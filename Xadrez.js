@@ -69,6 +69,13 @@ function optionCreation(tagFather,piece){
     optionPiece.innerHTML= piece;
     selectPiece.appendChild(optionPiece);
 }
+function removeOption (tagFather){
+    const optionSelect = document.querySelector(tagFather);
+    while (optionSelect.childElementCount>0){
+        const optionChildren = optionSelect.firstElementChild;
+        optionSelect.removeChild(optionChildren);
+    }
+}
 
 
 // ------
@@ -193,7 +200,27 @@ buttomStar.addEventListener("click", ()=>{
     // });   
 });
 
-//Caso tiver mudança de cor informa as peças que estão ativas
+//Caso tiver mudança de cor informa as peças que estão ativas. Evento onChance.
+const colorPiece = document.querySelector(".move__color");
+colorPiece.addEventListener('change', () =>{
+    // debugger;
+    removeOption (".move__piece");
+    if(colorPiece.value=="White"){
+        for(let piece in piecesBoard){
+            if(piecesBoard[piece].color=="White" && piecesBoard[piece].isAtive==true){
+                optionCreation(".move__piece",piecesBoard[piece].name);
+            }
+        }
+    }
+    else if(colorPiece.value=="Black"){
+        for(let piece in piecesBoard){
+            if(piecesBoard[piece].color=="Black" && piecesBoard[piece].isAtive==true){
+                optionCreation(".move__piece",piecesBoard[piece].name);
+            }
+        }     
+    }
+})
+
 
 //Mudança de peça informa as coordenadas
 
