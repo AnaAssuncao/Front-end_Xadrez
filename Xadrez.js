@@ -174,17 +174,17 @@ function starBoard(chessBoard,objStarBoard){
         const refLine= (parseInt(i/8)+1);
         const refColumn= (i%8+1);
         const keyChess = `ref${refColumn}${refLine}`
-        chessBoard[keyChess]= new makePiece(objStarBoard.namePieceBlack[i],'Black',objStarBoard.starPiecesBlack[i],keyChess,objStarBoard.functionPiecesBlack[i]);
         const keyPieces = `${objStarBoard.namePieceBlack[i]}Black`
-        piecesBoard[keyPieces]=chessBoard[keyChess];
+        piecesBoard[keyPieces]= new makePiece(objStarBoard.namePieceBlack[i],'Black',objStarBoard.starPiecesBlack[i],keyChess,objStarBoard.functionPiecesBlack[i]);
+        chessBoard[keyChess]= piecesBoard[keyPieces];
     }
     for (let i in objStarBoard.starPiecesWhite) {
         const refColumn= (i%8+1);
         const refLine= (8 - parseInt(i/8));
         const keyChess = `ref${refColumn}${refLine}`
-        chessBoard[keyChess]= new makePiece(objStarBoard.namePieceWhite[i],'White',objStarBoard.starPiecesWhite[i],keyChess, objStarBoard.functionPiecesWhite[i]);
         const keyPieces = `${objStarBoard.namePieceWhite[i]}White`
-        piecesBoard[keyPieces]=chessBoard[keyChess];
+        piecesBoard[keyPieces]= new makePiece(objStarBoard.namePieceWhite[i],'White',objStarBoard.starPiecesWhite[i],keyChess, objStarBoard.functionPiecesWhite[i]);
+        chessBoard[keyChess]= piecesBoard[keyPieces];
     }
     renderBoard(chessBoard);
 }
@@ -229,9 +229,13 @@ function selectPiece (colorPiece,piecesBoard){
 //Mudança de peça informa as coordenadas
 const namePiece = document.querySelector(".move__piece");
 namePiece.addEventListener('click', () =>{
-    const selectedPiece = `${namePiece.value}${colorPiece.value}`;
-    piecesBoard[selectedPiece].functionPiece(chessBoard,piecesBoard[selectedPiece]);
+    selectFunction(namePiece.value,colorPiece.value);
 })
+
+function selectFunction(namePiece,colorPiece){
+    const selectedPiece = `${namePiece}${colorPiece}`;
+    piecesBoard[selectedPiece].functionPiece(chessBoard,piecesBoard[selectedPiece]);
+}
 
 //Movimentar as peças
 const buttomMove= document.querySelector(`.move__button`);
@@ -242,36 +246,44 @@ buttomMove.addEventListener("click", () =>{
         column:document.querySelector('.move__column').value,
         line: document.querySelector('.move__line').value
     }
-    let refRemove;
+
     // descobrir onde esta a peça q vai mover
-    for(let key in chessBoard){
-        if(chessBoard[key]!==null){
-            if((chessBoard[key].name== movementPieceBoard.name) && (chessBoard[key].color== movementPieceBoard.color))
-            {
-                refRemove=chessBoard[key].position;
+    const nameColor=`${movementPieceBoard.name}${movementPieceBoard.color}`;
+    const refRemove=piecesBoard[nameColor].position;
+    const newPosition = `ref${ movementPieceBoard.column}${ movementPieceBoard.line}`;
+    piecesBoard[nameColor].position=newPosition;
+    chessBoard[newPosition]= piecesBoard[nameColor];
+    chessBoard[refRemove]=null;
+    renderBoard(chessBoard);
+    selectFunction(movementPieceBoard.name,movementPieceBoard.color)
+});
+
+function tower (chessBoard,informationPiece){
+    const indicePosition = [Number(informationPiece.position[3]),Number(informationPiece.position[4])];
+    const movimentTower = [];
+    for(let i=0;i<9;i++){
+        const refChessBoard=`ref${indicePosition[0]}${(indicePosition[1]+i)}`
+        if((indicePosition[1]+i)>0 && (indicePosition[1]+i)<9){
+            if((chessBoard[refChessBoard]!==null) && (chessBoard[refChessBoard]!==undefined)){
+                movimentTower.push([(indicePosition[0]),(indicePosition[1]+i)]);
             }
         }
     }
-    const newPosition = `ref${ movementPieceBoard.column}${ movementPieceBoard.line}`
-    chessBoard[newPosition]={...chessBoard[refRemove]};
-    chessBoard[newPosition].position=newPosition;
-    chessBoard[refRemove]=null;
-    renderBoard(chessBoard);
-});
 
-function tower (){
+    coordinateSelectionColumn(movimentTower);
+}
+function knight (chessBoard,informationPiece){
     coordinateSelectionColumn()
 }
-function knight (){
+function bishop (chessBoard,informationPiece){
     coordinateSelectionColumn()
 }
-function bishop (){
+function king (chessBoard,informationPiece){
     coordinateSelectionColumn()
 }
-function king (){
-    coordinateSelectionColumn()
-}
-function queen (){
+function queen (chessBoard,informationPiece){
+    tower();
+    bishop();
     coordinateSelectionColumn()
 }
 function pawn (chessBoard,informationPiece){
@@ -290,12 +302,13 @@ function pawn (chessBoard,informationPiece){
     }
 
     refChessBoard=`ref${indicePosition[0]-1}${(indicePosition[1]+valueColor)}`;
-    if(chessBoard[refChessBoard]!==null){
+    if((chessBoard[refChessBoard]!==null) && (chessBoard[refChessBoard]!==undefined) && (chessBoard[refChessBoard].color!==informationPiece.color)){
         movimentPawn.push([(indicePosition[0]-1),(indicePosition[1]+valueColor)]);
     }
 
     refChessBoard=`ref${indicePosition[0]+1}${(indicePosition[1]+valueColor)}`;
-    if(chessBoard[refChessBoard]!==null){
+
+    if((chessBoard[refChessBoard]!==null)&&(chessBoard[refChessBoard]!==undefined) && (chessBoard[refChessBoard].color!==informationPiece.color)){
         movimentPawn.push([(indicePosition[0]+1),(indicePosition[1]+valueColor)]);
     }   
 
