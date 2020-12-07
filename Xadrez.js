@@ -44,17 +44,17 @@ function coordinatesCreation(fatherDiv,classDiv){
 
 //renderizar as peças conforme a chave (referência) do objeto.
 function renderBoard(chessBoard){
-    for (let chave of Object.keys(chessBoard)){
-        const divSquare= document.querySelector(`#${chave}`);
+    for (let key of Object.keys(chessBoard)){
+        const divSquare= document.querySelector(`#${key}`);
         if(divSquare.childElementCount==1){
             const divChildren = divSquare.firstElementChild;
             divSquare.removeChild(divChildren);
         }
-        if(chessBoard[chave]!==null){
+        if(chessBoard[key]!==null){
             const divImg = document.createElement('div');
             const img = document.createElement('img')
             divImg.classList.add("board__pieces");
-            img.src=`${chessBoard[chave].img}.png`
+            img.src=`${chessBoard[key].img}.png`
             img.classList.add('pieces__imagem')
             divImg.appendChild(img);
             divSquare.appendChild(divImg);           
@@ -151,8 +151,14 @@ function makePiece(name,color,img,position,isAtive=true){
 const objStarBoard={
     starPiecesBlack:["towerBlack","knightBlack","bishopBlack","queenBlack","kingBlack","bishopBlack","knightBlack","towerBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack"],
     starPiecesWhite:["towerWhite","knightWhite","bishopWhite","kingWhite","queenWhite","bishopWhite","knightWhite","towerWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite"],
-    namePiece:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"]
+    namePieceBlack:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
+    namePieceWhite:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
+    // functionPiecesBlack:[tower,knight,bishop,queen,king,bishop,knight,tower,pawn,pawn,pawn,pawn,pawn,pawn,pawn,pawn],
+    // functionPiecesWhite:[tower,knight,bishop,king,queen,bishop,knight,tower,pawn,pawn,pawn,pawn,pawn,pawn,pawn,pawn],
 }
+
+//chave Nome+cor - conforme obj chessBoard
+const piecesBoard ={}
 
 function starBoard(chessBoard,objStarBoard){
     Object.keys(chessBoard).forEach((value)=>{chessBoard[value]=null});
@@ -160,16 +166,19 @@ function starBoard(chessBoard,objStarBoard){
     for (let i in objStarBoard.starPiecesBlack) {
         const refLine= (parseInt(i/8)+1);
         const refColumn= (i%8+1);
-        const chave = `ref${refColumn}${refLine}`
-        chessBoard[chave]= new makePiece(objStarBoard.namePiece[i],'Black',objStarBoard.starPiecesBlack[i],chave)
+        const keyChess = `ref${refColumn}${refLine}`
+        chessBoard[keyChess]= new makePiece(objStarBoard.namePieceBlack[i],'Black',objStarBoard.starPiecesBlack[i],keyChess);
+        const keyPieces = `${objStarBoard.namePieceBlack[i]}Black`
+        piecesBoard[keyPieces]=chessBoard[keyChess];
     }
     for (let i in objStarBoard.starPiecesWhite) {
         const refColumn= (i%8+1);
         const refLine= (8 - parseInt(i/8));
-        const chave = `ref${refColumn}${refLine}`
-        chessBoard[chave]= new makePiece(objStarBoard.namePiece[i],'White',objStarBoard.starPiecesWhite[i],chave)
+        const keyChess = `ref${refColumn}${refLine}`
+        chessBoard[keyChess]= new makePiece(objStarBoard.namePieceWhite[i],'White',objStarBoard.starPiecesWhite[i],keyChess);
+        const keyPieces = `${objStarBoard.namePieceWhite[i]}White`
+        piecesBoard[keyPieces]=chessBoard[keyChess];
     }
-  
     renderBoard(chessBoard);
 }
 //Cria o tabuleiro
@@ -178,10 +187,15 @@ boardCreation();
 const buttomStar= document.querySelector(`.chess__button`);
 buttomStar.addEventListener("click", ()=>{
     starBoard(chessBoard,objStarBoard);
-    objStarBoard.namePiece.forEach(element => {
-        optionCreation(`.move__piece`,element)
-    });   
+    // Informar conforme a cor 
+    // objStarBoard.namePiece.forEach(element => {
+    //     optionCreation(`.move__piece`,element)
+    // });   
 });
+
+//Caso tiver mudança de cor informa as peças que estão ativas
+
+//Mudança de peça informa as coordenadas
 
 //Movimentar as peças
 const buttomMove= document.querySelector(`.move__button`);
@@ -194,11 +208,11 @@ buttomMove.addEventListener("click", () =>{
     }
     let refRemove;
     // descobrir onde esta a peça q vai mover
-    for(let chave in chessBoard){
-        if(chessBoard[chave]!==null){
-            if((chessBoard[chave].name== movementPieceBoard.name) && (chessBoard[chave].color== movementPieceBoard.color))
+    for(let key in chessBoard){
+        if(chessBoard[key]!==null){
+            if((chessBoard[key].name== movementPieceBoard.name) && (chessBoard[key].color== movementPieceBoard.color))
             {
-                refRemove=chessBoard[chave].position;
+                refRemove=chessBoard[key].position;
             }
         }
     }
@@ -207,4 +221,4 @@ buttomMove.addEventListener("click", () =>{
     chessBoard[newPosition].position=newPosition;
     chessBoard[refRemove]=null;
     renderBoard(chessBoard);
-})
+});
