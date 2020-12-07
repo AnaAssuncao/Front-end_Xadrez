@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Xadrez</title>
+    <link rel="stylesheet" href="Style.css">
+</head>
+
+<body class="chess">
+    <header class="chess__header">
+        <h1 class="chess__tittle">Jogo Xadrez</h1>
+        <button class="chess__button">Iniciar Jogo</button>
+        <div class="chess__move">
+            <p>Cor Peça</p>
+            <select class="move__color">
+                <option  value = "White">Brancas</option>
+                <option  value = "Black">Pretas</option>
+            </select>
+            <p>Peça Mover</p>
+            <select class="move__piece">
+                <!-- Peças de cada cor ativa no tabuleiro-->
+            </select>
+            <p>Coordenada para mover</p>
+            <p>Coluna</p>
+            <select class="move__column">
+                <!-- Coluna que a peça pode andar tabuleiro-->
+            </select>
+            <p>Linha</p>
+            <select class="move__rank">
+                <!-- Linha que a peça pode andar tabuleiro-->
+            </select>
+            <button class="move__button">Mover</button>
+        </div>    
+    </header> 
+    
+    <section class="chess__game">
+        <div class="chess__rank">
+    <!-- numero-->
+        </div>
+        <div class="chess__board">     
+    <!-- casa-->
+        </div>
+        <div class="chess__column">      
+    <!-- letra-->
+        </div>
+
+    </section>
+
+</body>
+<script src="Xadrez.js"></script>

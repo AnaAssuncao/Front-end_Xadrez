@@ -1,0 +1,93 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+.chess{
+    display: flex;
+    flex-flow: column wrap;
+    width: 100vw;
+    height: 100vh;
+}
+.chess__header{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: space-around;
+    height: 60%;
+}
+.cless__titte{
+    color: rgb(60, 88, 60);
+}
+.chess__button{
+    background-color: rgb(117, 155, 112);
+    width:40%;
+    height:10%;
+}
+.chess__game{
+    width:min(50vw,95vh);
+    height:min(50vw,95vh);
+    margin:1vw;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end; 
+    box-shadow: 3px 3px 15px rgb(77, 77, 77);
+}
+.chess__rank{
+    width: 6%;
+    height: 94%;
+    display: flex;
+    flex-flow: column-reverse nowrap;
+}
+.chess__column{
+    width:94%;
+    height: 6%;
+    display: flex;
+    flex-flow: row nowrap;  
+    justify-content: space-between; 
+    /* margin-left:6%; */
+}
+.rank{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(60, 88, 60);
+}
+.column{  
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(117, 155, 112);
+}
+.chess__board{
+    border: solid 2px rgb(77, 77, 77);
+    width: 94%;
+    height: 94%;
+    display: flex;
+    flex-flow:  column-reverse wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.board__square{
+    width: 12.5%;
+    height: 12.5%;
+    border: solid 1px rgb(77, 77, 77);
+}
+.square__light{
+    background-color: rgb(240, 255, 240);
+}
+.square__dark{
+    background-color: rgb(117, 155, 112);
+}
+.board__pieces{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+.pieces__imagem{
+    height: 90%;
+}
