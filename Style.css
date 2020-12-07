@@ -33,7 +33,7 @@
     justify-content: flex-end; 
     box-shadow: 3px 3px 15px rgb(77, 77, 77);
 }
-.chess__rank{
+.chess__line{
     width: 6%;
     height: 94%;
     display: flex;
@@ -47,7 +47,7 @@
     justify-content: space-between; 
     /* margin-left:6%; */
 }
-.rank{
+.line{
     height: 100%;
     display: flex;
     justify-content: center;

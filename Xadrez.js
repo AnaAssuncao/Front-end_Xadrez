@@ -22,7 +22,7 @@ function boardCreation(){
         color = (color===true)?false:true;  
     }
 
-    coordinatesCreation('.chess__rank','rank');
+    coordinatesCreation('.chess__line','line');
     coordinatesCreation('.chess__column','column');
 
 }
@@ -76,7 +76,6 @@ function removeOption (tagFather){
         optionSelect.removeChild(optionChildren);
     }
 }
-
 
 // ------
 //Objeto que possui como chave a referência do id de cada casa do tabuleiro.
@@ -153,7 +152,7 @@ function makePiece(name,color,img,position,functionPiece,isAtive=true){
     this.img=`img/${img}`;
     this.position=position;
     this.isAtive=isAtive;
-    // this.functionPiece=functionPiece;
+    this.functionPiece=functionPiece;
 }
 //Objeto para Iniciar o tabuleiro.
 const objStarBoard={
@@ -161,8 +160,8 @@ const objStarBoard={
     starPiecesWhite:["towerWhite","knightWhite","bishopWhite","kingWhite","queenWhite","bishopWhite","knightWhite","towerWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite"],
     namePieceBlack:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
     namePieceWhite:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
-    // functionPiecesBlack:[tower,knight,bishop,queen,king,bishop,knight,tower,pawn,pawn,pawn,pawn,pawn,pawn,pawn,pawn],
-    // functionPiecesWhite:[tower,knight,bishop,king,queen,bishop,knight,tower,pawn,pawn,pawn,pawn,pawn,pawn,pawn,pawn],
+    functionPiecesBlack:[tower,knight,bishop,queen,king,bishop,knight,tower,pawn,pawn,pawn,pawn,pawn,pawn,pawn,pawn],
+    functionPiecesWhite:[tower,knight,bishop,king,queen,bishop,knight,tower,pawn,pawn,pawn,pawn,pawn,pawn,pawn,pawn]
 }
 
 //chave Nome+cor - conforme obj chessBoard
@@ -175,7 +174,7 @@ function starBoard(chessBoard,objStarBoard){
         const refLine= (parseInt(i/8)+1);
         const refColumn= (i%8+1);
         const keyChess = `ref${refColumn}${refLine}`
-        chessBoard[keyChess]= new makePiece(objStarBoard.namePieceBlack[i],'Black',objStarBoard.starPiecesBlack[i],keyChess);//teste
+        chessBoard[keyChess]= new makePiece(objStarBoard.namePieceBlack[i],'Black',objStarBoard.starPiecesBlack[i],keyChess,objStarBoard.functionPiecesBlack[i]);
         const keyPieces = `${objStarBoard.namePieceBlack[i]}Black`
         piecesBoard[keyPieces]=chessBoard[keyChess];
     }
@@ -183,7 +182,7 @@ function starBoard(chessBoard,objStarBoard){
         const refColumn= (i%8+1);
         const refLine= (8 - parseInt(i/8));
         const keyChess = `ref${refColumn}${refLine}`
-        chessBoard[keyChess]= new makePiece(objStarBoard.namePieceWhite[i],'White',objStarBoard.starPiecesWhite[i],keyChess);//teste
+        chessBoard[keyChess]= new makePiece(objStarBoard.namePieceWhite[i],'White',objStarBoard.starPiecesWhite[i],keyChess, objStarBoard.functionPiecesWhite[i]);
         const keyPieces = `${objStarBoard.namePieceWhite[i]}White`
         piecesBoard[keyPieces]=chessBoard[keyChess];
     }
@@ -199,6 +198,8 @@ buttomStar.addEventListener("click", ()=>{
     optionCreation(".move__color","White");
     optionCreation(".move__color","Black");
     selectPiece ("White",piecesBoard);
+    removeOption (".move__column");
+    removeOption (".move__line");
 });
 
 //Caso tiver mudança de cor informa as peças que estão ativas. Evento onChance.
@@ -227,11 +228,10 @@ function selectPiece (colorPiece,piecesBoard){
 
 //Mudança de peça informa as coordenadas
 const namePiece = document.querySelector(".move__piece");
-namePiece.addEventListener('change', () =>{
+namePiece.addEventListener('click', () =>{
     const selectedPiece = `${namePiece.value}${colorPiece.value}`;
-    // console.log(piecesBoard[selectedPiece].functionPiece())
+    piecesBoard[selectedPiece].functionPiece(chessBoard,piecesBoard[selectedPiece]);
 })
-
 
 //Movimentar as peças
 const buttomMove= document.querySelector(`.move__button`);
@@ -240,7 +240,7 @@ buttomMove.addEventListener("click", () =>{
         name: document.querySelector('.move__piece').value,
         color: document.querySelector('.move__color').value,
         column:document.querySelector('.move__column').value,
-        rank: document.querySelector('.move__rank').value
+        line: document.querySelector('.move__line').value
     }
     let refRemove;
     // descobrir onde esta a peça q vai mover
@@ -252,9 +252,72 @@ buttomMove.addEventListener("click", () =>{
             }
         }
     }
-    const newPosition = `ref${ movementPieceBoard.column}${ movementPieceBoard.rank}`
+    const newPosition = `ref${ movementPieceBoard.column}${ movementPieceBoard.line}`
     chessBoard[newPosition]={...chessBoard[refRemove]};
     chessBoard[newPosition].position=newPosition;
     chessBoard[refRemove]=null;
     renderBoard(chessBoard);
 });
+
+function tower (){
+    coordinateSelectionColumn()
+}
+function knight (){
+    coordinateSelectionColumn()
+}
+function bishop (){
+    coordinateSelectionColumn()
+}
+function king (){
+    coordinateSelectionColumn()
+}
+function queen (){
+    coordinateSelectionColumn()
+}
+function pawn (chessBoard,informationPiece){
+    const indicePosition = [Number(informationPiece.position[3]),Number(informationPiece.position[4])];
+    const movimentPawn = [];
+    let valueColor;
+    if(informationPiece.color=="Black"){
+        valueColor=1;
+    }
+    else{
+        valueColor=-1;
+    }
+        let refChessBoard=`ref${indicePosition[0]}${(indicePosition[1]+valueColor)}`;
+    if(chessBoard[refChessBoard]==null){
+        movimentPawn.push([indicePosition[0],(indicePosition[1]+valueColor)]);
+    }
+
+    refChessBoard=`ref${indicePosition[0]-1}${(indicePosition[1]+valueColor)}`;
+    if(chessBoard[refChessBoard]!==null){
+        movimentPawn.push([(indicePosition[0]-1),(indicePosition[1]+valueColor)]);
+    }
+
+    refChessBoard=`ref${indicePosition[0]+1}${(indicePosition[1]+valueColor)}`;
+    if(chessBoard[refChessBoard]!==null){
+        movimentPawn.push([(indicePosition[0]+1),(indicePosition[1]+valueColor)]);
+    }   
+
+    coordinateSelectionColumn(movimentPawn);
+}
+
+function coordinateSelectionColumn(selectionPossible){
+    removeOption (".move__column");
+    for(let i=0; i<selectionPossible.length;i++){
+        //trocar numero por letra
+        optionCreation(".move__column",selectionPossible[i][0]);
+        coordinateSelectionLine(selectionPossible);   
+    }
+}
+function coordinateSelectionLine(selectionPossible){
+    removeOption (".move__line");
+    const columnSelect = document.querySelector(".move__column");
+    for(let i=0; i<selectionPossible.length;i++){
+        if(columnSelect.value==selectionPossible[i][0]){
+            optionCreation(".move__line",selectionPossible[i][1]);
+        }
+    }
+}
+const columnSelect = document.querySelector(".move__column");
+columnSelect.addEventListener('click', () =>{coordinateSelectionLine(selectionPossible)});
