@@ -147,12 +147,13 @@ const chessBoard = {
     ref88:null,
 } 
 //função construtora do objeto com as informações das peças.
-function makePiece(name,color,img,position,isAtive=true){   
+function makePiece(name,color,img,position,functionPiece,isAtive=true){   
     this.name=name;
     this.color=color;
     this.img=`img/${img}`;
     this.position=position;
     this.isAtive=isAtive;
+    // this.functionPiece=functionPiece;
 }
 //Objeto para Iniciar o tabuleiro.
 const objStarBoard={
@@ -174,7 +175,7 @@ function starBoard(chessBoard,objStarBoard){
         const refLine= (parseInt(i/8)+1);
         const refColumn= (i%8+1);
         const keyChess = `ref${refColumn}${refLine}`
-        chessBoard[keyChess]= new makePiece(objStarBoard.namePieceBlack[i],'Black',objStarBoard.starPiecesBlack[i],keyChess);
+        chessBoard[keyChess]= new makePiece(objStarBoard.namePieceBlack[i],'Black',objStarBoard.starPiecesBlack[i],keyChess);//teste
         const keyPieces = `${objStarBoard.namePieceBlack[i]}Black`
         piecesBoard[keyPieces]=chessBoard[keyChess];
     }
@@ -182,7 +183,7 @@ function starBoard(chessBoard,objStarBoard){
         const refColumn= (i%8+1);
         const refLine= (8 - parseInt(i/8));
         const keyChess = `ref${refColumn}${refLine}`
-        chessBoard[keyChess]= new makePiece(objStarBoard.namePieceWhite[i],'White',objStarBoard.starPiecesWhite[i],keyChess);
+        chessBoard[keyChess]= new makePiece(objStarBoard.namePieceWhite[i],'White',objStarBoard.starPiecesWhite[i],keyChess);//teste
         const keyPieces = `${objStarBoard.namePieceWhite[i]}White`
         piecesBoard[keyPieces]=chessBoard[keyChess];
     }
@@ -194,35 +195,43 @@ boardCreation();
 const buttomStar= document.querySelector(`.chess__button`);
 buttomStar.addEventListener("click", ()=>{
     starBoard(chessBoard,objStarBoard);
-    // Informar conforme a cor 
-    // objStarBoard.namePiece.forEach(element => {
-    //     optionCreation(`.move__piece`,element)
-    // });   
+    removeOption (".move__color")
+    optionCreation(".move__color","White");
+    optionCreation(".move__color","Black");
+    selectPiece ("White",piecesBoard);
 });
 
 //Caso tiver mudança de cor informa as peças que estão ativas. Evento onChance.
 const colorPiece = document.querySelector(".move__color");
-colorPiece.addEventListener('change', () =>{
+colorPiece.addEventListener('change', () => {selectPiece (colorPiece.value,piecesBoard)})
+
+function selectPiece (colorPiece,piecesBoard){
     // debugger;
     removeOption (".move__piece");
-    if(colorPiece.value=="White"){
+    if(colorPiece=="White"){
         for(let piece in piecesBoard){
             if(piecesBoard[piece].color=="White" && piecesBoard[piece].isAtive==true){
                 optionCreation(".move__piece",piecesBoard[piece].name);
             }
         }
     }
-    else if(colorPiece.value=="Black"){
+    else if(colorPiece=="Black"){
         for(let piece in piecesBoard){
             if(piecesBoard[piece].color=="Black" && piecesBoard[piece].isAtive==true){
                 optionCreation(".move__piece",piecesBoard[piece].name);
             }
         }     
     }
-})
+}
 
 
 //Mudança de peça informa as coordenadas
+const namePiece = document.querySelector(".move__piece");
+namePiece.addEventListener('change', () =>{
+    const selectedPiece = `${namePiece.value}${colorPiece.value}`;
+    // console.log(piecesBoard[selectedPiece].functionPiece())
+})
+
 
 //Movimentar as peças
 const buttomMove= document.querySelector(`.move__button`);
