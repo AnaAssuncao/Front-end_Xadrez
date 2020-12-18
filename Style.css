@@ -32,6 +32,7 @@
     flex-flow: row wrap;
     justify-content: flex-end; 
     box-shadow: 3px 3px 15px rgb(77, 77, 77);
+    padding: 2%;
 }
 .chess__line{
     width: 6%;
@@ -69,6 +70,7 @@
     flex-flow:  column-reverse wrap;
     justify-content: flex-start;
     align-items: flex-start;
+    background-color:  rgb(77, 77, 77);
 }
 .board__square{
     width: 12.5%;
