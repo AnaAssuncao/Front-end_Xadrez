@@ -1,7 +1,7 @@
 //Tela
 //Renderizar as casas do tabuleiro.
 function boardCreation(){
-    const board = document.querySelector('.chess__board');
+    const board = document.querySelector('#board');
     let color = true
     for(let i=0; i<8;i++){   
         for(let j=0;j<8;j++){
@@ -11,19 +11,19 @@ function boardCreation(){
             // tagPosition.innerHTML=`${i+1}${j+1}`;
             board.appendChild(tagPosition);
             if(color===true){
-                tagPosition.classList.add('square__light');
+                tagPosition.classList.add('square__dark');
                 color=false;
             }
             else{
-                tagPosition.classList.add('square__dark');
+                tagPosition.classList.add('square__light');
                 color=true;
             }
         }   
         color = (color===true)?false:true;  
     }
 
-    coordinatesCreation('.chess__line','line');
-    coordinatesCreation('.chess__column','column');
+    coordinatesCreation('#line','line');
+    coordinatesCreation('#column','column');
 
 }
 //Renderizar as coordenadas ao lado tabuleiro.
@@ -46,7 +46,7 @@ function coordinatesCreation(fatherDiv,classDiv){
 function renderBoard(chessBoard){
     for (let key of Object.keys(chessBoard)){
         const divSquare= document.querySelector(`#${key}`);
-        if(divSquare.childElementCount==1){
+        if(!!divSquare.childElementCount){
             const divChildren = divSquare.firstElementChild;
             divSquare.removeChild(divChildren);
         }
@@ -69,14 +69,19 @@ function optionCreation(tagFather,piece){
     optionPiece.innerHTML= piece;
     selectPiece.appendChild(optionPiece);
 }
-function removeOption (tagFather){
+function clearGeneralInput (tagFather){
     const optionSelect = document.querySelector(tagFather);
     while (optionSelect.childElementCount>0){
         const optionChildren = optionSelect.firstElementChild;
         optionSelect.removeChild(optionChildren);
     }
 }
-
+function updateInputCoordinate(namePiece,colorPiece){
+    clearGeneralInput("#select__coordinate");
+    //NÃO ENVIAR PIECEBOARD
+    const possiblePosition= piecesBoard[namePiece+colorPiece].functionPiece(chessBoard); 
+    coordinateSelection(possiblePosition);
+}
 // ------
 //Objeto que possui como chave a referência do id de cada casa do tabuleiro.
 const chessBoard = {
@@ -144,8 +149,8 @@ const chessBoard = {
     ref86:null,
     ref87:null,
     ref88:null,
-} 
-//função construtora do objeto com as informações das peças.
+} ;
+
 function makePiece(name,color,img,position,functionPiece,isAtive=true){   
     this.name=name;
     this.color=color;
@@ -154,140 +159,184 @@ function makePiece(name,color,img,position,functionPiece,isAtive=true){
     this.isAtive=isAtive;
     this.functionPiece=functionPiece;
     this.qtMovements=0;
-}
-//Objeto para Iniciar o tabuleiro.
-const objStarBoard={
-    starPiecesBlack:["towerBlack","knightBlack","bishopBlack","queenBlack","kingBlack","bishopBlack","knightBlack","towerBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack"],
-    starPiecesWhite:["towerWhite","knightWhite","bishopWhite","kingWhite","queenWhite","bishopWhite","knightWhite","towerWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite"],
-    namePieceBlack:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
-    namePieceWhite:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
-    functionPiecesBlack:[tower,knight,bishop,queen,king,bishop,knight,tower,pawn,pawn,pawn,pawn,pawn,pawn,pawn,pawn],
-    functionPiecesWhite:[tower,knight,bishop,king,queen,bishop,knight,tower,pawn,pawn,pawn,pawn,pawn,pawn,pawn,pawn]
-}
-
+}  
 //chave Nome+cor - conforme obj chessBoard
-const piecesBoard ={}
+const piecesBoard ={};
 
-function starGame(chessBoard,objStarBoard,piecesBoard){
-    Object.keys(chessBoard).forEach((value)=>{chessBoard[value]=null});
-
-    for (let i in objStarBoard.starPiecesBlack) {
-        const refLine= (parseInt(i/8)+1);
-        const refColumn= (i%8+1);
-        const keyChess = `ref${refColumn}${refLine}`
-        const keyPieces = `${objStarBoard.namePieceBlack[i]}Black`
-        piecesBoard[keyPieces]= new makePiece(objStarBoard.namePieceBlack[i],'Black',objStarBoard.starPiecesBlack[i],keyChess,objStarBoard.functionPiecesBlack[i]);
-        chessBoard[keyChess]= piecesBoard[keyPieces];
-    }
-    for (let i in objStarBoard.starPiecesWhite) {
-        const refColumn= (i%8+1);
-        const refLine= (8 - parseInt(i/8));
-        const keyChess = `ref${refColumn}${refLine}`
-        const keyPieces = `${objStarBoard.namePieceWhite[i]}White`
-        piecesBoard[keyPieces]= new makePiece(objStarBoard.namePieceWhite[i],'White',objStarBoard.starPiecesWhite[i],keyChess, objStarBoard.functionPiecesWhite[i]);
-        chessBoard[keyChess]= piecesBoard[keyPieces];
-    }
-    renderBoard(chessBoard);
+//Objeto para Inicio.
+const starChessBoard = {
+    colorPieceBoard: {
+        higher:"White",
+        bottom:"Black"
+    },
+    objStarBoard:{
+        starPiecesBlack:["towerBlack","knightBlack","bishopBlack","queenBlack","kingBlack","bishopBlack","knightBlack","towerBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack"],
+        starPiecesWhite:["towerWhite","knightWhite","bishopWhite","queenWhite","kingWhite","bishopWhite","knightWhite","towerWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite"],
+        namePiece:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
+        functionPieces:[possibleMovimentTower,possibleMovimentKnight,possibleMovimentBishop,possibleMovimentQueen,possibleMovimentKing, possibleMovimentBishop,possibleMovimentKnight, possibleMovimentTower,
+            possibleMovimentPawn, possibleMovimentPawn, possibleMovimentPawn, possibleMovimentPawn, possibleMovimentPawn, possibleMovimentPawn, possibleMovimentPawn, possibleMovimentPawn]
+    },
+    starObjGame(chessBoard){
+        Object.keys(chessBoard).forEach((value)=>{chessBoard[value]=null});
+    
+        for (let i in this.objStarBoard.starPiecesBlack) {
+            const refLine= (parseInt(i/8)+1);
+            const refColumn= (i%8+1);
+            const keyChess = `ref${refColumn}${refLine}`
+            const keyPieces = `${this.objStarBoard.namePiece[i]}${this.colorPieceBoard.bottom}`
+            piecesBoard[keyPieces]= new makePiece(this.objStarBoard.namePiece[i],this.colorPieceBoard.bottom,this.objStarBoard.starPiecesBlack[i],keyChess,this.objStarBoard.functionPieces[i]);
+            chessBoard[keyChess]= piecesBoard[keyPieces];
+        }
+        for (let i in this.objStarBoard.starPiecesWhite) {
+            const refColumn= (i%8+1);
+            const refLine= (8 - parseInt(i/8));
+            const keyChess = `ref${refColumn}${refLine}`
+            const keyPieces = `${this.objStarBoard.namePiece[i]}${this.colorPieceBoard.higher}`
+            piecesBoard[keyPieces]= new makePiece(this.objStarBoard.namePiece[i],this.colorPieceBoard.higher,this.objStarBoard.starPiecesWhite[i],keyChess, this.objStarBoard.functionPieces[i]);
+            chessBoard[keyChess]= piecesBoard[keyPieces];
+        }
+        return chessBoard;
+    },
+    starGame (chessBoard,piecesBoard){
+        clearGeneralInput ("#select__color");
+        clearGeneralInput ("#select__coordinate");
+        this.starObjGame(chessBoard,this.objStarBoard,piecesBoard,this.colorPieceBoard);
+        renderBoard(chessBoard);
+        optionCreation("#select__color",this.colorPieceBoard.higher);
+        optionCreation("#select__color",this.colorPieceBoard.bottom);
+        selectPiece (this.colorPieceBoard.higher,piecesBoard);
+    },
+    //função construtora do objeto com as informações das peças. 
 }
+
+
 //Cria o tabuleiro
 boardCreation();
 //Clicar no iniciar jogo as peças irão para as casas iniciais
-const buttomStar= document.querySelector(`.chess__button`);
-// TRANSFORMAR FUNÇÃO ANONIMA EM UMA FUNÇÃO COM NOME. 
-// COR DAS PEÇAS DEVEM SER GUARDADAS EM UMA ESTRUTURA DE DADOS.
-// TROCAR CLASS PARA ID QUANDO SE REFERE APENAS A UM OBJ.
+const buttomStar= document.querySelector(`#button__start`);
 buttomStar.addEventListener("click", ()=>{
-    starGame(chessBoard,objStarBoard,piecesBoard);
-    removeOption (".move__color");
-    optionCreation(".move__color","White");
-    optionCreation(".move__color","Black");
-    selectPiece ("White",piecesBoard);
-    removeOption (".move__column");
-    removeOption (".move__line");
+    starChessBoard.starGame(chessBoard,piecesBoard)
 });
 
 //Caso tiver mudança de cor informa as peças que estão ativas. Evento onChance.
-const colorPiece = document.querySelector(".move__color");
+const colorPiece = document.querySelector("#select__color");
 colorPiece.addEventListener('click', () => {selectPiece (colorPiece.value,piecesBoard)});
 
+document.querySelector("#select__name").addEventListener('change', (e) =>{
+    updateInputCoordinate(e.target.value,colorPiece.value);
+});
+
 function selectPiece (colorPiece,piecesBoard){
-    // debugger;
-    removeOption (".move__piece");
+    clearGeneralInput ("#select__name");
     for(let piece in piecesBoard){
         if(piecesBoard[piece].color==colorPiece && piecesBoard[piece].isAtive==true){
-            optionCreation(".move__piece",piecesBoard[piece].name);
+            optionCreation("#select__name",piecesBoard[piece].name);
         }
     }
 }
 
 //Mudança de peça informa as coordenadas
-document.querySelector(".move__piece").addEventListener('change', (e) =>{
-    selectFunction(e.target.value,colorPiece.value);
-});
 
-function selectFunction(namePiece,colorPiece){
-    // const selectedPiece = `${namePiece}${colorPiece}`;
-    //NÃO ENVIAR PIECEBOARD
-    const position= piecesBoard[namePiece+colorPiece].functionPiece(chessBoard,piecesBoard[namePiece+colorPiece]);
-    coordinateSelectionColumn(position.map((ref)=>[ref.charAt(3),ref.charAt(4)]));
+function possibleMovimentTower(chessBoard){
+    const column=Number(this.position.charAt(3));
+    const line=Number(this.position.charAt(4));
+    const direction = [[0,1],[0,-1],[1,0],[-1,0]];
+     
+    const moviment= direction.reduce((possibleMoviment,direction)=>{
+        const newPossibilitiesMoviment =  possibleMoviment.concat(checkRegularMovement(direction, column, line, chessBoard, this.color,8));
+         return newPossibilitiesMoviment;
+    },[]);
+
+    return moviment;
+}
+function possibleMovimentKnight (chessBoard){
+    const column=Number(this.position.charAt(3));
+    const line=Number(this.position.charAt(4));
+    const direction = [[2,1],[2,-1],[-2,-1],[-2,1],[1,2],[-1,2],[-1,-2],[1,-2]];
+   
+    const moviment= direction.reduce((possibleMoviment,direction)=>{
+        const newPossibilitiesMoviment =  possibleMoviment.concat(checkRegularMovement(direction, column, line, chessBoard, this.color,1));
+         return newPossibilitiesMoviment;
+    },[]);
+
+    return moviment;
+}
+function possibleMovimentBishop  (chessBoard){
+    const column=Number(this.position.charAt(3));
+    const line=Number(this.position.charAt(4));
+    const direction=[[1,1],[1,-1],[-1,-1],[-1,1]];
+   
+    const moviment= direction.reduce((possibleMoviment,direction)=>{
+        const newPossibilitiesMoviment =  possibleMoviment.concat(checkRegularMovement(direction, column, line, chessBoard, this.color,8));
+         return newPossibilitiesMoviment;
+    },[]);
+
+    return moviment;
+}
+function possibleMovimentQueen  (chessBoard){
+    const column=Number(this.position.charAt(3));
+    const line=Number(this.position.charAt(4));
+    const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]];
+
+    const moviment= direction.reduce((possibleMoviment,direction)=>{
+        const newPossibilitiesMoviment =  possibleMoviment.concat(checkRegularMovement(direction, column, line, chessBoard, this.color,8));
+         return newPossibilitiesMoviment;
+    },[]);
+
+    return moviment;
+}
+function possibleMovimentKing (chessBoard){
+    const column=Number(this.position.charAt(3));
+    const line=Number(this.position.charAt(4));
+    const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]];
+   
+    const moviment= direction.reduce((possibleMoviment,direction)=>{
+        const newPossibilitiesMoviment =  possibleMoviment.concat(checkRegularMovement(direction, column, line, chessBoard, this.color,1));
+         return newPossibilitiesMoviment;
+    },[]);
+
+    return moviment;
 }
 
-//Movimentar as peças
-const buttomMove= document.querySelector(`.move__button`);
-buttomMove.addEventListener("click", () =>{
-    movementPieceBoard={
-        name: document.querySelector('.move__piece').value,
-        color: document.querySelector('.move__color').value,
-        column:document.querySelector('.move__column').value,
-        line: document.querySelector('.move__line').value
+function checkRegularMovement([column,line], columnPosition, linePosition, chessBoard, color, maximumPaces){
+    let possibleColumn = columnPosition + column;
+    let possibleLine = linePosition+ line;
+    const possibleDirection = [];
+    for(let limit = 1; possibleColumn>=1 && possibleColumn<=8 && possibleLine>=1 && possibleLine<=8 && limit<=maximumPaces;limit++){
+        const position = `ref${possibleColumn}${possibleLine}`;
+        if(chessBoard[position]==null){
+            possibleDirection.push(position);
+        }
+        else if(chessBoard[position].color!==color){
+            possibleDirection.push(position);
+            break;
+        }
+        else{
+            break;
+        }
+        possibleColumn = possibleColumn+column;
+        possibleLine= possibleLine+line;
     }
+    return possibleDirection;
+}
 
-    // descobrir onde esta a peça q vai mover
-    const nameColor=`${movementPieceBoard.name}${movementPieceBoard.color}`;
-    const refRemove=piecesBoard[nameColor].position;
-    const newPosition = `ref${ movementPieceBoard.column}${ movementPieceBoard.line}`;
-    piecesBoard[nameColor].position=newPosition;
-    chessBoard[newPosition]= piecesBoard[nameColor];
-    chessBoard[refRemove]=null;
-    renderBoard(chessBoard);
-    selectFunction(movementPieceBoard.name,movementPieceBoard.color)
-});
-
-function tower (chessBoard,informationPiece){
- 
-    coordinateSelectionColumn(movimentTower);
-}
-function knight (chessBoard,informationPiece){
-    console.dir(this)
-    coordinateSelectionColumn()
-}
-function bishop (chessBoard,informationPiece){
-    coordinateSelectionColumn()
-}
-function king (chessBoard,informationPiece){
-    coordinateSelectionColumn()
-}
-function queen (chessBoard,informationPiece){
-    tower();
-    bishop();
-    coordinateSelectionColumn()
-}
-function pawn (chessBoard){
+function possibleMovimentPawn (chessBoard){
     const column=Number(this.position.charAt(3));
     const line =Number(this.position.charAt(4));
     const movimentPawn = [];
-    let directionColor = (this.color=="Black")?1:-1; //Peças Pretas aumentam a linha e as Brancas diminuem.
-    const possibleMovement=[`ref${column}${(line+directionColor)}`]
+    const direction=[(this.color==starChessBoard.colorPieceBoard.bottom)?1:-1]
+//Peças Pretas aumentam a linha e as Brancas diminuem.
+    const possibleMovement=[`ref${column}${(line+Number(direction))}`]
     if(this.qtMovements==0){
-        possibleMovement.push(`ref${column}${(line+directionColor*2)}`)
+        possibleMovement.push(`ref${column}${(line+direction*2)}`)
     }
-    const possibleEat=[`ref${column-1}${(line+directionColor)}`,`ref${column+1}${(line+directionColor)}`];
-
     possibleMovement.forEach((position)=>{
         if(chessBoard[position]==null){
             movimentPawn.push(position);
         }
     });
+
+    const possibleEat=[`ref${column-1}${(line+Number(direction))}`,`ref${column+1}${(line+Number(direction))}`];
     possibleEat.forEach((position)=>{
         if((chessBoard[position]!==null) && (chessBoard[position]!==undefined) && (chessBoard[position].color!==this.color)){
             movimentPawn.push(position);
@@ -297,22 +346,47 @@ function pawn (chessBoard){
     return movimentPawn;
 }
 
-function coordinateSelectionColumn(selectionPossible){
-    removeOption (".move__column");
-    for(let i=0; i<selectionPossible.length;i++){
-        //trocar numero por letra
-        optionCreation(".move__column",selectionPossible[i][0]);
-        coordinateSelectionLine(selectionPossible);   
-    }
+function coordinateSelection(positions){
+
+    if(positions.length==0){
+        optionCreation("#select__coordinate","Sem Movimento");
+     }
+
+    positions.forEach((possibleCoordinate)=>{ 
+        possibleCoordinate = refIdToCoordinate(possibleCoordinate);
+        optionCreation("#select__coordinate",possibleCoordinate)}
+        );
 }
-function coordinateSelectionLine(selectionPossible){
-    removeOption (".move__line");
-    const columnSelect = document.querySelector(".move__column");
-    for(let i=0; i<selectionPossible.length;i++){
-        if(columnSelect.value==selectionPossible[i][0]){
-            optionCreation(".move__line",selectionPossible[i][1]);
-        }
-    }
+
+function refIdToCoordinate (coordenadasClass){
+    let result = coordenadasClass.substring(3);
+    //Edita as coordenadas para renderização, trocando o número pela letra usando .charCodeAt
+    result = (String.fromCharCode(result.charCodeAt(0)+16))+result.charAt(1);
+    return result;
+    // const conversao = [["1","A"],["2","B"],["3","C"],["4","D"],["5","E"],["6","F"],["7","G"],["8","H"]];
 }
-const columnSelect = document.querySelector(".move__column");
-columnSelect.addEventListener('click', () =>{coordinateSelectionLine(selectionPossible)});
+function coordinateToRefId (coordenadasClass){
+    //Edita as coordenadas para renderização, trocando a letra pelo numero usando .charCodeAt
+   let result = "ref"+(String.fromCharCode(coordenadasClass.charCodeAt(0)-16))+coordenadasClass.charAt(1);
+    return result;
+}
+//Movimentar as peças
+const buttomMove= document.querySelector(`#button__movement`);
+buttomMove.addEventListener("click", () =>{
+    movementPieceBoard={
+        name: document.querySelector('#select__name').value,
+        color: document.querySelector('#select__color').value,
+        coordinate: coordinateToRefId(document.querySelector('#select__coordinate').value),
+    }
+
+    // descobrir onde esta a peça q vai mover
+    const namePiece=`${movementPieceBoard.name}${movementPieceBoard.color}`;
+    const refPiece=piecesBoard[namePiece];
+    const newPosition = movementPieceBoard.coordinate;
+    chessBoard[refPiece.position]=null;
+    refPiece.position=newPosition;
+    refPiece.qtMovements++;
+    chessBoard[newPosition]= refPiece;
+    renderBoard(chessBoard);
+    updateInputCoordinate(movementPieceBoard.name,movementPieceBoard.color);
+});
