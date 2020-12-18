@@ -9,36 +9,31 @@
 <body class="chess">
     <header class="chess__header">
         <h1 class="chess__tittle">Jogo Xadrez</h1>
-        <button class="chess__button">Iniciar Jogo</button>
+        <button class="chess__button" id="button__start">Iniciar Jogo</button>
         <div class="chess__move">
             <p>Cor Peça</p>
-            <select class="move__color">
+            <select class="move__color" id="select__color">
             </select>
             <p>Peça Mover</p>
-            <select class="move__piece">
+            <select class="move__piece" id="select__name">
                 <!-- Peças de cada cor ativa no tabuleiro-->
             </select>
             <p>Coordenada para mover</p>
-            <p>Coluna</p>
-            <select class="move__column">
+            <select class="move__coordinate" id="select__coordinate">
                 <!-- Coluna que a peça pode andar tabuleiro-->
             </select>
-            <p>Linha</p>
-            <select class="move__line">
-                <!-- Linha que a peça pode andar tabuleiro-->
-            </select>
-            <button class="move__button">Mover</button>
+            <button class="move__button" id="button__movement">Mover</button>
         </div>    
     </header> 
     
     <section class="chess__game">
-        <div class="chess__line">
+        <div class="chess__line" id="line">
     <!-- numero-->
         </div>
-        <div class="chess__board">     
+        <div class="chess__board" id="board">     
     <!-- casa-->
         </div>
-        <div class="chess__column">      
+        <div class="chess__column" id="column">      
     <!-- letra-->
         </div>
 
