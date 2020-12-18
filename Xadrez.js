@@ -328,6 +328,7 @@ function possibleMovimentPawn (chessBoard){
     const movimentPawn = [];
     const direction=[(this.color==starChessBoard.colorPieceBoard.bottom)?1:-1]
 //Peças Pretas aumentam a linha e as Brancas diminuem.
+if((line+Number(direction))>=1 && (line+Number(direction))<=8){
     const possibleMovement=[`ref${column}${(line+Number(direction))}`]
     if(this.qtMovements==0){
         possibleMovement.push(`ref${column}${(line+direction*2)}`)
@@ -344,9 +345,10 @@ function possibleMovimentPawn (chessBoard){
             movimentPawn.push(position);
         }
     })   
-
+}
     return movimentPawn;
 }
+
 
 function coordinateSelection(positions){
 
