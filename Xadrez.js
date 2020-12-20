@@ -8,6 +8,8 @@ function boardCreation(){
             const tagPosition = document.createElement('div');
             tagPosition.classList.add('board__square');
             tagPosition.id = `ref${i+1}${j+1}`;
+            // const func = (e) => {const a = tagPosition.id; console.log(a)}
+            // tagPosition.onclick=func
             // tagPosition.innerHTML=`${i+1}${j+1}`;
             board.appendChild(tagPosition);
             if(color===true){
@@ -78,7 +80,6 @@ function clearGeneralInput (tagFather){
 }
 function updateInputCoordinate(namePiece,colorPiece){
     clearGeneralInput("#select__coordinate");
-    //NÃO ENVIAR PIECEBOARD
     const possiblePosition= piecesBoard[namePiece+colorPiece].functionPiece(chessBoard); 
     coordinateSelection(possiblePosition);
 }
@@ -219,14 +220,20 @@ buttomStar.addEventListener("click", ()=>{
 });
 
 //Caso tiver mudança de cor informa as peças que estão ativas. Evento onChance.
-const colorPiece = document.querySelector("#select__color");
-colorPiece.addEventListener('click', () => {selectPiece (colorPiece.value,piecesBoard)});
+const inputColor= document.querySelector("#select__color");
+inputColor.addEventListener('change', () => { console.log("qualquer "); 
+    selectPiece (inputColor.value,piecesBoard)});
 
-document.querySelector("#select__name").addEventListener('change', (e) =>{
-    updateInputCoordinate(e.target.value,colorPiece.value);
+const inputName = document.querySelector("#select__name")
+inputName.addEventListener('change', (e) =>{
+    updateInputCoordinate(e.target.value,inputColor.value);
 });
 
-document.querySelector(`#button__movement`).addEventListener("click", () =>{pieceMovementInformation(chessBoard,piecesBoard)}) 
+const inputCoordinate = document.querySelector('#select__coordinate');
+
+document.querySelector(`#button__movement`).addEventListener("click", () =>{
+    requiredPieceMovement(chessBoard,piecesBoard,inputColor.value,inputName.value,inputCoordinate.value);
+}); 
 
 function selectPiece (colorPiece,piecesBoard){
     clearGeneralInput ("#select__name");
@@ -349,7 +356,6 @@ if((line+Number(direction))>=1 && (line+Number(direction))<=8){
     return movimentPawn;
 }
 
-
 function coordinateSelection(positions){
 
     if(positions.length==0){
@@ -369,30 +375,27 @@ function refIdToCoordinate (coordenadasClass){
     return result;
     // const conversao = [["1","A"],["2","B"],["3","C"],["4","D"],["5","E"],["6","F"],["7","G"],["8","H"]];
 }
+
 function coordinateToRefId (coordenadasClass){
     //Edita as coordenadas para renderização, trocando a letra pelo numero usando .charCodeAt
    let result = "ref"+(String.fromCharCode(coordenadasClass.charCodeAt(0)-16))+coordenadasClass.charAt(1);
     return result;
 }
-//Movimentar as peças
 
-function pieceMovementInformation(chessBoard,piecesBoard){
-    movementPieceBoard={
-        name: document.querySelector('#select__name').value,
-        color: document.querySelector('#select__color').value,
-        coordinate: coordinateToRefId(document.querySelector('#select__coordinate').value),
-    }
+//Movimentar as peças
+function requiredPieceMovement(chessBoard,piecesBoard,inputColorValue,inputNameValue,inputCoordinateValue){
     // descobrir onde esta a peça q vai mover
-    positionRefModification(chessBoard,piecesBoard,movementPieceBoard);
+    positionRefModification(chessBoard,piecesBoard,inputColorValue,inputNameValue,coordinateToRefId(inputCoordinateValue));
     renderBoard(chessBoard);
-    updateInputCoordinate(movementPieceBoard.name,movementPieceBoard.color);
+    updateInputCoordinate(inputNameValue,inputColorValue);
+    return chessBoard;
 };
 
-function positionRefModification(chessBoard,piecesBoard,movementPieceBoard){
-    const namePiece=`${movementPieceBoard.name}${movementPieceBoard.color}`;
+function positionRefModification(chessBoard,piecesBoard,inputColorValue,inputNameValue,inputCoordinateValue){
+    const namePiece=`${inputNameValue}${inputColorValue}`;
     const refPiece=piecesBoard[namePiece];
-    const newPosition = movementPieceBoard.coordinate;
-    if(chessBoard[newPosition]!==null){
+    const newPosition = inputCoordinateValue;
+    if(chessBoard[newPosition]!==null && refPiece.position!==chessBoard[newPosition]){
         chessBoard[newPosition].isAtive = false;
     }
         chessBoard[refPiece.position]=null;
@@ -400,5 +403,3 @@ function positionRefModification(chessBoard,piecesBoard,movementPieceBoard){
         refPiece.qtMovements++;
         chessBoard[newPosition]= refPiece;
 }
-
-
