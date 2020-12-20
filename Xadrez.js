@@ -8,8 +8,10 @@ function boardCreation(){
             const tagPosition = document.createElement('div');
             tagPosition.classList.add('board__square');
             tagPosition.id = `ref${i+1}${j+1}`;
-            // const func = (e) => {const a = tagPosition.id; console.log(a)}
-            // tagPosition.onclick=func
+            tagPosition.onclick= (e) => {
+                const squareRefIdClick = tagPosition.id; 
+                modifyClassRefIdAndMovement(squareRefIdClick);
+            }
             // tagPosition.innerHTML=`${i+1}${j+1}`;
             board.appendChild(tagPosition);
             if(color===true){
@@ -243,7 +245,43 @@ function selectPiece (colorPiece,piecesBoard){
         }
     }
 }
+function modifyClassRefIdAndMovement(squareRefIdClick){
+    clearViewsPossibleMovements("move__piece--possibilities");//limpar as possibilidades
+    const divSquareRefId = document.getElementById(`${squareRefIdClick}`);
+    if(divSquareRefId.classList.contains("move__piece--selected"))
+    {
+        divSquareRefId.classList.remove("move__piece--selected");
+    }
+    else{
+        clearViewsPossibleMovements("move__piece--selected");
+        divSquareRefId.classList.add('move__piece--selected');
+        const PossibleMovements = ViewsPossibleMovements(divSquareRefId,chessBoard);
+        renderizaçãoTela(PossibleMovements);
+    }
+}
+function clearViewsPossibleMovements(classSelecionada){
+    const classPossibilities = document.querySelectorAll(`.${classSelecionada}`);
+    classPossibilities.forEach((possibilitie)=>{
+        document.getElementById(`${possibilitie.id}`).classList.remove(`${classSelecionada}`);
+       
+    })
+}
 
+function ViewsPossibleMovements(divSquareRefId,chessBoard){
+    if(chessBoard[divSquareRefId.id]!==null){
+        
+        return chessBoard[divSquareRefId.id].functionPiece(chessBoard);
+    }
+    else{
+        return [];
+    }
+}
+function renderizaçãoTela(PossibleMovements){
+    PossibleMovements.forEach((moviment)=>{
+        document.getElementById(`${moviment}`).classList.add("move__piece--possibilities");
+        console.dir( document.getElementById(`${moviment}`))
+    })
+}
 //Mudança de peça informa as coordenadas
 
 function possibleMovimentTower(chessBoard){
@@ -361,7 +399,7 @@ function coordinateSelection(positions){
     if(positions.length==0){
         optionCreation("#select__coordinate","Sem Movimento");
      }
-
+     positions.sort();
     positions.forEach((possibleCoordinate)=>{ 
         possibleCoordinate = refIdToCoordinate(possibleCoordinate);
         optionCreation("#select__coordinate",possibleCoordinate)}
