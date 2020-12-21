@@ -246,7 +246,7 @@ function selectPiece (colorPiece,piecesBoard){
     }
 }
 function modifyClassRefIdAndMovement(squareRefIdClick){
-    clearViewsPossibleMovements("move__piece--possibilities");//limpar as possibilidades
+    clearViewsPossibleMovements("move__piece--possibilities");//limpar as class das possibilidades
     const divSquareRefId = document.getElementById(`${squareRefIdClick}`);
     if(divSquareRefId.classList.contains("move__piece--selected"))
     {
@@ -256,27 +256,23 @@ function modifyClassRefIdAndMovement(squareRefIdClick){
         clearViewsPossibleMovements("move__piece--selected");
         divSquareRefId.classList.add('move__piece--selected');
         const PossibleMovements = ViewsPossibleMovements(divSquareRefId,chessBoard);
-        renderizaçãoTela(PossibleMovements);
+        demonstrationPossibleMovements(PossibleMovements);
     }
 }
-function clearViewsPossibleMovements(classSelecionada){
-    const classPossibilities = document.querySelectorAll(`.${classSelecionada}`);
+function clearViewsPossibleMovements(classToRemove){
+    const classPossibilities = document.querySelectorAll(`.${classToRemove}`);
     classPossibilities.forEach((possibilitie)=>{
-        document.getElementById(`${possibilitie.id}`).classList.remove(`${classSelecionada}`);
+        document.getElementById(`${possibilitie.id}`).classList.remove(`${classToRemove}`);
        
     })
 }
-
 function ViewsPossibleMovements(divSquareRefId,chessBoard){
     if(chessBoard[divSquareRefId.id]!==null){
         
         return chessBoard[divSquareRefId.id].functionPiece(chessBoard);
     }
-    else{
-        return [];
-    }
 }
-function renderizaçãoTela(PossibleMovements){
+function demonstrationPossibleMovements(PossibleMovements){
     PossibleMovements.forEach((moviment)=>{
         document.getElementById(`${moviment}`).classList.add("move__piece--possibilities");
         console.dir( document.getElementById(`${moviment}`))
