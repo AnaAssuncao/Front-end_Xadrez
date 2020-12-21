@@ -93,3 +93,10 @@
 .pieces__imagem{
     height: 90%;
 }
+.move__piece--possibilities{
+    background-color: rgb(83, 50, 50);
+    border: solid 0.2vw  rgb(56, 41, 41);
+}   
+.move__piece--selected{
+    border: solid 0.2vw  rgb(56, 41, 41);
+}       
