@@ -94,9 +94,11 @@
     height: 90%;
 }
 .move__piece--possibilities{
-    background-color: rgb(83, 50, 50);
-    border: solid 0.2vw  rgb(56, 41, 41);
+    /* background-color:rgba(117, 155, 112, 0.4); */
+    border: dashed 0.2vw  rgb(41, 41, 41);
+    /* background-image: url("img/simbolo.svg"); */
+    /* background-size: cover; */
 }   
 .move__piece--selected{
-    border: solid 0.2vw  rgb(56, 41, 41);
+    border: dashed 0.2vw  rgb(41, 41, 41);
 }       

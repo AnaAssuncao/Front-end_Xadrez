@@ -8,9 +8,9 @@ function boardCreation(){
             const tagPosition = document.createElement('div');
             tagPosition.classList.add('board__square');
             tagPosition.id = `ref${i+1}${j+1}`;
-            tagPosition.onclick= (e) => {
+            tagPosition.onclick= () => {
                 const squareRefIdClick = tagPosition.id; 
-                modifyClassRefIdAndMovement(squareRefIdClick);
+                renderSquareToGo(squareRefIdClick);
             }
             // tagPosition.innerHTML=`${i+1}${j+1}`;
             board.appendChild(tagPosition);
@@ -56,10 +56,10 @@ function renderBoard(chessBoard){
         }
         if(chessBoard[key]!==null){
             const divImg = document.createElement('div');
-            const img = document.createElement('img')
+            const img = document.createElement('img');
             divImg.classList.add("board__pieces");
-            img.src=`${chessBoard[key].img}.png`
-            img.classList.add('pieces__imagem')
+            img.src=`${chessBoard[key].img}.png`;
+            img.classList.add('pieces__imagem');
             divImg.appendChild(img);
             divSquare.appendChild(divImg);           
         }
@@ -245,37 +245,31 @@ function selectPiece (colorPiece,piecesBoard){
         }
     }
 }
-function modifyClassRefIdAndMovement(squareRefIdClick){
-    clearViewsPossibleMovements("move__piece--possibilities");//limpar as class das possibilidades
-    const divSquareRefId = document.getElementById(`${squareRefIdClick}`);
+function renderSquareToGo(idSquare){
+    clearMovementsBoard("move__piece--possibilities");//limpar as class das possibilidades
+    const divSquareRefId = document.getElementById(`${idSquare}`);
     if(divSquareRefId.classList.contains("move__piece--selected"))
     {
         divSquareRefId.classList.remove("move__piece--selected");
     }
     else{
-        clearViewsPossibleMovements("move__piece--selected");
+        const refPiece = chessBoard[divSquareRefId.id]
+        clearMovementsBoard("move__piece--selected");
         divSquareRefId.classList.add('move__piece--selected');
-        const PossibleMovements = ViewsPossibleMovements(divSquareRefId,chessBoard);
+        const PossibleMovements = (refPiece)?refPiece.functionPiece(chessBoard):[];
         demonstrationPossibleMovements(PossibleMovements);
     }
 }
-function clearViewsPossibleMovements(classToRemove){
+function  clearMovementsBoard(classToRemove){
     const classPossibilities = document.querySelectorAll(`.${classToRemove}`);
     classPossibilities.forEach((possibilitie)=>{
         document.getElementById(`${possibilitie.id}`).classList.remove(`${classToRemove}`);
        
     })
 }
-function ViewsPossibleMovements(divSquareRefId,chessBoard){
-    if(chessBoard[divSquareRefId.id]!==null){
-        
-        return chessBoard[divSquareRefId.id].functionPiece(chessBoard);
-    }
-}
 function demonstrationPossibleMovements(PossibleMovements){
     PossibleMovements.forEach((moviment)=>{
         document.getElementById(`${moviment}`).classList.add("move__piece--possibilities");
-        console.dir( document.getElementById(`${moviment}`))
     })
 }
 //Mudança de peça informa as coordenadas
@@ -417,16 +411,19 @@ function coordinateToRefId (coordenadasClass){
 }
 
 //Movimentar as peças
-function requiredPieceMovement(chessBoard,piecesBoard,inputColorValue,inputNameValue,inputCoordinateValue){
+function requiredPieceMovement(chessBoard,piecesBoard,inputColorValue,inputNamePieceValue,inputCoordinateValue){
     // descobrir onde esta a peça q vai mover
-    positionRefModification(chessBoard,piecesBoard,inputColorValue,inputNameValue,coordinateToRefId(inputCoordinateValue));
+    const refId = coordinateToRefId(inputCoordinateValue);
+    // Altera obj do jogo
+    positionRefModification(chessBoard,piecesBoard,inputColorValue,inputNamePieceValue,refId);
     renderBoard(chessBoard);
-    updateInputCoordinate(inputNameValue,inputColorValue);
+    updateInputCoordinate(inputNamePieceValue,inputColorValue);
+    renderSquareToGo(refId);
     return chessBoard;
 };
 
-function positionRefModification(chessBoard,piecesBoard,inputColorValue,inputNameValue,inputCoordinateValue){
-    const namePiece=`${inputNameValue}${inputColorValue}`;
+function positionRefModification(chessBoard,piecesBoard,inputColorValue,inputNamePieceValue,inputCoordinateValue){
+    const namePiece=`${inputNamePieceValue}${inputColorValue}`;
     const refPiece=piecesBoard[namePiece];
     const newPosition = inputCoordinateValue;
     if(chessBoard[newPosition]!==null && refPiece.position!==chessBoard[newPosition]){
