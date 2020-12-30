@@ -212,9 +212,9 @@ const starChessBoard = {
     //função construtora do objeto com as informações das peças. 
 }
 const pieceSelect = {
-    ref:null,
-    element:null,
-    class:"move__piece--selected",
+    refPiece:null,
+    elementPiece:null,
+    classPiece:"move__piece--selected",
     refMoviments:[],
     elementsMoviments:[],
     classMoviments:"move__piece--possibilities"
@@ -241,7 +241,7 @@ inputName.addEventListener('change', (e) =>{
 const inputCoordinate = document.querySelector('#select__coordinate');
 
 document.querySelector(`#button__movement`).addEventListener("click", () =>{
-    requiredPieceMovement(chessBoard,piecesBoard,inputColor.value,inputName.value,inputCoordinate.value);
+    requiredPieceMovement(chessBoard,piecesBoard,inputColor.value,inputName.value,coordinateToRefId(inputCoordinate.value));
 }); 
 
 function selectPiece (colorPiece,piecesBoard){
@@ -268,33 +268,55 @@ function addMovementsBoard(pieceSelect){
     pieceSelect.elementPiece.classList.add(`${pieceSelect.classPiece}`);
     pieceSelect.elementsMoviments.forEach((possibilitie)=>{
         possibilitie.classList.add(`${pieceSelect.classMoviments}`);
-    })
+    });
 }
 function demonstrationPossibleMovements(pieceSelect){
     return pieceSelect.refMoviments.map((moviment)=>{
         const possibleElements = document.getElementById(`${moviment}`);
         possibleElements.classList.add(pieceSelect.classMoviments);
         return possibleElements
-    })
+    });
 }
 
 function movimentsModification(idSquare,pieceSelect,divSquareRefId){
-    if(pieceSelect.refPiece===idSquare)
+    const movimentBoardPiece = checkMoviments(idSquare,pieceSelect);
+    if((pieceSelect.refPiece!==idSquare)&&(chessBoard[idSquare]!==null||movimentBoardPiece))
     {
+        if(movimentBoardPiece){
+            moveBoardPiece(chessBoard,piecesBoard,idSquare,pieceSelect);     
+        }
+        pieceSelect.refPiece=idSquare;
+        pieceSelect.elementPiece=divSquareRefId;
+        const refPiece = chessBoard[idSquare];
+        pieceSelect.refMoviments = (refPiece)?refPiece.functionPiece(chessBoard):[];
+        pieceSelect.elementsMoviments=demonstrationPossibleMovements(pieceSelect);
+        return true;
+    }
+    else{
         pieceSelect.refPiece=null;
         pieceSelect.elementPiece=null;
         pieceSelect.refMoviments=[];
         pieceSelect.elementsMoviments=[];
         return false;
-    }
-    else{
-        pieceSelect.refPiece=idSquare;
-        pieceSelect.elementPiece=divSquareRefId;
-        const refPiece = chessBoard[idSquare]
-        pieceSelect.refMoviments = (refPiece)?refPiece.functionPiece(chessBoard):[];
-        pieceSelect.elementsMoviments=demonstrationPossibleMovements(pieceSelect);
-        return true;
     }  
+}
+function checkMoviments(idSquare,pieceSelect){
+    let movedThePiece =false;
+    for(let ref of pieceSelect.refMoviments){
+        if(ref===idSquare){
+            movedThePiece=true;
+            break;
+        }
+    }
+    return movedThePiece;
+}
+function moveBoardPiece(chessBoard,piecesBoard,idSquare,pieceSelect){
+    const informationPieceSelect={
+        color: chessBoard[pieceSelect.refPiece].color,
+        namePiece: chessBoard[pieceSelect.refPiece].name,
+    }
+    positionRefModification(chessBoard,piecesBoard,informationPieceSelect.color,informationPieceSelect.namePiece,idSquare);
+    renderBoard(chessBoard);
 }
 
 //Mudança de peça informa as coordenadas
@@ -436,13 +458,13 @@ function coordinateToRefId (coordenadasClass){
 
 //Movimentar as peças
 function requiredPieceMovement(chessBoard,piecesBoard,inputColorValue,inputNamePieceValue,inputCoordinateValue){
-    // descobrir onde esta a peça q vai mover
+    // Modificando o nome da ref ID pela função coordinateToRefId
     const refId = coordinateToRefId(inputCoordinateValue);
     // Altera obj do jogo
-    positionRefModification(chessBoard,piecesBoard,inputColorValue,inputNamePieceValue,refId);
+    positionRefModification(chessBoard,piecesBoard,inputColorValue,inputNamePieceValue,refID);
     renderBoard(chessBoard);
     updateInputCoordinate(inputNamePieceValue,inputColorValue);
-    renderSquareToGo(refId);
+    renderSquareToGo(inputCoordinateValue);
     return chessBoard;
 };
 
