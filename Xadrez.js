@@ -9,8 +9,8 @@ function boardCreation(){
             tagPosition.classList.add('board__square');
             tagPosition.id = `ref${i+1}${j+1}`;
             tagPosition.onclick= () => {
-                const squareRefIdClick = tagPosition.id; 
-                renderSquareToGo(squareRefIdClick);
+                const squareRefIdClick = tagPosition.id;
+                renderSquareToGo(squareRefIdClick, pieceSelect);
             }
             // tagPosition.innerHTML=`${i+1}${j+1}`;
             board.appendChild(tagPosition);
@@ -211,10 +211,17 @@ const starChessBoard = {
     },
     //função construtora do objeto com as informações das peças. 
 }
-
+const pieceSelect = {
+    ref:null,
+    element:null,
+    class:"move__piece--selected",
+    refMoviments:[],
+    elementsMoviments:[],
+    classMoviments:"move__piece--possibilities"
+}
 
 //Cria o tabuleiro
-boardCreation();
+boardCreation(pieceSelect);
 //Clicar no iniciar jogo as peças irão para as casas iniciais
 const buttomStar= document.querySelector(`#button__start`);
 buttomStar.addEventListener("click", ()=>{
@@ -223,7 +230,7 @@ buttomStar.addEventListener("click", ()=>{
 
 //Caso tiver mudança de cor informa as peças que estão ativas. Evento onChance.
 const inputColor= document.querySelector("#select__color");
-inputColor.addEventListener('change', () => { console.log("qualquer "); 
+inputColor.addEventListener('change', () => { 
     selectPiece (inputColor.value,piecesBoard)});
 
 const inputName = document.querySelector("#select__name")
@@ -245,35 +252,52 @@ function selectPiece (colorPiece,piecesBoard){
         }
     }
 }
-function renderSquareToGo(idSquare){
-    clearMovementsBoard("move__piece--possibilities");//limpar as class das possibilidades
+function renderSquareToGo(idSquare,pieceSelect){
+    (pieceSelect.refPiece)?clearMovementsBoard(pieceSelect):null;//limpar as class das possibilidades
     const divSquareRefId = document.getElementById(`${idSquare}`);
-    if(divSquareRefId.classList.contains("move__piece--selected"))
+    movimentsModification(idSquare,pieceSelect,divSquareRefId );
+    (pieceSelect.refPiece)?addMovementsBoard(pieceSelect):null;
+}
+function clearMovementsBoard(pieceSelect){
+    pieceSelect.elementPiece.classList.remove(`${pieceSelect.classPiece}`);
+    pieceSelect.elementsMoviments.forEach((possibilitie)=>{
+        possibilitie.classList.remove(`${pieceSelect.classMoviments}`);
+    });
+}
+function addMovementsBoard(pieceSelect){
+    pieceSelect.elementPiece.classList.add(`${pieceSelect.classPiece}`);
+    pieceSelect.elementsMoviments.forEach((possibilitie)=>{
+        possibilitie.classList.add(`${pieceSelect.classMoviments}`);
+    })
+}
+function demonstrationPossibleMovements(pieceSelect){
+    return pieceSelect.refMoviments.map((moviment)=>{
+        const possibleElements = document.getElementById(`${moviment}`);
+        possibleElements.classList.add(pieceSelect.classMoviments);
+        return possibleElements
+    })
+}
+
+function movimentsModification(idSquare,pieceSelect,divSquareRefId){
+    if(pieceSelect.refPiece===idSquare)
     {
-        divSquareRefId.classList.remove("move__piece--selected");
+        pieceSelect.refPiece=null;
+        pieceSelect.elementPiece=null;
+        pieceSelect.refMoviments=[];
+        pieceSelect.elementsMoviments=[];
+        return false;
     }
     else{
-        const refPiece = chessBoard[divSquareRefId.id]
-        clearMovementsBoard("move__piece--selected");
-        divSquareRefId.classList.add('move__piece--selected');
-        const PossibleMovements = (refPiece)?refPiece.functionPiece(chessBoard):[];
-        demonstrationPossibleMovements(PossibleMovements);
-    }
+        pieceSelect.refPiece=idSquare;
+        pieceSelect.elementPiece=divSquareRefId;
+        const refPiece = chessBoard[idSquare]
+        pieceSelect.refMoviments = (refPiece)?refPiece.functionPiece(chessBoard):[];
+        pieceSelect.elementsMoviments=demonstrationPossibleMovements(pieceSelect);
+        return true;
+    }  
 }
-function  clearMovementsBoard(classToRemove){
-    const classPossibilities = document.querySelectorAll(`.${classToRemove}`);
-    classPossibilities.forEach((possibilitie)=>{
-        document.getElementById(`${possibilitie.id}`).classList.remove(`${classToRemove}`);
-       
-    })
-}
-function demonstrationPossibleMovements(PossibleMovements){
-    PossibleMovements.forEach((moviment)=>{
-        document.getElementById(`${moviment}`).classList.add("move__piece--possibilities");
-    })
-}
-//Mudança de peça informa as coordenadas
 
+//Mudança de peça informa as coordenadas
 function possibleMovimentTower(chessBoard){
     const column=Number(this.position.charAt(3));
     const line=Number(this.position.charAt(4));
