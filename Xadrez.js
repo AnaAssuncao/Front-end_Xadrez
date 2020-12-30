@@ -226,7 +226,6 @@ boardCreation(pieceSelect);
 //Clicar no iniciar jogo as peças irão para as casas iniciais
 const buttomStar= document.querySelector(`#button__start`);
 buttomStar.addEventListener("click", ()=>{
-    debugger;
     starChessBoard.starGame(chessBoard,piecesBoard,pieceSelect)
 });
 
