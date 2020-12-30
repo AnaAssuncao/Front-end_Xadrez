@@ -200,7 +200,7 @@ const starChessBoard = {
         }
         return chessBoard;
     },
-    starGame (chessBoard,piecesBoard){
+    starGame (chessBoard,piecesBoard,pieceSelect){
         clearGeneralInput ("#select__color");
         clearGeneralInput ("#select__coordinate");
         this.starObjGame(chessBoard,this.objStarBoard,piecesBoard,this.colorPieceBoard);
@@ -208,6 +208,7 @@ const starChessBoard = {
         optionCreation("#select__color",this.colorPieceBoard.higher);
         optionCreation("#select__color",this.colorPieceBoard.bottom);
         selectPiece (this.colorPieceBoard.higher,piecesBoard);
+        (pieceSelect.refPiece)?clearMovementsBoard(pieceSelect):null;
     },
     //função construtora do objeto com as informações das peças. 
 }
@@ -225,7 +226,8 @@ boardCreation(pieceSelect);
 //Clicar no iniciar jogo as peças irão para as casas iniciais
 const buttomStar= document.querySelector(`#button__start`);
 buttomStar.addEventListener("click", ()=>{
-    starChessBoard.starGame(chessBoard,piecesBoard)
+    debugger;
+    starChessBoard.starGame(chessBoard,piecesBoard,pieceSelect)
 });
 
 //Caso tiver mudança de cor informa as peças que estão ativas. Evento onChance.
