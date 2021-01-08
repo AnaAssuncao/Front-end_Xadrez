@@ -1,101 +1,94 @@
-function createGame () {
-    //Objeto que possui como chave a referência do id de cada casa do tabuleiro.
-    this.chessBoard= {
-        ref11:null,
-        ref12:null,
-        ref13:null,
-        ref14:null,
-        ref15:null,
-        ref16:null,
-        ref17:null,
-        ref18:null,
-        ref21:null,
-        ref22:null,
-        ref23:null,
-        ref24:null,
-        ref25:null,
-        ref26:null,
-        ref27:null,
-        ref28:null,
-        ref31:null,
-        ref32:null,
-        ref33:null,
-        ref34:null,
-        ref35:null,
-        ref36:null,
-        ref37:null,
-        ref38:null,
-        ref41:null,
-        ref42:null,
-        ref43:null,
-        ref44:null,
-        ref45:null,
-        ref46:null,
-        ref47:null,
-        ref48:null,
-        ref51:null,
-        ref52:null,
-        ref53:null,
-        ref54:null,
-        ref55:null,
-        ref56:null,
-        ref57:null,
-        ref58:null,
-        ref61:null,
-        ref62:null,
-        ref63:null,
-        ref64:null,
-        ref65:null,
-        ref66:null,
-        ref67:null,
-        ref68:null,
-        ref71:null,
-        ref72:null,
-        ref73:null,
-        ref74:null,
-        ref75:null,
-        ref76:null,
-        ref77:null,
-        ref78:null,
-        ref81:null,
-        ref82:null,
-        ref83:null,
-        ref84:null,
-        ref85:null,
-        ref86:null,
-        ref87:null,
-        ref88:null,
-    };
-
-    //chave Nome+cor - conforme obj chessBoard
-    this.piecesBoard= {};
-
-    //Cor peças
-    this.colorPieceBoard= {
-        top:"White",
-        bottom:"Black"
-    }
-
-    // Controle de peça selecionada.
-    this.pieceSelect= {
-        namePiece:null,
-        refPiece:null,
-        refMoviments:[],
-        color:null
-    }
+class createGame {
+    constructor(){
+        this.chessBoard= {
+            ref11:null,
+            ref12:null,
+            ref13:null,
+            ref14:null,
+            ref15:null,
+            ref16:null,
+            ref17:null,
+            ref18:null,
+            ref21:null,
+            ref22:null,
+            ref23:null,
+            ref24:null,
+            ref25:null,
+            ref26:null,
+            ref27:null,
+            ref28:null,
+            ref31:null,
+            ref32:null,
+            ref33:null,
+            ref34:null,
+            ref35:null,
+            ref36:null,
+            ref37:null,
+            ref38:null,
+            ref41:null,
+            ref42:null,
+            ref43:null,
+            ref44:null,
+            ref45:null,
+            ref46:null,
+            ref47:null,
+            ref48:null,
+            ref51:null,
+            ref52:null,
+            ref53:null,
+            ref54:null,
+            ref55:null,
+            ref56:null,
+            ref57:null,
+            ref58:null,
+            ref61:null,
+            ref62:null,
+            ref63:null,
+            ref64:null,
+            ref65:null,
+            ref66:null,
+            ref67:null,
+            ref68:null,
+            ref71:null,
+            ref72:null,
+            ref73:null,
+            ref74:null,
+            ref75:null,
+            ref76:null,
+            ref77:null,
+            ref78:null,
+            ref81:null,
+            ref82:null,
+            ref83:null,
+            ref84:null,
+            ref85:null,
+            ref86:null,
+            ref87:null,
+            ref88:null,
+        }
     
-    //Objeto para Inicio.
-    objStarBoard={
-        starPiecesBlack:["towerBlack","knightBlack","bishopBlack","queenBlack","kingBlack","bishopBlack","knightBlack","towerBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack"],
-        starPiecesWhite:["towerWhite","knightWhite","bishopWhite","queenWhite","kingWhite","bishopWhite","knightWhite","towerWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite"],
-        namePiece:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
-        functionPieces:[possibleMovimentTower,possibleMovimentKnight,possibleMovimentBishop,possibleMovimentQueen,possibleMovimentKing, possibleMovimentBishop,possibleMovimentKnight, possibleMovimentTower,
-            possibleMovimentPawn, possibleMovimentPawn, possibleMovimentPawn, possibleMovimentPawn, possibleMovimentPawn, possibleMovimentPawn, possibleMovimentPawn, possibleMovimentPawn]
+        //chave Nome+cor - conforme obj chessBoard
+        this.piecesBoard= {}
+    
+        //Cor peças
+        this.colorPieceBoard= {
+            top:"White",
+            bottom:"Black"
+        }
+    
+        // Controle de peça selecionada.
+        this.pieceSelect= {
+            namePiece:null,
+            refPiece:null,
+            refMoviments:[],
+            color:null
+        }
+        this.starObjGame()
     }
 
-    const makePiece = (name,color,img,position,functionPiece,isAtive=true)=>{   
+    makePiece = (name,color,img,position,functionPiece,isAtive=true)=>{   
         return {
-            __proto__: this, 
+            __proto__:this,
             name:name,
             color:color,
             img:`img/${img}`,
@@ -106,7 +99,14 @@ function createGame () {
         } 
     }  
 
-    this.starObjGame = function (){
+    starObjGame(){
+        const objStarBoard={
+            starPiecesBlack:["towerBlack","knightBlack","bishopBlack","queenBlack","kingBlack","bishopBlack","knightBlack","towerBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack"],
+            starPiecesWhite:["towerWhite","knightWhite","bishopWhite","queenWhite","kingWhite","bishopWhite","knightWhite","towerWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite"],
+            namePiece:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
+             functionPieces:[this.possibleMovimentTower,this.possibleMovimentKnight,this.possibleMovimentBishop,this.possibleMovimentQueen,this.possibleMovimentKing, this.possibleMovimentBishop,this.possibleMovimentKnight, this.possibleMovimentTower,
+                this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn]
+        }
         Object.keys(this.chessBoard).forEach((value)=>{this.chessBoard[value]=null});
 
         for (let i in objStarBoard.starPiecesBlack) {
@@ -115,7 +115,7 @@ function createGame () {
             const keyChess = `ref${refColumn}${refLine}`
             const keyPieces = `${objStarBoard.namePiece[i]}${this.colorPieceBoard.bottom}`;
           
-            this.piecesBoard[keyPieces]= makePiece(objStarBoard.namePiece[i],this.colorPieceBoard.bottom,objStarBoard.starPiecesBlack[i],keyChess,objStarBoard.functionPieces[i]);
+            this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],this.colorPieceBoard.bottom,objStarBoard.starPiecesBlack[i],keyChess,objStarBoard.functionPieces[i]);
             this.chessBoard[keyChess]= this.piecesBoard[keyPieces];
         }
         for (let i in objStarBoard.starPiecesWhite) {
@@ -124,17 +124,13 @@ function createGame () {
             const keyChess = `ref${refColumn}${refLine}`
             const keyPieces = `${objStarBoard.namePiece[i]}${this.colorPieceBoard.top}`
             
-            this.piecesBoard[keyPieces]= makePiece(objStarBoard.namePiece[i],this.colorPieceBoard.top,objStarBoard.starPiecesWhite[i],keyChess, objStarBoard.functionPieces[i]);
+            this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],this.colorPieceBoard.top,objStarBoard.starPiecesWhite[i],keyChess, objStarBoard.functionPieces[i]);
             this.chessBoard[keyChess]= this.piecesBoard[keyPieces];
         }
 
         this.pieceSelect.color=this.colorPieceBoard.top; //Cor Branca começam.
-        return this.chessBoard
     }
-    this.starObjGame();
-
-    //Mudança de peça informa as coordenadas
-    function possibleMovimentTower(tower){
+    possibleMovimentTower(){
         const column=Number(this.position.charAt(3));
         const line=Number(this.position.charAt(4));
         const direction = [[0,1],[0,-1],[1,0],[-1,0]];
@@ -146,7 +142,7 @@ function createGame () {
 
         return moviment;
     }
-    function possibleMovimentKnight (){
+    possibleMovimentKnight (){
         const column=Number(this.position.charAt(3));
         const line=Number(this.position.charAt(4));
         const direction = [[2,1],[2,-1],[-2,-1],[-2,1],[1,2],[-1,2],[-1,-2],[1,-2]];
@@ -158,7 +154,7 @@ function createGame () {
 
         return moviment;
     }
-    function possibleMovimentBishop  (){
+    possibleMovimentBishop  (){
         const column=Number(this.position.charAt(3));
         const line=Number(this.position.charAt(4));
         const direction=[[1,1],[1,-1],[-1,-1],[-1,1]];
@@ -170,7 +166,7 @@ function createGame () {
 
         return moviment;
     }
-    function possibleMovimentQueen  (){
+    possibleMovimentQueen  (){
         const column=Number(this.position.charAt(3));
         const line=Number(this.position.charAt(4));
         const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]];
@@ -182,7 +178,7 @@ function createGame () {
 
         return moviment;
     }
-    function possibleMovimentKing (){
+    possibleMovimentKing (){
         const column=Number(this.position.charAt(3));
         const line=Number(this.position.charAt(4));
         const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]];
@@ -195,7 +191,7 @@ function createGame () {
         return moviment;
     }
 
-    const checkRegularMovement =([column,line], columnPosition, linePosition, color, maximumPaces)=>{
+    checkRegularMovement([column,line], columnPosition, linePosition, color, maximumPaces){
         let possibleColumn = columnPosition + column;
         let possibleLine = linePosition+ line;
         const possibleDirection = [];
@@ -217,7 +213,7 @@ function createGame () {
         return possibleDirection;
     }
 
-    function possibleMovimentPawn (){
+    possibleMovimentPawn (){
         const column=Number(this.position.charAt(3));
         const line =Number(this.position.charAt(4));
         const movimentPawn = [];
@@ -244,7 +240,7 @@ function createGame () {
         return movimentPawn;
     }
 
-    this.positionRefModification = function (ColorValue,NamePieceValue,CoordinateValue){
+    positionRefModification(ColorValue,NamePieceValue,CoordinateValue){
         const namePiece=`${NamePieceValue}${ColorValue}`;
         const refPiece=this.piecesBoard[namePiece];
         const newPosition = CoordinateValue;
@@ -257,14 +253,14 @@ function createGame () {
             this.chessBoard[newPosition]= refPiece;
     }
 
-    const checkColor=(idSquare)=>{
+    checkColor(idSquare){
         let colorMoviment = true;
         if(this.pieceSelect.color!==this.chessBoard[idSquare].color){
             colorMoviment = false;
         }
         return colorMoviment;
     }
-    const checkMoviments=(idSquare)=>{
+    checkMoviments(idSquare){
         let movedThePiece =false;
         for(let ref of this.pieceSelect.refMoviments){
             if(ref===idSquare){
@@ -274,20 +270,20 @@ function createGame () {
         }
         return movedThePiece;
     }
-    const movePiece=(idSquare)=>{
+    movePiece(idSquare){
         const informationPieceSelect={
             color: this.chessBoard[this.pieceSelect.refPiece].color,
             namePiece: this.chessBoard[this.pieceSelect.refPiece].name,
         }
         this.positionRefModification(informationPieceSelect.color,informationPieceSelect.namePiece,idSquare);
     }
-    this.movimentsPiece = function (piece){
+    movimentsPiece(piece){
         const refId=this.piecesBoard[piece].position;
         this.movimentsModification(refId)
     }
     // Movimentação peça no tabuleiro
-    this.movimentsModification = function (idSquare){
-        if((this.pieceSelect.refPiece!==idSquare)&&(this.chessBoard[idSquare]!==null)&&checkColor(idSquare))
+    movimentsModification(idSquare){
+        if((this.pieceSelect.refPiece!==idSquare)&&(this.chessBoard[idSquare]!==null)&& this.checkColor(idSquare))
         {
             this.pieceSelect.refPiece=idSquare;
             const refPiece = this.chessBoard[idSquare];
@@ -295,8 +291,8 @@ function createGame () {
             this.pieceSelect.refMoviments = (refPiece)?refPiece.functionPiece():[];      
         }
         else{
-            if(checkMoviments(idSquare)){
-                movePiece(idSquare);   
+            if(this.checkMoviments(idSquare)){
+                this.movePiece(idSquare);   
                 this.pieceSelect.color=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top;
             }
             this.pieceSelect.namePiece=null;
