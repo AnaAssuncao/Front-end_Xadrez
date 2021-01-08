@@ -78,9 +78,10 @@ function createGame () {
 
     // Controle de peça selecionada.
     this.pieceSelect= {
+        namePiece:null,
         refPiece:null,
         refMoviments:[],
-        color:this.colorPieceBoard.top
+        color:null
     }
     
     //Objeto para Inicio.
@@ -126,6 +127,8 @@ function createGame () {
             this.piecesBoard[keyPieces]= makePiece(objStarBoard.namePiece[i],this.colorPieceBoard.top,objStarBoard.starPiecesWhite[i],keyChess, objStarBoard.functionPieces[i]);
             this.chessBoard[keyChess]= this.piecesBoard[keyPieces];
         }
+
+        this.pieceSelect.color=this.colorPieceBoard.top; //Cor Branca começam.
         return this.chessBoard
     }
     this.starObjGame();
@@ -242,7 +245,6 @@ function createGame () {
     }
 
     this.positionRefModification = function (ColorValue,NamePieceValue,CoordinateValue){
-        debugger
         const namePiece=`${NamePieceValue}${ColorValue}`;
         const refPiece=this.piecesBoard[namePiece];
         const newPosition = CoordinateValue;
@@ -280,7 +282,8 @@ function createGame () {
         this.positionRefModification(informationPieceSelect.color,informationPieceSelect.namePiece,idSquare);
     }
     this.movimentsPiece = function (piece){
-        return this.piecesBoard[piece].functionPiece(); 
+        const refId=this.piecesBoard[piece].position;
+        this.movimentsModification(refId)
     }
     // Movimentação peça no tabuleiro
     this.movimentsModification = function (idSquare){
@@ -288,6 +291,7 @@ function createGame () {
         {
             this.pieceSelect.refPiece=idSquare;
             const refPiece = this.chessBoard[idSquare];
+            this.pieceSelect.namePiece=refPiece.name;
             this.pieceSelect.refMoviments = (refPiece)?refPiece.functionPiece():[];      
         }
         else{
@@ -295,10 +299,9 @@ function createGame () {
                 movePiece(idSquare);   
                 this.pieceSelect.color=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top;
             }
-            this.pieceSelect.refPiece=null;
+            this.pieceSelect.namePiece=null;
+            this.pieceSelect.refPiece=null;           
             this.pieceSelect.refMoviments=[];
         } 
-
     }
-
 }

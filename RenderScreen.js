@@ -94,6 +94,9 @@ function renderScreen(){
             document.getElementById(`${possibilitie}`).classList.add("move__piece--possibilities");
         });
     }
-
+    this.renderNamePieceSelect=function(piece){
+        const selectPiece = document.getElementById("select__name");
+        selectPiece.value= piece;
+    }
 }
 
