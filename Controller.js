@@ -29,8 +29,8 @@ render.boardCreation();
 function starGame(){
     render.clearGeneralInput ("#select__color");
     render.clearGeneralInput ("#select__coordinate");
-    const chessBoard = game.starObjGame();
-    render.renderBoard(chessBoard);
+    game.starObjGame();
+    render.renderBoard(game.chessBoard);
     render.optionCreation("#select__color",game.pieceSelect.color);
     selectPieceInput (game.pieceSelect.color,game.piecesBoard);
     (game.pieceSelect.refPiece)?render.clearMovementsBoard(game.pieceSelect):null;
@@ -91,6 +91,7 @@ function requiredPieceMovement(inputCoordinateValue){
 // MOVER NA TELA
 function notifyMoviment (idSquare){
     updateMovimentsPiece(idSquare);
+    render.clearGeneralInput ("#select__coordinate");
     render.renderBoard(game.chessBoard);
     inputModification(idSquare);
 }
