@@ -1,4 +1,4 @@
-class createGame {
+export default class createGame {
     constructor(){
         this.chessBoard= {
             ref11:null,
@@ -86,7 +86,7 @@ class createGame {
         this.starObjGame()
     }
 
-    makePiece = (name,color,img,position,functionPiece,isAtive=true)=>{   
+    makePiece (name,color,img,position,functionPiece,isAtive=true){  
         return {
             __proto__:this,
             name:name,
@@ -104,7 +104,7 @@ class createGame {
             starPiecesBlack:["towerBlack","knightBlack","bishopBlack","queenBlack","kingBlack","bishopBlack","knightBlack","towerBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack"],
             starPiecesWhite:["towerWhite","knightWhite","bishopWhite","queenWhite","kingWhite","bishopWhite","knightWhite","towerWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite"],
             namePiece:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
-             functionPieces:[this.possibleMovimentTower,this.possibleMovimentKnight,this.possibleMovimentBishop,this.possibleMovimentQueen,this.possibleMovimentKing, this.possibleMovimentBishop,this.possibleMovimentKnight, this.possibleMovimentTower,
+             functionPieces:[this.__proto__.possibleMovimentTower,this.possibleMovimentKnight,this.possibleMovimentBishop,this.possibleMovimentQueen,this.possibleMovimentKing, this.possibleMovimentBishop,this.possibleMovimentKnight, this.possibleMovimentTower,
                 this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn]
         }
         Object.keys(this.chessBoard).forEach((value)=>{this.chessBoard[value]=null});
@@ -136,7 +136,7 @@ class createGame {
         const direction = [[0,1],[0,-1],[1,0],[-1,0]];
         
         const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(checkRegularMovement(direction, column, line, this.color,8));
+            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,8));
             return newPossibilitiesMoviment;
         },[]);
 
@@ -148,7 +148,7 @@ class createGame {
         const direction = [[2,1],[2,-1],[-2,-1],[-2,1],[1,2],[-1,2],[-1,-2],[1,-2]];
     
         const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(checkRegularMovement(direction, column, line, this.color,1));
+            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,1));
             return newPossibilitiesMoviment;
         },[]);
 
@@ -160,7 +160,7 @@ class createGame {
         const direction=[[1,1],[1,-1],[-1,-1],[-1,1]];
     
         const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(checkRegularMovement(direction, column, line, this.color,8));
+            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,8));
             return newPossibilitiesMoviment;
         },[]);
 
@@ -172,7 +172,7 @@ class createGame {
         const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]];
 
         const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(checkRegularMovement(direction, column, line, this.color,8));
+            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,8));
             return newPossibilitiesMoviment;
         },[]);
 
@@ -184,7 +184,7 @@ class createGame {
         const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]];
     
         const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(checkRegularMovement(direction, column, line, this.color,1));
+            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,1));
             return newPossibilitiesMoviment;
         },[]);
 

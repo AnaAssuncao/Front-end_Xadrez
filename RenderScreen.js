@@ -1,4 +1,4 @@
-function renderScreen(){
+export default function renderScreen(notifyMoviment){
     //Tela
     //Renderizar as casas do tabuleiro.
     this.boardCreation = function (){

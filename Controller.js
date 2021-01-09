@@ -1,6 +1,7 @@
-const render = new renderScreen();
+import createGame from "./XadrezGame.js";
+import renderScreen from "./RenderScreen.js";
+const render = new renderScreen(notifyMoviment);
 const game = new createGame();
-
 //Clicar no iniciar jogo as peças irão para as casas iniciais
 const buttomStar= document.querySelector(`#button__start`);
 buttomStar.addEventListener("click", ()=>{
