@@ -10,27 +10,24 @@ export default function viewScreen(){
     this.buttomStart={
         subscribeFunction(fn){
             functionToCallBack.buttomStart.push(fn)
-        },
-        clearAll(highlightedMovement){
-            clearGeneralInput ("#select__color")
-            clearGeneralInput ("#select__name")
-            clearGeneralInput ("#select__coordinate")
-            if(highlightedMovement.refPiece){
-                clearMovementsBoard(highlightedMovement)
+        }
+    }
+
+    this.colorInput={
+        clearAll(){
+            const optionSelect = document.querySelector("#select__color");
+            while (optionSelect.childElementCount>0){
+                const optionChildren = optionSelect.firstElementChild;
+                optionSelect.removeChild(optionChildren);
             }
         },
-        addPieceColor(color){
-            renderInputOption("#select__color",color)
-        },
-        addPiecesName(arrayValue){
-            arrayValue.forEach((value)=>{
-                renderInputOption("#select__name",value)
-            })
-        },
-        addPiecesCoordinates(arrayValue){
-            arrayValue.forEach((value)=>{
-                renderInputOption("#select__coordinate",value)
-            })
+        addPiecesColor(value){
+                const selectPiece = document.querySelector("#select__color");
+                const optionPiece = document.createElement('option');
+                optionPiece.classList.add("board__option");
+                optionPiece.innerHTML= value;
+                selectPiece.appendChild(optionPiece);
+
         }
     }
 
@@ -38,54 +35,20 @@ export default function viewScreen(){
         subscribeFunction(fn){
             functionToCallBack.pieceInput.push(fn)
         },
-        clearAll(highlightedMovement){
-            clearGeneralInput ("#select__coordinate")
-            if(highlightedMovement.refPiece){
-                clearMovementsBoard(highlightedMovement)
+        clearAll(){
+            const optionSelect = document.querySelector("#select__name");
+            while (optionSelect.childElementCount>0){
+                const optionChildren = optionSelect.firstElementChild;
+                optionSelect.removeChild(optionChildren);
             }
         },
-        addPiecesCoordinates(arrayValue){
+        addPiecesName(arrayValue){
             arrayValue.forEach((value)=>{
-                renderInputOption("#select__coordinate",value)
-            })
-        },
-        renderhighlightedMovement(highlightedMovement){
-            if(highlightedMovement.refPiece){
-                renderMovementsBoard(highlightedMovement)
-            }
-        }
-    }
-
-    this.buttomMove={
-        subscribeFunction(fn){
-            functionToCallBack.buttomMove.push(fn)
-        },
-        clearAll(highlightedMovement){
-            if(highlightedMovement.refPiece){
-                clearMovementsBoard(highlightedMovement)
-            }
-        },
-
-    }
-
-    this.clickChessBoard={
-        subscribeFunction(fn){
-            functionToCallBack.clickChessBoard.push(fn)
-        },
-        clearAll(highlightedMovement){
-            clearGeneralInput ("#select__coordinate")
-            if(highlightedMovement.refPiece){
-                clearMovementsBoard(highlightedMovement)
-            }
-        },
-        renderhighlightedMovement(highlightedMovement){
-            if(highlightedMovement.refPiece){
-                renderMovementsBoard(highlightedMovement)
-            }
-        },
-        addPiecesCoordinates(arrayValue){
-            arrayValue.forEach((value)=>{
-                renderInputOption("#select__coordinate",value)
+                const selectPiece = document.querySelector("#select__name");
+                const optionPiece = document.createElement('option');
+                optionPiece.classList.add("board__option");
+                optionPiece.innerHTML= value;
+                selectPiece.appendChild(optionPiece);
             })
         },
         renderNamePieceSelect(namePiece){
@@ -94,24 +57,49 @@ export default function viewScreen(){
         }
     }
 
-    this.nextColorToPlay ={
+    this.coordinateInput={
         clearAll(){
-            clearGeneralInput ("#select__color")
-            clearGeneralInput ("#select__name")
-            clearGeneralInput ("#select__coordinate")
-        },
-        addPieceColor(color){
-            renderInputOption("#select__color",color)
-        },
-        addPiecesName(arrayValue){
-            arrayValue.forEach((value)=>{
-                renderInputOption("#select__name",value)
-            })
+            const optionSelect = document.querySelector("#select__coordinate");
+            while (optionSelect.childElementCount>0){
+                const optionChildren = optionSelect.firstElementChild;
+                optionSelect.removeChild(optionChildren);
+            }
         },
         addPiecesCoordinates(arrayValue){
             arrayValue.forEach((value)=>{
-                renderInputOption("#select__coordinate",value)
+                const selectPiece = document.querySelector("#select__coordinate");
+                const optionPiece = document.createElement('option');
+                optionPiece.classList.add("board__option");
+                optionPiece.innerHTML= value;
+                selectPiece.appendChild(optionPiece);
             })
+        }
+    }
+
+    this.buttomMove={
+        subscribeFunction(fn){
+            functionToCallBack.buttomMove.push(fn)
+        }
+    }
+
+    this.clickChessBoard={
+        subscribeFunction(fn){
+            functionToCallBack.clickChessBoard.push(fn)
+        }
+    }
+
+    this.highlightedMovement={
+        clearAll(piece){
+            document.getElementById(`${piece.refPiece}`).classList.remove("move__piece--selected");
+            piece.refMoviments.forEach((possibilitie)=>{
+                document.getElementById(`${possibilitie}`).classList.remove("move__piece--possibilities");
+            });
+        },
+        renderhighlightedMovement(piece){
+            document.getElementById(`${piece.refPiece}`).classList.add("move__piece--selected");
+            piece.refMoviments.forEach((possibilitie)=>{
+                document.getElementById(`${possibilitie}`).classList.add("move__piece--possibilities");
+            });
         }
     }
 
@@ -217,36 +205,4 @@ export default function viewScreen(){
             }
         }
     }
-
-    //renderizar as opções para escolher.
-    function renderInputOption(tagFather,data){
-        const selectPiece = document.querySelector(tagFather);
-        const optionPiece = document.createElement('option');
-        optionPiece.classList.add("board__option");
-        optionPiece.innerHTML= data;
-        selectPiece.appendChild(optionPiece);
-    }
-
-    function clearGeneralInput(tagFather){
-        const optionSelect = document.querySelector(tagFather);
-        while (optionSelect.childElementCount>0){
-            const optionChildren = optionSelect.firstElementChild;
-            optionSelect.removeChild(optionChildren);
-        }
-    }
-
-    function clearMovementsBoard(pieceSelect){
-        document.getElementById(`${pieceSelect.refPiece}`).classList.remove("move__piece--selected");
-        pieceSelect.refMoviments.forEach((possibilitie)=>{
-            document.getElementById(`${possibilitie}`).classList.remove("move__piece--possibilities");
-        });
-    }
-
-    function renderMovementsBoard(pieceSelect){
-        document.getElementById(`${pieceSelect.refPiece}`).classList.add("move__piece--selected");
-        pieceSelect.refMoviments.forEach((possibilitie)=>{
-            document.getElementById(`${possibilitie}`).classList.add("move__piece--possibilities");
-        });
-    }
-
 }
