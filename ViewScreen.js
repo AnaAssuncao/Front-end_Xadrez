@@ -14,20 +14,15 @@ export default function viewScreen(chessBoard){
     }
 
     this.colorInput={
+        colorIdClass:{
+            idInput:"#select__color",
+            classOption:"board__option"
+        },
         clearAll(){
-            const optionSelect = document.querySelector("#select__color")
-            while (optionSelect.childElementCount>0){
-                const optionChildren = optionSelect.firstElementChild
-                optionSelect.removeChild(optionChildren)
-            }
+            clearOptionsInput(this.colorIdClass.idInput)
         },
         addPiecesColor(value){
-                const selectPiece = document.querySelector("#select__color")
-                const optionPiece = document.createElement('option')
-                optionPiece.classList.add("board__option")
-                optionPiece.innerHTML= value
-                selectPiece.appendChild(optionPiece)
-
+            addOptionsInput(value,this.colorIdClass)
         }
     }
 
@@ -35,45 +30,32 @@ export default function viewScreen(chessBoard){
         subscribeFunction(fn){
             functionToCallBack.pieceInput.push(fn)
         },
+        pieceIdClass:{
+            idInput:"#select__name",
+            classOption:"board__option"
+        },
         clearAll(){
-            const optionSelect = document.querySelector("#select__name")
-            while (optionSelect.childElementCount>0){
-                const optionChildren = optionSelect.firstElementChild
-                optionSelect.removeChild(optionChildren)
-            }
+            clearOptionsInput(this.pieceIdClass.idInput)
         },
         addPiecesName(arrayValue){
-            arrayValue.forEach((value)=>{
-                const selectPiece = document.querySelector("#select__name")
-                const optionPiece = document.createElement('option')
-                optionPiece.classList.add("board__option")
-                optionPiece.innerHTML= value
-                selectPiece.appendChild(optionPiece)
-            })
+            addOptionsInput(arrayValue,this.pieceIdClass)    
         },
         selectNamePiece(namePiece){
-            debugger
             const selectPiece = document.getElementById("select__name")
             selectPiece.value= namePiece
         }
     }
 
     this.coordinateInput={
+        coordinateIdClass:{
+            idInput:"#select__coordinate",
+            classOption:"board__option"
+        },
         clearAll(){
-            const optionSelect = document.querySelector("#select__coordinate")
-            while (optionSelect.childElementCount>0){
-                const optionChildren = optionSelect.firstElementChild
-                optionSelect.removeChild(optionChildren)
-            }
+            clearOptionsInput(this.coordinateIdClass.idInput)
         },
         addPiecesCoordinates(arrayValue){
-            arrayValue.forEach((value)=>{
-                const selectPiece = document.querySelector("#select__coordinate")
-                const optionPiece = document.createElement('option')
-                optionPiece.classList.add("board__option")
-                optionPiece.innerHTML= value
-                selectPiece.appendChild(optionPiece)
-            })
+            addOptionsInput(arrayValue,this.coordinateIdClass)
         },
         selectNamePiece(namePiece){
             const selectPiece = document.getElementById("select__coordinate")
@@ -204,5 +186,23 @@ export default function viewScreen(chessBoard){
             board.appendChild(tagPosition)
         
         }
+    }
+
+    function clearOptionsInput(idInput){
+        const optionSelect = document.querySelector(idInput)
+        while (optionSelect.childElementCount>0){
+            const optionChildren = optionSelect.firstElementChild
+            optionSelect.removeChild(optionChildren)
+        }
+    }
+    
+    function addOptionsInput(arrayValue,input){
+        arrayValue.forEach((value)=>{
+            const selectPiece = document.querySelector(input.idInput)
+            const optionPiece = document.createElement('option')
+            optionPiece.classList.add(input.classOption)
+            optionPiece.innerHTML= value
+            selectPiece.appendChild(optionPiece)
+        })
     }
 }

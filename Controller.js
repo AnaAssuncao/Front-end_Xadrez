@@ -2,12 +2,12 @@ import createGame from "./XadrezGame.js"
 import viewScreen from "./ViewScreen.js"
 
 const game = new createGame()
-const render = new viewScreen(game.chessBoard) //mudar p view
+const view = new viewScreen(game.chessBoard) //mudar p view
 
-render.buttomStart.subscribeFunction(notifyStarGame)
-render.pieceInput.subscribeFunction(notifyPieceInput)
-render.buttomMove.subscribeFunction(notifybuttomMove)
-render.chessBoard.subscribeFunction(notifyclickChessBoard)
+view.buttomStart.subscribeFunction(notifyStarGame)
+view.pieceInput.subscribeFunction(notifyPieceInput)
+view.buttomMove.subscribeFunction(notifybuttomMove)
+view.chessBoard.subscribeFunction(notifyclickChessBoard)
 
 function notifyStarGame(){
     starGame()
@@ -15,7 +15,7 @@ function notifyStarGame(){
 function notifyPieceInput(piece){
     updateInputCoordinate(piece)
 }
-function notifybuttomMove(coordinate){debugger
+function notifybuttomMove(coordinate){
     requiredPieceMovement(coordinate)
 }
 function notifyclickChessBoard(idSquare){
@@ -24,45 +24,45 @@ function notifyclickChessBoard(idSquare){
 
 function starGame(){
     game.starObjGame()
-    render.chessBoard.renderBoard(game.chessBoard)
+    view.chessBoard.renderBoard(game.chessBoard)
     colorToPlay()
 }
 
 function colorToPlay (){
     // limpar tabuleiro e input
-    render.colorInput.clearAll()
+    view.colorInput.clearAll()
     // iniciar ou reiniciar tabuleiro e input
-    render.colorInput.addPiecesColor(game.pieceSelect.color) 
+    view.colorInput.addPiecesColor([game.pieceSelect.color]) 
     const arrayPieces = updatePieceInput ()
-    render.pieceInput.selectNamePiece("")
-    render.coordinateInput.clearAll()
+    view.pieceInput.selectNamePiece("")
+    view.coordinateInput.clearAll()
 }
 
 function updatePieceInput (){
-    render.pieceInput.clearAll()
+    view.pieceInput.clearAll()
     const arrayPieces = []
     for(let piece in game.piecesBoard){ 
         if(game.piecesBoard[piece].color==game.pieceSelect.color && game.piecesBoard[piece].isAtive==true){
             arrayPieces.push(game.piecesBoard[piece].name)
         }
     }
-    render.pieceInput.addPiecesName(arrayPieces)
+    view.pieceInput.addPiecesName(arrayPieces)
     return arrayPieces
 }
 
 function updateInputCoordinate(piece){
     // Limpar coordenadas e destaque dos movimentos com a mudança de peça
-    render.coordinateInput.clearAll()
+    view.coordinateInput.clearAll()
     if(game.pieceSelect.refPiece){
-        render.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
+        view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }
     const refPiece=`${piece}${game.pieceSelect.color}`
     game.movimentsPiece(refPiece)
     // renderizar novas coordenadas e destaque dos movimentos
     const arrayCoordinates = coordinateSelection(game.pieceSelect.refMoviments)
-    render.coordinateInput.addPiecesCoordinates(arrayCoordinates)
-    render.coordinateInput.selectNamePiece("")
-    render.chessBoard.highlighSquare.addHighlightSquares(game.pieceSelect)
+    view.coordinateInput.addPiecesCoordinates(arrayCoordinates)
+    view.coordinateInput.selectNamePiece("")
+    view.chessBoard.highlighSquare.addHighlightSquares(game.pieceSelect)
 }   
 
 function coordinateSelection(positions){
@@ -96,28 +96,29 @@ function coordinateToRefId (coordenadasClass){
 function requiredPieceMovement(coordinate){
     // Modificando o nome da ref ID pela função coordinateToRefId
     if(coordinate!=="Sem Movimento" && coordinate!==""){
-        render.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)//limpar destaque movimentos
+        view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)//limpar destaque movimentos
         const refId = coordinateToRefId(coordinate)
         game.movimentsModification(refId)
-        render.chessBoard.renderBoard(game.chessBoard)
+        view.chessBoard.renderBoard(game.chessBoard)
         colorToPlay()
     }   
 }
 
 function updateClickChessBoard (idSquare){
     if(game.pieceSelect.refPiece){
-        render.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
+        view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }  //limpar destaque movimentos da peça anterior
     game.movimentsModification(idSquare) 
     if(game.pieceSelect.refPiece){
-        render.chessBoard.highlighSquare.addHighlightSquares(game.pieceSelect)
-        render.pieceInput.selectNamePiece(game.pieceSelect.namePiece)
-        render.coordinateInput.clearAll()
+        view.chessBoard.highlighSquare.addHighlightSquares(game.pieceSelect)
+        view.pieceInput.selectNamePiece(game.pieceSelect.namePiece)
+        view.coordinateInput.clearAll()
         const arrayCoordinates = coordinateSelection(game.pieceSelect.refMoviments)
-        render.coordinateInput.addPiecesCoordinates(arrayCoordinates)
+        view.coordinateInput.addPiecesCoordinates(arrayCoordinates)
+        view.coordinateInput.selectNamePiece("")  
     }
     else{
-        render.chessBoard.renderBoard(game.chessBoard)
+        view.chessBoard.renderBoard(game.chessBoard)
         colorToPlay()
     }
 }
