@@ -25,6 +25,8 @@ function notifyclickChessBoard(idSquare){
 function starGame(){
     game.starObjGame()
     view.chessBoard.renderBoard(game.chessBoard)
+    view.chessBoard.capturePieceColorTop([])
+    view.chessBoard.capturePieceColorBottom([])
     colorToPlay()
 }
 
@@ -100,6 +102,7 @@ function requiredPieceMovement(coordinate){
         const refId = coordinateToRefId(coordinate)
         game.movimentsModification(refId)
         view.chessBoard.renderBoard(game.chessBoard)
+        updateDeadPiece()
         colorToPlay()
     }   
 }
@@ -119,6 +122,24 @@ function updateClickChessBoard (idSquare){
     }
     else{
         view.chessBoard.renderBoard(game.chessBoard)
+        updateDeadPiece()
         colorToPlay()
+        // olhar se comeu e renderizar
     }
+}
+
+function updateDeadPiece(){
+    const top=[]
+    const bottom=[]
+    debugger
+    for(let capturePiece in game.capturePiece){ 
+        if(game.colorPieceBoard.top==game.capturePiece[capturePiece].color){
+            top.push(game.capturePiece[capturePiece].img)
+        }
+        else{
+            bottom.push(game.capturePiece[capturePiece].img)
+        }
+    }
+    view.chessBoard.capturePieceColorTop(top)
+    view.chessBoard.capturePieceColorBottom(bottom)
 }

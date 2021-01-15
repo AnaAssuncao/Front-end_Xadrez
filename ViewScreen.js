@@ -105,7 +105,27 @@ export default function viewScreen(chessBoard){
                     document.getElementById(`${possibilitie}`).classList.add("move__piece--possibilities")
                 })
             }
+        },
+        capturePieceColorTop(capturePiece){
+            clearOptionsInput("#player1")
+            for (let img of capturePiece){
+               addImagem(img,"#player1")            
+            }
+        },
+        capturePieceColorBottom(capturePiece){
+            clearOptionsInput("#player2")
+            for (let img of capturePiece){
+               addImagem(img,"#player2")            
+            }
         }
+    }
+
+    function addImagem(capturePieceImg,player){
+        const divSquare= document.querySelector(`${player}`)
+        const img = document.createElement('img')
+        img.src=`${capturePieceImg}.png`
+        img.classList.add('pieceDead__img')
+        divSquare.appendChild(img) 
     }
 
     function notifyFunctions (objToCallBack,parameters){
