@@ -78,8 +78,8 @@ export default class createGame {
     
         // Controle de peça selecionada.
         this.pieceSelect= {
-            namePiece:null,
-            refPiece:null,
+            name:null,
+            refId:null,
             refMoviments:[],
             color:null
         }
@@ -98,7 +98,8 @@ export default class createGame {
             position:position,
             isAtive:isAtive,
             functionPiece:functionPiece,
-            qtMovements:0
+            qtMovements:0,
+            refMoviments:[]
         } 
     }  
 
@@ -131,6 +132,9 @@ export default class createGame {
             this.chessBoard[keyChess]= this.piecesBoard[keyPieces]
         }
 
+        this.pieceSelect.name=null
+        this.pieceSelect.refId=null           
+        this.pieceSelect.refMoviments=[]
         this.pieceSelect.color=this.colorPieceBoard.top //Cor Branca começam.
         this.capturePiece={}
     }
@@ -144,7 +148,7 @@ export default class createGame {
             const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,8))
             return newPossibilitiesMoviment
         },[])
-
+        
         return moviment
     }
     possibleMovimentKnight (){
@@ -245,23 +249,24 @@ export default class createGame {
         return movimentPawn
     }
 
-    positionRefModification(attackPiece){
-        const nameRefPieceBoard=`${attackPiece.namePiece}${attackPiece.color}`
-        const refAttackPiece =this.piecesBoard[nameRefPieceBoard]
-        const newPosition = attackPiece.coordinateRef
-        if(this.chessBoard[newPosition]!==null){
-            this.eatPiece(newPosition)
+    positionRefModification(movePiece){
+        const nameRefPieceBoard=`${movePiece.namePiece}${movePiece.color}`
+        const refMovePiece =this.piecesBoard[nameRefPieceBoard]
+        const newRefId = movePiece.coordinateRef
+        if(this.chessBoard[newRefId]!==null){
+            const nameCapturePiece = `${this.chessBoard[newRefId].name}${this.chessBoard[newRefId].color}`
+            this.eatPiece(nameCapturePiece)
         }
-            this.chessBoard[refAttackPiece.position]=null
-            refAttackPiece.position=newPosition
-            refAttackPiece.qtMovements++
-            this.chessBoard[newPosition]= refAttackPiece
+        this.chessBoard[refMovePiece.position]=null
+        refMovePiece.position=newRefId
+        refMovePiece.qtMovements++
+        //add os movimento refMovePiece.refMoviments=refMovePiece.functionPiece():[] 
+        this.chessBoard[newRefId]= refMovePiece
     }
     
-    eatPiece(newPosition){
-        this.chessBoard[newPosition].isAtive = false
-        const nameDeadPiece=this.chessBoard[newPosition].name
-        this.capturePiece[nameDeadPiece]=this.chessBoard[newPosition]
+    eatPiece(nameCapturePiece){
+        this.piecesBoard[nameCapturePiece].isAtive = false
+        this.capturePiece[nameCapturePiece]=this.piecesBoard[nameCapturePiece]
     }
 
     checkColor(idSquare){
@@ -288,25 +293,27 @@ export default class createGame {
     }
     // Movimentação peça no tabuleiro
     movimentsModification(idSquare){
-        if((this.pieceSelect.refPiece!==idSquare) && (this.chessBoard[idSquare]!==null) && this.checkColor(idSquare))
+        debugger
+        if((this.pieceSelect.refId!==idSquare) && (this.chessBoard[idSquare]!==null) && this.checkColor(idSquare))
         {
-            this.pieceSelect.refPiece=idSquare
+            this.pieceSelect.refId=idSquare
             const refPiece = this.chessBoard[idSquare]
-            this.pieceSelect.namePiece=refPiece.name
-            this.pieceSelect.refMoviments = (refPiece)?refPiece.functionPiece():[]      
+            this.pieceSelect.name=refPiece.name
+            this.pieceSelect.refMoviments = (refPiece)?refPiece.functionPiece():[]   
+            //  this.pieceSelect = {this.chessBoard[idSquare]} ou pego refPiece, namePiece e refMoviments
         }
         else{
             if(this.checkMoviments(idSquare)){
                 const informationPieceSelect={
-                    color: this.chessBoard[this.pieceSelect.refPiece].color,
-                    namePiece: this.chessBoard[this.pieceSelect.refPiece].name,
+                    color: this.chessBoard[this.pieceSelect.refId].color,
+                    namePiece: this.chessBoard[this.pieceSelect.refId].name,
                     coordinateRef:idSquare
                 }
                 this.positionRefModification(informationPieceSelect)  
                 this.pieceSelect.color=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
             }
-            this.pieceSelect.namePiece=null
-            this.pieceSelect.refPiece=null           
+            this.pieceSelect.name=null
+            this.pieceSelect.refId=null           
             this.pieceSelect.refMoviments=[]
         } 
     }

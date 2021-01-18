@@ -4,29 +4,16 @@ import viewScreen from "./ViewScreen.js"
 const game = new createGame()
 const view = new viewScreen(game.chessBoard) //mudar p view
 
-view.buttomStart.subscribeFunction(notifyStarGame)
-view.pieceInput.subscribeFunction(notifyPieceInput)
-view.buttomMove.subscribeFunction(notifybuttomMove)
-view.chessBoard.subscribeFunction(notifyclickChessBoard)
-
-function notifyStarGame(){
-    starGame()
-}
-function notifyPieceInput(piece){
-    updateInputCoordinate(piece)
-}
-function notifybuttomMove(coordinate){
-    requiredPieceMovement(coordinate)
-}
-function notifyclickChessBoard(idSquare){
-    updateClickChessBoard (idSquare)
-}
+view.buttomStart.subscribeFunction(starGame)
+view.pieceInput.subscribeFunction(updateInputCoordinate)
+view.buttomMove.subscribeFunction(requiredPieceMovement)
+view.chessBoard.subscribeFunction(updateClickChessBoard)
 
 function starGame(){
     game.starObjGame()
     view.chessBoard.renderBoard(game.chessBoard)
-    view.chessBoard.capturePieceColorTop([])
-    view.chessBoard.capturePieceColorBottom([])
+    view.capturePiece.colorTop([])
+    view.capturePiece.colorBottom([])
     colorToPlay()
 }
 
@@ -55,7 +42,7 @@ function updatePieceInput (){
 function updateInputCoordinate(piece){
     // Limpar coordenadas e destaque dos movimentos com a mudança de peça
     view.coordinateInput.clearAll()
-    if(game.pieceSelect.refPiece){
+    if(game.pieceSelect.refId){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }
     const refPiece=`${piece}${game.pieceSelect.color}`
@@ -108,13 +95,13 @@ function requiredPieceMovement(coordinate){
 }
 
 function updateClickChessBoard (idSquare){
-    if(game.pieceSelect.refPiece){
+    if(game.pieceSelect.refId){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }  //limpar destaque movimentos da peça anterior
     game.movimentsModification(idSquare) 
-    if(game.pieceSelect.refPiece){
+    if(game.pieceSelect.refId){
         view.chessBoard.highlighSquare.addHighlightSquares(game.pieceSelect)
-        view.pieceInput.selectNamePiece(game.pieceSelect.namePiece)
+        view.pieceInput.selectNamePiece(game.pieceSelect.name)
         view.coordinateInput.clearAll()
         const arrayCoordinates = coordinateSelection(game.pieceSelect.refMoviments)
         view.coordinateInput.addPiecesCoordinates(arrayCoordinates)
@@ -131,7 +118,6 @@ function updateClickChessBoard (idSquare){
 function updateDeadPiece(){
     const top=[]
     const bottom=[]
-    debugger
     for(let capturePiece in game.capturePiece){ 
         if(game.colorPieceBoard.top==game.capturePiece[capturePiece].color){
             top.push(game.capturePiece[capturePiece].img)
@@ -140,6 +126,6 @@ function updateDeadPiece(){
             bottom.push(game.capturePiece[capturePiece].img)
         }
     }
-    view.chessBoard.capturePieceColorTop(top)
-    view.chessBoard.capturePieceColorBottom(bottom)
+    view.capturePiece.colorTop(top)
+    view.capturePiece.colorBottom(bottom)
 }

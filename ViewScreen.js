@@ -94,28 +94,30 @@ export default function viewScreen(chessBoard){
         },
         highlighSquare:{
             clearHighlightSquares(piece){
-                document.getElementById(`${piece.refPiece}`).classList.remove("move__piece--selected")
+                document.getElementById(`${piece.refId}`).classList.remove("move__piece--selected")
                 piece.refMoviments.forEach((possibilitie)=>{
                     document.getElementById(`${possibilitie}`).classList.remove("move__piece--possibilities")
                 })
             },
             addHighlightSquares(piece){
-                document.getElementById(`${piece.refPiece}`).classList.add("move__piece--selected")
+                document.getElementById(`${piece.refId}`).classList.add("move__piece--selected")
                 piece.refMoviments.forEach((possibilitie)=>{
                     document.getElementById(`${possibilitie}`).classList.add("move__piece--possibilities")
                 })
             }
-        },
-        capturePieceColorTop(capturePiece){
-            clearOptionsInput("#player1")
+        }, 
+    }
+    this.capturePiece={
+        colorTop(capturePiece){
+            clearOptionsInput("#colorTop")
             for (let img of capturePiece){
-               addImagem(img,"#player1")            
+               addImagem(img,"#colorTop")            
             }
         },
-        capturePieceColorBottom(capturePiece){
-            clearOptionsInput("#player2")
+        colorBottom(capturePiece){
+            clearOptionsInput("#colorBottom")
             for (let img of capturePiece){
-               addImagem(img,"#player2")            
+               addImagem(img,"#colorBottom")            
             }
         }
     }
