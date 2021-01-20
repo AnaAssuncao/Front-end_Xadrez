@@ -136,24 +136,24 @@ function updateDeadPiece(){
     view.capturePiece.colorBottom(bottom)
 }
 
-function updateInformationGame(){debugger
-    if(game.checkKingTop.checkMate===true){
-        view.informationGame.addinformation(`Check Mate no ${game.checkKingTop.kingCapturecheckMate} <br> Vitória das Peças Pretas`)
+function updateInformationGame(){
+    if(game.checkKing[game.colorPieceBoard.top].checkMate===true){
+        view.informationGame.addinformation(`Check Mate no ${game.checkKing[game.colorPieceBoard.top].kingCapturecheckMate} - Vitória das Peças Pretas`)
     }
-    else if(game.checkKingBottom.checkMate===true){
-        view.informationGame.addinformation(`Check Mate no ${game.checkKingBottom.kingCapturecheckMate} <br> Vitória das Peças Brancas`)
+    else if(game.checkKing[game.colorPieceBoard.bottom].checkMate===true){
+        view.informationGame.addinformation(`Check Mate no ${game.checkKing[game.colorPieceBoard.bottom].kingCapturecheckMate} - Vitória das Peças Brancas`)
     }
-    else if(game.checkKingTop.endGame===true){
+    else if(game.checkKing[game.colorPieceBoard.top].endGame===true){
         view.informationGame.addinformation(`Vitória das Peças Pretas`)
     }
-    else if(game.checkKingBottom.endGame===true){
+    else if(game.checkKing[game.colorPieceBoard.bottom].endGame===true){
         view.informationGame.addinformation(`Vitória das Peças Brancas`)
     }
-    else if(game.checkKingTop.check===true){
-        view.informationGame.addinformation(`Check no ${game.checkKingTop.kingCaptureCheck}`)
+    else if(game.checkKing[game.colorPieceBoard.top].check===true){
+        view.informationGame.addinformation(`Check no ${game.checkKing[game.colorPieceBoard.top].kingCaptureCheck}`)
     }
-    else if(game.checkKingBottom.check===true) {
-            view.informationGame.addinformation(`Check no ${game.checkKingBottom.kingCaptureCheck}`)
+    else if(game.checkKing[game.colorPieceBoard.bottom].check===true) {
+            view.informationGame.addinformation(`Check no ${game.checkKing[game.colorPieceBoard.bottom].kingCaptureCheck}`)
     }
     else{
         view.informationGame.clearInformation()

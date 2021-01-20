@@ -86,8 +86,7 @@ export default class createGame {
 
         this.capturePiece={}
 
-        this.checkKingTop={}
-        this.checkKingBottom={}
+        this.checkKing={}
 
         this.starObjGame()
     }
@@ -143,17 +142,15 @@ export default class createGame {
         this.capturePiece={}
         
         this.checkMovimentsPieceBoard()
-        
-        this.checkKingTop={
-            color:this.colorPieceBoard.top,
+
+        this.checkKing[this.colorPieceBoard.top]={
             check:false,
             checkMate:false,
             kingCaptureCheck:null,
             kingCapturecheckMate:null,
             endGame:null
         }
-        this.checkKingBottom={
-            color:this.colorPieceBoard.bottom,
+        this.checkKing[this.colorPieceBoard.bottom]={
             check:false,
             checkMate:false,
             kingCaptureCheck:null,
@@ -166,6 +163,8 @@ export default class createGame {
         for(let piece in this.piecesBoard){
             this.piecesBoard[piece].refMoviments=this.piecesBoard[piece].functionPiece()
         }
+        this.checkMovimentKingValid()
+        // this.movimentValidCheckKing()
     }
     possibleMovimentTower(){
         const column=Number(this.position.charAt(3))
@@ -215,13 +214,14 @@ export default class createGame {
 
         return moviment
     }
+
     possibleMovimentKing (){
         const column=Number(this.position.charAt(3))
         const line=Number(this.position.charAt(4))
         const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]]
     
         const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,1))
+            const newPossibilitiesMoviment = possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,1))
             return newPossibilitiesMoviment
         },[])
 
@@ -289,7 +289,6 @@ export default class createGame {
         refMovePiece.position=newRefId
         refMovePiece.qtMovements++
         this.chessBoard[newRefId]= refMovePiece
-        this.checkMovimentsPieceBoard()
     }
     
     eatPiece(nameCapturePiece){
@@ -297,10 +296,10 @@ export default class createGame {
         this.piecesBoard[nameCapturePiece].refMoviments=[]
         this.capturePiece[nameCapturePiece]=this.piecesBoard[nameCapturePiece]
         if(nameCapturePiece==="KingWhite"){
-            this.checkKingTop.endGame=true
+            this.checkKing[this.colorPieceBoard.top].endGame=true
         }
-        else if(nameCapturePiece==="KingBlack"){debugger
-            this.checkKingBottom.endGame=true
+        else if(nameCapturePiece==="KingBlack"){
+            this.checkKing[this.colorPieceBoard.bottom].endGame=true
         }
     }
 
@@ -322,6 +321,7 @@ export default class createGame {
         }
         return movedThePiece
     }
+
     movimentsPiece(piece){
         const refId=this.piecesBoard[piece].position
         this.movimentsModification(refId)
@@ -337,14 +337,16 @@ export default class createGame {
         }
         else{
             if(this.checkMoviments(idSquare)){
+                // movimentValidCheckKing()
                 const informationPieceSelect={
                     color: this.chessBoard[this.pieceSelect.refId].color,
                     namePiece: this.chessBoard[this.pieceSelect.refId].name,
                     coordinateRef:idSquare
-                }
-                this.positionRefModification(informationPieceSelect)  
-                this.captureKings(informationPieceSelect.color)
+                }      
+                this.positionRefModification(informationPieceSelect) 
                 this.pieceSelect.color=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
+                this.checkMovimentsPieceBoard()
+                this.captureKingAdversity(informationPieceSelect.color)
             }
             this.pieceSelect.name=null
             this.pieceSelect.refId=null           
@@ -352,52 +354,50 @@ export default class createGame {
         } 
     }
 // Check and ChekMate
-    captureKings(color){
-        this.checkKingTop.check=false,
-        this.checkKingTop.kingCaptureCheck=null,
-        this.checkKingBottom.check=false,
-        this.checkKingBottom.checkMate=false,
-
-        this.checkCaptureKing(color)
-        const adversaryColor = (this.colorPieceBoard.top===color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
-        this.checkCaptureKing(adversaryColor)
-}
-    checkCaptureKing(color){
-        const king =`King${color}`
-        const captureKing=this.checkCaptureKingApieceAdversity(this.piecesBoard[king].position,color,king)
-
-        if(this.checkKingTop.color===color){
-            if(captureKing.check===true){
-                this.checkKingTop.check=true
-                this.checkKingTop.kingCaptureCheck=king
-                if(captureKing.possibleCheckMate===false){
-                    this.checkKingTop.checkMate=this.checkMate(king,color)
-                    if(this.checkKingTop.checkMate===true){
-                        this.checkKingTop.kingCapturecheckMate=king
-                        this.checkKingTop.endGame=true
-                    }
-                }
-            }   
-        }
-        else{
-            if(captureKing.check===true){
-                this.checkKingBottom.check=true
-                this.checkKingBottom.kingCaptureCheck=king
-                if(captureKing.possibleCheckMate===false){
-                    this.checkKingBottom.checkMate=this.checkMate(king,color)
-                    if(this.checkKingBottom.checkMate===true){
-                        this.checkKingBottom.kingCapturecheckMate=king
-                        this.checkKingBottom.endGame=true
-                    }
-                }
-            } 
-        }
+// o proximo rei q jogar
+    checkMovimentKingValid(){debugger
+        const king = `King${this.pieceSelect.color}`
+        let movimentInvalid
+        for(let i =0;i<this.piecesBoard[king].refMoviments.length;){
+            const movimentKing = "king"
+            movimentInvalid=this.checkCaptureKingApieceAdversity(this.piecesBoard[king].refMoviments[i],this.pieceSelect.color,king,movimentKing)
+            if(movimentInvalid.check){
+                this.piecesBoard[king].refMoviments.splice(i,1)
+            }
+            else{
+                i++
+            }
+        }   
     }
-    checkCaptureKingApieceAdversity(refId,colorKing,king){
+
+    captureKingAdversity(color){
+        const adversaryColor = (this.colorPieceBoard.top===color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
+        this.checkKing[adversaryColor].check=false
+        this.checkKing[adversaryColor].kingCaptureCheck=null
+        this.checkKing[color].check=false
+        this.checkKing[color].kingCaptureCheck=null
+        const king =`King${adversaryColor}` 
+        const captureKing=this.checkCaptureKingApieceAdversity(this.piecesBoard[king].position,adversaryColor,king,color)
+
+        if(captureKing.check===true){
+            this.checkKing[adversaryColor].check=true
+            this.checkKing[adversaryColor].kingCaptureCheck=king
+            if(captureKing.possiblefriendlyPieceMove===false){
+                this.checkKing[adversaryColor].checkMate=this.checkMate(king,adversaryColor )
+                if(this.checkKing[adversaryColor].checkMate===true){
+                    this.checkKing[adversaryColor].kingCapturecheckMate=king
+                    this.checkKing[adversaryColor].endGame=true
+                }
+            }
+        } 
+    }
+
+    checkCaptureKingApieceAdversity(refIdKing,colorKing,king,colorPieceMove){
         let checkRefPiece
         for(let piece in this.piecesBoard){
-            if(colorKing!==this.piecesBoard[piece].color){
-                checkRefPiece = this.movimentsPieceAdversity(this.piecesBoard[piece].refMoviments,refId,colorKing,king)
+            if((colorKing!==this.piecesBoard[piece].color)&&(this.piecesBoard[piece].isAtive===true)){
+                const movimentAdversity = "Adversity"
+                checkRefPiece = this.movimentsPieceAdversity(this.piecesBoard[piece].refMoviments,refIdKing,colorKing,king,movimentAdversity)
                 if(checkRefPiece.check===true){
                     break
                 }
@@ -406,26 +406,27 @@ export default class createGame {
         return checkRefPiece
     }
 
-    movimentsPieceAdversity(movimentsPiece,refIdKing,colorKing,king){
+    movimentsPieceAdversity(movimentsPiece,refIdKing,colorKing,king,pieceConference){
         let check =false
-        let possibleCheckMate = false
+        let possiblefriendlyPieceMove = false
         for (let i = 0;i<movimentsPiece.length;i++){
             if(movimentsPiece[i]===refIdKing){
-                check=true
-                if(!this.friendlyPieceMovePath(movimentsPiece[i],colorKing,king)){
-                    possibleCheckMate=true
+                if(pieceConference==="Adversity"){
+                    // quando é uma peça do adversario que move, deve observar se pode ter uma peça aliada para salvar
+                    possiblefriendlyPieceMove=this.friendlyPieceMovePath(movimentsPiece[i],colorKing,king)
                 }
+                check=true
                 break
             }                    
-        }
-        return {check,possibleCheckMate}
+        } 
+        return {check,possiblefriendlyPieceMove}
     }
 
     friendlyPieceMovePath(refIdPieceAdversity,colorKing,king){
         let save=false
         for(let piece in this.piecesBoard){
             if(colorKing===this.piecesBoard[piece].color){
-                save = this.movimentsPieceFriend(this.piecesBoard[piece].refMoviments,refIdPieceAdversity,colorKing,king)
+                save = this.movimentsPieceFriend(this.piecesBoard[piece].refMoviments,refIdPieceAdversity,king)
             }
             if(save===true){
                 break
@@ -434,7 +435,7 @@ export default class createGame {
         return save
     }
 
-    movimentsPieceFriend(movimentsPieceFriend,refIdAdversity,colorKing,king){
+    movimentsPieceFriend(movimentsPieceFriend,refIdAdversity,king){
         for (let i = 0;i<movimentsPieceFriend.length;i++){
             if(movimentsPieceFriend[i]===refIdAdversity){
                 const newMoviment = this.chessBoard[refIdAdversity].functionPiece()
@@ -449,14 +450,15 @@ export default class createGame {
     }
 
     checkMate(king,colorKing){
-        let checkMateRefId
+        let checkMateRefId = true
         for(let i=0;i<this.piecesBoard[king].refMoviments.length;i++){
-            checkMateRefId =this.checkCaptureKingApieceAdversity(this.piecesBoard[king].refMoviments[i],colorKing,king)
-            if(checkMateRefId.possibleCheckMate===false){
+            const checkKing =this.checkCaptureKingApieceAdversity(this.piecesBoard[king].refMoviments[i],colorKing,king)
+            if(checkKing.possiblefriendlyPieceMove===true){
+                checkMateRefId = false
                 break
             }
         }
-        return checkMateRefId.possibleCheckMate
+        return checkMateRefId
     }
 }
 
