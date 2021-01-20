@@ -86,6 +86,9 @@ export default class createGame {
 
         this.capturePiece={}
 
+        this.checkKingTop={}
+        this.checkKingBottom={}
+
         this.starObjGame()
     }
 
@@ -108,7 +111,7 @@ export default class createGame {
             starPiecesBlack:["towerBlack","knightBlack","bishopBlack","queenBlack","kingBlack","bishopBlack","knightBlack","towerBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack"],
             starPiecesWhite:["towerWhite","knightWhite","bishopWhite","queenWhite","kingWhite","bishopWhite","knightWhite","towerWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite"],
             namePiece:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
-             functionPieces:[this.__proto__.possibleMovimentTower,this.possibleMovimentKnight,this.possibleMovimentBishop,this.possibleMovimentQueen,this.possibleMovimentKing, this.possibleMovimentBishop,this.possibleMovimentKnight, this.possibleMovimentTower,
+             functionPieces:[this.possibleMovimentTower,this.possibleMovimentKnight,this.possibleMovimentBishop,this.possibleMovimentQueen,this.possibleMovimentKing, this.possibleMovimentBishop,this.possibleMovimentKnight, this.possibleMovimentTower,
                 this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn]
         }
         Object.keys(this.chessBoard).forEach((value)=>{this.chessBoard[value]=null})
@@ -117,8 +120,7 @@ export default class createGame {
             const refLine= (parseInt(i/8)+1)
             const refColumn= (i%8+1)
             const keyChess = `ref${refColumn}${refLine}`
-            const keyPieces = `${objStarBoard.namePiece[i]}${this.colorPieceBoard.bottom}`
-          
+            const keyPieces = `${objStarBoard.namePiece[i]}${this.colorPieceBoard.bottom}`      
             this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],this.colorPieceBoard.bottom,objStarBoard.starPiecesBlack[i],keyChess,objStarBoard.functionPieces[i])
             this.chessBoard[keyChess]= this.piecesBoard[keyPieces]
         }
@@ -126,19 +128,45 @@ export default class createGame {
             const refColumn= (i%8+1)
             const refLine= (8 - parseInt(i/8))
             const keyChess = `ref${refColumn}${refLine}`
-            const keyPieces = `${objStarBoard.namePiece[i]}${this.colorPieceBoard.top}`
-            
+            const keyPieces = `${objStarBoard.namePiece[i]}${this.colorPieceBoard.top}` 
             this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],this.colorPieceBoard.top,objStarBoard.starPiecesWhite[i],keyChess, objStarBoard.functionPieces[i])
             this.chessBoard[keyChess]= this.piecesBoard[keyPieces]
         }
 
-        this.pieceSelect.name=null
-        this.pieceSelect.refId=null           
-        this.pieceSelect.refMoviments=[]
-        this.pieceSelect.color=this.colorPieceBoard.top //Cor Branca começam.
+        this.pieceSelect= {
+            name:null,
+            refId:null,
+            refMoviments:[],
+            color:this.colorPieceBoard.top //Cor Branca começam.
+        }
+        
         this.capturePiece={}
+        
+        this.checkMovimentsPieceBoard()
+        
+        this.checkKingTop={
+            color:this.colorPieceBoard.top,
+            check:false,
+            checkMate:false,
+            kingCaptureCheck:null,
+            kingCapturecheckMate:null,
+            endGame:null
+        }
+        this.checkKingBottom={
+            color:this.colorPieceBoard.bottom,
+            check:false,
+            checkMate:false,
+            kingCaptureCheck:null,
+            kingCapturecheckMate:null,
+            endGame:null
+        }
     }
 
+    checkMovimentsPieceBoard(){
+        for(let piece in this.piecesBoard){
+            this.piecesBoard[piece].refMoviments=this.piecesBoard[piece].functionPiece()
+        }
+    }
     possibleMovimentTower(){
         const column=Number(this.position.charAt(3))
         const line=Number(this.position.charAt(4))
@@ -260,13 +288,20 @@ export default class createGame {
         this.chessBoard[refMovePiece.position]=null
         refMovePiece.position=newRefId
         refMovePiece.qtMovements++
-        //add os movimento refMovePiece.refMoviments=refMovePiece.functionPiece():[] 
         this.chessBoard[newRefId]= refMovePiece
+        this.checkMovimentsPieceBoard()
     }
     
     eatPiece(nameCapturePiece){
         this.piecesBoard[nameCapturePiece].isAtive = false
+        this.piecesBoard[nameCapturePiece].refMoviments=[]
         this.capturePiece[nameCapturePiece]=this.piecesBoard[nameCapturePiece]
+        if(nameCapturePiece==="KingWhite"){
+            this.checkKingTop.endGame=true
+        }
+        else if(nameCapturePiece==="KingBlack"){debugger
+            this.checkKingBottom.endGame=true
+        }
     }
 
     checkColor(idSquare){
@@ -293,14 +328,12 @@ export default class createGame {
     }
     // Movimentação peça no tabuleiro
     movimentsModification(idSquare){
-        debugger
         if((this.pieceSelect.refId!==idSquare) && (this.chessBoard[idSquare]!==null) && this.checkColor(idSquare))
         {
             this.pieceSelect.refId=idSquare
             const refPiece = this.chessBoard[idSquare]
             this.pieceSelect.name=refPiece.name
-            this.pieceSelect.refMoviments = (refPiece)?refPiece.functionPiece():[]   
-            //  this.pieceSelect = {this.chessBoard[idSquare]} ou pego refPiece, namePiece e refMoviments
+            this.pieceSelect.refMoviments =  this.chessBoard[idSquare].refMoviments
         }
         else{
             if(this.checkMoviments(idSquare)){
@@ -310,6 +343,7 @@ export default class createGame {
                     coordinateRef:idSquare
                 }
                 this.positionRefModification(informationPieceSelect)  
+                this.captureKings(informationPieceSelect.color)
                 this.pieceSelect.color=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
             }
             this.pieceSelect.name=null
@@ -317,4 +351,112 @@ export default class createGame {
             this.pieceSelect.refMoviments=[]
         } 
     }
+// Check and ChekMate
+    captureKings(color){
+        this.checkKingTop.check=false,
+        this.checkKingTop.kingCaptureCheck=null,
+        this.checkKingBottom.check=false,
+        this.checkKingBottom.checkMate=false,
+
+        this.checkCaptureKing(color)
+        const adversaryColor = (this.colorPieceBoard.top===color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
+        this.checkCaptureKing(adversaryColor)
 }
+    checkCaptureKing(color){
+        const king =`King${color}`
+        const captureKing=this.checkCaptureKingApieceAdversity(this.piecesBoard[king].position,color,king)
+
+        if(this.checkKingTop.color===color){
+            if(captureKing.check===true){
+                this.checkKingTop.check=true
+                this.checkKingTop.kingCaptureCheck=king
+                if(captureKing.possibleCheckMate===false){
+                    this.checkKingTop.checkMate=this.checkMate(king,color)
+                    if(this.checkKingTop.checkMate===true){
+                        this.checkKingTop.kingCapturecheckMate=king
+                        this.checkKingTop.endGame=true
+                    }
+                }
+            }   
+        }
+        else{
+            if(captureKing.check===true){
+                this.checkKingBottom.check=true
+                this.checkKingBottom.kingCaptureCheck=king
+                if(captureKing.possibleCheckMate===false){
+                    this.checkKingBottom.checkMate=this.checkMate(king,color)
+                    if(this.checkKingBottom.checkMate===true){
+                        this.checkKingBottom.kingCapturecheckMate=king
+                        this.checkKingBottom.endGame=true
+                    }
+                }
+            } 
+        }
+    }
+    checkCaptureKingApieceAdversity(refId,colorKing,king){
+        let checkRefPiece
+        for(let piece in this.piecesBoard){
+            if(colorKing!==this.piecesBoard[piece].color){
+                checkRefPiece = this.movimentsPieceAdversity(this.piecesBoard[piece].refMoviments,refId,colorKing,king)
+                if(checkRefPiece.check===true){
+                    break
+                }
+            }
+        }
+        return checkRefPiece
+    }
+
+    movimentsPieceAdversity(movimentsPiece,refIdKing,colorKing,king){
+        let check =false
+        let possibleCheckMate = false
+        for (let i = 0;i<movimentsPiece.length;i++){
+            if(movimentsPiece[i]===refIdKing){
+                check=true
+                if(!this.friendlyPieceMovePath(movimentsPiece[i],colorKing,king)){
+                    possibleCheckMate=true
+                }
+                break
+            }                    
+        }
+        return {check,possibleCheckMate}
+    }
+
+    friendlyPieceMovePath(refIdPieceAdversity,colorKing,king){
+        let save=false
+        for(let piece in this.piecesBoard){
+            if(colorKing===this.piecesBoard[piece].color){
+                save = this.movimentsPieceFriend(this.piecesBoard[piece].refMoviments,refIdPieceAdversity,colorKing,king)
+            }
+            if(save===true){
+                break
+            }
+        }
+        return save
+    }
+
+    movimentsPieceFriend(movimentsPieceFriend,refIdAdversity,colorKing,king){
+        for (let i = 0;i<movimentsPieceFriend.length;i++){
+            if(movimentsPieceFriend[i]===refIdAdversity){
+                const newMoviment = this.chessBoard[refIdAdversity].functionPiece()
+                for(let i = 0;i<newMoviment.length;i++){
+                    if(newMoviment===this.piecesBoard[king].position){
+                        return false
+                    }
+                }
+            }
+        }
+        return true
+    }
+
+    checkMate(king,colorKing){
+        let checkMateRefId
+        for(let i=0;i<this.piecesBoard[king].refMoviments.length;i++){
+            checkMateRefId =this.checkCaptureKingApieceAdversity(this.piecesBoard[king].refMoviments[i],colorKing,king)
+            if(checkMateRefId.possibleCheckMate===false){
+                break
+            }
+        }
+        return checkMateRefId.possibleCheckMate
+    }
+}
+

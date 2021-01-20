@@ -107,6 +107,7 @@ export default function viewScreen(chessBoard){
             }
         }, 
     }
+
     this.capturePiece={
         colorTop(capturePiece){
             clearOptionsInput("#colorTop")
@@ -120,6 +121,15 @@ export default function viewScreen(chessBoard){
                addImagem(img,"#colorBottom")            
             }
         }
+    }
+
+    this.informationGame={
+        addinformation(text){
+            document.querySelector(`#information__game`).innerText = text
+        },      
+        clearInformation(){
+            document.querySelector(`#information__game`).innerText = ""
+        }   
     }
 
     function addImagem(capturePieceImg,player){

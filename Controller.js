@@ -10,11 +10,15 @@ view.buttomMove.subscribeFunction(requiredPieceMovement)
 view.chessBoard.subscribeFunction(updateClickChessBoard)
 
 function starGame(){
+    if(game.pieceSelect.refId){
+        view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
+    }
     game.starObjGame()
     view.chessBoard.renderBoard(game.chessBoard)
     view.capturePiece.colorTop([])
     view.capturePiece.colorBottom([])
     colorToPlay()
+    updateInformationGame() 
 }
 
 function colorToPlay (){
@@ -22,7 +26,7 @@ function colorToPlay (){
     view.colorInput.clearAll()
     // iniciar ou reiniciar tabuleiro e input
     view.colorInput.addPiecesColor([game.pieceSelect.color]) 
-    const arrayPieces = updatePieceInput ()
+    updatePieceInput ()
     view.pieceInput.selectNamePiece("")
     view.coordinateInput.clearAll()
 }
@@ -91,6 +95,7 @@ function requiredPieceMovement(coordinate){
         view.chessBoard.renderBoard(game.chessBoard)
         updateDeadPiece()
         colorToPlay()
+        updateInformationGame()
     }   
 }
 
@@ -111,6 +116,7 @@ function updateClickChessBoard (idSquare){
         view.chessBoard.renderBoard(game.chessBoard)
         updateDeadPiece()
         colorToPlay()
+        updateInformationGame()
         // olhar se comeu e renderizar
     }
 }
@@ -128,4 +134,29 @@ function updateDeadPiece(){
     }
     view.capturePiece.colorTop(top)
     view.capturePiece.colorBottom(bottom)
+}
+
+function updateInformationGame(){debugger
+    if(game.checkKingTop.checkMate===true){
+        view.informationGame.addinformation(`Check Mate no ${game.checkKingTop.kingCapturecheckMate} <br> Vitória das Peças Pretas`)
+    }
+    else if(game.checkKingBottom.checkMate===true){
+        view.informationGame.addinformation(`Check Mate no ${game.checkKingBottom.kingCapturecheckMate} <br> Vitória das Peças Brancas`)
+    }
+    else if(game.checkKingTop.endGame===true){
+        view.informationGame.addinformation(`Vitória das Peças Pretas`)
+    }
+    else if(game.checkKingBottom.endGame===true){
+        view.informationGame.addinformation(`Vitória das Peças Brancas`)
+    }
+    else if(game.checkKingTop.check===true){
+        view.informationGame.addinformation(`Check no ${game.checkKingTop.kingCaptureCheck}`)
+    }
+    else if(game.checkKingBottom.check===true) {
+            view.informationGame.addinformation(`Check no ${game.checkKingBottom.kingCaptureCheck}`)
+    }
+    else{
+        view.informationGame.clearInformation()
+    }
+    
 }
