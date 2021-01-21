@@ -137,23 +137,23 @@ function updateDeadPiece(){
 }
 
 function updateInformationGame(){
-    if(game.checkKing[game.colorPieceBoard.top].checkMate===true){
-        view.informationGame.addinformation(`Check Mate no ${game.checkKing[game.colorPieceBoard.top].kingCapturecheckMate} - Vitória das Peças Pretas`)
+    if(game.statusCheckKing[game.colorPieceBoard.top].checkMate===true){
+        view.informationGame.addinformation(`Check Mate no ${game.statusCheckKing[game.colorPieceBoard.top].kingCapturecheckMate} - Vitória das Peças Pretas`)
     }
-    else if(game.checkKing[game.colorPieceBoard.bottom].checkMate===true){
-        view.informationGame.addinformation(`Check Mate no ${game.checkKing[game.colorPieceBoard.bottom].kingCapturecheckMate} - Vitória das Peças Brancas`)
+    else if(game.statusCheckKing[game.colorPieceBoard.bottom].checkMate===true){
+        view.informationGame.addinformation(`Check Mate no ${game.statusCheckKing[game.colorPieceBoard.bottom].kingCapturecheckMate} - Vitória das Peças Brancas`)
     }
-    else if(game.checkKing[game.colorPieceBoard.top].endGame===true){
+    else if(game.statusCheckKing[game.colorPieceBoard.top].endGame===true){
         view.informationGame.addinformation(`Vitória das Peças Pretas`)
     }
-    else if(game.checkKing[game.colorPieceBoard.bottom].endGame===true){
+    else if(game.statusCheckKing[game.colorPieceBoard.bottom].endGame===true){
         view.informationGame.addinformation(`Vitória das Peças Brancas`)
     }
-    else if(game.checkKing[game.colorPieceBoard.top].check===true){
-        view.informationGame.addinformation(`Check no ${game.checkKing[game.colorPieceBoard.top].kingCaptureCheck}`)
+    else if(game.statusCheckKing[game.colorPieceBoard.top].check===true){
+        view.informationGame.addinformation(`Check no ${game.statusCheckKing[game.colorPieceBoard.top].kingCaptureCheck}`)
     }
-    else if(game.checkKing[game.colorPieceBoard.bottom].check===true) {
-            view.informationGame.addinformation(`Check no ${game.checkKing[game.colorPieceBoard.bottom].kingCaptureCheck}`)
+    else if(game.statusCheckKing[game.colorPieceBoard.bottom].check===true) {
+            view.informationGame.addinformation(`Check no ${game.statusCheckKing[game.colorPieceBoard.bottom].kingCaptureCheck}`)
     }
     else{
         view.informationGame.clearInformation()
