@@ -143,12 +143,7 @@ export default class createGame {
         
         this.checkMovimentsAllPieces()
 
-        this.statusCheckKing[this.colorPieceBoard.top]={
-            check:false,
-            checkMate:false,
-            endGame:null
-        }
-        this.statusCheckKing[this.colorPieceBoard.bottom]={
+        this.statusCheckKing={
             check:false,
             checkMate:false,
             endGame:null
@@ -163,78 +158,78 @@ export default class createGame {
                 }
         }
     }
-    possibleMovimentTower(){
+    possibleMovimentTower(chessBoard=this.chessBoard){//fazer isso
         const column=Number(this.position.charAt(3))
         const line=Number(this.position.charAt(4))
         const direction = [[0,1],[0,-1],[1,0],[-1,0]]
         
         const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,8))
+            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,8,chessBoard))
             return newPossibilitiesMoviment
         },[])
         
         return moviment
     }
-    possibleMovimentKnight(){
+    possibleMovimentKnight(chessBoard=this.chessBoard){
         const column=Number(this.position.charAt(3))
         const line=Number(this.position.charAt(4))
         const direction = [[2,1],[2,-1],[-2,-1],[-2,1],[1,2],[-1,2],[-1,-2],[1,-2]]
     
         const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,1))
+            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,1,chessBoard))
             return newPossibilitiesMoviment
         },[])
 
         return moviment
     }
-    possibleMovimentBishop(){
+    possibleMovimentBishop(chessBoard=this.chessBoard){
         const column=Number(this.position.charAt(3))
         const line=Number(this.position.charAt(4))
         const direction=[[1,1],[1,-1],[-1,-1],[-1,1]]
     
         const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,8))
+            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,8,chessBoard))
             return newPossibilitiesMoviment
         },[])
 
         return moviment
     }
-    possibleMovimentQueen(){
+    possibleMovimentQueen(chessBoard=this.chessBoard){
         const column=Number(this.position.charAt(3))
         const line=Number(this.position.charAt(4))
         const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]]
-
+        const a = this.chessBoard
         const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,8))
+            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,8,chessBoard))
             return newPossibilitiesMoviment
         },[])
 
         return moviment
     }
 
-    possibleMovimentKing(){
+    possibleMovimentKing(chessBoard=this.chessBoard){
         const column=Number(this.position.charAt(3))
         const line=Number(this.position.charAt(4))
         const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]]
     
         const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment = possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,1))
+            const newPossibilitiesMoviment = possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,1,chessBoard))
             return newPossibilitiesMoviment
         },[])
 
         return moviment
     }
 
-    checkRegularMovement([column,line], columnPosition, linePosition, color, maximumPaces){
+    checkRegularMovement([column,line], columnPosition, linePosition, color, maximumPaces,chessBoard){
         let possibleColumn = columnPosition + column
         let possibleLine = linePosition+ line
         const possibleDirection = []
         for(let limit = 1; possibleColumn>=1 && possibleColumn<=8 && possibleLine>=1 && possibleLine<=8 && limit<=maximumPaces;limit++){
             const position = `ref${possibleColumn}${possibleLine}`
-            if(this.chessBoard[position]==null){
+            if(chessBoard[position]==null){
                 possibleDirection.push(position)
             }
-            else if(this.chessBoard[position].color!==color){
+            else if(chessBoard[position].color!==color){
                 possibleDirection.push(position)
                 break
             }
@@ -247,7 +242,7 @@ export default class createGame {
         return possibleDirection
     }
 
-    possibleMovimentPawn(){
+    possibleMovimentPawn(chessBoard=this.chessBoard){
         const column=Number(this.position.charAt(3))
         const line =Number(this.position.charAt(4))
         const movimentPawn = []
@@ -259,14 +254,14 @@ export default class createGame {
             possibleMovement.push(`ref${column}${(line+direction*2)}`)
         }
         possibleMovement.forEach((position)=>{
-            if(this.chessBoard[position]==null){
+            if(chessBoard[position]==null){
                 movimentPawn.push(position)
             }
         })
 
         const possibleEat=[`ref${column-1}${(line+Number(direction))}`,`ref${column+1}${(line+Number(direction))}`]
         possibleEat.forEach((position)=>{
-            if((this.chessBoard[position]!==null) && (this.chessBoard[position]!==undefined) && (this.chessBoard[position].color!==this.color)){
+            if((chessBoard[position]!==null) && (chessBoard[position]!==undefined) && (chessBoard[position].color!==this.color)){
                 movimentPawn.push(position)
             }
         })   
@@ -353,16 +348,15 @@ export default class createGame {
 
     captureKingAdversity(color){
         const adversaryColor = (this.colorPieceBoard.top===color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
-        this.statusCheckKing[adversaryColor].check=false
-        this.statusCheck[color].check=false
-        const king =`King${adversaryColor}` 
-        const checks=this.verifyCheck(this.piecesBoard[king].position,adversaryColor,king)
+        this.statusCheckKing.check=false
+        const nameKing =`King${adversaryColor}` 
+        const checks=this.verifyCheck(this.piecesBoard[nameKing].position,adversaryColor,nameKing)
 
         if(checks.qt!==0){
-            this.statusCheck[adversaryColor].check=true
-            this.statusCheck[adversaryColor].checkMate=this.checkMate(king,adversaryColor,checks)
-                if( this.statusCheck[adversaryColor].checkMate===true){
-                    this.statusCheck[adversaryColor].endGame=true
+            this.statusCheckKing.check=true
+            this.statusCheckKing.checkMate=this.checkMate(nameKing,adversaryColor,checks)
+                if( this.statusCheckKing.checkMate===true){
+                    this.statusCheckKing.endGame=true
                 }
             }
         } 
@@ -370,13 +364,13 @@ export default class createGame {
     verifyCheck(refIdKing,colorKing){
         let checks = {
             qt:0,
-            piecesChecks:[]
+            pieceCheck:null
         }
         for(let piece in this.piecesBoard){
             if((colorKing!==this.piecesBoard[piece].color)&&(this.piecesBoard[piece].isAtive===true)){
                 if(this.movimentsPieceAdversity(this.piecesBoard[piece].refMoviments,refIdKing)){
                     checks.qt++
-                    checks.piecesChecks.push(piece)
+                    checks.pieceCheck=piece
                 }
             }
         }
@@ -392,26 +386,77 @@ export default class createGame {
         return false
     }
 
-    friendlyPieceMovePath(refIdPieceAdversity,colorKing,king){
-        let save=false
-        for(let piece in this.piecesBoard){
-            if(colorKing===this.piecesBoard[piece].color){
-                save = this.movimentsPieceFriend(this.piecesBoard[piece].refMoviments,refIdPieceAdversity,king)
-            }
-            if(save===true){
-                break
-            }
-        }
-        return save
+    refIdToArray(refId){
+        return [Number(refId.charAt(3)),Number(refId.charAt(4))]
     }
 
-    movimentsPieceFriend(movimentsPieceFriend,refIdAdversity,king){
-        for (let i = 0;i<movimentsPieceFriend.length;i++){
-            if(movimentsPieceFriend[i]===refIdAdversity){
-                const newMoviment = this.chessBoard[refIdAdversity].functionPiece()
-                for(let i = 0;i<newMoviment.length;i++){
-                    if(newMoviment===this.piecesBoard[king].position){
-                        return false
+    checkMate(nameKing,colorKing,checks){
+        for(let i=0;i<this.piecesBoard[nameKing].refMoviments.length;i++){
+            const fakeChessBoard = {...this.chessBoard}            //FALSO CHESSBOARD PARA CONFERÊNCIA DO REI
+            const refIdInitialKing=this.piecesBoard[nameKing].position
+            const newRefIdKing = this.piecesBoard[nameKing].refMoviments[i]
+           
+            const kingRefId = fakeChessBoard[refIdInitialKing]
+            fakeChessBoard[newRefIdKing] = kingRefId 
+            fakeChessBoard[refIdInitialKing]=null
+
+            if(this.verifyCheckInMate(fakeChessBoard,newRefIdKing,colorKing) === false){//se na nova refId do rei não tem check, não há checkMate
+                return false 
+            }
+        }
+
+        if(checks.qt===1){
+            const refIdPossiblePaths=[]
+            const positionPieceAdversary = this.piecesBoard[checks.pieceCheck].position
+            const positionInitialKing = this.piecesBoard[nameKing].position
+            let direction = [0,0]
+
+            // descobrir direção
+            for(let refMovimentKing of this.piecesBoard[nameKing].refMoviments){
+               for(let refMovimentAdversary of this.piecesBoard[checks.pieceCheck].refMoviments){
+                   if(refMovimentKing===refMovimentAdversary){
+                        refIdPossiblePaths.push(refMovimentAdversary)
+                        const arrayPositionKing=this.refIdToArray(positionInitialKing)
+                        const arrayPositionAdversary=this.refIdToArray(refMovimentAdversary)
+                        direction = [(arrayPositionAdversary[0]-arrayPositionKing[0]),(arrayPositionAdversary[1]-arrayPositionKing[1])]
+                        break
+                    }
+               }
+            }
+
+            let currentRefid = refIdPossiblePaths[0]
+            while(currentRefid){
+                const refId = this.refIdToArray(currentRefid)
+                const possibleRefid = `ref${refId[0]+direction[0]}${refId[1]+direction[1]}`
+                for(let refMovimentAdversary of this.piecesBoard[checks.pieceCheck].refMoviments){
+                    if(possibleRefid===refMovimentAdversary){
+                        refIdPossiblePaths.push(possibleRefid)
+                        currentRefid = possibleRefid
+                        break
+                    }
+                }
+                if(possibleRefid!==currentRefid){
+                    currentRefid = null
+                }         
+            }
+
+            refIdPossiblePaths.push(positionPieceAdversary)
+
+            for(let refId in this.chessBoard){
+                if(this.chessBoard[refId]!==null && this.chessBoard[refId].color===colorKing && this.chessBoard[refId].name!=="King")
+                {
+                    for(let refMovimentFriend of this.chessBoard[refId].refMoviments){
+                        for(let refIdPossiblePath of refIdPossiblePaths){
+                            if(refMovimentFriend===refIdPossiblePath){
+                                const fakeChessBoard= {...this.chessBoard} 
+                                const pieceMoveFriend = fakeChessBoard[refId]
+                                fakeChessBoard[refMovimentFriend] = pieceMoveFriend 
+                                fakeChessBoard[refId]=null
+                                if(this.verifyCheckInMate(fakeChessBoard,positionInitialKing,colorKing) === false){//se na nova refId do rei não tem check, não há checkMate
+                                    return false 
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -419,20 +464,17 @@ export default class createGame {
         return true
     }
 
-    checkMate(king,colorKing,checks){
-        // movimentoa o rei nas possiveis referencia criando um obj falso do chessBoard, para verificar se há check
-        // quantidade do check, se for  = 1 ira conferir se uma peça aliada entra na frente,se alguma peça aliana esta na rota da piece que deu check
-        
-        let checkMateRefId = true
-        for(let i=0;i<this.piecesBoard[king].refMoviments.length;i++){
-            const checkKing =this.verifyCheck(this.piecesBoard[king].refMoviments[i],colorKing,king)
-            if(checkKing.possiblefriendlyPieceMove===true){
-                checkMateRefId = false
-                break
+    verifyCheckInMate(fakeChessBoard,newRefIdKing,colorKing){
+        for(let refId in fakeChessBoard){
+            if(fakeChessBoard[refId]!==null && fakeChessBoard[refId].color!==colorKing)
+            {
+                const refMoviments=fakeChessBoard[refId].functionPiece(fakeChessBoard)
+                if(this.movimentsPieceAdversity(refMoviments,newRefIdKing)){//verifica se o refId adversario e igual ao refId do rei
+                    //se for verdadeiro o rei esta em check, movimento para morte
+                    return true
+                }
             }
         }
-        return checkMateRefId
+        return false
     }
-
 }
-

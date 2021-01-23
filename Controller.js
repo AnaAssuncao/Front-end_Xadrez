@@ -137,23 +137,15 @@ function updateDeadPiece(){
 }
 
 function updateInformationGame(){
-    if(game.statusCheckKing[game.colorPieceBoard.top].checkMate===true){
-        view.informationGame.addinformation(`Check Mate no ${game.statusCheckKing[game.colorPieceBoard.top].kingCapturecheckMate} - Vitória das Peças Pretas`)
+    if(game.statusCheckKing.checkMate===true){
+        view.informationGame.addinformation(`Check Mate no King ${game.pieceSelect.color} - Vitória das Peças ${game.pieceSelect.color}`)
     }
-    else if(game.statusCheckKing[game.colorPieceBoard.bottom].checkMate===true){
-        view.informationGame.addinformation(`Check Mate no ${game.statusCheckKing[game.colorPieceBoard.bottom].kingCapturecheckMate} - Vitória das Peças Brancas`)
+    else if(game.statusCheckKing.endGame===true){
+        view.informationGame.addinformation(`Vitória das Peças ${game.pieceSelect.color}`)
     }
-    else if(game.statusCheckKing[game.colorPieceBoard.top].endGame===true){
-        view.informationGame.addinformation(`Vitória das Peças Pretas`)
-    }
-    else if(game.statusCheckKing[game.colorPieceBoard.bottom].endGame===true){
-        view.informationGame.addinformation(`Vitória das Peças Brancas`)
-    }
-    else if(game.statusCheckKing[game.colorPieceBoard.top].check===true){
-        view.informationGame.addinformation(`Check no ${game.statusCheckKing[game.colorPieceBoard.top].kingCaptureCheck}`)
-    }
-    else if(game.statusCheckKing[game.colorPieceBoard.bottom].check===true) {
-            view.informationGame.addinformation(`Check no ${game.statusCheckKing[game.colorPieceBoard.bottom].kingCaptureCheck}`)
+
+    else if(game.statusCheckKing.check===true){
+        view.informationGame.addinformation(`Check no King ${game.pieceSelect.color}`)
     }
     else{
         view.informationGame.clearInformation()
