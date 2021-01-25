@@ -87,6 +87,9 @@ export default function viewScreen(chessBoard){
                     divImg.classList.add("board__pieces")
                     img.src=`${chessBoard[key].img}.png`
                     img.classList.add('pieces__imagem')
+                    img.draggable = true
+                    img.addEventListener('dragstart', e=>{
+                    notifyFunctions(functionToCallBack.clickChessBoard,chessBoard[key].position)})
                     divImg.appendChild(img)
                     divSquare.appendChild(divImg)           
                 }
@@ -94,15 +97,23 @@ export default function viewScreen(chessBoard){
         },
         highlighSquare:{
             clearHighlightSquares(piece){
-                document.getElementById(`${piece.refId}`).classList.remove("move__piece--selected")
+                const selectedSquare = document.getElementById(piece.refId)
+                selectedSquare.classList.remove("move__piece--selected-l")
+                selectedSquare.classList.remove("move__piece--selected-d")
                 piece.refMoviments.forEach((possibilitie)=>{
-                    document.getElementById(`${possibilitie}`).classList.remove("move__piece--possibilities")
+                    const selectedSquare = document.getElementById(possibilitie)
+                    selectedSquare.classList.remove("move__piece--possibilities-l")
+                    selectedSquare.classList.remove("move__piece--possibilities-d")
                 })
             },
             addHighlightSquares(piece){
-                document.getElementById(`${piece.refId}`).classList.add("move__piece--selected")
+                const selectedSquare = document.getElementById(piece.refId)
+                const classToAdd = selectedSquare.classList.contains('square__light')?'move__piece--selected-l':'move__piece--selected-d'
+                selectedSquare.classList.add(classToAdd)
                 piece.refMoviments.forEach((possibilitie)=>{
-                    document.getElementById(`${possibilitie}`).classList.add("move__piece--possibilities")
+                    const selectedSquare = document.getElementById(possibilitie)
+                    const classToAdd = selectedSquare.classList.contains('square__light')?'move__piece--possibilities-l':'move__piece--possibilities-d'
+                    selectedSquare.classList.add(classToAdd)
                 })
             }
         }, 
@@ -169,6 +180,18 @@ export default function viewScreen(chessBoard){
                 notifyFunctions(functionToCallBack.clickChessBoard,squareRefIdClick)
             }
         },
+        DragChessBoard(tagPosition){
+            tagPosition.addEventListener('dragenter',e=>{
+            const allSquareMark = document.querySelectorAll('.square__dark--mark')
+            allSquareMark.forEach(elt=>{elt.classList.remove('square__dark--mark')})
+            tagPosition.classList.add('square__dark--mark');
+            })
+            tagPosition.addEventListener('dragover',e=>{e.preventDefault();})
+            tagPosition.addEventListener('drop',e=>{console.log(`drop ${tagPosition.id}`);
+            notifyFunctions(functionToCallBack.clickChessBoard,tagPosition.id)
+            tagPosition.classList.remove('square__dark--mark')
+            })
+        }
     }
     starGameEvent.buttomStart()
     starGameEvent.pieceInput()
@@ -184,6 +207,7 @@ export default function viewScreen(chessBoard){
                 tagPosition.classList.add('board__square')
                 tagPosition.id = `${refId}`
                 starGameEvent.clickChessBoard(tagPosition)
+                starGameEvent.DragChessBoard(tagPosition)
                 if(color===true){
                     tagPosition.classList.add('square__dark')
                     color=false

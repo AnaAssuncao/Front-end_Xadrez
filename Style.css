@@ -95,6 +95,9 @@
 .square__dark{
     background-color: rgb(117, 155, 112);
 }
+.square__dark--mark{
+    background-color: rgb(112, 132, 155);
+}
 .board__pieces{
     display: flex;
     justify-content: center;
@@ -131,12 +134,33 @@
 }
 .move__piece--possibilities{
     /* background-color:rgba(117, 155, 112, 0.4); */
-    border: dashed 0.2vw  rgb(41, 41, 41);
+    border: dashed 2px  rgb(41, 41, 41);
+    /* background-color:rgb(75, 88, 73); */
     /* background-image: url("img/simbolo.svg"); */
     /* background-size: cover; */
+}
+.move__piece--possibilities-l{
+    border: solid 2px black;
+    background-image: url("img/posible-moviment.svg");
+    background-size: 15px 15px;
+    background-position: top left;
+    background-repeat:no-repeat;
 }   
+.move__piece--possibilities-d{
+    border: solid 2px black;
+    background-image: url("img/posible-moviment.svg");
+    background-size: 15px 15px;
+    background-position: top left;
+    background-repeat:no-repeat;
+}
+.move__piece--selected-l{
+    border: solid 2px red;
+}
+.move__piece--selected-d{
+    border: solid 2px red;
+}             
 .move__piece--selected{
-    border: dashed 0.2vw  rgb(41, 41, 41);
+    border: dashed 2px  rgb(41, 41, 41);
 }       
 #information__game{
     background-color: rgb(240, 255, 240);
