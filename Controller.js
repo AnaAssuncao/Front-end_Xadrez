@@ -138,14 +138,14 @@ function updateDeadPiece(){
 
 function updateInformationGame(){
     if(game.statusCheckKing.checkMate===true){
-        view.informationGame.addinformation(`Check Mate no King ${game.pieceSelect.color} - Vitória das Peças ${game.pieceSelect.color}`)
+        view.informationGame.addinformation(`Xeque-Mate no King ${game.pieceSelect.color} - Vitória das Peças ${game.statusCheckKing.winColor}`)
     }
     else if(game.statusCheckKing.endGame===true){
-        view.informationGame.addinformation(`Vitória das Peças ${game.pieceSelect.color}`)
+        view.informationGame.addinformation(`Vitória das Peças ${game.statusCheckKing.winColor}`)
     }
 
     else if(game.statusCheckKing.check===true){
-        view.informationGame.addinformation(`Check no King ${game.pieceSelect.color}`)
+        view.informationGame.addinformation(`Xeque no King ${game.pieceSelect.color}`)
     }
     else{
         view.informationGame.clearInformation()

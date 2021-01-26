@@ -146,7 +146,8 @@ export default class createGame {
         this.statusCheckKing={
             check:false,
             checkMate:false,
-            endGame:null
+            endGame:null,
+            winColor:null
         }
     }
 
@@ -289,11 +290,9 @@ export default class createGame {
         this.piecesBoard[nameCapturePiece].isAtive = false
         this.piecesBoard[nameCapturePiece].refMoviments=[]
         this.capturePiece[nameCapturePiece]=this.piecesBoard[nameCapturePiece]
-        if(nameCapturePiece==="KingWhite"){
-            this.checkKing[this.colorPieceBoard.top].endGame=true
-        }
-        else if(nameCapturePiece==="KingBlack"){
-            this.checkKing[this.colorPieceBoard.bottom].endGame=true
+        if(nameCapturePiece==="KingWhite"||nameCapturePiece==="KingBlack"){
+            this.statusCheckKing.endGame=true
+            this.statusCheckKing.winColor=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top 
         }
     }
 
@@ -357,6 +356,7 @@ export default class createGame {
             this.statusCheckKing.checkMate=this.checkMate(nameKing,adversaryColor,checks)
                 if( this.statusCheckKing.checkMate===true){
                     this.statusCheckKing.endGame=true
+                    this.statusCheckKing.winColor=color
                 }
             }
         } 
