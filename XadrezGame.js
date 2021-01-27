@@ -364,6 +364,7 @@ export default class createGame {
                 }
         }
         else{
+            this.assistantKing(nameKing,adversaryColor)
             this.assistantPiece(nameKing,adversaryColor)
             }
     } 
@@ -397,14 +398,23 @@ export default class createGame {
         return [Number(refId.charAt(3)),Number(refId.charAt(4))]
     }
 
+    assistantKing(nameKing,assistantPieceColor){
+        const positionInitialKing = this.piecesBoard[nameKing].position
+        this.piecesBoard[nameKing].refMoviments=this.piecesBoard[nameKing].refMoviments.reduce((possibleMovimentKing,refIdKing)=>{
+               const fakeChessBoard = this.newFakeChessBoard(positionInitialKing,refIdKing)
+               if(this.verifyCheckInMate(fakeChessBoard,refIdKing,assistantPieceColor) === false){
+                    possibleMovimentKing.push(refIdKing)
+               }
+               return possibleMovimentKing
+        },[])
+    }
+
     checkMate(nameKing,colorKing,checks,refIdPossiblePaths){
         const positionInitialKing = this.piecesBoard[nameKing].position
         for(let i=0;i<this.piecesBoard[nameKing].refMoviments.length;i++){
             const refIdInitialKing=this.piecesBoard[nameKing].position
             const newRefIdKing = this.piecesBoard[nameKing].refMoviments[i]
-            const fakeChessBoard = this.newFakeChessBoard(refIdInitialKing,newRefIdKing)
-                    //FALSO CHESSBOARD PARA CONFERÊNCIA DO REI
-
+            const fakeChessBoard = this.newFakeChessBoard(refIdInitialKing,newRefIdKing) //FALSO CHESSBOARD PARA CONFERÊNCIA DO REI
             if(this.verifyCheckInMate(fakeChessBoard,newRefIdKing,colorKing) === false){//se na nova refId do rei não tem check, não há checkMate
                 return false 
             }
@@ -431,7 +441,7 @@ export default class createGame {
 
     verifyCheckInMate(fakeChessBoard,newRefIdKing,colorKing){
         for(let refId in fakeChessBoard){
-            if(fakeChessBoard[refId]!==null && fakeChessBoard[refId].color!==colorKing)
+            if(fakeChessBoard[refId]!==null && fakeChessBoard[refId].color!==colorKing && fakeChessBoard[refId].isAtive)
             {
                 const refMoviments=fakeChessBoard[refId].functionPiece(fakeChessBoard)
                 if(this.movimentsPieceAdversity(refMoviments,newRefIdKing)){//verifica se o refId adversario e igual ao refId do rei
@@ -482,15 +492,9 @@ export default class createGame {
     }
 
     checkAssistance(nameKing,assistantPieceColor,refIdPossiblePaths){
+        this.assistantKing(nameKing,adversaryColor)
+
         const positionInitialKing = this.piecesBoard[nameKing].position
-        this.piecesBoard[nameKing].refMoviments=this.piecesBoard[nameKing].refMoviments.reduce((possibleMovimentKing,refIdKing)=>{
-               const positionCheck= this.verifyCheck(refIdKing,assistantPieceColor)
-               if(!positionCheck.qt){ 
-                    possibleMovimentKing.push(refIdKing)
-               }
-               return possibleMovimentKing
-        },[])
-    
         const arrayNamesPieces = Object.keys(this.piecesBoard)
         arrayNamesPieces.forEach((namePiece)=>{
             if((assistantPieceColor===this.piecesBoard[namePiece].color)&&(this.piecesBoard[namePiece].isAtive===true)&&(namePiece!==nameKing)){
