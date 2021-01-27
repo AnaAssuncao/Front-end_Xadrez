@@ -352,7 +352,7 @@ export default class createGame {
         const checks=this.verifyCheck(this.piecesBoard[nameKing].position,adversaryColor,nameKing)
 
         if(checks.qt!==0){
-            const refIdPossiblePaths = this.teste(nameKing,checks)
+            const refIdPossiblePaths = this.wayToCheck(nameKing,checks)
             this.statusCheckKing.check=true
             this.statusCheckKing.checkMate=this.checkMate(nameKing,adversaryColor,checks,refIdPossiblePaths)
                 if( this.statusCheckKing.checkMate===true){
@@ -360,11 +360,11 @@ export default class createGame {
                     this.statusCheckKing.winColor=color
                 }
                 else{
-                    this.checkAssistance(adversaryColor,refIdPossiblePaths)
+                    this.checkAssistance(nameKing,adversaryColor,refIdPossiblePaths)
                 }
             }
         } 
-
+ 
     verifyCheck(refIdKing,colorKing){
         let checks = {
             qt:0,
@@ -440,7 +440,7 @@ export default class createGame {
         return false
     }
 
-    teste(nameKing,checks){
+    wayToCheck(nameKing,checks){
         const refIdPossiblePaths=[]
         const positionPieceAdversary = this.piecesBoard[checks.pieceCheck].position
         const positionInitialKing = this.piecesBoard[nameKing].position
@@ -478,8 +478,7 @@ export default class createGame {
         return refIdPossiblePaths
     }
 
-    checkAssistance(assistantPieceColor,refIdPossiblePaths){
-        const nameKing = `King${assistantPieceColor}`
+    checkAssistance(nameKing,assistantPieceColor,refIdPossiblePaths){
         const positionInitialKing = this.piecesBoard[nameKing].position
         this.piecesBoard[nameKing].refMoviments=this.piecesBoard[nameKing].refMoviments.reduce((possibleMovimentKing,refIdKing)=>{
                const positionCheck= this.verifyCheck(refIdKing,assistantPieceColor)
