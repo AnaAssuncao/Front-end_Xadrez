@@ -352,11 +352,15 @@ export default class createGame {
         const checks=this.verifyCheck(this.piecesBoard[nameKing].position,adversaryColor,nameKing)
 
         if(checks.qt!==0){
+            const refIdPossiblePaths = this.teste(nameKing,checks)
             this.statusCheckKing.check=true
-            this.statusCheckKing.checkMate=this.checkMate(nameKing,adversaryColor,checks)
+            this.statusCheckKing.checkMate=this.checkMate(nameKing,adversaryColor,checks,refIdPossiblePaths)
                 if( this.statusCheckKing.checkMate===true){
                     this.statusCheckKing.endGame=true
                     this.statusCheckKing.winColor=color
+                }
+                else{
+                    this.checkAssistance(adversaryColor,refIdPossiblePaths)
                 }
             }
         } 
@@ -390,68 +394,27 @@ export default class createGame {
         return [Number(refId.charAt(3)),Number(refId.charAt(4))]
     }
 
-    checkMate(nameKing,colorKing,checks){
+    checkMate(nameKing,colorKing,checks,refIdPossiblePaths){
+        const positionInitialKing = this.piecesBoard[nameKing].position
         for(let i=0;i<this.piecesBoard[nameKing].refMoviments.length;i++){
-            const fakeChessBoard = {...this.chessBoard}            //FALSO CHESSBOARD PARA CONFERÊNCIA DO REI
             const refIdInitialKing=this.piecesBoard[nameKing].position
             const newRefIdKing = this.piecesBoard[nameKing].refMoviments[i]
-           
-            const kingRefId = fakeChessBoard[refIdInitialKing]
-            fakeChessBoard[newRefIdKing] = kingRefId 
-            fakeChessBoard[refIdInitialKing]=null
+            const fakeChessBoard = this.newFakeChessBoard(refIdInitialKing,newRefIdKing)
+                    //FALSO CHESSBOARD PARA CONFERÊNCIA DO REI
 
             if(this.verifyCheckInMate(fakeChessBoard,newRefIdKing,colorKing) === false){//se na nova refId do rei não tem check, não há checkMate
                 return false 
             }
         }
 
-        if(checks.qt===1){
-            const refIdPossiblePaths=[]
-            const positionPieceAdversary = this.piecesBoard[checks.pieceCheck].position
-            const positionInitialKing = this.piecesBoard[nameKing].position
-            let direction = [0,0]
-
-            // descobrir direção
-            for(let refMovimentKing of this.piecesBoard[nameKing].refMoviments){
-               for(let refMovimentAdversary of this.piecesBoard[checks.pieceCheck].refMoviments){
-                   if(refMovimentKing===refMovimentAdversary){
-                        refIdPossiblePaths.push(refMovimentAdversary)
-                        const arrayPositionKing=this.refIdToArray(positionInitialKing)
-                        const arrayPositionAdversary=this.refIdToArray(refMovimentAdversary)
-                        direction = [(arrayPositionAdversary[0]-arrayPositionKing[0]),(arrayPositionAdversary[1]-arrayPositionKing[1])]
-                        break
-                    }
-               }
-            }
-
-            let currentRefid = refIdPossiblePaths[0]
-            while(currentRefid){
-                const refId = this.refIdToArray(currentRefid)
-                const possibleRefid = `ref${refId[0]+direction[0]}${refId[1]+direction[1]}`
-                for(let refMovimentAdversary of this.piecesBoard[checks.pieceCheck].refMoviments){
-                    if(possibleRefid===refMovimentAdversary){
-                        refIdPossiblePaths.push(possibleRefid)
-                        currentRefid = possibleRefid
-                        break
-                    }
-                }
-                if(possibleRefid!==currentRefid){
-                    currentRefid = null
-                }         
-            }
-
-            refIdPossiblePaths.push(positionPieceAdversary)
-
+        if(checks.qt===1)
             for(let refId in this.chessBoard){
                 if(this.chessBoard[refId]!==null && this.chessBoard[refId].color===colorKing && this.chessBoard[refId].name!=="King")
                 {
                     for(let refMovimentFriend of this.chessBoard[refId].refMoviments){
                         for(let refIdPossiblePath of refIdPossiblePaths){
                             if(refMovimentFriend===refIdPossiblePath){
-                                const fakeChessBoard= {...this.chessBoard} 
-                                const pieceMoveFriend = fakeChessBoard[refId]
-                                fakeChessBoard[refMovimentFriend] = pieceMoveFriend 
-                                fakeChessBoard[refId]=null
+                                const fakeChessBoard = this.newFakeChessBoard(refId,refMovimentFriend)
                                 if(this.verifyCheckInMate(fakeChessBoard,positionInitialKing,colorKing) === false){//se na nova refId do rei não tem check, não há checkMate
                                     return false 
                                 }
@@ -460,7 +423,6 @@ export default class createGame {
                     }
                 }
             }
-        }
         return true
     }
 
@@ -477,4 +439,83 @@ export default class createGame {
         }
         return false
     }
+
+    teste(nameKing,checks){
+        const refIdPossiblePaths=[]
+        const positionPieceAdversary = this.piecesBoard[checks.pieceCheck].position
+        const positionInitialKing = this.piecesBoard[nameKing].position
+        let direction = [0,0]
+
+        // descobrir direção
+        for(let refMovimentKing of this.piecesBoard[nameKing].refMoviments){
+           for(let refMovimentAdversary of this.piecesBoard[checks.pieceCheck].refMoviments){
+               if(refMovimentKing===refMovimentAdversary){
+                    refIdPossiblePaths.push(refMovimentAdversary)
+                    const arrayPositionKing=this.refIdToArray(positionInitialKing)
+                    const arrayPositionAdversary=this.refIdToArray(refMovimentAdversary)
+                    direction = [(arrayPositionAdversary[0]-arrayPositionKing[0]),(arrayPositionAdversary[1]-arrayPositionKing[1])]
+                    break
+                }
+           }
+        }
+
+        let currentRefid = refIdPossiblePaths[0]
+        while(currentRefid){
+            const refId = this.refIdToArray(currentRefid)
+            const possibleRefid = `ref${refId[0]+direction[0]}${refId[1]+direction[1]}`
+            for(let refMovimentAdversary of this.piecesBoard[checks.pieceCheck].refMoviments){
+                if(possibleRefid===refMovimentAdversary){
+                    refIdPossiblePaths.push(possibleRefid)
+                    currentRefid = possibleRefid
+                    break
+                }
+            }
+            if(possibleRefid!==currentRefid){
+                currentRefid = null
+            }         
+        }
+        refIdPossiblePaths.push(positionPieceAdversary)
+        return refIdPossiblePaths
+    }
+
+    checkAssistance(assistantPieceColor,refIdPossiblePaths){
+        const nameKing = `King${assistantPieceColor}`
+        const positionInitialKing = this.piecesBoard[nameKing].position
+        this.piecesBoard[nameKing].refMoviments=this.piecesBoard[nameKing].refMoviments.reduce((possibleMovimentKing,refIdKing)=>{
+               const positionCheck= this.verifyCheck(refIdKing,assistantPieceColor)
+               if(!positionCheck.qt){ 
+                    possibleMovimentKing.push(refIdKing)
+               }
+               return possibleMovimentKing
+        },[])
+    
+        const arrayNamesPieces = Object.keys(this.piecesBoard)
+        arrayNamesPieces.forEach((namePiece)=>{
+            if((assistantPieceColor===this.piecesBoard[namePiece].color)&&(this.piecesBoard[namePiece].isAtive===true)&&(namePiece!==nameKing)){
+                this.piecesBoard[namePiece].refMoviments=this.piecesBoard[namePiece].refMoviments.reduce((possibleMovimentPiece,refIdpiece)=>{
+                    for(let refIdPossiblePath of refIdPossiblePaths){
+                        if(refIdPossiblePath===refIdpiece){
+                            const fakeChessBoard = this.newFakeChessBoard(this.piecesBoard[namePiece].position,refIdpiece)
+                            if(this.verifyCheckInMate(fakeChessBoard,positionInitialKing,assistantPieceColor) === false){//se na nova refId do rei não tem check, não há checkMate
+                                possibleMovimentPiece.push(refIdpiece)
+                            }                
+                        }
+                    }
+                    return possibleMovimentPiece
+                },[])
+            }
+        })
+    }   
+
+    newFakeChessBoard(pastPositionPiece,newPositionPiece){
+        const fakeChessBoard= {...this.chessBoard} 
+        const pieceMove = fakeChessBoard[pastPositionPiece]
+        fakeChessBoard[newPositionPiece] = pieceMove
+        fakeChessBoard[pastPositionPiece]=null
+        return fakeChessBoard
+    }
 }
+
+
+
+
