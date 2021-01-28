@@ -151,6 +151,8 @@ export default class createGame {
             winColor:null,
             refIdPathsToCheck: []
         }
+
+        this.allChangeGame=[]
     }
 
     checkMovimentsAllPieces(){
@@ -159,18 +161,6 @@ export default class createGame {
                 {
                     this.piecesBoard[piece].refMoviments=this.piecesBoard[piece].functionPiece()
                 }
-        }
-    }
-
-    updateMovimentAllPiece(color){
-        if(this.statusCheckKing.checkMate===false){
-            if(this.statusCheckKing.check===true ){
-                this.checkAssistance(color)
-            }
-            else{
-                this.assistantKing(color)
-                this.assistantPiece(color)
-            }
         }
     }
 
@@ -222,7 +212,6 @@ export default class createGame {
 
         return moviment
     }
-
     possibleMovimentKing(chessBoard=this.chessBoard){
         const column=Number(this.position.charAt(3))
         const line=Number(this.position.charAt(4))
@@ -286,24 +275,32 @@ export default class createGame {
     }
 
     changePiecePosition(informationPieceSelect){
+        const chancePositionPiece={
+            positionIntial:null,
+            newPosition:null,
+            pieceEat:null
+        }
         const nameRefPieceBoard=`${informationPieceSelect.namePiece}${informationPieceSelect.color}`
+        chancePositionPiece.positionIntial={__proto__:this,
+        ...this.piecesBoard[nameRefPieceBoard]}
         const movePiece =this.piecesBoard[nameRefPieceBoard]
         const newRefId = informationPieceSelect.coordinateRef
         if(this.chessBoard[newRefId]!==null){
             const nameCapturePiece = `${this.chessBoard[newRefId].name}${this.chessBoard[newRefId].color}`
+            chancePositionPiece.pieceEat={__proto__:this,
+                ...this.piecesBoard[nameCapturePiece]}
             this.eatPiece(nameCapturePiece)
         }
         this.chessBoard[movePiece.position]=null
         movePiece.position=newRefId
         movePiece.qtMovements++
         this.chessBoard[newRefId]= movePiece
-        
-        this.checkMovimentsAllPieces()
-        const nextColor=(this.colorPieceBoard.top===informationPieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
-        this.updateStatusCheck(nextColor)
-        this.updateMovimentAllPiece(nextColor)
+        chancePositionPiece.newPosition=movePiece
+
+        this.allChangeGame.push(chancePositionPiece)
+        this.updateStatusGame(informationPieceSelect.color)
     }
-    
+
     eatPiece(nameCapturePiece){
         this.piecesBoard[nameCapturePiece].isAtive = false
         this.piecesBoard[nameCapturePiece].refMoviments=[]
@@ -311,6 +308,25 @@ export default class createGame {
         if(nameCapturePiece==="KingWhite"||nameCapturePiece==="KingBlack"){
             this.statusCheckKing.endGame=true
             this.statusCheckKing.winColor=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top 
+        }
+    }
+
+    updateStatusGame(colorMove){
+        this.checkMovimentsAllPieces()
+        const nextColor=(this.colorPieceBoard.top===colorMove)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
+        this.updateStatusCheck(nextColor)
+        this.updateMovimentAllPiece(nextColor)
+    }
+
+    updateMovimentAllPiece(color){
+        if(this.statusCheckKing.checkMate===false){
+            if(this.statusCheckKing.check===true ){
+                this.checkAssistance(color)
+            }
+            else{
+                this.assistantKing(color)
+                this.assistantPiece(color)
+            }
         }
     }
 
