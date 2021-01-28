@@ -178,6 +178,8 @@ export default function viewScreen(chessBoard){
             tagPosition.onclick= () => {
                 const squareRefIdClick = tagPosition.id
                 notifyFunctions(functionToCallBack.clickChessBoard,squareRefIdClick)
+                const allSquareMark = document.querySelectorAll('.square__dark--mark')
+                allSquareMark.forEach(elt=>{elt.classList.remove('square__dark--mark')})
             }
         },
         DragChessBoard(tagPosition){
