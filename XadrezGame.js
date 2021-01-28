@@ -275,19 +275,19 @@ export default class createGame {
     }
 
     changePiecePosition(informationPieceSelect){
-        const chancePositionPiece={
-            positionIntial:null,
-            newPosition:null,
+        const chanceMoviment={
+            pieceIntial:null,
+            pieceFinal:null,
             pieceEat:null
         }
         const nameRefPieceBoard=`${informationPieceSelect.namePiece}${informationPieceSelect.color}`
-        chancePositionPiece.positionIntial={__proto__:this,
+        chanceMoviment.pieceIntial={__proto__:this,
         ...this.piecesBoard[nameRefPieceBoard]}
         const movePiece =this.piecesBoard[nameRefPieceBoard]
         const newRefId = informationPieceSelect.coordinateRef
         if(this.chessBoard[newRefId]!==null){
             const nameCapturePiece = `${this.chessBoard[newRefId].name}${this.chessBoard[newRefId].color}`
-            chancePositionPiece.pieceEat={__proto__:this,
+            chanceMoviment.pieceEat={__proto__:this,
                 ...this.piecesBoard[nameCapturePiece]}
             this.eatPiece(nameCapturePiece)
         }
@@ -295,9 +295,9 @@ export default class createGame {
         movePiece.position=newRefId
         movePiece.qtMovements++
         this.chessBoard[newRefId]= movePiece
-        chancePositionPiece.newPosition=movePiece
+        chanceMoviment.pieceFinal=movePiece
 
-        this.allChangeGame.push(chancePositionPiece)
+        this.allChangeGame.push(chanceMoviment)
         this.updateStatusGame(informationPieceSelect.color)
     }
 
