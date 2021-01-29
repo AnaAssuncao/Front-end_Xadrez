@@ -255,14 +255,16 @@ export default class createGame {
     //Peças Pretas aumentam a linha e as Brancas diminuem.
     if((line+Number(direction))>=1 && (line+Number(direction))<=8){
         const possibleMovement=[`ref${column}${(line+Number(direction))}`]
-        if(this.qtMovements==0){
-            possibleMovement.push(`ref${column}${(line+direction*2)}`)
-        }
-        possibleMovement.forEach((position)=>{
-            if(chessBoard[position]==null){
-                movimentPawn.push(position)
+        if(chessBoard[possibleMovement]===null){
+            movimentPawn.push(possibleMovement)
+
+            if(this.qtMovements==0){
+                const fistMovement=`ref${column}${(line+direction*2)}`
+                if(chessBoard[fistMovement]===null){
+                    movimentPawn.push(fistMovement)
+                }
             }
-        })
+        }    
 
         const possibleEat=[`ref${column-1}${(line+Number(direction))}`,`ref${column+1}${(line+Number(direction))}`]
         possibleEat.forEach((position)=>{
