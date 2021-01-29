@@ -254,7 +254,7 @@ export default class createGame {
         const direction=[(this.color==this.colorPieceBoard.bottom)?1:-1]
     //Peças Pretas aumentam a linha e as Brancas diminuem.
     if((line+Number(direction))>=1 && (line+Number(direction))<=8){
-        const possibleMovement=[`ref${column}${(line+Number(direction))}`]
+        const possibleMovement=`ref${column}${(line+Number(direction))}`
         if(chessBoard[possibleMovement]===null){
             movimentPawn.push(possibleMovement)
 
