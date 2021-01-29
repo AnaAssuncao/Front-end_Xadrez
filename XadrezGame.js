@@ -295,7 +295,8 @@ export default class createGame {
         movePiece.position=newRefId
         movePiece.qtMovements++
         this.chessBoard[newRefId]= movePiece
-        chanceMoviment.pieceFinal=movePiece
+        chanceMoviment.pieceFinal={__proto__:this,
+            ...this.piecesBoard[nameRefPieceBoard]}
 
         this.allChangeGame.push(chanceMoviment)
         this.updateStatusGame(informationPieceSelect.color)
@@ -564,4 +565,26 @@ export default class createGame {
             }
         }
     )}
+
+    returnMoviment(){
+        const lastMoviment = this.allChangeGame.length-1
+        const position = this.allChangeGame[lastMoviment].pieceFinal.position
+        if(this.allChangeGame[lastMoviment].pieceEat){
+            const namePieceEat =this.allChangeGame[lastMoviment].pieceEat.name +this.allChangeGame[lastMoviment].pieceEat.color
+            this.piecesBoard[namePieceEat]=this.allChangeGame[lastMoviment].pieceEat
+            this.chessBoard[position]=this.allChangeGame[lastMoviment].pieceEat   
+            delete this.capturePiece[namePieceEat]
+        }
+        else{
+            this.chessBoard[position]=null
+        }
+        const positionBack = this.allChangeGame[lastMoviment].pieceIntial.position
+        const namePiece=this.allChangeGame[lastMoviment].pieceIntial.name+this.allChangeGame[lastMoviment].pieceIntial.color
+        this.chessBoard[positionBack]=this.allChangeGame[lastMoviment].pieceIntial
+        this.piecesBoard[namePiece]=this.allChangeGame[lastMoviment].pieceIntial
+
+        this.allChangeGame.pop()      
+        this.updateStatusGame(this.pieceSelect.color)
+        this.pieceSelect.color=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
+    }
 }

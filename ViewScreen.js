@@ -4,12 +4,19 @@ export default function viewScreen(chessBoard){
         buttomStart:[],
         pieceInput:[],
         buttomMove:[],
-        clickChessBoard:[]
+        clickChessBoard:[],
+        buttomBackMoviment:[]
     }
 
     this.buttomStart={
         subscribeFunction(fn){
             functionToCallBack.buttomStart.push(fn)
+        }
+    }
+
+    this.buttomBackMoviment={
+        subscribeFunction(fn){
+            functionToCallBack.buttomBackMoviment.push(fn)
         }
     }
 
@@ -193,11 +200,18 @@ export default function viewScreen(chessBoard){
             notifyFunctions(functionToCallBack.clickChessBoard,tagPosition.id)
             tagPosition.classList.remove('square__dark--mark')
             })
+        },
+        buttomBackMoviment(){
+            const buttomBackMoviment= document.querySelector(`#button__back__moviment`)
+            buttomBackMoviment.addEventListener("click", ()=>{
+                notifyFunctions(functionToCallBack.buttomBackMoviment)
+            })
         }
     }
     starGameEvent.buttomStart()
     starGameEvent.pieceInput()
     starGameEvent.buttomMove()
+    starGameEvent.buttomBackMoviment()
     boardCreation(chessBoard)
     
     function boardCreation(chessBoard){

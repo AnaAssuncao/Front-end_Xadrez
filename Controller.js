@@ -8,6 +8,7 @@ view.buttomStart.subscribeFunction(starGame)
 view.pieceInput.subscribeFunction(updateInputCoordinate)
 view.buttomMove.subscribeFunction(requiredPieceMovement)
 view.chessBoard.subscribeFunction(updateClickChessBoard)
+view.buttomBackMoviment.subscribeFunction(backPreviousMove)
 
 function starGame(){
     if(game.pieceSelect.refId){
@@ -150,5 +151,15 @@ function updateInformationGame(){
     else{
         view.informationGame.clearInformation()
     }
-    
+       
+}
+
+function backPreviousMove(){
+    if(game.allChangeGame.length>0){
+        game.returnMoviment()
+        view.chessBoard.renderBoard(game.chessBoard)
+        updateDeadPiece()
+        colorToPlay()
+        updateInformationGame()
+    }
 }
