@@ -152,7 +152,12 @@ export default class createGame {
             refIdPathsToCheck: []
         }
 
-        this.allChangeGame=[]
+        this.playHistory=[]
+
+        this.rockeEspecialRules={
+            isAtive:false,
+            tower:null,
+        }
     }
 
     checkMovimentsAllPieces(){
@@ -217,7 +222,7 @@ export default class createGame {
         const line=Number(this.position.charAt(4))
         const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]]
     
-        const moviment= direction.reduce((possibleMoviment,direction)=>{
+        let moviment = direction.reduce((possibleMoviment,direction)=>{
             const newPossibilitiesMoviment = possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,1,chessBoard))
             return newPossibilitiesMoviment
         },[])
@@ -277,31 +282,37 @@ export default class createGame {
     }
 
     changePiecePosition(informationPieceSelect){
-        const chanceMoviment={
-            pieceIntial:null,
-            pieceFinal:null,
-            pieceEat:null
-        }
         const nameRefPieceBoard=`${informationPieceSelect.namePiece}${informationPieceSelect.color}`
-        chanceMoviment.pieceIntial={__proto__:this,
-        ...this.piecesBoard[nameRefPieceBoard]}
         const movePiece =this.piecesBoard[nameRefPieceBoard]
         const newRefId = informationPieceSelect.coordinateRef
+        this.updateHistory(nameRefPieceBoard,newRefId)
         if(this.chessBoard[newRefId]!==null){
             const nameCapturePiece = `${this.chessBoard[newRefId].name}${this.chessBoard[newRefId].color}`
-            chanceMoviment.pieceEat={__proto__:this,
-                ...this.piecesBoard[nameCapturePiece]}
             this.eatPiece(nameCapturePiece)
         }
         this.chessBoard[movePiece.position]=null
         movePiece.position=newRefId
         movePiece.qtMovements++
         this.chessBoard[newRefId]= movePiece
-        chanceMoviment.pieceFinal={__proto__:this,
-            ...this.piecesBoard[nameRefPieceBoard]}
 
-        this.allChangeGame.push(chanceMoviment)
         this.updateStatusGame(informationPieceSelect.color)
+    }
+
+    updateHistory(nameRefPieceBoard,newRefId){
+        const moviment={
+            pieceIntial:null,
+            pieceEat:null,
+            newRefId:null
+        }
+        moviment.pieceIntial={__proto__:this,
+            ...this.piecesBoard[nameRefPieceBoard]}
+        if(this.chessBoard[newRefId]!==null){
+            const nameCapturePiece = `${this.chessBoard[newRefId].name}${this.chessBoard[newRefId].color}`
+            moviment.pieceEat={__proto__:this,
+                ...this.piecesBoard[nameCapturePiece]}
+        }
+        moviment.newRefId=newRefId
+        this.playHistory.push(moviment)
     }
 
     eatPiece(nameCapturePiece){
@@ -569,23 +580,23 @@ export default class createGame {
     )}
 
     returnMoviment(){
-        const lastMoviment = this.allChangeGame.length-1
-        const position = this.allChangeGame[lastMoviment].pieceFinal.position
-        if(this.allChangeGame[lastMoviment].pieceEat){
-            const namePieceEat =this.allChangeGame[lastMoviment].pieceEat.name +this.allChangeGame[lastMoviment].pieceEat.color
-            this.piecesBoard[namePieceEat]=this.allChangeGame[lastMoviment].pieceEat
-            this.chessBoard[position]=this.allChangeGame[lastMoviment].pieceEat   
+        const lastMoviment= this.playHistory.length-1
+        const position = this.playHistory[lastMoviment].newRefId
+        if(this.playHistory[lastMoviment].pieceEat!==null){
+            const namePieceEat =this.playHistory[lastMoviment].pieceEat.name +this.playHistory[lastMoviment].pieceEat.color
+            this.piecesBoard[namePieceEat]=this.playHistory[lastMoviment].pieceEat
+            this.chessBoard[position]=this.playHistory[lastMoviment].pieceEat   
             delete this.capturePiece[namePieceEat]
         }
         else{
             this.chessBoard[position]=null
         }
-        const positionBack = this.allChangeGame[lastMoviment].pieceIntial.position
-        const namePiece=this.allChangeGame[lastMoviment].pieceIntial.name+this.allChangeGame[lastMoviment].pieceIntial.color
-        this.chessBoard[positionBack]=this.allChangeGame[lastMoviment].pieceIntial
-        this.piecesBoard[namePiece]=this.allChangeGame[lastMoviment].pieceIntial
+        const positionBack = this.playHistory[lastMoviment].pieceIntial.position
+        const namePiece=this.playHistory[lastMoviment].pieceIntial.name+this.playHistory[lastMoviment].pieceIntial.color
+        this.chessBoard[positionBack]=this.playHistory[lastMoviment].pieceIntial
+        this.piecesBoard[namePiece]=this.playHistory[lastMoviment].pieceIntial
 
-        this.allChangeGame.pop()      
+        this.playHistory.pop()      
         this.updateStatusGame(this.pieceSelect.color)
         this.pieceSelect.color=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
     }

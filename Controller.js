@@ -133,7 +133,7 @@ function updateDeadPiece(){
             bottom.push(game.capturePiece[capturePiece].img)
         }
     }
-    view.capturePiece.colorTop(top)
+    view.capturePiece.colorTop(top) //renderColorTop nome
     view.capturePiece.colorBottom(bottom)
 }
 
@@ -155,7 +155,7 @@ function updateInformationGame(){
 }
 
 function backPreviousMove(){
-    if(game.allChangeGame.length>0){
+    if(game.playHistory.length>0){
         game.returnMoviment()
         view.chessBoard.renderBoard(game.chessBoard)
         updateDeadPiece()
