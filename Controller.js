@@ -18,11 +18,11 @@ function starGame(){
     view.chessBoard.renderBoard(game.chessBoard)
     view.capturePiece.colorTop([])
     view.capturePiece.colorBottom([])
-    colorToPlay()
+    updateInput()
     updateInformationGame() 
 }
 
-function colorToPlay (){
+function updateInput (){
     // limpar tabuleiro e input
     view.colorInput.clearAll()
     // iniciar ou reiniciar tabuleiro e input
@@ -95,7 +95,7 @@ function requiredPieceMovement(coordinate){
         game.movimentsModification(refId)
         view.chessBoard.renderBoard(game.chessBoard)
         updateDeadPiece()
-        colorToPlay()
+        updateInput()
         updateInformationGame()
     }   
 }
@@ -116,7 +116,7 @@ function updateClickChessBoard (idSquare){
     else{
         view.chessBoard.renderBoard(game.chessBoard)
         updateDeadPiece()
-        colorToPlay()
+        updateInput()
         updateInformationGame()
         // olhar se comeu e renderizar
     }
@@ -156,10 +156,13 @@ function updateInformationGame(){
 
 function backPreviousMove(){
     if(game.playHistory.length>0){
+        if(game.pieceSelect.refId){
+            view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
+        }
         game.returnMoviment()
         view.chessBoard.renderBoard(game.chessBoard)
         updateDeadPiece()
-        colorToPlay()
+        updateInput()
         updateInformationGame()
     }
 }

@@ -91,10 +91,11 @@ export default class createGame {
         this.starObjGame()
     }
 
-    makePiece (name,color,img,position,functionPiece,isAtive=true){  
+    makePiece (name,nameComplete,color,img,position,functionPiece,isAtive=true){  
         return {
             __proto__:this,
             name:name,
+            nameComplete:nameComplete,
             color:color,
             img:`img/${img}`,
             position:position,
@@ -119,16 +120,16 @@ export default class createGame {
             const refLine= (parseInt(i/8)+1)
             const refColumn= (i%8+1)
             const keyChess = `ref${refColumn}${refLine}`
-            const keyPieces = `${objStarBoard.namePiece[i]}${this.colorPieceBoard.bottom}`      
-            this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],this.colorPieceBoard.bottom,objStarBoard.starPiecesBlack[i],keyChess,objStarBoard.functionPieces[i])
+            const keyPieces = objStarBoard.namePiece[i] + this.colorPieceBoard.bottom 
+            this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.bottom,objStarBoard.starPiecesBlack[i],keyChess,objStarBoard.functionPieces[i])
             this.chessBoard[keyChess]= this.piecesBoard[keyPieces]
         }
         for (let i in objStarBoard.starPiecesWhite) {
             const refColumn= (i%8+1)
             const refLine= (8 - parseInt(i/8))
             const keyChess = `ref${refColumn}${refLine}`
-            const keyPieces = `${objStarBoard.namePiece[i]}${this.colorPieceBoard.top}` 
-            this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],this.colorPieceBoard.top,objStarBoard.starPiecesWhite[i],keyChess, objStarBoard.functionPieces[i])
+            const keyPieces = objStarBoard.namePiece[i]+this.colorPieceBoard.top
+            this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.top,objStarBoard.starPiecesWhite[i],keyChess, objStarBoard.functionPieces[i])
             this.chessBoard[keyChess]= this.piecesBoard[keyPieces]
         }
 
@@ -282,13 +283,11 @@ export default class createGame {
     }
 
     changePiecePosition(informationPieceSelect){
-        const nameRefPieceBoard=`${informationPieceSelect.namePiece}${informationPieceSelect.color}`
-        const movePiece =this.piecesBoard[nameRefPieceBoard]
+        const movePiece =this.piecesBoard[informationPieceSelect.nameCompletePiece]
         const newRefId = informationPieceSelect.coordinateRef
-        this.updateHistory(nameRefPieceBoard,newRefId)
+        this.updateHistory(informationPieceSelect.nameCompletePiece,newRefId)
         if(this.chessBoard[newRefId]!==null){
-            const nameCapturePiece = `${this.chessBoard[newRefId].name}${this.chessBoard[newRefId].color}`
-            this.eatPiece(nameCapturePiece)
+            this.eatPiece(this.chessBoard[newRefId].nameComplete)
         }
         this.chessBoard[movePiece.position]=null
         movePiece.position=newRefId
@@ -307,9 +306,8 @@ export default class createGame {
         moviment.pieceIntial={__proto__:this,
             ...this.piecesBoard[nameRefPieceBoard]}
         if(this.chessBoard[newRefId]!==null){
-            const nameCapturePiece = `${this.chessBoard[newRefId].name}${this.chessBoard[newRefId].color}`
             moviment.pieceEat={__proto__:this,
-                ...this.piecesBoard[nameCapturePiece]}
+                ...this.piecesBoard[this.chessBoard[newRefId].nameComplete]}
         }
         moviment.newRefId=newRefId
         this.playHistory.push(moviment)
@@ -372,21 +370,20 @@ export default class createGame {
         if((this.pieceSelect.refId!==idSquare) && (this.chessBoard[idSquare]!==null) && this.checkColor(idSquare))
         {
             this.pieceSelect.refId=idSquare
-            const refPiece = this.chessBoard[idSquare]
-            this.pieceSelect.name=refPiece.name
+            this.pieceSelect.nameComplete=this.chessBoard[idSquare].nameComplete
             this.pieceSelect.refMoviments =  this.chessBoard[idSquare].refMoviments
         }
         else{
             if(this.checkMoviments(idSquare)){
                 const informationPieceSelect={
                     color: this.chessBoard[this.pieceSelect.refId].color,
-                    namePiece: this.chessBoard[this.pieceSelect.refId].name,
+                    nameCompletePiece: this.pieceSelect.nameComplete,
                     coordinateRef:idSquare
                 }   
                 this.changePiecePosition(informationPieceSelect)    
                 this.pieceSelect.color=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top  
             }
-            this.pieceSelect.name=null
+            this.pieceSelect.nameComplete=null
             this.pieceSelect.refId=null           
             this.pieceSelect.refMoviments=[]
         } 
@@ -583,7 +580,7 @@ export default class createGame {
         const lastMoviment= this.playHistory.length-1
         const position = this.playHistory[lastMoviment].newRefId
         if(this.playHistory[lastMoviment].pieceEat!==null){
-            const namePieceEat =this.playHistory[lastMoviment].pieceEat.name +this.playHistory[lastMoviment].pieceEat.color
+            const namePieceEat =this.playHistory[lastMoviment].pieceEat.nameComplete
             this.piecesBoard[namePieceEat]=this.playHistory[lastMoviment].pieceEat
             this.chessBoard[position]=this.playHistory[lastMoviment].pieceEat   
             delete this.capturePiece[namePieceEat]
@@ -592,12 +589,17 @@ export default class createGame {
             this.chessBoard[position]=null
         }
         const positionBack = this.playHistory[lastMoviment].pieceIntial.position
-        const namePiece=this.playHistory[lastMoviment].pieceIntial.name+this.playHistory[lastMoviment].pieceIntial.color
+        const namePiece=this.playHistory[lastMoviment].pieceIntial.nameComplete
         this.chessBoard[positionBack]=this.playHistory[lastMoviment].pieceIntial
         this.piecesBoard[namePiece]=this.playHistory[lastMoviment].pieceIntial
+        this.playHistory.pop()  
 
-        this.playHistory.pop()      
         this.updateStatusGame(this.pieceSelect.color)
+        this.movimentsModification(positionBack)
+        this.pieceSelect.nameComplete=null
+        this.pieceSelect.refId=null           
+        this.pieceSelect.refMoviments=[]
         this.pieceSelect.color=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
+    
     }
 }

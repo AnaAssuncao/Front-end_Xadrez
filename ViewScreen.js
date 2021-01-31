@@ -89,13 +89,13 @@ export default function viewScreen(chessBoard){
                     divSquare.removeChild(divChildren)
                 }
                 if(chessBoard[key]!==null){
-                    const divImg = document.createElement('div')
-                    const img = document.createElement('img')
+                    const divImg = document.createElement("div")
+                    const img = document.createElement("img")
                     divImg.classList.add("board__pieces")
                     img.src=`${chessBoard[key].img}.png`
-                    img.classList.add('pieces__imagem')
+                    img.classList.add("pieces__imagem")
                     img.draggable = true
-                    img.addEventListener('dragstart', e=>{
+                    img.addEventListener("dragstart", e=>{
                     notifyFunctions(functionToCallBack.clickChessBoard,chessBoard[key].position)})
                     divImg.appendChild(img)
                     divSquare.appendChild(divImg)           
@@ -115,11 +115,11 @@ export default function viewScreen(chessBoard){
             },
             addHighlightSquares(piece){
                 const selectedSquare = document.getElementById(piece.refId)
-                const classToAdd = selectedSquare.classList.contains('square__light')?'move__piece--selected-l':'move__piece--selected-d'
+                const classToAdd = selectedSquare.classList.contains("square__light")?"move__piece--selected-l":"move__piece--selected-d"
                 selectedSquare.classList.add(classToAdd)
                 piece.refMoviments.forEach((possibilitie)=>{
                     const selectedSquare = document.getElementById(possibilitie)
-                    const classToAdd = selectedSquare.classList.contains('square__light')?'move__piece--possibilities-l':'move__piece--possibilities-d'
+                    const classToAdd = selectedSquare.classList.contains("square__light")?"move__piece--possibilities-l":"move__piece--possibilities-d"
                     selectedSquare.classList.add(classToAdd)
                 })
             }
@@ -143,18 +143,18 @@ export default function viewScreen(chessBoard){
 
     this.informationGame={
         addinformation(text){
-            document.querySelector(`#information__game`).innerText = text
+            document.querySelector("#information__game").innerText = text
         },      
         clearInformation(){
-            document.querySelector(`#information__game`).innerText = ""
+            document.querySelector("#information__game").innerText = ""
         }   
     }
 
     function addImagem(capturePieceImg,player){
-        const divSquare= document.querySelector(`${player}`)
-        const img = document.createElement('img')
+        const divSquare= document.querySelector(player)
+        const img = document.createElement("img")
         img.src=`${capturePieceImg}.png`
-        img.classList.add('pieceDead__img')
+        img.classList.add("pieceDead__img")
         divSquare.appendChild(img) 
     }
 
@@ -164,20 +164,20 @@ export default function viewScreen(chessBoard){
 
     const starGameEvent={
         buttomStart(){
-            const buttomStar= document.querySelector(`#button__start`)
+            const buttomStar= document.querySelector("#button__start")
             buttomStar.addEventListener("click", ()=>{
                 notifyFunctions(functionToCallBack.buttomStart)
             })
         },
         pieceInput(){          
             const inputPiece= document.querySelector("#select__name")
-            inputPiece.addEventListener('change', () =>{
+            inputPiece.addEventListener("change", () =>{
                 notifyFunctions(functionToCallBack.pieceInput,inputPiece.value)
             })
         },
         buttomMove(){
-            const inputCoordinate = document.querySelector('#select__coordinate')
-            document.querySelector(`#button__movement`).addEventListener("click", () =>{
+            const inputCoordinate = document.querySelector("#select__coordinate")
+            document.querySelector("#button__movement").addEventListener("click", () =>{
                 notifyFunctions(functionToCallBack.buttomMove,inputCoordinate.value)
             }) 
         },
@@ -185,24 +185,24 @@ export default function viewScreen(chessBoard){
             tagPosition.onclick= () => {
                 const squareRefIdClick = tagPosition.id
                 notifyFunctions(functionToCallBack.clickChessBoard,squareRefIdClick)
-                const allSquareMark = document.querySelectorAll('.square__dark--mark')
-                allSquareMark.forEach(elt=>{elt.classList.remove('square__dark--mark')})
+                const allSquareMark = document.querySelectorAll(".square__dark--mark")
+                allSquareMark.forEach(elt=>{elt.classList.remove("square__dark--mark")})
             }
         },
         DragChessBoard(tagPosition){
-            tagPosition.addEventListener('dragenter',e=>{
-            const allSquareMark = document.querySelectorAll('.square__dark--mark')
-            allSquareMark.forEach(elt=>{elt.classList.remove('square__dark--mark')})
-            tagPosition.classList.add('square__dark--mark');
+            tagPosition.addEventListener("dragenter",e=>{
+            const allSquareMark = document.querySelectorAll(".square__dark--mark")
+            allSquareMark.forEach(elt=>{elt.classList.remove("square__dark--mark")})
+            tagPosition.classList.add("square__dark--mark");
             })
-            tagPosition.addEventListener('dragover',e=>{e.preventDefault();})
-            tagPosition.addEventListener('drop',e=>{console.log(`drop ${tagPosition.id}`);
+            tagPosition.addEventListener("dragover",e=>{e.preventDefault();})
+            tagPosition.addEventListener("drop",e=>{console.log(`drop ${tagPosition.id}`);
             notifyFunctions(functionToCallBack.clickChessBoard,tagPosition.id)
-            tagPosition.classList.remove('square__dark--mark')
+            tagPosition.classList.remove("square__dark--mark")
             })
         },
         buttomBackMoviment(){
-            const buttomBackMoviment= document.querySelector(`#button__back__moviment`)
+            const buttomBackMoviment= document.querySelector("#button__back__moviment")
             buttomBackMoviment.addEventListener("click", ()=>{
                 notifyFunctions(functionToCallBack.buttomBackMoviment)
             })
@@ -215,21 +215,21 @@ export default function viewScreen(chessBoard){
     boardCreation(chessBoard)
     
     function boardCreation(chessBoard){
-        const board = document.querySelector('#board')
+        const board = document.querySelector("#board")
         let color = true
         let newColumn = 1
         for(let refId in chessBoard){
-                const tagPosition = document.createElement('div')
-                tagPosition.classList.add('board__square')
-                tagPosition.id = `${refId}`
+                const tagPosition = document.createElement("div")
+                tagPosition.classList.add("board__square")
+                tagPosition.id = refId
                 starGameEvent.clickChessBoard(tagPosition)
                 starGameEvent.DragChessBoard(tagPosition)
                 if(color===true){
-                    tagPosition.classList.add('square__dark')
+                    tagPosition.classList.add("square__dark")
                     color=false
                 }
                 else{
-                    tagPosition.classList.add('square__light')
+                    tagPosition.classList.add("square__light")
                     color=true
                 } 
                 board.appendChild(tagPosition) 
@@ -239,21 +239,21 @@ export default function viewScreen(chessBoard){
                 }
                newColumn++
             }
-        coordinatesCreation('#line','line')
-        coordinatesCreation('#column','column')
+        coordinatesCreation("#line","line")
+        coordinatesCreation("#column","column")
     }
 
     //Renderizar as coordenadas ao lado tabuleiro.
     function coordinatesCreation(fatherDiv,classDiv){
         const board = document.querySelector(fatherDiv)
         for(let i=0; i<8;i++){
-            const tagPosition = document.createElement('div')
+            const tagPosition = document.createElement("div")
             tagPosition.classList.add(classDiv)
-            if(classDiv ==='column'){
+            if(classDiv ==="column"){
                 tagPosition.innerHTML=String.fromCharCode(65+i)
             }
             else{ 
-                tagPosition.innerHTML=`${i+1}`
+                tagPosition.innerHTML=i+1
             }
             board.appendChild(tagPosition)
         
@@ -271,7 +271,7 @@ export default function viewScreen(chessBoard){
     function addOptionsInput(arrayValue,input){
         arrayValue.forEach((value)=>{
             const selectPiece = document.querySelector(input.idInput)
-            const optionPiece = document.createElement('option')
+            const optionPiece = document.createElement("option")
             optionPiece.classList.add(input.classOption)
             optionPiece.innerHTML= value
             selectPiece.appendChild(optionPiece)
