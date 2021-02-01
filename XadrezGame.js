@@ -88,6 +88,15 @@ export default class createGame {
 
         this.statusCheckKing={}
 
+        this.specialMoviment={
+            roque:{
+                king:null,
+                isAtive:false,
+                tower:null,
+                newMovimentTower:null,
+            }
+        }
+
         this.starObjGame()
     }
 
@@ -155,10 +164,6 @@ export default class createGame {
 
         this.playHistory=[]
 
-        this.rockeEspecialRules={
-            isAtive:false,
-            tower:null,
-        }
     }
 
     checkMovimentsAllPieces(){
@@ -282,10 +287,10 @@ export default class createGame {
         return movimentPawn
     }
 
-    changePiecePosition(informationPieceSelect){
+    changePiecePosition(informationPieceSelect,specialMoviment){
         const movePiece =this.piecesBoard[informationPieceSelect.nameCompletePiece]
         const newRefId = informationPieceSelect.coordinateRef
-        this.updateHistory(informationPieceSelect.nameCompletePiece,newRefId)
+        this.updateHistory(informationPieceSelect.nameCompletePiece,newRefId,specialMoviment)
         if(this.chessBoard[newRefId]!==null){
             this.eatPiece(this.chessBoard[newRefId].nameComplete)
         }
@@ -293,15 +298,19 @@ export default class createGame {
         movePiece.position=newRefId
         movePiece.qtMovements++
         this.chessBoard[newRefId]= movePiece
+        if(this.specialMoviment.roque.isAtive===true && informationPieceSelect.nameCompletePiece===this.specialMoviment.roque.king.nameComplete){
+            this.movimentRoque()
+        }
 
         this.updateStatusGame(informationPieceSelect.color)
     }
 
-    updateHistory(nameRefPieceBoard,newRefId){
+    updateHistory(nameRefPieceBoard,newRefId,specialMoviment){
         const moviment={
             pieceIntial:null,
             pieceEat:null,
-            newRefId:null
+            newRefId:null,
+            specialMoviment:null
         }
         moviment.pieceIntial={__proto__:this,
             ...this.piecesBoard[nameRefPieceBoard]}
@@ -310,6 +319,8 @@ export default class createGame {
                 ...this.piecesBoard[this.chessBoard[newRefId].nameComplete]}
         }
         moviment.newRefId=newRefId
+        moviment.specialMoviment=specialMoviment
+
         this.playHistory.push(moviment)
     }
 
@@ -327,6 +338,7 @@ export default class createGame {
         this.checkMovimentsAllPieces()
         const nextColor=(this.colorPieceBoard.top===colorMove)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
         this.updateStatusCheck(nextColor)
+        this.verifyRoque(nextColor)
         this.updateMovimentAllPiece(nextColor)
     }
 
@@ -577,7 +589,18 @@ export default class createGame {
     )}
 
     returnMoviment(){
+        this.returnChangePiece( )
+        this.updateStatusGame(this.pieceSelect.color)
+        this.pieceSelect.nameComplete=null
+        this.pieceSelect.refId=null           
+        this.pieceSelect.refMoviments=[]
+        this.pieceSelect.color=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
+
+    }
+
+    returnChangePiece(){
         const lastMoviment= this.playHistory.length-1
+        const specialMoviment = this.playHistory[lastMoviment].specialMoviment
         const position = this.playHistory[lastMoviment].newRefId
         if(this.playHistory[lastMoviment].pieceEat!==null){
             const namePieceEat =this.playHistory[lastMoviment].pieceEat.nameComplete
@@ -593,13 +616,74 @@ export default class createGame {
         this.chessBoard[positionBack]=this.playHistory[lastMoviment].pieceIntial
         this.piecesBoard[namePiece]=this.playHistory[lastMoviment].pieceIntial
         this.playHistory.pop()  
+        if(specialMoviment==='roque'){
+            this.returnChangePiece()
+        }
+    }
 
-        this.updateStatusGame(this.pieceSelect.color)
-        this.movimentsModification(positionBack)
-        this.pieceSelect.nameComplete=null
-        this.pieceSelect.refId=null           
-        this.pieceSelect.refMoviments=[]
-        this.pieceSelect.color=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
-    
+    verifyRoque(color){
+        const nameKing = `King${color}`
+        if(this.piecesBoard[nameKing].qtMovements===0 && this.statusCheckKing.check===false){
+            this.piecesBoard[nameKing].refMoviments=this.piecesBoard[nameKing].refMoviments.concat(this.specialMovimentRoque(color,nameKing))
+        }
+    }
+
+    specialMovimentRoque(color,nameKing){
+            this.specialMoviment.roque.isAtive=false
+            const TowerLeft = `Tower-Left${color}`
+            const TowerRight = `Tower-Right${color}`
+            const towerMoviment = {
+                ref41:"ref31",
+                ref48:"ref38",
+                ref61:"ref71",
+                ref68:"ref78"
+            }
+        
+            const moviment = []
+            if(this.piecesBoard[TowerLeft].qtMovements===0){
+                for(let i in this.piecesBoard[TowerLeft].refMoviments){
+                    if(this.piecesBoard[TowerLeft].refMoviments[i]==="ref41"||this.piecesBoard[TowerLeft].refMoviments[i]==="ref48"){
+                        const possiblemoviment = towerMoviment[this.piecesBoard[TowerLeft].refMoviments[i]] 
+                        moviment.push(possiblemoviment)
+                        this.specialMoviment.roque.king=this.piecesBoard[nameKing]
+                        this.specialMoviment.roque.isAtive=true
+                        this.specialMoviment.roque.tower=this.piecesBoard[TowerLeft]
+                        this.specialMoviment.roque.newMovimentTower=this.piecesBoard[TowerLeft].refMoviments[i]
+                        break
+                    }
+                }  
+            }
+            if(this.piecesBoard[TowerRight].qtMovements===0){
+                for(let i in this.piecesBoard[TowerRight].refMoviments){
+                    if(this.piecesBoard[TowerRight].refMoviments[i]==="ref61"||this.piecesBoard[TowerRight].refMoviments[i]==="ref68"){
+                        const possiblemoviment = towerMoviment[this.piecesBoard[TowerRight].refMoviments[i]] 
+                        moviment.push(possiblemoviment)
+                        this.specialMoviment.roque.king=this.piecesBoard[nameKing]
+                        this.specialMoviment.roque.isAtive=true
+                        this.specialMoviment.roque.tower=this.piecesBoard[TowerRight]
+                        this.specialMoviment.roque.newMovimentTower=this.piecesBoard[TowerRight].refMoviments[i]
+                        break
+                    }
+                }
+            }
+
+      
+        return moviment
+    }
+
+    movimentRoque(){
+        const informationPieceSelect={
+            color: this.specialMoviment.roque.tower.color,
+            nameCompletePiece:this.specialMoviment.roque.tower.nameComplete,
+            coordinateRef:this.specialMoviment.roque.newMovimentTower
+        }  
+        this.specialMoviment.roque={
+            king:null,
+            isAtive:false,
+            tower:null,
+            newMovimentTower:null,
+        }
+        const roque = "roque"
+        this.changePiecePosition(informationPieceSelect,roque)
     }
 }
