@@ -92,7 +92,7 @@ function requiredPieceMovement(coordinate){
     if(coordinate!=="Sem Movimento" && coordinate!==""){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)//limpar destaque movimentos
         const refId = coordinateToRefId(coordinate)
-        game.movimentsModification(refId)
+        game.verifyPieceSelect(refId)
         view.chessBoard.renderBoard(game.chessBoard)
         updateDeadPiece()
         updateInput()
@@ -104,7 +104,7 @@ function updateClickChessBoard (idSquare){
     if(game.pieceSelect.refId){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }  //limpar destaque movimentos da peça anterior
-    game.movimentsModification(idSquare) 
+    game.verifyPieceSelect(idSquare) 
     if(game.pieceSelect.refId){
         view.chessBoard.highlighSquare.addHighlightSquares(game.pieceSelect)
         view.pieceInput.selectNamePiece(game.pieceSelect.name)
