@@ -88,16 +88,8 @@ export default class createGame {
 
         this.statusCheckKing={}
 
-        this.specialMoviment={
-            possibleMoviment:false,
-            roque:{
-                ative:false,
-                king:null,
-                positionKingToRoque:[],
-                tower:[],
-                newMovimentTower:[],
-            }
-        }
+        this.specialMoviment={}
+    
 
         this.starObjGame()
     }
@@ -166,6 +158,23 @@ export default class createGame {
 
         this.playHistory=[]
 
+        this.specialMoviment={
+            possibleMoviment:false,
+            roque:{
+                ative:false,
+                king:null,
+                positionKingToRoque:[],
+                tower:[],
+                newMovimentTower:[],
+            },
+            enPassant:{
+                ative:false,
+                pawnPossibleCapture:null,
+                refIdPawn:null,
+                pawnAdverary:null
+            }
+        }
+        
     }
 
     possibleMovimentTower(chessBoard=this.chessBoard){//fazer isso
@@ -348,9 +357,13 @@ export default class createGame {
                 moviment.pieceEat={__proto__:this,
                     ...this.piecesBoard[this.chessBoard[piece.refId].fullName]}
             }
+            if(typeMoviment==="enPassant"){
+               moviment.pieceEat={__proto__:this,
+                    ...this.piecesBoard[this.specialMoviment.enPassant.pawnPossibleCapture.fullName]}
+            }
             moviment.newRefId.push(piece.refId)
             moviment.typeMoviment=typeMoviment
-        });
+        })
      
         this.playHistory.push(moviment)
     }
@@ -374,6 +387,20 @@ export default class createGame {
                 } 
             }
         }
+        if(this.specialMoviment.enPassant.ative===true){
+            if(this.specialMoviment.enPassant.pawnAdverary.fullName===informationPieceToMove.fullName && this.specialMoviment.enPassant.indiceLastMoviment===this.playHistory.length){
+                this.movimentEnPassant(informationPieceToMove)
+                return true
+            }
+            else{
+                this.specialMoviment.enPassant={
+                    ative:false,
+                    pawnPossibleCapture:null,
+                    refIdPawn:null,
+                    pawnAdverary:null
+                }
+            }
+        }
         return false
     }
 
@@ -387,6 +414,7 @@ export default class createGame {
 
     updateSpecialMoves(nextColor){
         this.verifyRoque(nextColor)
+        this.verifyEnPassant(nextColor)
     }
 
     updateMovimentAllPiece(color){
@@ -626,14 +654,13 @@ export default class createGame {
         const lastMoviment= this.playHistory.length-1
         this.playHistory[lastMoviment].pieceInitial.forEach((pieceInitial,indice)=>{
             const position = this.playHistory[lastMoviment].newRefId[indice]
+            this.chessBoard[position]=null
             if(this.playHistory[lastMoviment].pieceEat!==null){
                 const namePieceEat =this.playHistory[lastMoviment].pieceEat.fullName
                 this.piecesBoard[namePieceEat]=this.playHistory[lastMoviment].pieceEat
-                this.chessBoard[position]=this.playHistory[lastMoviment].pieceEat   
+                const positionPieceEat=this.playHistory[lastMoviment].pieceEat.position
+                this.chessBoard[positionPieceEat]=this.playHistory[lastMoviment].pieceEat   
                 delete this.capturePiece[namePieceEat]
-            }
-            else{
-                this.chessBoard[position]=null
             }
             const positionBack = pieceInitial.position
             const namePiece=pieceInitial.fullName
@@ -715,7 +742,53 @@ export default class createGame {
             positionKingToRoque:[],
             tower:[],
             newMovimentTower:[],
-        }
-        
+        }   
+    }
+    
+    verifyEnPassant(nextColor){
+        const enPassant = {}
+        if(this.playHistory.length>0){
+            const lastMoviment=this.playHistory.length-1
+            if(this.playHistory[lastMoviment].pieceInitial.length===1){
+                const nameReg = /Pawn/g
+                const lastPieceMove=this.playHistory[lastMoviment].pieceInitial[0]
+                if(nameReg.test(lastPieceMove.name) && lastPieceMove.qtMovements===0){
+                    const positionInitialPawn= this.refIdToArray(lastPieceMove.position)
+                    const newPositionPawn= this.refIdToArray(this.piecesBoard[lastPieceMove.fullName].position)
+                    if((positionInitialPawn[1]+2)===newPositionPawn[1]){
+                        for(let piece in this.piecesBoard){
+                            if(nameReg.test(piece) && this.piecesBoard[piece].color===nextColor){
+                                const positionPawnAdverary = this.refIdToArray(this.piecesBoard[piece].position)
+                                if((positionPawnAdverary[0]+1===newPositionPawn[0] || positionPawnAdverary[0]-1===newPositionPawn[0]) && positionPawnAdverary[1]===newPositionPawn[1])
+                                {
+                                    const newMovimentPiece= `ref${newPositionPawn[0]}${newPositionPawn[1]-1}`
+                                    this.piecesBoard[piece].refMoviments=this.piecesBoard[piece].refMoviments.concat(newMovimentPiece)
+                                    enPassant.ative=true
+                                    enPassant.pawnPossibleCapture=lastPieceMove
+                                    enPassant.refIdPawn=this.piecesBoard[lastPieceMove.fullName].position
+                                    enPassant.pawnAdverary=this.piecesBoard[piece]
+                                    enPassant.indiceLastMoviment=this.playHistory.length
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            this.specialMoviment.enPassant=enPassant
+        }  
+    }
+
+    movimentEnPassant(informationPieceToMove){
+           const enPassant = "enPassant"
+            this.updateHistory([informationPieceToMove],enPassant)
+            this.changePiecePosition(informationPieceToMove)
+            this.eatPiece(this.specialMoviment.enPassant.pawnPossibleCapture.fullName)
+            this.chessBoard[this.specialMoviment.enPassant.refIdPawn]=null
+            this.specialMoviment.enPassant={
+                ative:false,
+                pawnPossibleCapture:null,
+                refIdPawn:null,
+                pawnAdverary:null
+            }
     }
 }
