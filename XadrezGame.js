@@ -170,7 +170,7 @@ export default class createGame {
                 ative:false,
                 pawnPossibleCapture:null,
                 refIdPawn:null,
-                pawnInAtack:null
+                pawnInAtack:[]
             },
         }  
     }
@@ -386,8 +386,7 @@ export default class createGame {
             }
         }
         if(this.specialMoviment.enPassant.ative===true){
-            if(this.specialMoviment.enPassant.pawnInAtack.fullName===informationPieceToMove.fullName)// && this.specialMoviment.enPassant.indiceLastMoviment===this.playHistory.length){
-            {
+            if(this.specialMoviment.enPassant.refIdAtack===informationPieceToMove.refId){
                 this.movimentEnPassant(informationPieceToMove)
                 return true
             }
@@ -723,42 +722,42 @@ export default class createGame {
     }
     
     verifyEnPassant(nextColor){
+        this.specialMoviment.enPassant.ative=false
         if(this.playHistory.length>0){
             const lastMoviment=this.playHistory.length-1
             if(this.playHistory[lastMoviment].pieceInitial.length===1){
-                const nameReg = /Pawn/g
                 const lastPieceMove=this.playHistory[lastMoviment].pieceInitial[0]
-                if(nameReg.test(lastPieceMove.name) && lastPieceMove.qtMovements===0){
-                    const direction =(lastPieceMove.color==this.colorPieceBoard.bottom)?1:-1
-                    this.possibleMovimentEnPassant(lastPieceMove,direction,nextColor)
+                if(lastPieceMove.name.includes("Pawn") && lastPieceMove.qtMovements===0){
+                    const directionLastPawn =(lastPieceMove.color==this.colorPieceBoard.bottom)?1:-1
+                    const positionLastPawn= this.refIdToArray(lastPieceMove.position)
+                    const newPositionPawn= this.refIdToArray(this.piecesBoard[lastPieceMove.fullName].position)
+                    if((positionLastPawn[1]+(directionLastPawn*2))===newPositionPawn[1]){
+                        const positionInAtackLeft = `ref${(newPositionPawn[0]-1)}${newPositionPawn[1]}`
+                        if(!!this.chessBoard[positionInAtackLeft]){
+                            if(this.chessBoard[positionInAtackLeft].fullName.includes("Pawn") && this.chessBoard[positionInAtackLeft].color===nextColor){
+                                this.possibleMovimentEnPassant(lastPieceMove,directionLastPawn,positionInAtackLeft)
+                            }
+                        }
+                        const positionInAtackRigth = `ref${(newPositionPawn[0]+1)}${newPositionPawn[1]}`
+                        if(!!this.chessBoard[positionInAtackRigth]){
+                            if(this.chessBoard[positionInAtackRigth].fullName.includes("Pawn") && this.chessBoard[positionInAtackRigth].color===nextColor){
+                                this.possibleMovimentEnPassant(lastPieceMove,directionLastPawn,positionInAtackRigth)
+                            }
+                        }
+                    }
                 }
             }         
         }  
     }
 
-    possibleMovimentEnPassant(lastPieceMove,direction,nextColor){
-        const enPassant = {}
-        const positionInitialPawn= this.refIdToArray(lastPieceMove.position)
-        const newPositionPawn= this.refIdToArray(this.piecesBoard[lastPieceMove.fullName].position)
-        if((positionInitialPawn[1]+(direction*2))===newPositionPawn[1]){
-            for(let piece in this.piecesBoard){
-                const nameReg = /Pawn/g
-                if(nameReg.test(piece) && this.piecesBoard[piece].color===nextColor){
-                    const positionPawnInAtack = this.refIdToArray(this.piecesBoard[piece].position)
-                    if((positionPawnInAtack[0]+1===newPositionPawn[0] || positionPawnInAtack[0]-1===newPositionPawn[0]) && positionPawnInAtack[1]===newPositionPawn[1])
-                    {
-                        const newMovimentPiece= `ref${newPositionPawn[0]}${newPositionPawn[1]-direction}`
-                        this.piecesBoard[piece].refMoviments=this.piecesBoard[piece].refMoviments.concat(newMovimentPiece)
-                        enPassant.ative=true
-                        enPassant.pawnPossibleCapture=lastPieceMove
-                        enPassant.refIdPawn=this.piecesBoard[lastPieceMove.fullName].position
-                        enPassant.pawnInAtack=this.piecesBoard[piece]
-                        enPassant.indiceLastMoviment=this.playHistory.length
-                    }
-                }
-            }
-        }
-        this.specialMoviment.enPassant=enPassant
+    possibleMovimentEnPassant(lastPieceMove,direction,positionInAtack){
+        const moviment = this.refIdToArray(lastPieceMove.position)
+        const newMovimentPiece= `ref${moviment[0]}${moviment[1]+direction}`
+        this.chessBoard[positionInAtack].refMoviments.push(newMovimentPiece)
+        this.specialMoviment.enPassant.ative=true
+        this.specialMoviment.enPassant.pawnPossibleCapture=this.piecesBoard[lastPieceMove.fullName]
+        this.specialMoviment.enPassant.refIdAtack=newMovimentPiece
+        this.specialMoviment.enPassant.pawnInAtack=this.chessBoard[positionInAtack]
     }
 
     movimentEnPassant(informationPieceToMove){
@@ -766,12 +765,6 @@ export default class createGame {
             this.updateHistory([informationPieceToMove],enPassant)
             this.changePiecePosition(informationPieceToMove)
             this.eatPiece(this.specialMoviment.enPassant.pawnPossibleCapture.fullName)
-            this.chessBoard[this.specialMoviment.enPassant.refIdPawn]=null
-            this.specialMoviment.enPassant={
-                ative:false,
-                pawnPossibleCapture:null,
-                refIdPawn:null,
-                pawnInAtack:null
-            }
+            this.chessBoard[this.specialMoviment.enPassant.pawnPossibleCapture.position]=null
     }
 }
