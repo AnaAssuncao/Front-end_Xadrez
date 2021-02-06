@@ -90,7 +90,6 @@ export default class createGame {
 
         this.specialMoviment={}
     
-
         this.starObjGame()
     }
 
@@ -171,14 +170,9 @@ export default class createGame {
                 ative:false,
                 pawnPossibleCapture:null,
                 refIdPawn:null,
-                pawnAdverary:null
+                pawnInAtack:null
             },
-            pawnPromotion:{
-                ative:false,
-                piecePawn:null,    
-            }
-        }
-        
+        }  
     }
 
     possibleMovimentTower(chessBoard=this.chessBoard){//fazer isso
@@ -392,17 +386,13 @@ export default class createGame {
             }
         }
         if(this.specialMoviment.enPassant.ative===true){
-            if(this.specialMoviment.enPassant.pawnAdverary.fullName===informationPieceToMove.fullName && this.specialMoviment.enPassant.indiceLastMoviment===this.playHistory.length){
+            if(this.specialMoviment.enPassant.pawnInAtack.fullName===informationPieceToMove.fullName)// && this.specialMoviment.enPassant.indiceLastMoviment===this.playHistory.length){
+            {
                 this.movimentEnPassant(informationPieceToMove)
                 return true
             }
             else{
-                this.specialMoviment.enPassant={
-                    ative:false,
-                    pawnPossibleCapture:null,
-                    refIdPawn:null,
-                    pawnAdverary:null
-                }
+                this.specialMoviment.enPassant.ative=false
             }
         }
         return false
@@ -413,7 +403,7 @@ export default class createGame {
         const nextColor=(this.colorPieceBoard.top===colorMove)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
         this.updateStatusCheck(nextColor)
         this.updateSpecialMoves(nextColor)
-        this.updateMovimentAllPiece(nextColor)
+        this.updateFilterMoviment(nextColor)
     }
 
     updateSpecialMoves(nextColor){
@@ -421,7 +411,7 @@ export default class createGame {
         this.verifyEnPassant(nextColor)
     }
 
-    updateMovimentAllPiece(color){
+    updateFilterMoviment(color){
         if(this.statusCheckKing.checkMate===false){
             if(this.statusCheckKing.check===true ){
                 this.checkAssistance(color)
@@ -675,57 +665,48 @@ export default class createGame {
     }
 
     verifyRoque(color){
+        this.specialMoviment.roque.ative=false
+        this.specialMoviment.roque.positionKingToRoque=[]
+        this.specialMoviment.roque.tower=[]
+        this.specialMoviment.roque.newMovimentTower=[]
         const nameKing = `King${color}`
         if(this.piecesBoard[nameKing].qtMovements===0 && this.statusCheckKing.check===false){
-            this.piecesBoard[nameKing].refMoviments=this.piecesBoard[nameKing].refMoviments.concat(this.possibleMovimentRoque(color,nameKing))
+            const TowerLeft = `Tower-Left${color}`
+            const TowerRight = `Tower-Right${color}`
+            if(this.piecesBoard[TowerLeft].qtMovements===0){
+                if(this.piecesBoard[TowerLeft].refMoviments.includes("ref41")){    
+                    this.possibleMovimentRoque(TowerLeft,"ref41",nameKing)
+                } 
+                if(this.piecesBoard[TowerLeft].refMoviments.includes("ref48")){
+                    this.possibleMovimentRoque(TowerLeft,"ref48",nameKing)
+                }         
+            }
+            if(this.piecesBoard[TowerRight].qtMovements===0){
+                if(this.piecesBoard[TowerRight].refMoviments.includes("ref61")){
+                    this.possibleMovimentRoque(TowerRight,"ref61",nameKing)
+                } 
+                if(this.piecesBoard[TowerRight].refMoviments.includes("ref68")){ 
+                    this.possibleMovimentRoque(TowerRight,"ref68",nameKing)
+                }
+            }
+            this.piecesBoard[nameKing].refMoviments.push()
         }
     }
 
-    possibleMovimentRoque(color,nameKing){
-            this.specialMoviment.roque.ative=false
-            const TowerLeft = `Tower-Left${color}`
-            const TowerRight = `Tower-Right${color}`
-            const towerMoviment = {
-                ref41:"ref31",
-                ref48:"ref38",
-                ref61:"ref71",
-                ref68:"ref78"
-            }
-        
-            const moviment = []
-            if(this.piecesBoard[TowerLeft].qtMovements===0){
-                for(let i in this.piecesBoard[TowerLeft].refMoviments){
-                    if(this.piecesBoard[TowerLeft].refMoviments[i]==="ref41"||this.piecesBoard[TowerLeft].refMoviments[i]==="ref48"){
-                        const possiblemoviment = towerMoviment[this.piecesBoard[TowerLeft].refMoviments[i]] 
-                        moviment.push(possiblemoviment)
-                        this.specialMoviment.possibleMoviment=true
-                        this.specialMoviment.roque.ative=true
-                        this.specialMoviment.roque.king=this.piecesBoard[nameKing]
-                        this.specialMoviment.roque.positionKingToRoque.push(possiblemoviment)
-                        this.specialMoviment.roque.tower.push(this.piecesBoard[TowerLeft])
-                        this.specialMoviment.roque.newMovimentTower.push(this.piecesBoard[TowerLeft].refMoviments[i])
-                        break
-                    }
-                }  
-            }
-            if(this.piecesBoard[TowerRight].qtMovements===0){
-                for(let i in this.piecesBoard[TowerRight].refMoviments){
-                    if(this.piecesBoard[TowerRight].refMoviments[i]==="ref61"||this.piecesBoard[TowerRight].refMoviments[i]==="ref68"){
-                        const possiblemoviment = towerMoviment[this.piecesBoard[TowerRight].refMoviments[i]] 
-                        moviment.push(possiblemoviment)
-                        this.specialMoviment.possibleMoviment=true
-                        this.specialMoviment.roque.ative=true
-                        this.specialMoviment.roque.king=this.piecesBoard[nameKing]
-                        this.specialMoviment.roque.positionKingToRoque.push(possiblemoviment)
-                        this.specialMoviment.roque.tower.push(this.piecesBoard[TowerRight])
-                        this.specialMoviment.roque.newMovimentTower.push(this.piecesBoard[TowerRight].refMoviments[i])
-                        break
-                    }
-                }
-            }
-
-      
-        return moviment
+    possibleMovimentRoque(tower,refMovimentTower,nameKing){
+        const towerMoviment = {
+            ref41:"ref31",
+            ref48:"ref38",
+            ref61:"ref71",
+            ref68:"ref78"
+        }   
+        const possiblemoviment = towerMoviment[refMovimentTower] 
+        this.specialMoviment.roque.ative=true
+        this.specialMoviment.roque.king=this.piecesBoard[nameKing]
+        this.specialMoviment.roque.positionKingToRoque.push(possiblemoviment)
+        this.specialMoviment.roque.tower.push(this.piecesBoard[tower])
+        this.specialMoviment.roque.newMovimentTower.push(refMovimentTower)
+        this.piecesBoard[nameKing].refMoviments.push(possiblemoviment)
     }
 
     movimentRoque(informationPieceToMove){
@@ -739,14 +720,6 @@ export default class createGame {
         this.updateHistory([informationPieceToMove,informationTowerMove],roque)
         this.changePiecePosition(informationPieceToMove)
         this.changePiecePosition(informationTowerMove)
-
-        this.specialMoviment.roque={
-            ative:false,
-            king:null,
-            positionKingToRoque:[],
-            tower:[],
-            newMovimentTower:[],
-        }   
     }
     
     verifyEnPassant(nextColor){
@@ -771,15 +744,15 @@ export default class createGame {
             for(let piece in this.piecesBoard){
                 const nameReg = /Pawn/g
                 if(nameReg.test(piece) && this.piecesBoard[piece].color===nextColor){
-                    const positionPawnAdverary = this.refIdToArray(this.piecesBoard[piece].position)
-                    if((positionPawnAdverary[0]+1===newPositionPawn[0] || positionPawnAdverary[0]-1===newPositionPawn[0]) && positionPawnAdverary[1]===newPositionPawn[1])
+                    const positionPawnInAtack = this.refIdToArray(this.piecesBoard[piece].position)
+                    if((positionPawnInAtack[0]+1===newPositionPawn[0] || positionPawnInAtack[0]-1===newPositionPawn[0]) && positionPawnInAtack[1]===newPositionPawn[1])
                     {
                         const newMovimentPiece= `ref${newPositionPawn[0]}${newPositionPawn[1]-direction}`
                         this.piecesBoard[piece].refMoviments=this.piecesBoard[piece].refMoviments.concat(newMovimentPiece)
                         enPassant.ative=true
                         enPassant.pawnPossibleCapture=lastPieceMove
                         enPassant.refIdPawn=this.piecesBoard[lastPieceMove.fullName].position
-                        enPassant.pawnAdverary=this.piecesBoard[piece]
+                        enPassant.pawnInAtack=this.piecesBoard[piece]
                         enPassant.indiceLastMoviment=this.playHistory.length
                     }
                 }
@@ -798,7 +771,7 @@ export default class createGame {
                 ative:false,
                 pawnPossibleCapture:null,
                 refIdPawn:null,
-                pawnAdverary:null
+                pawnInAtack:null
             }
     }
 }
