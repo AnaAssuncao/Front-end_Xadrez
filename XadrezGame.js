@@ -158,16 +158,15 @@ export default class createGame {
         this.playHistory=[]
 
         this.specialMoviment={
-            possibleMoviment:false,
             roque:{
-                ative:false,
+                isPossible:false,
                 king:null,
                 positionKingToRoque:[],
                 tower:[],
                 newMovimentTower:[],
             },
             enPassant:{
-                ative:false,
+                isPossible:false,
                 pawnPossibleCapture:null,
                 refIdPawn:null,
                 pawnInAtack:[]
@@ -377,7 +376,7 @@ export default class createGame {
     }
 
     verifySpecialMoviment(informationPieceToMove){
-        if(this.specialMoviment.roque.ative===true){
+        if(this.specialMoviment.roque.isPossible===true){
             if(informationPieceToMove.fullName===this.specialMoviment.roque.king.fullName){
                 if(this.specialMoviment.roque.positionKingToRoque.includes(informationPieceToMove.refId)){
                     this.movimentRoque(informationPieceToMove)
@@ -385,13 +384,10 @@ export default class createGame {
                 } 
             }
         }
-        if(this.specialMoviment.enPassant.ative===true){
+        if(this.specialMoviment.enPassant.isPossible===true){
             if(this.specialMoviment.enPassant.refIdAtack===informationPieceToMove.refId){
                 this.movimentEnPassant(informationPieceToMove)
                 return true
-            }
-            else{
-                this.specialMoviment.enPassant.ative=false
             }
         }
         return false
@@ -664,7 +660,7 @@ export default class createGame {
     }
 
     verifyRoque(color){
-        this.specialMoviment.roque.ative=false
+        this.specialMoviment.roque.isPossible=false
         this.specialMoviment.roque.positionKingToRoque=[]
         this.specialMoviment.roque.tower=[]
         this.specialMoviment.roque.newMovimentTower=[]
@@ -700,7 +696,7 @@ export default class createGame {
             ref68:"ref78"
         }   
         const possiblemoviment = towerMoviment[refMovimentTower] 
-        this.specialMoviment.roque.ative=true
+        this.specialMoviment.roque.isPossible=true
         this.specialMoviment.roque.king=this.piecesBoard[nameKing]
         this.specialMoviment.roque.positionKingToRoque.push(possiblemoviment)
         this.specialMoviment.roque.tower.push(this.piecesBoard[tower])
@@ -722,7 +718,7 @@ export default class createGame {
     }
     
     verifyEnPassant(nextColor){
-        this.specialMoviment.enPassant.ative=false
+        this.specialMoviment.enPassant.isPossible=false
         if(this.playHistory.length>0){
             const lastMoviment=this.playHistory.length-1
             if(this.playHistory[lastMoviment].pieceInitial.length===1){
@@ -754,7 +750,7 @@ export default class createGame {
         const moviment = this.refIdToArray(lastPieceMove.position)
         const newMovimentPiece= `ref${moviment[0]}${moviment[1]+direction}`
         this.chessBoard[positionInAtack].refMoviments.push(newMovimentPiece)
-        this.specialMoviment.enPassant.ative=true
+        this.specialMoviment.enPassant.isPossible=true
         this.specialMoviment.enPassant.pawnPossibleCapture=this.piecesBoard[lastPieceMove.fullName]
         this.specialMoviment.enPassant.refIdAtack=newMovimentPiece
         this.specialMoviment.enPassant.pawnInAtack=this.chessBoard[positionInAtack]
