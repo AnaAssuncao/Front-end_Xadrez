@@ -55,9 +55,9 @@ function updateInputCoordinate(piece){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }
     const refPiece=`${piece}${game.pieceSelect.color}`
-    game.movimentsPiece(refPiece)
+    game.MovementsPiece(refPiece)
     // renderizar novas coordenadas e destaque dos movimentos
-    const arrayCoordinates = coordinateSelection(game.pieceSelect.refMoviments)
+    const arrayCoordinates = coordinateSelection(game.pieceSelect.refMovements)
     view.coordinateInput.addPiecesCoordinates(arrayCoordinates)
     view.coordinateInput.selectNamePiece("")
     view.chessBoard.highlighSquare.addHighlightSquares(game.pieceSelect)
@@ -119,7 +119,7 @@ function updateClickChessBoard (idSquare){
         view.chessBoard.highlighSquare.addHighlightSquares(game.pieceSelect)
         view.pieceInput.selectNamePiece(game.pieceSelect.name)
         view.coordinateInput.clearAll()
-        const arrayCoordinates = coordinateSelection(game.pieceSelect.refMoviments)
+        const arrayCoordinates = coordinateSelection(game.pieceSelect.refMovements)
         view.coordinateInput.addPiecesCoordinates(arrayCoordinates)
         view.coordinateInput.selectNamePiece("")  
     }

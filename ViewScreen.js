@@ -108,7 +108,7 @@ export default function viewScreen(chessBoard){
                 const selectedSquare = document.getElementById(piece.refId)
                 selectedSquare.classList.remove("move__piece--selected-l")
                 selectedSquare.classList.remove("move__piece--selected-d")
-                piece.refMoviments.forEach((possibilitie)=>{
+                piece.refMovements.forEach((possibilitie)=>{
                     const selectedSquare = document.getElementById(possibilitie)
                     selectedSquare.classList.remove("move__piece--possibilities-l")
                     selectedSquare.classList.remove("move__piece--possibilities-d")
@@ -118,7 +118,7 @@ export default function viewScreen(chessBoard){
                 const selectedSquare = document.getElementById(piece.refId)
                 const classToAdd = selectedSquare.classList.contains("square__light")?"move__piece--selected-l":"move__piece--selected-d"
                 selectedSquare.classList.add(classToAdd)
-                piece.refMoviments.forEach((possibilitie)=>{
+                piece.refMovements.forEach((possibilitie)=>{
                     const selectedSquare = document.getElementById(possibilitie)
                     const classToAdd = selectedSquare.classList.contains("square__light")?"move__piece--possibilities-l":"move__piece--possibilities-d"
                     selectedSquare.classList.add(classToAdd)
