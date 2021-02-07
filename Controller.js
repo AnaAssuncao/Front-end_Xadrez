@@ -55,7 +55,7 @@ function updateInputCoordinate(piece){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }
     const refPiece=`${piece}${game.pieceSelect.color}`
-    game.MovementsPiece(refPiece)
+    game.movementsPiece(refPiece)
     // renderizar novas coordenadas e destaque dos movimentos
     const arrayCoordinates = coordinateSelection(game.pieceSelect.refMovements)
     view.coordinateInput.addPiecesCoordinates(arrayCoordinates)

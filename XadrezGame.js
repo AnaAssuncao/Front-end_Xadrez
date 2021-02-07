@@ -459,9 +459,9 @@ export default class createGame {
         return movedThePiece
     }
 
-    MovementsPiece(piece){
+    movementsPiece(piece){
         const refId=this.piecesBoard[piece].position
-        this.MovementsModification(refId)
+        this.verifyPieceSelect(refId)
     }
 
 // Check and ChekMate
@@ -488,7 +488,7 @@ export default class createGame {
         }
         for(let piece in this.piecesBoard){
             if((colorKing!==this.piecesBoard[piece].color)&&(this.piecesBoard[piece].isAtive===true)){
-                if(this.MovementsPieceAdversity(this.piecesBoard[piece].refMovements,refIdKing)){
+                if(this.movementsPieceAdversity(this.piecesBoard[piece].refMovements,refIdKing)){
                     checks.qt++
                     checks.pieceCheck=piece
                 }
@@ -497,9 +497,9 @@ export default class createGame {
         return checks
     }
 
-    MovementsPieceAdversity(MovementsPiece,refIdKing){
-        for (let i = 0;i<MovementsPiece.length;i++){
-            if(MovementsPiece[i]===refIdKing){
+    movementsPieceAdversity(movementsPiece,refIdKing){
+        for (let i = 0;i<movementsPiece.length;i++){
+            if(movementsPiece[i]===refIdKing){
                 return true
             }                    
         } 
@@ -545,7 +545,7 @@ export default class createGame {
             if(fakeChessBoard[refId]!==null && fakeChessBoard[refId].color!==colorKing && fakeChessBoard[refId].isAtive)
             {
                 const refMovements=fakeChessBoard[refId].functionPiece(fakeChessBoard)
-                if(this.MovementsPieceAdversity(refMovements,newRefIdKing)){//verifica se o refId adversario e igual ao refId do rei
+                if(this.movementsPieceAdversity(refMovements,newRefIdKing)){//verifica se o refId adversario e igual ao refId do rei
                     //se for verdadeiro o rei esta em check, movimento para morte
                     return true
                 }
