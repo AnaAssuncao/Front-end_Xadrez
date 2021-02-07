@@ -171,17 +171,21 @@ export default class createGame {
                 refIdPawn:null,
                 pawnInAtack:[]
             },
-             pawnPromotion:{
+            pawnPromotion:{
                 isPossible:false,
                 chancePiece:false,
                 piecesPawn:[],   
                 namesPawn:[],
+                color:null,
+                promotedPawn:null,
                 piecePromotion:{
+                    names:["tower","knight","bishop","queen"],
                     Black:["towerBlack","knightBlack","bishopBlack","queenBlack"],
                     White:["towerWhite","knightWhite","bishopWhite","queenWhite"],
+                    qtPiece:[1,1,1,1],
                     functionPieces:[this.possibleMovimentTower,this.possibleMovimentKnight,this.possibleMovimentBishop,this.possibleMovimentQueen]
                 }
-             }
+}
         }  
     }
 
@@ -354,7 +358,7 @@ export default class createGame {
     updateHistory(arrayPiece,typeMoviment){
         const moviment={
             pieceInitial:[],
-            pieceEat:null,
+            pieceDeleted:[],
             newRefId:[],
             typeMoviment:null
         }
@@ -362,11 +366,11 @@ export default class createGame {
             moviment.pieceInitial.push({__proto__:this,
                 ...this.piecesBoard[piece.fullName]})
             if(this.chessBoard[piece.refId]!==null){
-                moviment.pieceEat={__proto__:this,
+                moviment.pieceDeleted={__proto__:this,
                     ...this.piecesBoard[this.chessBoard[piece.refId].fullName]}
             }
             if(typeMoviment==="enPassant"){
-               moviment.pieceEat={__proto__:this,
+               moviment.pieceDeleted={__proto__:this,
                     ...this.piecesBoard[this.specialMoviment.enPassant.pawnPossibleCapture.fullName]}
             }
             moviment.newRefId.push(piece.refId)
@@ -662,12 +666,12 @@ export default class createGame {
         this.playHistory[lastMoviment].pieceInitial.forEach((pieceInitial,indice)=>{
             const position = this.playHistory[lastMoviment].newRefId[indice]
             this.chessBoard[position]=null
-            if(this.playHistory[lastMoviment].pieceEat!==null){
-                const namePieceEat =this.playHistory[lastMoviment].pieceEat.fullName
-                this.piecesBoard[namePieceEat]=this.playHistory[lastMoviment].pieceEat
-                const positionPieceEat=this.playHistory[lastMoviment].pieceEat.position
-                this.chessBoard[positionPieceEat]=this.playHistory[lastMoviment].pieceEat   
-                delete this.capturePiece[namePieceEat]
+            if(this.playHistory[lastMoviment].pieceDeleted!==null){
+                const namePieceDeleted =this.playHistory[lastMoviment].pieceDeleted.fullName
+                this.piecesBoard[namePieceDeleted]=this.playHistory[lastMoviment].pieceDeleted
+                const positionPieceDeleted=this.playHistory[lastMoviment].pieceDeleted.position
+                this.chessBoard[positionPieceDeleted]=this.playHistory[lastMoviment].pieceDeleted   
+                delete this.capturePiece[namePieceDeleted]
             }
             const positionBack = pieceInitial.position
             const namePiece=pieceInitial.fullName
@@ -806,15 +810,36 @@ export default class createGame {
     }
 
     movimentPawnPromotion(informationPieceToMove){
-        const pawnPromotion = "pawnPromotion"
-        this.updateHistory([informationPieceToMove],pawnPromotion)
+        const piecePromotion = "piecePromotion"
+        this.updateHistory([informationPieceToMove],piecePromotion)
         this.changePiecePosition(informationPieceToMove)
         this.specialMoviment.pawnPromotion.chancePiece=true
         this.specialMoviment.pawnPromotion.color=this.piecesBoard[informationPieceToMove.fullName].color
+        this.specialMoviment.pawnPromotion.promotedPawn=this.piecesBoard[informationPieceToMove.fullName]
     }
 
     changePiecePromotion(namePieceSelect){
         this.specialMoviment.pawnPromotion.chancePiece=false
-        console.log(namePieceSelect)
+        const indChangePiece= this.specialMoviment.pawnPromotion.piecePromotion[this.specialMoviment.pawnPromotion.color].indexOf(namePieceSelect)
+        const namePiece=`${this.specialMoviment.pawnPromotion.piecePromotion.names[indChangePiece]}-${this.specialMoviment.pawnPromotion.piecePromotion.qtPiece[indChangePiece]}`
+        const fullName=namePiece+this.specialMoviment.pawnPromotion.color
+        const color = this.specialMoviment.pawnPromotion.color
+        const img = namePieceSelect
+        const position = this.specialMoviment.pawnPromotion.promotedPawn.position
+        const functionPiece = this.specialMoviment.pawnPromotion.piecePromotion.functionPieces[indChangePiece]
+        const newPiece=this.makePiece(namePiece,fullName,color,img,position,functionPiece)
+        this.piecesBoard[newPiece.fullName]=newPiece
+        this.specialMoviment.pawnPromotion.piecePromotion.qtPiece[indChangePiece]++
+        this.chessBoard[this.specialMoviment.pawnPromotion.promotedPawn.position]=newPiece
+        this.piecesBoard[this.specialMoviment.pawnPromotion.promotedPawn.fullName].isAtive=false
+        this.piecesBoard[newPiece.fullName].qtMovements=this.specialMoviment.pawnPromotion.promotedPawn.qtMovements
+        this.deletRefIdPromotion()
+        this.updateStatusGame(color)
+    }
+
+    deletRefIdPromotion(){
+        const indRefPawn=this.specialMoviment.pawnPromotion.namesPawn.includes(this.specialMoviment.pawnPromotion.promotedPawn.fullName)
+        this.specialMoviment.pawnPromotion.piecesPawn.splice(indRefPawn,1)
+        this.specialMoviment.pawnPromotion.namesPawn.splice(indRefPawn,1)
     }
 }

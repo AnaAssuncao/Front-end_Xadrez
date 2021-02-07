@@ -9,7 +9,7 @@ view.pieceInput.subscribeFunction(updateInputCoordinate)
 view.buttomMove.subscribeFunction(requiredPieceMovement)
 view.chessBoard.subscribeFunction(updateClickChessBoard)
 view.buttomBackMoviment.subscribeFunction(backPreviousMove)
-view.piecesPromotion.subscribeFunction(changePiecePromotio)
+view.piecesPromotion.subscribeFunction(changePiecePromotion)
 
 function starGame(){
     if(game.pieceSelect.refId){
@@ -115,23 +115,22 @@ function updateClickChessBoard (idSquare){
         })
             view.piecesPromotion.renderPiecePromotion(imgPromotion)
     }
+    if(game.pieceSelect.refId){
+        view.chessBoard.highlighSquare.addHighlightSquares(game.pieceSelect)
+        view.pieceInput.selectNamePiece(game.pieceSelect.name)
+        view.coordinateInput.clearAll()
+        const arrayCoordinates = coordinateSelection(game.pieceSelect.refMoviments)
+        view.coordinateInput.addPiecesCoordinates(arrayCoordinates)
+        view.coordinateInput.selectNamePiece("")  
+    }
     else{
-        if(game.pieceSelect.refId){
-            view.chessBoard.highlighSquare.addHighlightSquares(game.pieceSelect)
-            view.pieceInput.selectNamePiece(game.pieceSelect.name)
-            view.coordinateInput.clearAll()
-            const arrayCoordinates = coordinateSelection(game.pieceSelect.refMoviments)
-            view.coordinateInput.addPiecesCoordinates(arrayCoordinates)
-            view.coordinateInput.selectNamePiece("")  
-        }
-        else{
-            view.chessBoard.renderBoard(game.chessBoard)
-            updateDeadPiece()
-            updateInput()
-            updateInformationGame()
-            // olhar se comeu e renderizar
-        }
-     }
+        view.chessBoard.renderBoard(game.chessBoard)
+        updateDeadPiece()
+        updateInput()
+        updateInformationGame()
+        // olhar se comeu e renderizar
+    }
+    
 }
 
 function updateDeadPiece(){
@@ -179,8 +178,12 @@ function backPreviousMove(){
     }
 }
 
-function changePiecePromotio(imgPieceSelect){
+function changePiecePromotion(imgPieceSelect){
     const namePieceSelect = imgPieceSelect.replace("img/","")
     game.changePiecePromotion(namePieceSelect)
     view.piecesPromotion.clearPiecePromotion()
+    view.chessBoard.renderBoard(game.chessBoard)
+        updateDeadPiece()
+        updateInput()
+        updateInformationGame()
 }
