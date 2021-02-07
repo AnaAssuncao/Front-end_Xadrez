@@ -5,7 +5,8 @@ export default function viewScreen(chessBoard){
         pieceInput:[],
         buttomMove:[],
         clickChessBoard:[],
-        buttomBackMoviment:[]
+        buttomBackMoviment:[],
+        piecesPromotion:[]
     }
 
     this.buttomStart={
@@ -150,6 +151,32 @@ export default function viewScreen(chessBoard){
         }   
     }
 
+    this.piecesPromotion={
+        subscribeFunction(fn){
+            functionToCallBack.piecesPromotion.push(fn)
+        },
+        renderPiecePromotion(arrayImg){
+            const board = document.querySelector("#board")
+            const squarePieces = document.createElement("div")
+            squarePieces.id= "pawnPromotion"
+            squarePieces.classList.add("board__squarePieces")
+            board.appendChild(squarePieces) 
+
+            arrayImg.forEach((pieceImg)=>{
+                const img = document.createElement("img")
+                img.src=`${pieceImg}.png`
+                img.classList.add("squarePieces__img")
+                starGameEvent.piecesPromotion(img,pieceImg)
+                squarePieces.appendChild(img) 
+            })
+        },
+        clearPiecePromotion(){
+            clearOptionsInput("#pawnPromotion")
+            const board = document.querySelector("#board")
+            const squarePieces = document.querySelector("#pawnPromotion")
+            board.removeChild(squarePieces)
+        }
+    }
     function addImagem(capturePieceImg,player){
         const divSquare= document.querySelector(player)
         const img = document.createElement("img")
@@ -205,6 +232,11 @@ export default function viewScreen(chessBoard){
             const buttomBackMoviment= document.querySelector("#button__back__moviment")
             buttomBackMoviment.addEventListener("click", ()=>{
                 notifyFunctions(functionToCallBack.buttomBackMoviment)
+            })
+        },
+        piecesPromotion(img,pieceImg){
+            img.addEventListener("click",()=>{
+                notifyFunctions(functionToCallBack.piecesPromotion,pieceImg)
             })
         }
     }

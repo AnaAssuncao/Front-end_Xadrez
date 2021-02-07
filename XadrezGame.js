@@ -171,6 +171,17 @@ export default class createGame {
                 refIdPawn:null,
                 pawnInAtack:[]
             },
+             pawnPromotion:{
+                isPossible:false,
+                chancePiece:false,
+                piecesPawn:[],   
+                namesPawn:[],
+                piecePromotion:{
+                    Black:["towerBlack","knightBlack","bishopBlack","queenBlack"],
+                    White:["towerWhite","knightWhite","bishopWhite","queenWhite"],
+                    functionPieces:[this.possibleMovimentTower,this.possibleMovimentKnight,this.possibleMovimentBishop,this.possibleMovimentQueen]
+                }
+             }
         }  
     }
 
@@ -390,6 +401,12 @@ export default class createGame {
                 return true
             }
         }
+        if(this.specialMoviment.pawnPromotion.isPossible===true){
+            if(this.specialMoviment.pawnPromotion.namesPawn.includes(informationPieceToMove.fullName)){
+                this.movimentPawnPromotion(informationPieceToMove)
+                return true
+            }
+        }
         return false
     }
 
@@ -404,6 +421,7 @@ export default class createGame {
     updateSpecialMoves(nextColor){
         this.verifyRoque(nextColor)
         this.verifyEnPassant(nextColor)
+        this.verifyPawnPromotion(nextColor)
     }
 
     updateFilterMoviment(color){
@@ -762,5 +780,41 @@ export default class createGame {
             this.changePiecePosition(informationPieceToMove)
             this.eatPiece(this.specialMoviment.enPassant.pawnPossibleCapture.fullName)
             this.chessBoard[this.specialMoviment.enPassant.pawnPossibleCapture.position]=null
+    }
+
+    verifyPawnPromotion(color){
+        if(this.specialMoviment.pawnPromotion.piecesPawn.length===0){
+            this.specialMoviment.pawnPromotion.isPossible=false
+        }
+        for(let piece in this.piecesBoard){
+            if(piece.includes("Pawn")){
+                const positionPawn = this.refIdToArray(this.piecesBoard[piece].position)
+                const directionPawn =(this.piecesBoard[piece].color==this.colorPieceBoard.bottom)?1:-1
+                if((positionPawn[1]+directionPawn)===8 ||(positionPawn[1]+directionPawn)===1){
+                    this.possiblePawnPromotion(piece)
+                }
+            }
+        }
+    }
+    
+    possiblePawnPromotion(piece){
+        if(!this.specialMoviment.pawnPromotion.namesPawn.includes(piece)){
+            this.specialMoviment.pawnPromotion.isPossible=true
+            this.specialMoviment.pawnPromotion.piecesPawn.push(this.piecesBoard[piece])
+            this.specialMoviment.pawnPromotion.namesPawn.push(piece)
+        }
+    }
+
+    movimentPawnPromotion(informationPieceToMove){
+        const pawnPromotion = "pawnPromotion"
+        this.updateHistory([informationPieceToMove],pawnPromotion)
+        this.changePiecePosition(informationPieceToMove)
+        this.specialMoviment.pawnPromotion.chancePiece=true
+        this.specialMoviment.pawnPromotion.color=this.piecesBoard[informationPieceToMove.fullName].color
+    }
+
+    changePiecePromotion(namePieceSelect){
+        this.specialMoviment.pawnPromotion.chancePiece=false
+        console.log(namePieceSelect)
     }
 }

@@ -9,10 +9,14 @@ view.pieceInput.subscribeFunction(updateInputCoordinate)
 view.buttomMove.subscribeFunction(requiredPieceMovement)
 view.chessBoard.subscribeFunction(updateClickChessBoard)
 view.buttomBackMoviment.subscribeFunction(backPreviousMove)
+view.piecesPromotion.subscribeFunction(changePiecePromotio)
 
 function starGame(){
     if(game.pieceSelect.refId){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
+    }
+    if(game.specialMoviment.pawnPromotion.changePiece){
+        view.piecesPromotion.clearPiecePromotion()
     }
     game.starObjGame()
     view.chessBoard.renderBoard(game.chessBoard)
@@ -105,21 +109,29 @@ function updateClickChessBoard (idSquare){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }  //limpar destaque movimentos da peça anterior
     game.verifyPieceSelect(idSquare) 
-    if(game.pieceSelect.refId){
-        view.chessBoard.highlighSquare.addHighlightSquares(game.pieceSelect)
-        view.pieceInput.selectNamePiece(game.pieceSelect.name)
-        view.coordinateInput.clearAll()
-        const arrayCoordinates = coordinateSelection(game.pieceSelect.refMoviments)
-        view.coordinateInput.addPiecesCoordinates(arrayCoordinates)
-        view.coordinateInput.selectNamePiece("")  
+    if(game.specialMoviment.pawnPromotion.chancePiece){
+        const imgPromotion=game.specialMoviment.pawnPromotion.piecePromotion[game.specialMoviment.pawnPromotion.color].map((nameImg)=>{
+            return `img/${nameImg}`
+        })
+            view.piecesPromotion.renderPiecePromotion(imgPromotion)
     }
     else{
-        view.chessBoard.renderBoard(game.chessBoard)
-        updateDeadPiece()
-        updateInput()
-        updateInformationGame()
-        // olhar se comeu e renderizar
-    }
+        if(game.pieceSelect.refId){
+            view.chessBoard.highlighSquare.addHighlightSquares(game.pieceSelect)
+            view.pieceInput.selectNamePiece(game.pieceSelect.name)
+            view.coordinateInput.clearAll()
+            const arrayCoordinates = coordinateSelection(game.pieceSelect.refMoviments)
+            view.coordinateInput.addPiecesCoordinates(arrayCoordinates)
+            view.coordinateInput.selectNamePiece("")  
+        }
+        else{
+            view.chessBoard.renderBoard(game.chessBoard)
+            updateDeadPiece()
+            updateInput()
+            updateInformationGame()
+            // olhar se comeu e renderizar
+        }
+     }
 }
 
 function updateDeadPiece(){
@@ -165,4 +177,10 @@ function backPreviousMove(){
         updateInput()
         updateInformationGame()
     }
+}
+
+function changePiecePromotio(imgPieceSelect){
+    const namePieceSelect = imgPieceSelect.replace("img/","")
+    game.changePiecePromotion(namePieceSelect)
+    view.piecesPromotion.clearPiecePromotion()
 }
