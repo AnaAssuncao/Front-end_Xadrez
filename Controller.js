@@ -4,12 +4,12 @@ import viewScreen from "./ViewScreen.js"
 const game = new createGame()
 const view = new viewScreen(game.chessBoard) //mudar p view
 
-view.buttomStart.subscribeFunction(starGame)
-view.pieceInput.subscribeFunction(updateInputCoordinate)
-view.buttomMove.subscribeFunction(requiredPieceMovement)
-view.chessBoard.subscribeFunction(updateClickChessBoard)
-view.buttomBackMoviment.subscribeFunction(backPreviousMove)
-view.piecesPromotion.subscribeFunction(changePiecePromotion)
+view.buttomStart.subscribeToClick(starGame)
+view.pieceInput.subscribeToChange(updateInputCoordinate)
+view.buttomMove.subscribeToClick(requiredPieceMovement)
+view.chessBoard.subscribeToClick(updateClickChessBoard)
+view.buttomBackMoviment.subscribeToClick(backPreviousMove)
+view.piecesPromotion.subscribeToClick(changePiecePromotion)
 
 function starGame(){
     if(game.pieceSelect.refId){

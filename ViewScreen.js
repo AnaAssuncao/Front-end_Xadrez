@@ -10,13 +10,13 @@ export default function viewScreen(chessBoard){
     }
 
     this.buttomStart={
-        subscribeFunction(fn){
+        subscribeToClick(fn){
             functionToCallBack.buttomStart.push(fn)
         }
     }
 
     this.buttomBackMoviment={
-        subscribeFunction(fn){
+        subscribeToClick(fn){
             functionToCallBack.buttomBackMoviment.push(fn)
         }
     }
@@ -35,7 +35,7 @@ export default function viewScreen(chessBoard){
     }
 
     this.pieceInput={
-        subscribeFunction(fn){
+        subscribeToChange(fn){
             functionToCallBack.pieceInput.push(fn)
         },
         pieceIdClass:{
@@ -72,13 +72,13 @@ export default function viewScreen(chessBoard){
     }
 
     this.buttomMove={
-        subscribeFunction(fn){
+        subscribeToClick(fn){
             functionToCallBack.buttomMove.push(fn)
         }
     }
 
     this.chessBoard={
-        subscribeFunction(fn){
+        subscribeToClick(fn){
             functionToCallBack.clickChessBoard.push(fn)
         },
             //renderizar as peças conforme a chave (referência) do objeto.
@@ -152,7 +152,7 @@ export default function viewScreen(chessBoard){
     }
 
     this.piecesPromotion={
-        subscribeFunction(fn){
+        subscribeToClick(fn){
             functionToCallBack.piecesPromotion.push(fn)
         },
         renderPiecePromotion(arrayImg){
