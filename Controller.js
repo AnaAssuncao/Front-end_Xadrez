@@ -7,7 +7,7 @@ const view = new viewScreen(game.chessBoard) //mudar p view
 view.buttomStart.subscribeToClick(starGame)
 view.pieceInput.subscribeToChange(updateInputCoordinate)
 view.buttomMove.subscribeToClick(requiredPieceMovement)
-view.chessBoard.subscribeToClick(updateClickChessBoard)
+view.chessBoard.subscribeToClick(updateChessBoard)
 view.buttomBackMoviment.subscribeToClick(backPreviousMove)
 view.piecesPromotion.subscribeToClick(changePiecePromotion)
 
@@ -96,15 +96,11 @@ function requiredPieceMovement(coordinate){
     if(coordinate!=="Sem Movimento" && coordinate!==""){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)//limpar destaque movimentos
         const refId = coordinateToRefId(coordinate)
-        game.verifyPieceSelect(refId)
-        view.chessBoard.renderBoard(game.chessBoard)
-        updateDeadPiece()
-        updateInput()
-        updateInformationGame()
+        updateChessBoard(refId)
     }   
 }
 
-function updateClickChessBoard (idSquare){
+function updateChessBoard(idSquare){
     if(game.pieceSelect.refId){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }  //limpar destaque movimentos da peça anterior
