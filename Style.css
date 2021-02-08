@@ -210,6 +210,7 @@
 .play__number
 .play__refIdPiece{
     font-size:16px;
+    width: 5%;
 }
 .play__img{
     width: 5%;

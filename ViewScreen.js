@@ -232,6 +232,9 @@ export default function viewScreen(chessBoard){
                 imgPiece.innerHTML=" "
                 play.appendChild(imgPiece)
             }
+        },
+        clearPlays(){
+            clearOptionsInput("#information__history")
         }
     }
     function addImagem(capturePieceImg,player){

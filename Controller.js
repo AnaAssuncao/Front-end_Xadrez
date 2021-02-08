@@ -3,6 +3,7 @@ import viewScreen from "./ViewScreen.js"
 
 const game = new createGame()
 const view = new viewScreen(game.chessBoard) //mudar p view
+let numberPlays = 0
 
 view.buttomStart.subscribeToClick(starGame)
 view.pieceInput.subscribeToChange(updateInputCoordinate)
@@ -17,6 +18,10 @@ function starGame(){
     }
     if(game.specialMoviment.pawnPromotion.changePiece){
         view.piecesPromotion.clearPiecePromotion()
+    }
+    if(game.playHistory.length>0){
+        view.playHitory.clearPlays()
+        numberPlays = 0
     }
     game.starObjGame()
     view.chessBoard.renderBoard(game.chessBoard)
@@ -183,7 +188,6 @@ function changePiecePromotion(imgPieceSelect){
         updateInformationGame()
 }
 
-let numberPlays = 0
 function updatePlaysHistory(){
     const play = {
        number: (numberPlays+1),
