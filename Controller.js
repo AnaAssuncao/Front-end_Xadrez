@@ -124,9 +124,8 @@ function updateChessBoard(idSquare){
         updateDeadPiece()
         updateInput()
         updateInformationGame()
-        // olhar se comeu e renderizar
-    }
-    
+        updatePlaysHistory()
+    } 
 }
 
 function updateDeadPiece(){
@@ -182,4 +181,23 @@ function changePiecePromotion(imgPieceSelect){
         updateDeadPiece()
         updateInput()
         updateInformationGame()
+}
+
+let numberPlays = 0
+function updatePlaysHistory(){
+    const play = {
+       number: (numberPlays+1),
+       lastRefId: [],
+       imgPieces: [],
+       newRefId: [],
+       imgPieceDeleted: null
+    }
+    game.playHistory[numberPlays].pieceInitial.forEach((piece,ind)=>{
+        play.lastRefId.push(refIdToCoordinate(piece.position))
+        play.imgPieces.push(piece.img)
+        play.newRefId.push(refIdToCoordinate(game.playHistory[numberPlays].newRefId[ind]))
+    })
+    play.imgPieceDeleted = (game.playHistory[numberPlays].pieceDeleted)?game.playHistory[numberPlays].pieceDeleted.img:null
+    view.playHitory.addPlay(play)   
+    numberPlays++
 }

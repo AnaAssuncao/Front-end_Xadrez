@@ -197,4 +197,20 @@
     height: 60%;
     background-color: rgb(240, 255, 240);
     border: solid 1px rgb(77, 77, 77);
+    padding: 1%;
+    overflow-x: scroll;
+}
+.history__play{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+    height: 10%;
+}
+.play__number
+.play__refIdPiece{
+    font-size:16px;
+}
+.play__img{
+    width: 5%;
 }

@@ -177,6 +177,63 @@ export default function viewScreen(chessBoard){
             board.removeChild(squarePieces)
         }
     }
+
+    this.playHitory={
+        addPlay(playHitory){
+            const history = document.querySelector("#information__history")
+            const play = document.createElement("div")
+            play.classList.add("history__play")
+            this.addNumber(play,playHitory.number)
+            this.addLastRefId(play,playHitory.lastRefId)
+            this.addImgPiece(play,playHitory.imgPieces)
+            this.addNewRefId(play,playHitory.newRefId)
+            this.addPieceCaptured(play,playHitory.imgPieceDeleted)
+            history.appendChild(play)
+        },
+        addNumber(play,number){
+            const numberPlay= document.createElement("div")
+            numberPlay.classList.add("play__number")
+            numberPlay.innerHTML=number + "."
+            play.appendChild(numberPlay)
+        },
+        addLastRefId(play,arrayRefId){
+            arrayRefId.forEach((refId)=>{
+                const refIdPiece = document.createElement("div")
+                refIdPiece.classList.add("play__refIdPiece")
+                refIdPiece.innerHTML = refId
+                play.appendChild(refIdPiece)
+            })
+        },
+        addImgPiece(play,arrayImgs){
+            arrayImgs.forEach((img)=>{
+                const imgPiece = document.createElement("img")
+                imgPiece.src=`${img}.png`
+                imgPiece.classList.add("play__img")
+                play.appendChild(imgPiece) 
+            })
+        },
+        addNewRefId(play,arrayRefId){
+            arrayRefId.forEach((refId)=>{
+                const refIdPiece = document.createElement("div")
+                refIdPiece.classList.add("play__refIdPiece")
+                refIdPiece.innerHTML = refId
+                play.appendChild(refIdPiece)
+            })
+        },
+        addPieceCaptured(play,img){
+            if(img){
+                const imgPiece = document.createElement("img")
+                imgPiece.src=`${img}.png`
+                imgPiece.classList.add("play__img")
+                play.appendChild(imgPiece)
+            }
+            else{
+                const imgPiece = document.createElement("div")
+                imgPiece.innerHTML=" "
+                play.appendChild(imgPiece)
+            }
+        }
+    }
     function addImagem(capturePieceImg,player){
         const divSquare= document.querySelector(player)
         const img = document.createElement("img")
