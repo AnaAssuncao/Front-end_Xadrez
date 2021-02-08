@@ -20,7 +20,7 @@
     margin-top:3%;
 }
 .cless__titte{
-    color: rgb(60, 88, 60);
+    color: rgb(60, 85, 60);
 }
 .chess__button{
     background-color: rgb(117, 155, 112);
@@ -36,37 +36,38 @@
     justify-content: space-between;  
     align-items: space-between;
     box-shadow: 3px 3px 15px rgb(77, 77, 77);
-    padding: 1%;
+    padding-bottom: 0.5%;
 }
 .chess__board{   
     width:100%;
     height:100%;
     display: flex;
     flex-flow: row wrap;
-    justify-content: flex-end; 
+    justify-content: center; 
     margin-top:1%;
     position: relative;
 }
 .chess__line{
     width: 6%;
-    height: 94%;
+    height: 85%;
     display: flex;
     flex-flow: column-reverse nowrap;
 }
 .chess__column{
-    width:94%;
+    width:85%;
     height: 6%;
     display: flex;
     flex-flow: row nowrap;  
     justify-content: space-between; 
-    /* margin-left:6%; */
+    align-items: space-between;
+    margin-left:6%;
 }
 .line{
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: rgb(60, 88, 60);
+    color: rgb(60, 85, 60);
 }
 .column{  
     width:100%;
@@ -77,8 +78,8 @@
 }
 .chess__squares{
     border: solid 2px rgb(77, 77, 77);
-    width: 94%;
-    height: 94%;
+    width: 85%;
+    height: 85%;
     display: flex;
     flex-flow:  column-reverse wrap;
     justify-content: flex-start;
@@ -118,25 +119,29 @@
 }
 .capturePieceColor__banner{
     display: flex;
-    flex-flow:column nowrap;
-    /* align-items: start; */
+    flex-flow:row nowrap;
+    align-items: center;
+    justify-content: start;
     width:100%;
-    height: 40%;
-    background-color: rgb(240, 255, 240);
-    border: solid 1px rgb(77, 77, 77);
+    height:4%;
+    margin-left: 5%;
 }
 .capturePieceColor__text{
     text-align: center;
-    font-size: 20px;
+    font-size: 14px;
     color:  rgb(77, 77, 77);
 }
+.capturePieceColor__pieceDead{
+    width:100%;
+    height:100%;
+}
 .pieceDead__img{
-    width:15%;
+    width: 3%;
 }
 .move__piece--possibilities{
     /* background-color:rgba(117, 155, 112, 0.4); */
     border: dashed 2px  rgb(41, 41, 41);
-    /* background-color:rgb(75, 88, 73); */
+    /* background-color:rgb(75, 85, 73); */
     /* background-image: url("img/simbolo.svg"); */
     /* background-size: cover; */
 }

@@ -358,7 +358,7 @@ export default class createGame {
     updateHistory(arrayPiece,typeMoviment){
         const moviment={
             pieceInitial:[],
-            pieceDeleted:[],
+            pieceDeleted:null,
             newRefId:[],
             typeMoviment:null
         }
