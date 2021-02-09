@@ -185,7 +185,7 @@ export default class createGame {
                     qtPiece:[1,1,1,1],
                     functionPieces:[this.possibleMovimentTower,this.possibleMovimentKnight,this.possibleMovimentBishop,this.possibleMovimentQueen]
                 }
-}
+            }          
         }  
     }
 
@@ -358,7 +358,7 @@ export default class createGame {
     updateHistory(arrayPiece,typeMoviment){
         const moviment={
             pieceInitial:[],
-            pieceDeleted:[],
+            pieceDeleted:null,
             newRefId:[],
             typeMoviment:null
         }

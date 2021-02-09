@@ -3,11 +3,12 @@ import viewScreen from "./ViewScreen.js"
 
 const game = new createGame()
 const view = new viewScreen(game.chessBoard) //mudar p view
+let numberPlays = 0
 
 view.buttomStart.subscribeToClick(starGame)
 view.pieceInput.subscribeToChange(updateInputCoordinate)
 view.buttomMove.subscribeToClick(requiredPieceMovement)
-view.chessBoard.subscribeToClick(updateClickChessBoard)
+view.chessBoard.subscribeToClick(updateChessBoard)
 view.buttomBackMoviment.subscribeToClick(backPreviousMove)
 view.piecesPromotion.subscribeToClick(changePiecePromotion)
 
@@ -17,6 +18,10 @@ function starGame(){
     }
     if(game.specialMoviment.pawnPromotion.changePiece){
         view.piecesPromotion.clearPiecePromotion()
+    }
+    if(game.playHistory.length>0){
+        view.playHitory.clearPlays()
+        numberPlays = 0
     }
     game.starObjGame()
     view.chessBoard.renderBoard(game.chessBoard)
@@ -96,15 +101,11 @@ function requiredPieceMovement(coordinate){
     if(coordinate!=="Sem Movimento" && coordinate!==""){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)//limpar destaque movimentos
         const refId = coordinateToRefId(coordinate)
-        game.verifyPieceSelect(refId)
-        view.chessBoard.renderBoard(game.chessBoard)
-        updateDeadPiece()
-        updateInput()
-        updateInformationGame()
+        updateChessBoard(refId)
     }   
 }
 
-function updateClickChessBoard (idSquare){
+function updateChessBoard(idSquare){
     if(game.pieceSelect.refId){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }  //limpar destaque movimentos da peça anterior
@@ -128,9 +129,8 @@ function updateClickChessBoard (idSquare){
         updateDeadPiece()
         updateInput()
         updateInformationGame()
-        // olhar se comeu e renderizar
-    }
-    
+        updatePlaysHistory()
+    } 
 }
 
 function updateDeadPiece(){
@@ -186,4 +186,22 @@ function changePiecePromotion(imgPieceSelect){
         updateDeadPiece()
         updateInput()
         updateInformationGame()
+}
+
+function updatePlaysHistory(){
+    const play = {
+       number: (numberPlays+1),
+       lastRefId: [],
+       imgPieces: [],
+       newRefId: [],
+       imgPieceDeleted: null
+    }
+    game.playHistory[numberPlays].pieceInitial.forEach((piece,ind)=>{
+        play.lastRefId.push(refIdToCoordinate(piece.position))
+        play.imgPieces.push(piece.img)
+        play.newRefId.push(refIdToCoordinate(game.playHistory[numberPlays].newRefId[ind]))
+    })
+    play.imgPieceDeleted = (game.playHistory[numberPlays].pieceDeleted)?game.playHistory[numberPlays].pieceDeleted.img:null
+    view.playHitory.addPlay(play)   
+    numberPlays++
 }
