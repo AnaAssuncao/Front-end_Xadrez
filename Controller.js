@@ -109,6 +109,7 @@ function updateChessBoard(idSquare){
     if(game.pieceSelect.refId){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }  //limpar destaque movimentos da peça anterior
+    const movimentValid = game.verifyPieceSelect(idSquare) 
     game.verifyPieceSelect(idSquare) 
     if(game.piecesPromotion.chancePiece){
         const imgPromotion=game.piecesPromotion[game.piecesPromotion.color].imgs.map((nameImg)=>{
@@ -124,7 +125,7 @@ function updateChessBoard(idSquare){
         view.coordinateInput.addPiecesCoordinates(arrayCoordinates)
         view.coordinateInput.selectNamePiece("")  
     }
-    else{
+    else if(movimentValid){
         view.chessBoard.renderBoard(game.chessBoard)
         updateDeadPiece()
         updateInput()
@@ -173,6 +174,7 @@ function backPreviousMove(){
         if(game.pieceSelect.refId){
             view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
         }
+        view.playHitory.removeLine(game.playHistory.length)
         game.returnMoviment()
         view.chessBoard.renderBoard(game.chessBoard)
         updateDeadPiece()

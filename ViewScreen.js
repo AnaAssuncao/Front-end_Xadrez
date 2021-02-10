@@ -145,9 +145,11 @@ export default function viewScreen(chessBoard){
     this.informationGame={
         addinformation(text){
             document.querySelector("#information__game").innerText = text
+            document.querySelector(".status__game--board").classList.add("check-alert-effect")
         },      
         clearInformation(){
-            document.querySelector("#information__game").innerText = ""
+            document.querySelector("#information__game").innerText = "Nenhum Xeque Identificado"
+            document.querySelector(".status__game--board").classList.remove("check-alert-effect")
         }   
     }
 
@@ -183,12 +185,18 @@ export default function viewScreen(chessBoard){
             const history = document.querySelector("#information__history")
             const play = document.createElement("div")
             play.classList.add("history__play")
+            play.id = "history__play-" + playHitory.number
             this.addNumber(play,playHitory.number)
-            this.addLastRefId(play,playHitory.lastRefId)
             this.addImgPiece(play,playHitory.imgPieces)
+            this.addLastRefId(play,playHitory.lastRefId)
             this.addNewRefId(play,playHitory.newRefId)
             this.addPieceCaptured(play,playHitory.imgPieceDeleted)
             history.appendChild(play)
+        },
+        removeLine(number){
+            const id = "history__play-" + number
+            const line = document.querySelector("#"+id)
+            line.remove()
         },
         addNumber(play,number){
             const numberPlay= document.createElement("div")
@@ -200,7 +208,7 @@ export default function viewScreen(chessBoard){
             arrayRefId.forEach((refId)=>{
                 const refIdPiece = document.createElement("div")
                 refIdPiece.classList.add("play__refIdPiece")
-                refIdPiece.innerHTML = refId
+                refIdPiece.innerHTML = refId + "->"
                 play.appendChild(refIdPiece)
             })
         },
@@ -256,6 +264,16 @@ export default function viewScreen(chessBoard){
                 notifyFunctions(functionToCallBack.buttomStart)
             })
         },
+        buttonModal(){
+            const buttomStar= document.querySelector("#button__details__modal")
+            const modal= document.querySelector(".modal__details")
+            const icon = document.querySelector(".icon_micro")
+            buttomStar.addEventListener("click", ()=>{
+                const srcImg = icon.getAttribute('src')!=='img/down-chevron.svg'?'img/down-chevron.svg':'img/up-chevron.svg'
+                icon.setAttribute('src',srcImg)
+                modal.classList.toggle('modal__details--display')
+            })
+        },
         pieceInput(){          
             const inputPiece= document.querySelector("#select__name")
             inputPiece.addEventListener("change", () =>{
@@ -283,9 +301,12 @@ export default function viewScreen(chessBoard){
             tagPosition.classList.add("square__dark--mark");
             })
             tagPosition.addEventListener("dragover",e=>{e.preventDefault();})
-            tagPosition.addEventListener("drop",e=>{console.log(`drop ${tagPosition.id}`);
-            notifyFunctions(functionToCallBack.clickChessBoard,tagPosition.id)
+            tagPosition.addEventListener("drop",e=>{
+            e.preventDefault()
+            const squareRefIdClick = tagPosition.id
+            notifyFunctions(functionToCallBack.clickChessBoard,squareRefIdClick)
             tagPosition.classList.remove("square__dark--mark")
+            // console.log(`drop ${tagPosition.id}`)
             })
         },
         buttomBackMoviment(){
@@ -304,6 +325,7 @@ export default function viewScreen(chessBoard){
     starGameEvent.pieceInput()
     starGameEvent.buttomMove()
     starGameEvent.buttomBackMoviment()
+    starGameEvent.buttonModal()
     boardCreation(chessBoard)
     
     function boardCreation(chessBoard){

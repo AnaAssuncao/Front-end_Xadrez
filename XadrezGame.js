@@ -316,14 +316,17 @@ export default class createGame {
 
         // Movimentação peça no tabuleiro
     verifyPieceSelect(idSquare){
+        let movimentValid = false;
         if((this.pieceSelect.refId!==idSquare) && (this.chessBoard[idSquare]!==null) && this.checkColor(idSquare))
         {
             this.pieceSelect.refId=idSquare
             this.pieceSelect.name=this.chessBoard[idSquare].name
             this.pieceSelect.refMovements =  this.chessBoard[idSquare].refMovements
+
         }
         else{
-            if(this.checkMovements(idSquare)){
+            movimentValid = this.checkMovements(idSquare)
+            if(movimentValid){
                 const informationPieceSelect={
                     color: this.chessBoard[this.pieceSelect.refId].color,
                     fullName:  this.chessBoard[this.pieceSelect.refId].fullName,
@@ -336,6 +339,7 @@ export default class createGame {
             this.pieceSelect.refId=null           
             this.pieceSelect.refMovements=[]
         } 
+        return movimentValid
     }
     
     verifyMove(informationPieceSelect){

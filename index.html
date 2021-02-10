@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Xadrez</title>
     <link rel="stylesheet" href="Style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 
 <body class="chess">
@@ -26,14 +28,25 @@
         </div>    
     </header> 
     
+    <div class="main__column">
+     <div class="status__game__row">
+         <div class="status__game status__game--player">
+             <img src="img/Offline_logo.svg" class="icon_min"> 
+             Jogo Offline/Simulação
+         </div>
+         <div class="status__game status__game--board">
+            <img src="img/check.svg" class="icon_med">
+            <span id="information__game">Nenhum Xeque Identificado</span>
+        </div>
+        <div class="status__game status__game--details" id="button__details__modal">
+            Detalhes
+            <img src="img/down-chevron.svg" class="icon_micro">
+        </div>
+
+     </div>
+    
     <section class="chess__game">
         <div class="chess__board"> 
-            <div class="capturePieceColor__banner">
-                <p class="capturePieceColor__text">Peças:</p>
-                <div class="capturePieceColor__pieceDead" id="colorTop">
-                    <!-- imagens -->
-                </div>
-            </div>
             <div class="chess__line" id="line">
                 <!-- numero-->
             </div>
@@ -42,21 +55,39 @@
             </div>
             <div class="chess__column" id="column">      
                 <!-- letra-->
+            </div>   
+        </div>
+
+        <div class="modal__details modal__details--display" > 
+            <div class="modal__details_msg">
+                 Aqui vai ficar uma mensagem de log blablaalblablababab dhfiudshf iusdfisdaf soidufsdh osidfoi oisdufoisd
             </div>
             <div class="capturePieceColor__banner">
-                <p class="capturePieceColor__text">Peças:</p>
+                <p class="capturePieceColor__text">Peças Preta Eliminadas:</p>
                 <div class="capturePieceColor__pieceDead" id="colorBottom">
-                    <!-- imagens -->
+                    
+                </div>
+            </div>
+            <div class="capturePieceColor__banner">
+                <p class="capturePieceColor__text">Peças Brancas Eliminadas:</p>
+                <div class="capturePieceColor__pieceDead" id="colorTop">
+                    
                 </div>
             </div>
         </div>
+    </div>
+
+
     </section>
-    <section class="information"></section>
-    <section class="chess__capturePieceColor">
-        <div id="information__game"></div>
+    <div class="aux__column">
+        <div id="history__header">
+            <img src="img/history.svg" class="icon_med"> 
+            Histórico de Jogadas 
+            <button class="move__back" id="button__back__moviment"><img src="img/undo-arrow.svg" class="icon_micro"> </button>  
+        </div>
         <div id="information__history"></div>
-        <button class="move__back" id="button__back__moviment">Voltar jogada anterior</button>
-    </section>
+        
+    </div>
     
 </body>
 <!-- <script src="XadrezGame.js"></script> -->
