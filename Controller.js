@@ -129,7 +129,7 @@ function updateChessBoard(idSquare){
         updateDeadPiece()
         updateInput()
         updateInformationGame()
-        // updatePlaysHistory()
+        updatePlaysHistory()
     } 
 }
 
@@ -175,6 +175,7 @@ function backPreviousMove(){
         }
         view.playHitory.removeLine(game.playHistory.length)
         game.returnMoviment()
+        numberPlays--
         view.chessBoard.renderBoard(game.chessBoard)
         updateDeadPiece()
         updateInput()
