@@ -110,7 +110,6 @@ function updateChessBoard(idSquare){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }  //limpar destaque movimentos da peça anterior
     const movimentValid = game.verifyPieceSelect(idSquare) 
-    game.verifyPieceSelect(idSquare) 
     if(game.piecesPromotion.chancePiece){
         const imgPromotion=game.piecesPromotion[game.piecesPromotion.color].imgs.map((nameImg)=>{
             return `img/${nameImg}`

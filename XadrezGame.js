@@ -942,8 +942,9 @@ export default class createGame {
                     return false
                 }
             }
+            return true
         }
-        return true
+        return false
     }
     
     drawByChequeMateImpossibility(){
