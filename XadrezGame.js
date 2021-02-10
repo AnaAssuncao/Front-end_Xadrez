@@ -904,8 +904,9 @@ export default class createGame {
                     }
                 }
             }
-        }
-        return true
+            return true
+        }  
+        return false   
     }
     
     drawByReplayThreeMoves(){
@@ -929,17 +930,16 @@ export default class createGame {
         return false
     }
     
-    drawByFiftyRules(){
-        const numberPlays= 100
+    drawByFiftyRules(numberPlays= 100){
         const qtPlays = this.playHistory.length
         if(qtPlays>=numberPlays){
             for(let i = 1;(i<=numberPlays);i++){
                 if(this.playHistory[qtPlays-i].pieceInitial[0].name.includes("Pawn") || this.playHistory[qtPlays-i].pieceDeleted){
-                    return true
+                    return false
                 }
             }
         }
-        return false
+        return true
     }
     
     drawByChequeMateImpossibility(){
@@ -956,7 +956,7 @@ export default class createGame {
             return true
         }
         if(pieceAtive.length===3){
-            for(let piece in pieceAtive){
+            for(let piece of pieceAtive){
                 if(piece.includes("Bishop")||piece.includes("Knigth")){
                     return true
                 }
