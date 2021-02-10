@@ -110,8 +110,8 @@ function updateChessBoard(idSquare){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }  //limpar destaque movimentos da peça anterior
     game.verifyPieceSelect(idSquare) 
-    if(game.specialMoviment.pawnPromotion.chancePiece){
-        const imgPromotion=game.specialMoviment.pawnPromotion.piecePromotion[game.specialMoviment.pawnPromotion.color].map((nameImg)=>{
+    if(game.piecesPromotion.chancePiece){
+        const imgPromotion=game.piecesPromotion[game.piecesPromotion.color].imgs.map((nameImg)=>{
             return `img/${nameImg}`
         })
             view.piecesPromotion.renderPiecePromotion(imgPromotion)
@@ -129,7 +129,7 @@ function updateChessBoard(idSquare){
         updateDeadPiece()
         updateInput()
         updateInformationGame()
-        updatePlaysHistory()
+        // updatePlaysHistory()
     } 
 }
 
@@ -180,7 +180,7 @@ function backPreviousMove(){
 
 function changePiecePromotion(imgPieceSelect){
     const namePieceSelect = imgPieceSelect.replace("img/","")
-    game.changePiecePromotion(namePieceSelect)
+    game.updatePiecePromotion(namePieceSelect)
     view.piecesPromotion.clearPiecePromotion()
     view.chessBoard.renderBoard(game.chessBoard)
         updateDeadPiece()
