@@ -149,7 +149,10 @@ function updateDeadPiece(){
 }
 
 function updateInformationGame(){
-    if(game.statusCheckKing.checkMate===true){
+    if(game.statusDrawn.drawn){
+        view.informationGame.addinformation("Jogo empatado")
+    }
+    else if(game.statusCheckKing.checkMate===true){
         view.informationGame.addinformation(`Xeque-Mate no King ${game.pieceSelect.color} - Vitória das Peças ${game.statusCheckKing.winColor}`)
     }
     else if(game.statusCheckKing.endGame===true){

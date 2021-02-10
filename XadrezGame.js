@@ -77,16 +77,13 @@ export default class createGame {
         }
     
         // Controle de peça selecionada.
-        this.pieceSelect= {
-            name:null,
-            refId:null,
-            refMovements:[],
-            color:null
-        }
+        this.pieceSelect= {}
 
         this.capturePiece={}
 
         this.statusCheckKing={}
+
+        this.statusDrawn={}
 
         this.specialMoviment={}
 
@@ -192,6 +189,8 @@ export default class createGame {
                 qtPiece:[1,1,1,1]},
             newPiece:null,
         }
+
+        this.statusDrawn.drawn=false
     }
 
     possibleMovimentTower(chessBoard=this.chessBoard){//fazer isso
@@ -431,6 +430,7 @@ export default class createGame {
         this.updateStatusCheck(nextColor)
         this.updateSpecialMoves(nextColor)
         this.updateFilterMoviment(nextColor)
+        this.verifyDrawGame(nextColor)
     }
 
     updateSpecialMoves(nextColor){
@@ -882,5 +882,91 @@ export default class createGame {
         this.piecesPromotion[color].qtPiece[indChangePiece]++
         this.piecesPromotion.newPiece= this.makePiece(namePiece,fullName,color,img,position,functionPiece)
         this.piecesPromotion.newPiece.refMovements=this.piecesPromotion.promotedPawn.qtMovements
+    }
+
+    verifyDrawGame(color){
+        const draw=[]
+        draw.push(this.drawByDrowning(color))
+        draw.push(this.drawByReplayThreeMoves())
+        draw.push(this.drawByFiftyRules())
+        draw.push(this.drawByChequeMateImpossibility())
+        if(draw.includes(true)){
+            this.statusDrawn.drawn=true
+        }
+    }
+    
+    drawByDrowning(color){
+        if(this.statusCheckKing.check===false){
+            for(let piece in this.piecesBoard){
+                if(this.piecesBoard[piece].color===color){
+                    if(this.piecesBoard[piece].refMovements.length>0){
+                        return false
+                    }
+                }
+            }
+        }
+        return true
+    }
+    
+    drawByReplayThreeMoves(){
+        const qtPlays= this.playHistory.length-1
+        if(qtPlays>=6 && this.statusCheckKing.check===true){
+            const lastPlay=this.playHistory[qtPlays]
+            const penultimatePlay=this.playHistory[qtPlays-1]
+            if(lastPlay.pieceInitial[0].fullName.includes("King")||penultimatePlay.pieceInitial[0].fullName.includes("King")){
+                const conditions={
+                    play1:lastPlay.pieceInitial[0]===this.playHistory[qtPlays-2].pieceInitial[0],
+                    play2:penultimatePlay.pieceInitial[0]===this.playHistory[qtPlays-3].pieceInitial[0],
+                    play3:lastPlay.pieceInitial[0]===this.playHistory[qtPlays-4].pieceInitial[0] && lastPlay.newRefId[0]===this.playHistory[qtPlays-4].newRefId[0],
+                    play4:penultimatePlay.pieceInitial[0]===this.playHistory[qtPlays-5].pieceInitial[0] && penultimatePlay.newRefId[0]===this.playHistory[qtPlays-5].newRefId[0]
+                }
+                    if(conditions.play1===true && conditions.play2===true && conditions.play3===true && conditions.play4===true){
+                        return true
+                    }
+                }
+            }
+
+        return false
+    }
+    
+    drawByFiftyRules(){
+        const numberPlays= 100
+        const qtPlays = this.playHistory.length
+        if(qtPlays>=numberPlays){
+            for(let i = 1;(i<=numberPlays);i++){
+                if(this.playHistory[qtPlays-i].pieceInitial[0].name.includes("Pawn") || this.playHistory[qtPlays-i].pieceDeleted){
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    drawByChequeMateImpossibility(){
+        const pieceAtive=[]
+        for(let piece in this.piecesBoard){
+            if(this.piecesBoard[piece].isAtive){
+                pieceAtive.push(piece)
+            }
+        }
+        if(pieceAtive.length>4){
+            return false
+        }
+        if(pieceAtive.length===2){
+            return true
+        }
+        if(pieceAtive.length===3){
+            for(let piece in pieceAtive){
+                if(piece.includes("Bishop")||piece.includes("Knigth")){
+                    return true
+                }
+            }
+        }
+        if(pieceAtive.length===4){
+            if((pieceAtive.includes("Bishop-LeftBlack")||pieceAtive.includes("Bishop-RightBlack"))
+            &&(pieceAtive.includes("Bishop-LeftWhite")||pieceAtive.includes("Bishop-RightWhite"))){
+                return true
+            }
+        }
     }
 }
