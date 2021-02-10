@@ -77,18 +77,17 @@ export default class createGame {
         }
     
         // Controle de peça selecionada.
-        this.pieceSelect= {
-            name:null,
-            refId:null,
-            refMovements:[],
-            color:null
-        }
+        this.pieceSelect= {}
 
         this.capturePiece={}
 
         this.statusCheckKing={}
 
+        this.statusDrawn={}
+
         this.specialMoviment={}
+
+        this.piecesPromotion=
     
         this.starObjGame()
     }
@@ -173,20 +172,25 @@ export default class createGame {
             },
             pawnPromotion:{
                 isPossible:false,
-                chancePiece:false,
                 piecesPawn:[],   
-                namesPawn:[],
-                color:null,
-                promotedPawn:null,
-                piecePromotion:{
-                    names:["tower","knight","bishop","queen"],
-                    Black:["towerBlack","knightBlack","bishopBlack","queenBlack"],
-                    White:["towerWhite","knightWhite","bishopWhite","queenWhite"],
-                    qtPiece:[1,1,1,1],
-                    functionPieces:[this.possibleMovimentTower,this.possibleMovimentKnight,this.possibleMovimentBishop,this.possibleMovimentQueen]
-                }
-            }          
+                namesPawn:[],  
+            }        
         }  
+
+        this.piecesPromotion={
+            chancePiece:false,
+            promotedPawn:null,
+            color:null,
+            Black:{
+                imgs:["towerBlack","knightBlack","bishopBlack","queenBlack"],
+                qtPiece:[1,1,1,1]},
+            White:{
+                imgs:["towerWhite","knightWhite","bishopWhite","queenWhite"],
+                qtPiece:[1,1,1,1]},
+            newPiece:null,
+        }
+
+        this.statusDrawn.drawn=false
     }
 
     possibleMovimentTower(chessBoard=this.chessBoard){//fazer isso
@@ -367,19 +371,25 @@ export default class createGame {
             typeMoviment:null
         }
         arrayPiece.forEach(piece=> {
-            moviment.pieceInitial.push({__proto__:this,
-                ...this.piecesBoard[piece.fullName]})
-            if(this.chessBoard[piece.refId]!==null){
-                moviment.pieceDeleted={__proto__:this,
-                    ...this.piecesBoard[this.chessBoard[piece.refId].fullName]}
+            if(this.piecesBoard[piece.fullName]){
+                moviment.pieceInitial.push({__proto__:this,
+                    ...this.piecesBoard[piece.fullName]})   
+                if(this.chessBoard[piece.refId]!==null){
+                    moviment.pieceDeleted={__proto__:this,
+                        ...this.piecesBoard[this.chessBoard[piece.refId].fullName]}
+                }
+                if(typeMoviment==="enPassant"){
+                    moviment.pieceDeleted={__proto__:this,
+                        ...this.piecesBoard[this.specialMoviment.enPassant.pawnPossibleCapture.fullName]}
+                }
             }
-            if(typeMoviment==="enPassant"){
-               moviment.pieceDeleted={__proto__:this,
-                    ...this.piecesBoard[this.specialMoviment.enPassant.pawnPossibleCapture.fullName]}
+            else if(typeMoviment==="piecePromotion" ){
+                moviment.pieceInitial.push({__proto__:this,
+                     ...this.piecesPromotion.newPiece})
             }
             moviment.newRefId.push(piece.refId)
-            moviment.typeMoviment=typeMoviment
         })
+        moviment.typeMoviment=typeMoviment
      
         this.playHistory.push(moviment)
     }
@@ -411,7 +421,7 @@ export default class createGame {
         }
         if(this.specialMoviment.pawnPromotion.isPossible===true){
             if(this.specialMoviment.pawnPromotion.namesPawn.includes(informationPieceToMove.fullName)){
-                this.movimentPawnPromotion(informationPieceToMove)
+                this.informPawnPromotion(informationPieceToMove)
                 return true
             }
         }
@@ -424,6 +434,7 @@ export default class createGame {
         this.updateStatusCheck(nextColor)
         this.updateSpecialMoves(nextColor)
         this.updateFilterMoviment(nextColor)
+        this.verifyDrawGame(nextColor)
     }
 
     updateSpecialMoves(nextColor){
@@ -667,20 +678,26 @@ export default class createGame {
 
     returnChangePiece(){
         const lastMoviment= this.playHistory.length-1
-        this.playHistory[lastMoviment].pieceInitial.forEach((pieceInitial,indice)=>{
-            const position = this.playHistory[lastMoviment].newRefId[indice]
-            this.chessBoard[position]=null
-            if(this.playHistory[lastMoviment].pieceDeleted!==null){
-                const namePieceDeleted =this.playHistory[lastMoviment].pieceDeleted.fullName
-                this.piecesBoard[namePieceDeleted]=this.playHistory[lastMoviment].pieceDeleted
-                const positionPieceDeleted=this.playHistory[lastMoviment].pieceDeleted.position
-                this.chessBoard[positionPieceDeleted]=this.playHistory[lastMoviment].pieceDeleted   
-                delete this.capturePiece[namePieceDeleted]
+        this.playHistory[lastMoviment].pieceInitial.forEach((pieceInitial,ind)=>{
+            if(this.playHistory[lastMoviment].typeMoviment==="piecePromotion" && ind===1){
+                const namePiece=pieceInitial.fullName
+                delete this.piecesBoard[namePiece]
             }
-            const positionBack = pieceInitial.position
-            const namePiece=pieceInitial.fullName
-            this.chessBoard[positionBack]=pieceInitial
-            this.piecesBoard[namePiece]=pieceInitial
+            else{
+                const position = this.playHistory[lastMoviment].newRefId[ind]
+                this.chessBoard[position]=null
+                if(this.playHistory[lastMoviment].pieceDeleted!==null){
+                    const namePieceDeleted =this.playHistory[lastMoviment].pieceDeleted.fullName
+                    this.piecesBoard[namePieceDeleted]=this.playHistory[lastMoviment].pieceDeleted
+                    const positionPieceDeleted=this.playHistory[lastMoviment].pieceDeleted.position
+                    this.chessBoard[positionPieceDeleted]=this.playHistory[lastMoviment].pieceDeleted   
+                    delete this.capturePiece[namePieceDeleted]
+                }
+                const positionBack = pieceInitial.position
+                const namePiece=pieceInitial.fullName
+                this.chessBoard[positionBack]=pieceInitial
+                this.piecesBoard[namePiece]=pieceInitial
+            }
         })
         this.playHistory.pop()  
     }
@@ -791,9 +808,10 @@ export default class createGame {
     }
 
     verifyPawnPromotion(color){
-        if(this.specialMoviment.pawnPromotion.piecesPawn.length===0){
-            this.specialMoviment.pawnPromotion.isPossible=false
-        }
+        this.specialMoviment.pawnPromotion.piecesPawn=[]
+        this.specialMoviment.pawnPromotion.namesPawn=[]
+        this.specialMoviment.pawnPromotion.isPossible=false
+    
         for(let piece in this.piecesBoard){
             if(piece.includes("Pawn")){
                 const positionPawn = this.refIdToArray(this.piecesBoard[piece].position)
@@ -813,37 +831,146 @@ export default class createGame {
         }
     }
 
-    movimentPawnPromotion(informationPieceToMove){
+    informPawnPromotion(informationPieceToMove){
+        this.piecesPromotion.chancePiece=true
+        this.piecesPromotion.color=this.piecesBoard[informationPieceToMove.fullName].color
+        this.piecesPromotion.promotedPawn=this.piecesBoard[informationPieceToMove.fullName]
+        this.piecesPromotion.newPositionPromotion=informationPieceToMove.refId
+    }
+
+    updatePiecePromotion(namePieceSelect){
+        this.piecesPromotion.chancePiece=false
+        this.createNewPiece(namePieceSelect)
+        const informationPawnToMove={
+            color: this.piecesPromotion.promotedPawn.color,
+            fullName:  this.piecesPromotion.promotedPawn.fullName,
+            refId:this.piecesPromotion.newPositionPromotion
+        }  
+        const informationPiecePromotion={
+            color: this.piecesPromotion.newPiece.color,
+            fullName: this.piecesPromotion.newPiece.fullName,
+            refId:this.piecesPromotion.newPositionPromotion
+        }  
+
         const piecePromotion = "piecePromotion"
-        this.updateHistory([informationPieceToMove],piecePromotion)
-        this.changePiecePosition(informationPieceToMove)
-        this.specialMoviment.pawnPromotion.chancePiece=true
-        this.specialMoviment.pawnPromotion.color=this.piecesBoard[informationPieceToMove.fullName].color
-        this.specialMoviment.pawnPromotion.promotedPawn=this.piecesBoard[informationPieceToMove.fullName]
+        this.updateHistory([informationPawnToMove,informationPiecePromotion],piecePromotion)
+        this.changePiecePromotion(informationPawnToMove)
+        this.updateStatusGame(this.piecesPromotion.newPiece.color)
     }
 
-    changePiecePromotion(namePieceSelect){
-        this.specialMoviment.pawnPromotion.chancePiece=false
-        const indChangePiece= this.specialMoviment.pawnPromotion.piecePromotion[this.specialMoviment.pawnPromotion.color].indexOf(namePieceSelect)
-        const namePiece=`${this.specialMoviment.pawnPromotion.piecePromotion.names[indChangePiece]}-${this.specialMoviment.pawnPromotion.piecePromotion.qtPiece[indChangePiece]}`
-        const fullName=namePiece+this.specialMoviment.pawnPromotion.color
-        const color = this.specialMoviment.pawnPromotion.color
+    changePiecePromotion(informationPawnToMove){
+        this.changePiecePosition(informationPawnToMove)
+        this.piecesBoard[this.piecesPromotion.newPiece.fullName]=this.piecesPromotion.newPiece
+        this.chessBoard[this.piecesPromotion.newPiece.position]=this.piecesPromotion.newPiece
+        this.piecesBoard[this.piecesPromotion.promotedPawn.fullName].isAtive=false
+    }
+
+    createNewPiece(namePieceSelect){
+        const chancePiece={
+            names:["tower","knight","bishop","queen"],
+            functionPieces:[this.possibleMovimentTower,this.possibleMovimentKnight,this.possibleMovimentBishop,this.possibleMovimentQueen],
+            Black:{
+                fullName:["towerBlack","knightBlack","bishopBlack","queenBlack"],
+            },
+            White:{
+                fullName:["towerWhite","knightWhite","bishopWhite","queenWhite"],
+            }
+        }
+        const color = this.piecesPromotion.color
+        const indChangePiece= chancePiece[color].fullName.indexOf(namePieceSelect)
+        const namePiece=`${chancePiece.names[indChangePiece]}-${this.piecesPromotion[color].qtPiece[indChangePiece]}`
+        const fullName=namePiece+color
         const img = namePieceSelect
-        const position = this.specialMoviment.pawnPromotion.promotedPawn.position
-        const functionPiece = this.specialMoviment.pawnPromotion.piecePromotion.functionPieces[indChangePiece]
-        const newPiece=this.makePiece(namePiece,fullName,color,img,position,functionPiece)
-        this.piecesBoard[newPiece.fullName]=newPiece
-        this.specialMoviment.pawnPromotion.piecePromotion.qtPiece[indChangePiece]++
-        this.chessBoard[this.specialMoviment.pawnPromotion.promotedPawn.position]=newPiece
-        this.piecesBoard[this.specialMoviment.pawnPromotion.promotedPawn.fullName].isAtive=false
-        this.piecesBoard[newPiece.fullName].qtMovements=this.specialMoviment.pawnPromotion.promotedPawn.qtMovements
-        this.deletRefIdPromotion()
-        this.updateStatusGame(color)
+        const position = this.piecesPromotion.newPositionPromotion
+        const functionPiece = chancePiece.functionPieces[indChangePiece]
+        this.piecesPromotion[color].qtPiece[indChangePiece]++
+        this.piecesPromotion.newPiece= this.makePiece(namePiece,fullName,color,img,position,functionPiece)
+        this.piecesPromotion.newPiece.refMovements=this.piecesPromotion.promotedPawn.qtMovements
     }
 
-    deletRefIdPromotion(){
-        const indRefPawn=this.specialMoviment.pawnPromotion.namesPawn.includes(this.specialMoviment.pawnPromotion.promotedPawn.fullName)
-        this.specialMoviment.pawnPromotion.piecesPawn.splice(indRefPawn,1)
-        this.specialMoviment.pawnPromotion.namesPawn.splice(indRefPawn,1)
+    verifyDrawGame(color){
+        const draw=[]
+        draw.push(this.drawByDrowning(color))
+        draw.push(this.drawByReplayThreeMoves())
+        draw.push(this.drawByFiftyRules())
+        draw.push(this.drawByChequeMateImpossibility())
+        if(draw.includes(true)){
+            this.statusDrawn.drawn=true
+        }
+    }
+    
+    drawByDrowning(color){
+        if(this.statusCheckKing.check===false){
+            for(let piece in this.piecesBoard){
+                if(this.piecesBoard[piece].color===color){
+                    if(this.piecesBoard[piece].refMovements.length>0){
+                        return false
+                    }
+                }
+            }
+            return true
+        }  
+        return false   
+    }
+    
+    drawByReplayThreeMoves(){
+        const qtPlays= this.playHistory.length-1
+        if(qtPlays>=6 && this.statusCheckKing.check===true){
+            const lastPlay=this.playHistory[qtPlays]
+            const penultimatePlay=this.playHistory[qtPlays-1]
+            if(lastPlay.pieceInitial[0].fullName.includes("King")||penultimatePlay.pieceInitial[0].fullName.includes("King")){
+                const conditions={
+                    play1:lastPlay.pieceInitial[0]===this.playHistory[qtPlays-2].pieceInitial[0],
+                    play2:penultimatePlay.pieceInitial[0]===this.playHistory[qtPlays-3].pieceInitial[0],
+                    play3:lastPlay.pieceInitial[0]===this.playHistory[qtPlays-4].pieceInitial[0] && lastPlay.newRefId[0]===this.playHistory[qtPlays-4].newRefId[0],
+                    play4:penultimatePlay.pieceInitial[0]===this.playHistory[qtPlays-5].pieceInitial[0] && penultimatePlay.newRefId[0]===this.playHistory[qtPlays-5].newRefId[0]
+                }
+                    if(conditions.play1===true && conditions.play2===true && conditions.play3===true && conditions.play4===true){
+                        return true
+                    }
+                }
+            }
+
+        return false
+    }
+    
+    drawByFiftyRules(numberPlays= 100){
+        const qtPlays = this.playHistory.length
+        if(qtPlays>=numberPlays){
+            for(let i = 1;(i<=numberPlays);i++){
+                if(this.playHistory[qtPlays-i].pieceInitial[0].name.includes("Pawn") || this.playHistory[qtPlays-i].pieceDeleted){
+                    return false
+                }
+            }
+        }
+        return true
+    }
+    
+    drawByChequeMateImpossibility(){
+        const pieceAtive=[]
+        for(let piece in this.piecesBoard){
+            if(this.piecesBoard[piece].isAtive){
+                pieceAtive.push(piece)
+            }
+        }
+        if(pieceAtive.length>4){
+            return false
+        }
+        if(pieceAtive.length===2){
+            return true
+        }
+        if(pieceAtive.length===3){
+            for(let piece of pieceAtive){
+                if(piece.includes("Bishop")||piece.includes("Knigth")){
+                    return true
+                }
+            }
+        }
+        if(pieceAtive.length===4){
+            if((pieceAtive.includes("Bishop-LeftBlack")||pieceAtive.includes("Bishop-RightBlack"))
+            &&(pieceAtive.includes("Bishop-LeftWhite")||pieceAtive.includes("Bishop-RightWhite"))){
+                return true
+            }
+        }
     }
 }

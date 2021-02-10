@@ -110,8 +110,9 @@ function updateChessBoard(idSquare){
         view.chessBoard.highlighSquare.clearHighlightSquares(game.pieceSelect)
     }  //limpar destaque movimentos da peça anterior
     const movimentValid = game.verifyPieceSelect(idSquare) 
-    if(game.specialMoviment.pawnPromotion.chancePiece){
-        const imgPromotion=game.specialMoviment.pawnPromotion.piecePromotion[game.specialMoviment.pawnPromotion.color].map((nameImg)=>{
+    game.verifyPieceSelect(idSquare) 
+    if(game.piecesPromotion.chancePiece){
+        const imgPromotion=game.piecesPromotion[game.piecesPromotion.color].imgs.map((nameImg)=>{
             return `img/${nameImg}`
         })
             view.piecesPromotion.renderPiecePromotion(imgPromotion)
@@ -129,7 +130,7 @@ function updateChessBoard(idSquare){
         updateDeadPiece()
         updateInput()
         updateInformationGame()
-        updatePlaysHistory()
+        // updatePlaysHistory()
     } 
 }
 
@@ -149,7 +150,10 @@ function updateDeadPiece(){
 }
 
 function updateInformationGame(){
-    if(game.statusCheckKing.checkMate===true){
+    if(game.statusDrawn.drawn){
+        view.informationGame.addinformation("Jogo empatado")
+    }
+    else if(game.statusCheckKing.checkMate===true){
         view.informationGame.addinformation(`Xeque-Mate no King ${game.pieceSelect.color} - Vitória das Peças ${game.statusCheckKing.winColor}`)
     }
     else if(game.statusCheckKing.endGame===true){
@@ -181,7 +185,7 @@ function backPreviousMove(){
 
 function changePiecePromotion(imgPieceSelect){
     const namePieceSelect = imgPieceSelect.replace("img/","")
-    game.changePiecePromotion(namePieceSelect)
+    game.updatePiecePromotion(namePieceSelect)
     view.piecesPromotion.clearPiecePromotion()
     view.chessBoard.renderBoard(game.chessBoard)
         updateDeadPiece()
