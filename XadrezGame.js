@@ -974,4 +974,45 @@ export default class createGame {
             }
         }
     }
+    
+    testDraw(){
+        const draw=[]
+        this.statusCheckKing.check===false
+        for(let piece in this.piecesBoard){
+                this.piecesBoard[piece].refMovements=[]
+                this.piecesBoard[piece].isAtive=false
+        }
+        draw.push(this.drawByDrowning("Black"))
+
+        this.statusCheckKing.check=true
+        this.playHistory=[{pieceInitial:[this.piecesBoard["KingBlack"]], pieceDeleted:null, newRefId:["ref25"], typeMoviment:null},
+        {pieceInitial:[this.piecesBoard["QueenWhite"]], pieceDeleted:null, newRefId:["ref45"], typeMoviment:null},
+        {pieceInitial:[this.piecesBoard["KingBlack"]], pieceDeleted:null, newRefId:["ref24"], typeMoviment:null},
+        {pieceInitial:[this.piecesBoard["QueenWhite"]], pieceDeleted:null, newRefId:["ref44"], typeMoviment:null},
+        {pieceInitial:[this.piecesBoard["KingBlack"]], pieceDeleted:null, newRefId:["ref25"], typeMoviment:null},
+        {pieceInitial:[this.piecesBoard["QueenWhite"]], pieceDeleted:null, newRefId:["ref45"], typeMoviment:null},
+        {pieceInitial:[this.piecesBoard["KingBlack"]], pieceDeleted:null, newRefId:["ref24"], typeMoviment:null}]
+
+        draw.push(this.drawByReplayThreeMoves())
+        draw.push(this.drawByFiftyRules(7))
+
+        for(let refId in this.chessBoard){
+            this.chessBoard[refId]=null
+        }
+        this.chessBoard["ref11"]=this.piecesBoard["KingBlack"]
+        this.piecesBoard["KingBlack"].isAtive=true
+        this.chessBoard["ref55"]=this.piecesBoard["KingWhite"]
+        this.piecesBoard["KingWhite"].isAtive=true
+        draw.push(this.drawByChequeMateImpossibility())
+        this.chessBoard["ref15"]=this.piecesBoard["Bishop-RightWhite"]
+        this.piecesBoard["Bishop-RightWhite"].isAtive=true
+        draw.push(this.drawByChequeMateImpossibility())
+        this.chessBoard["ref68"]=this.piecesBoard["Bishop-LeftBlack"]
+        this.piecesBoard["Bishop-LeftBlack"].isAtive=true
+        draw.push(this.drawByChequeMateImpossibility())
+
+        if(draw.includes(true)){
+            this.statusDrawn.drawn=true
+        }
+    }
 }
