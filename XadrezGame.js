@@ -72,8 +72,8 @@ export default class createGame {
     
         //Cor peças
         this.colorPieceBoard= {
-            top:"White",
-            bottom:"Black"
+            top:"Black",
+            bottom:"White"
         }
     
         // Controle de peça selecionada.
@@ -117,20 +117,20 @@ export default class createGame {
         }
         Object.keys(this.chessBoard).forEach((value)=>{this.chessBoard[value]=null})
 
-        for (let i in objStarBoard.starPiecesBlack) {
+        for (let i in objStarBoard.starPiecesWhite) {
             const refLine= (parseInt(i/8)+1)
             const refColumn= (i%8+1)
             const keyChess = `ref${refColumn}${refLine}`
             const keyPieces = objStarBoard.namePiece[i] + this.colorPieceBoard.bottom 
-            this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.bottom,objStarBoard.starPiecesBlack[i],keyChess,objStarBoard.functionPieces[i])
+            this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.bottom,objStarBoard.starPiecesWhite[i],keyChess,objStarBoard.functionPieces[i])
             this.chessBoard[keyChess]= this.piecesBoard[keyPieces]
         }
-        for (let i in objStarBoard.starPiecesWhite) {
+        for (let i in objStarBoard.starPiecesBlack) {
             const refColumn= (i%8+1)
             const refLine= (8 - parseInt(i/8))
             const keyChess = `ref${refColumn}${refLine}`
             const keyPieces = objStarBoard.namePiece[i]+this.colorPieceBoard.top
-            this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.top,objStarBoard.starPiecesWhite[i],keyChess, objStarBoard.functionPieces[i])
+            this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.top,objStarBoard.starPiecesBlack[i],keyChess, objStarBoard.functionPieces[i])
             this.chessBoard[keyChess]= this.piecesBoard[keyPieces]
         }
 
@@ -138,7 +138,7 @@ export default class createGame {
             name:null,
             refId:null,
             refMovements:[],
-            color:this.colorPieceBoard.top //Cor Branca começam.
+            color:this.colorPieceBoard.bottom //Cor Branca começam.
         }
         
         this.capturePiece={}
