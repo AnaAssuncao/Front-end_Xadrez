@@ -181,16 +181,15 @@ export default function viewScreen(chessBoard){
     }
 
     this.playHitory={
-        addPlay(playHitory){
+        addPlay(number){
             const history = document.querySelector("#information__history")
             const play = document.createElement("div")
             play.classList.add("history__play")
-            play.id = "history__play-" + playHitory.number
-            this.addNumber(play,playHitory.number)
-            this.addImgPiece(play,playHitory.imgPieces)
-            this.addLastRefId(play,playHitory.lastRefId)
-            this.addNewRefId(play,playHitory.newRefId)
-            this.addPieceCaptured(play,playHitory.imgPieceCaptured)
+            play.id = "history__play-" + number
+            const numberPlay= document.createElement("div")
+            numberPlay.classList.add("play__number")
+            numberPlay.innerHTML=number + "."
+            play.appendChild(numberPlay)
             history.appendChild(play)
         },
         removeLine(number){
@@ -198,48 +197,33 @@ export default function viewScreen(chessBoard){
             const line = document.querySelector("#"+id)
             line.remove()
         },
-        addNumber(play,number){
-            const numberPlay= document.createElement("div")
-            numberPlay.classList.add("play__number")
-            numberPlay.innerHTML=number + "."
-            play.appendChild(numberPlay)
+        addRefId(refId,number,position){
+            const play = document.querySelector("#history__play-" + number)
+            const refIdPiece = document.createElement("div")
+            refIdPiece.classList.add("play__refIdPiece")
+            refIdPiece.innerHTML =(position==="last")? refId + " ->":refId
+            play.appendChild(refIdPiece)
+            
         },
-        addLastRefId(play,arrayRefId){
-            arrayRefId.forEach((refId)=>{
-                const refIdPiece = document.createElement("div")
-                refIdPiece.classList.add("play__refIdPiece")
-                refIdPiece.innerHTML = refId + " ->"
-                play.appendChild(refIdPiece)
-            })
+        addImgPiece(img,number){
+            const play = document.querySelector("#history__play-" + number)
+            const imgPiece = document.createElement("img")
+            imgPiece.src=`${img}.png`
+            imgPiece.classList.add("play__img")
+            play.appendChild(imgPiece) 
+
         },
-        addImgPiece(play,arrayImgs){
-            arrayImgs.forEach((img)=>{
-                const imgPiece = document.createElement("img")
-                imgPiece.src=`${img}.png`
-                imgPiece.classList.add("play__img")
-                play.appendChild(imgPiece) 
-            })
-        },
-        addNewRefId(play,arrayRefId){
-            arrayRefId.forEach((refId)=>{
-                const refIdPiece = document.createElement("div")
-                refIdPiece.classList.add("play__refIdPiece")
-                refIdPiece.innerHTML = refId
-                play.appendChild(refIdPiece)
-            })
-        },
-        addPieceCaptured(play,img){
+        addPieceCaptured(img,number){
+            const play = document.querySelector("#history__play-" + number)
+            const imgPiece = document.createElement("img")
             if(img){
-                const imgPiece = document.createElement("img")
                 imgPiece.src=`${img}.png`
                 imgPiece.classList.add("play__img")
-                play.appendChild(imgPiece)
             }
             else{
-                const imgPiece = document.createElement("div")
                 imgPiece.innerHTML=" "
-                play.appendChild(imgPiece)
-            }
+            }  
+            play.appendChild(imgPiece)     
         },
         clearPlays(){
             clearOptionsInput("#information__history")

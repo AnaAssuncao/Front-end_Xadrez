@@ -29,6 +29,7 @@ function starGame(){
     view.capturePiece.colorBottom([])
     updateInput()
     updateInformationGame() 
+    game.testDraw()
 }
 
 function updateInput (){
@@ -187,31 +188,21 @@ function changePiecePromotion(imgPieceSelect){
     game.updatePiecePromotion(namePieceSelect)
     view.piecesPromotion.clearPiecePromotion()
     view.chessBoard.renderBoard(game.chessBoard)
-        updateDeadPiece()
-        updateInput()
-        updateInformationGame()
-        updatePlaysHistory()
+    updateDeadPiece()
+    updateInput()
+    updateInformationGame()
+    updatePlaysHistory()
 }
 
 function updatePlaysHistory(){
-    const play = {
-       number: (numberPlays+1),
-       lastRefId: [],
-       imgPieces: [],
-       newRefId: [],
-       imgPieceCaptured: null
-    }
+    const number = numberPlays+1
+    view.playHitory.addPlay(number) 
     game.playHistory[numberPlays].piecesPlayed.forEach((piece,ind)=>{
-        if(game.playHistory[numberPlays].typeMoviment==="piecePromotion" && ind===1){
-            //add na view promoção peça
-        }
-        else{
-            play.lastRefId.push(refIdToCoordinate(piece.position))
-            play.imgPieces.push(piece.img)
-            play.newRefId.push(refIdToCoordinate(game.playHistory[numberPlays].newRefId[ind]))
-        }
+        view.playHitory.addImgPiece(piece.img,number)
+        view.playHitory.addRefId(refIdToCoordinate(piece.position),number,"last")
+        view.playHitory.addRefId(refIdToCoordinate(game.playHistory[numberPlays].newRefId[ind]),number,"new")
+        const imgPieceCaptured = (game.playHistory[numberPlays].pieceCaptured && ind!==1)?game.playHistory[numberPlays].pieceCaptured.img:null
+        view.playHitory.addPieceCaptured(imgPieceCaptured,number)
     })
-    play.imgPieceCaptured = (game.playHistory[numberPlays].pieceCaptured)?game.playHistory[numberPlays].pieceCaptured.img:null
-    view.playHitory.addPlay(play)   
     numberPlays++
 }
