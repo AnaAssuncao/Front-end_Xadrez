@@ -190,7 +190,7 @@ export default function viewScreen(chessBoard){
             this.addImgPiece(play,playHitory.imgPieces)
             this.addLastRefId(play,playHitory.lastRefId)
             this.addNewRefId(play,playHitory.newRefId)
-            this.addPieceCaptured(play,playHitory.imgPieceDeleted)
+            this.addPieceCaptured(play,playHitory.imgPieceCaptured)
             history.appendChild(play)
         },
         removeLine(number){
@@ -208,7 +208,7 @@ export default function viewScreen(chessBoard){
             arrayRefId.forEach((refId)=>{
                 const refIdPiece = document.createElement("div")
                 refIdPiece.classList.add("play__refIdPiece")
-                refIdPiece.innerHTML = refId + "->"
+                refIdPiece.innerHTML = refId + " ->"
                 play.appendChild(refIdPiece)
             })
         },

@@ -365,26 +365,26 @@ export default class createGame {
 
     updateHistory(arrayPiece,typeMoviment){
         const moviment={
-            pieceInitial:[],
-            pieceDeleted:null,
+            piecesPlayed:[],
+            pieceCaptured:null,
             newRefId:[],
             typeMoviment:null
         }
         arrayPiece.forEach(piece=> {
             if(this.piecesBoard[piece.fullName]){
-                moviment.pieceInitial.push({__proto__:this,
+                moviment.piecesPlayed.push({__proto__:this,
                     ...this.piecesBoard[piece.fullName]})   
                 if(this.chessBoard[piece.refId]!==null){
-                    moviment.pieceDeleted={__proto__:this,
+                    moviment.pieceCaptured={__proto__:this,
                         ...this.piecesBoard[this.chessBoard[piece.refId].fullName]}
                 }
                 if(typeMoviment==="enPassant"){
-                    moviment.pieceDeleted={__proto__:this,
+                    moviment.pieceCaptured={__proto__:this,
                         ...this.piecesBoard[this.specialMoviment.enPassant.pawnPossibleCapture.fullName]}
                 }
             }
             else if(typeMoviment==="piecePromotion" ){
-                moviment.pieceInitial.push({__proto__:this,
+                moviment.piecesPlayed.push({__proto__:this,
                      ...this.piecesPromotion.newPiece})
             }
             moviment.newRefId.push(piece.refId)
@@ -699,7 +699,7 @@ export default class createGame {
                 this.piecesBoard[namePiece]=pieceInitial
             }
         })
-        this.playHistory.pop()  
+        this.playHistory.pop()   
     }
 
     verifyRoque(color){
@@ -764,8 +764,8 @@ export default class createGame {
         this.specialMoviment.enPassant.isPossible=false
         if(this.playHistory.length>0){
             const lastMoviment=this.playHistory.length-1
-            if(this.playHistory[lastMoviment].pieceInitial.length===1){
-                const lastPieceMove=this.playHistory[lastMoviment].pieceInitial[0]
+            if(this.playHistory[lastMoviment].piecesPlayed.length===1){
+                const lastPieceMove=this.playHistory[lastMoviment].piecesPlayed[0]
                 if(lastPieceMove.name.includes("Pawn") && lastPieceMove.qtMovements===0){
                     const directionLastPawn =(lastPieceMove.color==this.colorPieceBoard.bottom)?1:-1
                     const positionLastPawn= this.refIdToArray(lastPieceMove.position)
@@ -918,12 +918,12 @@ export default class createGame {
         if(qtPlays>=6 && this.statusCheckKing.check===true){
             const lastPlay=this.playHistory[qtPlays]
             const penultimatePlay=this.playHistory[qtPlays-1]
-            if(lastPlay.pieceInitial[0].fullName.includes("King")||penultimatePlay.pieceInitial[0].fullName.includes("King")){
+            if(lastPlay.piecesPlayed[0].fullName.includes("King")||penultimatePlay.piecesPlayed[0].fullName.includes("King")){
                 const conditions={
-                    play1:lastPlay.pieceInitial[0]===this.playHistory[qtPlays-2].pieceInitial[0],
-                    play2:penultimatePlay.pieceInitial[0]===this.playHistory[qtPlays-3].pieceInitial[0],
-                    play3:lastPlay.pieceInitial[0]===this.playHistory[qtPlays-4].pieceInitial[0] && lastPlay.newRefId[0]===this.playHistory[qtPlays-4].newRefId[0],
-                    play4:penultimatePlay.pieceInitial[0]===this.playHistory[qtPlays-5].pieceInitial[0] && penultimatePlay.newRefId[0]===this.playHistory[qtPlays-5].newRefId[0]
+                    play1:lastPlay.piecesPlayed[0]===this.playHistory[qtPlays-2].piecesPlayed[0],
+                    play2:penultimatePlay.piecesPlayed[0]===this.playHistory[qtPlays-3].piecesPlayed[0],
+                    play3:lastPlay.piecesPlayed[0]===this.playHistory[qtPlays-4].piecesPlayed[0] && lastPlay.newRefId[0]===this.playHistory[qtPlays-4].newRefId[0],
+                    play4:penultimatePlay.piecesPlayed[0]===this.playHistory[qtPlays-5].piecesPlayed[0] && penultimatePlay.newRefId[0]===this.playHistory[qtPlays-5].newRefId[0]
                 }
                     if(conditions.play1===true && conditions.play2===true && conditions.play3===true && conditions.play4===true){
                         return true
@@ -938,7 +938,7 @@ export default class createGame {
         const qtPlays = this.playHistory.length
         if(qtPlays>=numberPlays){
             for(let i = 1;(i<=numberPlays);i++){
-                if(this.playHistory[qtPlays-i].pieceInitial[0].name.includes("Pawn") || this.playHistory[qtPlays-i].pieceDeleted){
+                if(this.playHistory[qtPlays-i].piecesPlayed[0].name.includes("Pawn") || this.playHistory[qtPlays-i].pieceCaptured){
                     return false
                 }
             }
@@ -985,13 +985,13 @@ export default class createGame {
         draw.push(this.drawByDrowning("Black"))
 
         this.statusCheckKing.check=true
-        this.playHistory=[{pieceInitial:[this.piecesBoard["KingBlack"]], pieceDeleted:null, newRefId:["ref25"], typeMoviment:null},
-        {pieceInitial:[this.piecesBoard["QueenWhite"]], pieceDeleted:null, newRefId:["ref45"], typeMoviment:null},
-        {pieceInitial:[this.piecesBoard["KingBlack"]], pieceDeleted:null, newRefId:["ref24"], typeMoviment:null},
-        {pieceInitial:[this.piecesBoard["QueenWhite"]], pieceDeleted:null, newRefId:["ref44"], typeMoviment:null},
-        {pieceInitial:[this.piecesBoard["KingBlack"]], pieceDeleted:null, newRefId:["ref25"], typeMoviment:null},
-        {pieceInitial:[this.piecesBoard["QueenWhite"]], pieceDeleted:null, newRefId:["ref45"], typeMoviment:null},
-        {pieceInitial:[this.piecesBoard["KingBlack"]], pieceDeleted:null, newRefId:["ref24"], typeMoviment:null}]
+        this.playHistory=[{pieceInitial:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMoviment:null},
+        {pieceInitial:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMoviment:null},
+        {pieceInitial:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMoviment:null},
+        {pieceInitial:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref44"], typeMoviment:null},
+        {pieceInitial:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMoviment:null},
+        {pieceInitial:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMoviment:null},
+        {pieceInitial:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMoviment:null}]
 
         draw.push(this.drawByReplayThreeMoves())
         draw.push(this.drawByFiftyRules(7))

@@ -116,7 +116,7 @@ function updateChessBoard(idSquare){
         })
             view.piecesPromotion.renderPiecePromotion(imgPromotion)
     }
-    if(game.pieceSelect.refId){
+    else if(game.pieceSelect.refId){
         view.chessBoard.highlighSquare.addHighlightSquares(game.pieceSelect)
         view.pieceInput.selectNamePiece(game.pieceSelect.name)
         view.coordinateInput.clearAll()
@@ -158,7 +158,6 @@ function updateInformationGame(){
     else if(game.statusCheckKing.endGame===true){
         view.informationGame.addinformation(`Vitória das Peças ${game.statusCheckKing.winColor}`)
     }
-
     else if(game.statusCheckKing.check===true){
         view.informationGame.addinformation(`Xeque no King ${game.pieceSelect.color}`)
     }
@@ -191,6 +190,7 @@ function changePiecePromotion(imgPieceSelect){
         updateDeadPiece()
         updateInput()
         updateInformationGame()
+        updatePlaysHistory()
 }
 
 function updatePlaysHistory(){
@@ -199,14 +199,19 @@ function updatePlaysHistory(){
        lastRefId: [],
        imgPieces: [],
        newRefId: [],
-       imgPieceDeleted: null
+       imgPieceCaptured: null
     }
-    game.playHistory[numberPlays].pieceInitial.forEach((piece,ind)=>{
-        play.lastRefId.push(refIdToCoordinate(piece.position))
-        play.imgPieces.push(piece.img)
-        play.newRefId.push(refIdToCoordinate(game.playHistory[numberPlays].newRefId[ind]))
+    game.playHistory[numberPlays].piecesPlayed.forEach((piece,ind)=>{
+        if(game.playHistory[numberPlays].typeMoviment==="piecePromotion" && ind===1){
+            //add na view promoção peça
+        }
+        else{
+            play.lastRefId.push(refIdToCoordinate(piece.position))
+            play.imgPieces.push(piece.img)
+            play.newRefId.push(refIdToCoordinate(game.playHistory[numberPlays].newRefId[ind]))
+        }
     })
-    play.imgPieceDeleted = (game.playHistory[numberPlays].pieceDeleted)?game.playHistory[numberPlays].pieceDeleted.img:null
+    play.imgPieceCaptured = (game.playHistory[numberPlays].pieceCaptured)?game.playHistory[numberPlays].pieceCaptured.img:null
     view.playHitory.addPlay(play)   
     numberPlays++
 }
