@@ -29,7 +29,6 @@ function starGame(){
     view.capturePiece.colorBottom([])
     updateInput()
     updateInformationGame() 
-    game.testDraw()
 }
 
 function updateInput (){

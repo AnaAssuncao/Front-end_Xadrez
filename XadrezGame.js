@@ -678,25 +678,25 @@ export default class createGame {
 
     returnChangePiece(){
         const lastMoviment= this.playHistory.length-1
-        this.playHistory[lastMoviment].pieceInitial.forEach((pieceInitial,ind)=>{
+        this.playHistory[lastMoviment].piecesPlayed.forEach((piecesPlayed,ind)=>{
             if(this.playHistory[lastMoviment].typeMoviment==="piecePromotion" && ind===1){
-                const namePiece=pieceInitial.fullName
+                const namePiece=piecesPlayed.fullName
                 delete this.piecesBoard[namePiece]
             }
             else{
                 const position = this.playHistory[lastMoviment].newRefId[ind]
                 this.chessBoard[position]=null
-                if(this.playHistory[lastMoviment].pieceDeleted!==null){
-                    const namePieceDeleted =this.playHistory[lastMoviment].pieceDeleted.fullName
-                    this.piecesBoard[namePieceDeleted]=this.playHistory[lastMoviment].pieceDeleted
-                    const positionPieceDeleted=this.playHistory[lastMoviment].pieceDeleted.position
-                    this.chessBoard[positionPieceDeleted]=this.playHistory[lastMoviment].pieceDeleted   
-                    delete this.capturePiece[namePieceDeleted]
+                if(this.playHistory[lastMoviment].pieceCaptured!==null){
+                    const namePieceCaptured =this.playHistory[lastMoviment].pieceCaptured.fullName
+                    this.piecesBoard[namePieceCaptured]=this.playHistory[lastMoviment].pieceCaptured
+                    const positionPieceCaptured=this.playHistory[lastMoviment].pieceCaptured.position
+                    this.chessBoard[positionPieceCaptured]=this.playHistory[lastMoviment].pieceCaptured   
+                    delete this.capturePiece[namePieceCaptured]
                 }
-                const positionBack = pieceInitial.position
-                const namePiece=pieceInitial.fullName
-                this.chessBoard[positionBack]=pieceInitial
-                this.piecesBoard[namePiece]=pieceInitial
+                const positionBack = piecesPlayed.position
+                const namePiece=piecesPlayed.fullName
+                this.chessBoard[positionBack]=piecesPlayed
+                this.piecesBoard[namePiece]=piecesPlayed
             }
         })
         this.playHistory.pop()   
@@ -985,13 +985,13 @@ export default class createGame {
         draw.push(this.drawByDrowning("Black"))
 
         this.statusCheckKing.check=true
-        this.playHistory=[{pieceInitial:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMoviment:null},
-        {pieceInitial:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMoviment:null},
-        {pieceInitial:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMoviment:null},
-        {pieceInitial:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref44"], typeMoviment:null},
-        {pieceInitial:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMoviment:null},
-        {pieceInitial:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMoviment:null},
-        {pieceInitial:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMoviment:null}]
+        this.playHistory=[{piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMoviment:null},
+        {piecesPlayed:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMoviment:null},
+        {piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMoviment:null},
+        {piecesPlayed:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref44"], typeMoviment:null},
+        {piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMoviment:null},
+        {piecesPlayed:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMoviment:null},
+        {piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMoviment:null}]
 
         draw.push(this.drawByReplayThreeMoves())
         draw.push(this.drawByFiftyRules(7))
