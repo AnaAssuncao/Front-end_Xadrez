@@ -85,7 +85,7 @@ export default class createGame {
 
         this.specialMoviment={}
 
-        this.piecesPromotion=
+        this.piecesPromotion={}
     
         this.starObjGame()
     }
@@ -305,8 +305,7 @@ export default class createGame {
         }
     }
 
-        // Movimentação peça no tabuleiro
-    
+        // Movimentação peça no tabuleiro   
     verifyMove(informationPieceSelect){
         if(!this.verifySpecialMoviment(informationPieceSelect)){
             this.updateHistory([informationPieceSelect],"movimentPiece")
@@ -805,7 +804,7 @@ export default class createGame {
 
     createNewPiece(namePieceSelect){
         const chancePiece={
-            names:["tower","knight","bishop","queen"],
+            names:["Tower","Knight","Bishop","Queen"],
             functionPieces:[this.possibleMovimentTower,this.possibleMovimentKnight,this.possibleMovimentBishop,this.possibleMovimentQueen],
             Black:{
                 fullName:["towerBlack","knightBlack","bishopBlack","queenBlack"],
@@ -952,5 +951,26 @@ export default class createGame {
         if(draw.includes(true)){
             this.statusDrawn.drawn=true
         }
+    }
+    getStatusGame(){
+        return {
+            endGame:this.statusCheckKing.endGame,
+            check: this.statusCheckKing.check,
+            checkMate: this.statusCheckKing.checkMate,
+            draw: this.statusDrawn.draw,
+            playerWin:this.statusCheckKing.winColor
+        }
+    }
+    getCurrentBoard(){
+        return this.chessBoard
+    }
+    getHistoryMoves(){
+        return this.playHistory
+    }
+    getCapturedPieces(){
+        return this.capturePiece
+    }
+    getPiecePromotion(){
+        return this.piecesPromotion
     }
 }

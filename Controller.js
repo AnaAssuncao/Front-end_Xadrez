@@ -1,10 +1,13 @@
 import createGame from "./XadrezGame.js"
 import viewScreen from "./ViewScreen.js"
-
+let chessBoard = {}
+let playHistory = {}
+let statusGame = {}
+let capturePieces = {}
 const game = new createGame()
-const view = new viewScreen(game.chessBoard) //mudar p view
+updateObjs()
+const view = new viewScreen(chessBoard) //mudar p view
 let numberPlays = 0
-
 const pieceSelect= {
     name:null,
     refId:null,
@@ -25,21 +28,21 @@ function starGame(){
     if(pieceSelect.refId){
         view.chessBoard.highlighSquare.clearHighlightSquares(pieceSelect)
     }
-    if(game.specialMoviment.pawnPromotion.changePiece){
-        view.piecesPromotion.clearPiecePromotion()
-    }
-    if(game.playHistory.length>0){
+    if(playHistory.length>0){
         view.playHitory.clearPlays()
         numberPlays = 0
     }
+    pieceSelect.name=null
+    pieceSelect.refId=null           
+    pieceSelect.refMovements=[]
+    pieceSelect.color="White"
     game.starObjGame()
-    view.chessBoard.renderBoard(game.chessBoard)
+    view.chessBoard.renderBoard(chessBoard)
     view.capturePiece.colorTop([])
     view.capturePiece.colorBottom([])
     updateInput()
     updateInformationGame() 
-
-    pieceSelect.refId=null
+    updateObjs()
 }
 
 function updateInput (){
@@ -55,11 +58,14 @@ function updateInput (){
 function updatePieceInput (){
     view.pieceInput.clearAll()
     const arrayPieces = []
-    for(let piece in game.piecesBoard){ 
-        if(game.piecesBoard[piece].color==pieceSelect.color && game.piecesBoard[piece].isAtive==true){
-            arrayPieces.push(game.piecesBoard[piece].name)
+    for(let refId in chessBoard){ 
+        if(chessBoard[refId]!==null){
+            if(chessBoard[refId].color==pieceSelect.color && chessBoard[refId].isAtive==true){
+                arrayPieces.push(chessBoard[refId].name)
+            }
         }
     }
+    arrayPieces.sort()
     view.pieceInput.addPiecesName(arrayPieces)
     return arrayPieces
 }
@@ -122,8 +128,9 @@ function updateChessBoard(idSquare){
         view.chessBoard.highlighSquare.clearHighlightSquares(pieceSelect)
     }  //limpar destaque movimentos da peça anterior
     const movimentValid = verifyPieceSelect(idSquare) 
-    if(game.piecesPromotion.chancePiece){
-        const imgPromotion=game.piecesPromotion[game.piecesPromotion.color].imgs.map((nameImg)=>{
+    const piecesPromotion = game.getPiecePromotion()
+    if(piecesPromotion.chancePiece){
+        const imgPromotion=piecesPromotion[piecesPromotion.color].imgs.map((nameImg)=>{
             return `img/${nameImg}`
         })
             view.piecesPromotion.renderPiecePromotion(imgPromotion)
@@ -137,7 +144,8 @@ function updateChessBoard(idSquare){
         view.coordinateInput.selectNamePiece("")  
     }
     else if(movimentValid){
-        view.chessBoard.renderBoard(game.chessBoard)
+        view.chessBoard.renderBoard(chessBoard)
+        updateObjs()
         updateDeadPiece()
         updateInput()
         updateInformationGame()
@@ -148,12 +156,12 @@ function updateChessBoard(idSquare){
 function updateDeadPiece(){
     const top=[]
     const bottom=[]
-    for(let capturePiece in game.capturePiece){ 
-        if(colorPieceBoard.top==game.capturePiece[capturePiece].color){
-            top.push(game.capturePiece[capturePiece].img)
+    for(let capturePiece in capturePieces){ 
+        if(colorPieceBoard.top==capturePieces[capturePiece].color){
+            top.push(capturePieces[capturePiece].img)
         }
         else{
-            bottom.push(game.capturePiece[capturePiece].img)
+            bottom.push(capturePieces[capturePiece].img)
         }
     }
     view.capturePiece.colorTop(top) //renderColorTop nome
@@ -161,16 +169,16 @@ function updateDeadPiece(){
 }
 
 function updateInformationGame(){
-    if(game.statusDrawn.drawn){
+    if(statusGame.drawn){
         view.informationGame.addinformation("Jogo empatado")
     }
-    else if(game.statusCheckKing.checkMate===true){
-        view.informationGame.addinformation(`Xeque-Mate no King ${pieceSelect.color} - Vitória das Peças ${game.statusCheckKing.winColor}`)
+    else if(statusGame.checkMate===true){
+        view.informationGame.addinformation(`Xeque-Mate no King ${pieceSelect.color} - Vitória das Peças ${statusGame.playerWin}`)
     }
-    else if(game.statusCheckKing.endGame===true){
-        view.informationGame.addinformation(`Vitória das Peças ${game.statusCheckKing.winColor}`)
+    else if(statusGame.endGame===true){
+        view.informationGame.addinformation(`Vitória das Peças ${statusGame.playerWin}`)
     }
-    else if(game.statusCheckKing.check===true){
+    else if(statusGame.check===true){
         view.informationGame.addinformation(`Xeque no King ${pieceSelect.color}`)
     }
     else{
@@ -180,15 +188,16 @@ function updateInformationGame(){
 }
 
 function backPreviousMove(){
-    if(game.playHistory.length>0){
+    if(playHistory.length>0){
         if(pieceSelect.refId){
             view.chessBoard.highlighSquare.clearHighlightSquares(pieceSelect)
         }
-        view.playHitory.removeLine(game.playHistory.length)
+        view.playHitory.removeLine(playHistory.length)
         game.returnMoviment()
         pieceSelect.color=(colorPieceBoard.top===pieceSelect.color)?colorPieceBoard.bottom:colorPieceBoard.top
         numberPlays--
-        view.chessBoard.renderBoard(game.chessBoard)
+        view.chessBoard.renderBoard(chessBoard)
+        updateObjs()
         updateDeadPiece()
         updateInput()
         updateInformationGame()
@@ -199,7 +208,8 @@ function changePiecePromotion(imgPieceSelect){
     const namePieceSelect = imgPieceSelect.replace("img/","")
     game.updatePiecePromotion(namePieceSelect)
     view.piecesPromotion.clearPiecePromotion()
-    view.chessBoard.renderBoard(game.chessBoard)
+    view.chessBoard.renderBoard(chessBoard)
+    updateObjs()
     updateDeadPiece()
     updateInput()
     updateInformationGame()
@@ -209,11 +219,11 @@ function changePiecePromotion(imgPieceSelect){
 function updatePlaysHistory(){
     const number = numberPlays+1
     view.playHitory.addPlay(number) 
-    game.playHistory[numberPlays].piecesPlayed.forEach((piece,ind)=>{
+    playHistory[numberPlays].piecesPlayed.forEach((piece,ind)=>{
         view.playHitory.addImgPiece(piece.img,number)
         view.playHitory.addRefId(refIdToCoordinate(piece.position),number,"last")
-        view.playHitory.addRefId(refIdToCoordinate(game.playHistory[numberPlays].newRefId[ind]),number,"new")
-        const imgPieceCaptured = (game.playHistory[numberPlays].pieceCaptured && ind!==1)?game.playHistory[numberPlays].pieceCaptured.img:null
+        view.playHitory.addRefId(refIdToCoordinate(playHistory[numberPlays].newRefId[ind]),number,"new")
+        const imgPieceCaptured = (playHistory[numberPlays].pieceCaptured && ind!==1)?playHistory[numberPlays].pieceCaptured.img:null
         view.playHitory.addPieceCaptured(imgPieceCaptured,number)
     })
     numberPlays++
@@ -221,19 +231,19 @@ function updatePlaysHistory(){
 
 function verifyPieceSelect(idSquare){
     let movimentValid = false;
-    if((pieceSelect.refId!==idSquare) && (game.chessBoard[idSquare]!==null) && pieceSelect.color===game.chessBoard[idSquare].color)
+    if((pieceSelect.refId!==idSquare) && (chessBoard[idSquare]!==null) && pieceSelect.color===chessBoard[idSquare].color)
     {
         pieceSelect.refId=idSquare
-        pieceSelect.name=game.chessBoard[idSquare].name
-        pieceSelect.refMovements =  game.chessBoard[idSquare].refMovements
+        pieceSelect.name=chessBoard[idSquare].name
+        pieceSelect.refMovements =  chessBoard[idSquare].refMovements
 
     }
     else{
         movimentValid = checkMovements(idSquare)
         if(movimentValid){
             const informationPieceSelect={
-                color: game.chessBoard[pieceSelect.refId].color,
-                fullName:  game.chessBoard[pieceSelect.refId].fullName,
+                color: chessBoard[pieceSelect.refId].color,
+                fullName:  chessBoard[pieceSelect.refId].fullName,
                 refId:idSquare
             }   
             game.verifyMove(informationPieceSelect)    
@@ -259,13 +269,20 @@ function checkMovements(idSquare){
 
 function movementsPiece (fullNamePiece){
     let position = null
-    for(let refId in game.chessBoard){
-        if(game.chessBoard[refId]!==null){
-            if(game.chessBoard[refId].fullName===fullNamePiece){
+    for(let refId in chessBoard){
+        if(chessBoard[refId]!==null){
+            if(chessBoard[refId].fullName===fullNamePiece){
                 position = refId
                 break
             }
         }
     }
     return position
+}
+
+function updateObjs(){
+    chessBoard = game.getCurrentBoard()
+    playHistory = game.getHistoryMoves()
+    statusGame = game.getStatusGame()
+    capturePieces = game.getCapturedPieces()
 }
