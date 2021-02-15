@@ -72,13 +72,11 @@ export default class createGame {
     
         //Cor peças
         this.colorPieceBoard= {
+            play:null,
             top:"Black",
             bottom:"White"
         }
     
-        // Controle de peça selecionada.
-        this.pieceSelect= {}
-
         this.capturePiece={}
 
         this.statusCheckKing={}
@@ -132,13 +130,6 @@ export default class createGame {
             const keyPieces = objStarBoard.namePiece[i]+this.colorPieceBoard.top
             this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.top,objStarBoard.starPiecesBlack[i],keyChess, objStarBoard.functionPieces[i])
             this.chessBoard[keyChess]= this.piecesBoard[keyPieces]
-        }
-
-        this.pieceSelect= {
-            name:null,
-            refId:null,
-            refMovements:[],
-            color:this.colorPieceBoard.bottom //Cor Branca começam.
         }
         
         this.capturePiece={}
@@ -315,32 +306,6 @@ export default class createGame {
     }
 
         // Movimentação peça no tabuleiro
-    verifyPieceSelect(idSquare){
-        let movimentValid = false;
-        if((this.pieceSelect.refId!==idSquare) && (this.chessBoard[idSquare]!==null) && this.checkColor(idSquare))
-        {
-            this.pieceSelect.refId=idSquare
-            this.pieceSelect.name=this.chessBoard[idSquare].name
-            this.pieceSelect.refMovements =  this.chessBoard[idSquare].refMovements
-
-        }
-        else{
-            movimentValid = this.checkMovements(idSquare)
-            if(movimentValid){
-                const informationPieceSelect={
-                    color: this.chessBoard[this.pieceSelect.refId].color,
-                    fullName:  this.chessBoard[this.pieceSelect.refId].fullName,
-                    refId:idSquare
-                }   
-                this.verifyMove(informationPieceSelect)    
-                this.pieceSelect.color=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top  
-            }
-            this.pieceSelect.name=null
-            this.pieceSelect.refId=null           
-            this.pieceSelect.refMovements=[]
-        } 
-        return movimentValid
-    }
     
     verifyMove(informationPieceSelect){
         if(!this.verifySpecialMoviment(informationPieceSelect)){
@@ -400,7 +365,7 @@ export default class createGame {
         this.capturePiece[nameCapturePiece]=this.piecesBoard[nameCapturePiece]
         if(nameCapturePiece==="KingWhite"||nameCapturePiece==="KingBlack"){
             this.statusCheckKing.endGame=true
-            this.statusCheckKing.winColor=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top 
+            this.statusCheckKing.winColor=(this.colorPieceBoard.top===this.colorPieceBoard.play)?this.colorPieceBoard.bottom:this.colorPieceBoard.top 
         }
     }
 
@@ -435,6 +400,7 @@ export default class createGame {
         this.updateSpecialMoves(nextColor)
         this.updateFilterMoviment(nextColor)
         this.verifyDrawGame(nextColor)
+        this.colorPieceBoard.play=nextColor
     }
 
     updateSpecialMoves(nextColor){
@@ -453,30 +419,6 @@ export default class createGame {
                 this.assistantPiece(color)
             }
         }
-    }
-
-    checkColor(idSquare){
-        let colorMoviment = true
-        if(this.pieceSelect.color!==this.chessBoard[idSquare].color){
-            colorMoviment = false
-        }
-        return colorMoviment
-    }
-
-    checkMovements(idSquare){
-        let movedThePiece =false
-        for(let ref of this.pieceSelect.refMovements){
-            if(ref===idSquare){
-                movedThePiece=true
-                break
-            }
-        }
-        return movedThePiece
-    }
-
-    movementsPiece(piece){
-        const refId=this.piecesBoard[piece].position
-        this.verifyPieceSelect(refId)
     }
 
 // Check and ChekMate
@@ -668,12 +610,8 @@ export default class createGame {
 
     returnMoviment(){
         this.returnChangePiece( )
-        this.updateStatusGame(this.pieceSelect.color)
-        this.pieceSelect.name=null
-        this.pieceSelect.refId=null           
-        this.pieceSelect.refMovements=[]
-        this.pieceSelect.color=(this.colorPieceBoard.top===this.pieceSelect.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
-
+        this.updateStatusGame(this.colorPieceBoard.play)
+        this.colorPieceBoard.play=(this.colorPieceBoard.top===this.colorPieceBoard.play)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
     }
 
     returnChangePiece(){
