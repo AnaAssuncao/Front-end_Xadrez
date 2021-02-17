@@ -4,7 +4,9 @@ let chessBoard = {}
 let playHistory = {}
 let statusGame = {}
 let capturePieces = {}
-const game = new createGame()
+let specialMovements = {}
+const colorInitial = "White"
+const game = new createGame(colorInitial)
 updateObjs()
 const view = new viewScreen(chessBoard) //mudar p view
 let numberPlays = 0
@@ -12,7 +14,7 @@ const pieceSelect= {
     name:null,
     refId:null,
     refMovements:[],
-    color:"White" //Cor Branca começam.
+    color:colorInitial 
 }
 
 const colorPieceBoard= game.colorPieceBoard
@@ -35,7 +37,7 @@ function starGame(){
     pieceSelect.name=null
     pieceSelect.refId=null           
     pieceSelect.refMovements=[]
-    pieceSelect.color="White"
+    pieceSelect.color=colorInitial
     game.starObjGame()
     view.chessBoard.renderBoard(chessBoard)
     view.capturePiece.colorTop([])
@@ -128,9 +130,8 @@ function updateChessBoard(idSquare){
         view.chessBoard.highlighSquare.clearHighlightSquares(pieceSelect)
     }  //limpar destaque movimentos da peça anterior
     const movimentValid = verifyPieceSelect(idSquare) 
-    const piecesPromotion = game.getPiecePromotion()
-    if(piecesPromotion.chancePiece){
-        const imgPromotion=piecesPromotion[piecesPromotion.color].imgs.map((nameImg)=>{
+    if(specialMovements.piecesPromotion.chancePiece){
+        const imgPromotion=specialMovements.piecesPromotion[specialMovements.piecesPromotion.color].imgs.map((nameImg)=>{
             return `img/${nameImg}`
         })
             view.piecesPromotion.renderPiecePromotion(imgPromotion)
@@ -285,4 +286,5 @@ function updateObjs(){
     playHistory = game.getHistoryMoves()
     statusGame = game.getStatusGame()
     capturePieces = game.getCapturedPieces()
+    specialMovements = game.getPiecePromotion()
 }

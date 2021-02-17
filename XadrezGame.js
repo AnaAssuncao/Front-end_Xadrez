@@ -1,5 +1,5 @@
 export default class createGame {
-    constructor(){
+    constructor(color){
         this.chessBoard= {
             ref11:null,
             ref12:null,
@@ -72,7 +72,7 @@ export default class createGame {
     
         //Cor peças
         this.colorPieceBoard= {
-            play:null,
+            play:color,
             top:"Black",
             bottom:"White"
         }
@@ -305,7 +305,7 @@ export default class createGame {
         }
     }
 
-        // Movimentação peça no tabuleiro   
+        // Movimentação peça no tabuleiro  
     verifyMove(informationPieceSelect){
         if(!this.verifySpecialMoviment(informationPieceSelect)){
             this.updateHistory([informationPieceSelect],"movimentPiece")
@@ -800,6 +800,7 @@ export default class createGame {
         this.piecesBoard[this.piecesPromotion.newPiece.fullName]=this.piecesPromotion.newPiece
         this.chessBoard[this.piecesPromotion.newPiece.position]=this.piecesPromotion.newPiece
         this.piecesBoard[this.piecesPromotion.promotedPawn.fullName].isAtive=false
+        this.piecesBoard[this.piecesPromotion.promotedPawn.fullName].refMovements=[]
     }
 
     createNewPiece(namePieceSelect){
@@ -971,6 +972,8 @@ export default class createGame {
         return this.capturePiece
     }
     getPiecePromotion(){
-        return this.piecesPromotion
+        return {
+            possibleSpecialMove:this.specialMoviment,
+            piecesPromotion:this.piecesPromotion}
     }
 }
