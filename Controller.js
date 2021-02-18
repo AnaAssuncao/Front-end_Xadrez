@@ -1,24 +1,28 @@
 import createGame from "./XadrezGame.js"
 import ViewController from "./ViewController.js"
 
-const game = new createGame()
-const chessBoard = game.getCurrentBoard()
-const viewController = new ViewController (chessBoard)
-let numberPlays = 0
-
 const player={
-    top:null,
-    bottom:null,
+    top:"Black",
+    bottom:"White",
     play:null
 }
+
+const game = new createGame(player)
+const startboard = game.getCurrentBoard()
+
+const viewController = new ViewController (startboard)
+let numberPlays = 0
 
 viewController.startGameOffline.subscribe(start)
 
 function start(){
     player.play="White"
     game.starObjGame(player.play)
-    const chessBoard = game.getCurrentBoard()
-    viewController.updateBoard(chessBoard,player.play)
+    const board ={
+        chessBoard:game.getCurrentBoard(),
+        playerMove:player.play
+    } 
+    viewController.updateBoard(board)
 
     // if(playHistory.length>0){
     //     view.playHitory.clearPlays()

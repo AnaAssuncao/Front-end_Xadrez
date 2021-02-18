@@ -1,5 +1,5 @@
 export default class createGame {
-    constructor(color){
+    constructor(player){
         this.chessBoard= {
             ref11:null,
             ref12:null,
@@ -71,12 +71,8 @@ export default class createGame {
         this.piecesBoard= {}
     
         //Cor peças
-        this.colorPieceBoard= {
-            play:color,
-            top:"Black",
-            bottom:"White"
-        }
-    
+        this.colorPieceBoard= player
+        
         this.capturePiece={}
 
         this.statusCheckKing={}
