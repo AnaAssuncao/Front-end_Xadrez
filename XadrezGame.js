@@ -72,7 +72,7 @@ export default class createGame {
     
         //Cor peças
         this.colorPieceBoard= player
-        
+
         this.capturePiece={}
 
         this.statusCheckKing={}
@@ -97,7 +97,8 @@ export default class createGame {
             isAtive:isAtive,
             functionPiece:functionPiece,
             qtMovements:0,
-            refMovements:[]
+            refMovements:[],
+            possibleSpecialMovements:[]
         } 
     }  
 
@@ -297,6 +298,7 @@ export default class createGame {
             if(this.piecesBoard[piece].isAtive===true)
                 {
                     this.piecesBoard[piece].refMovements=this.piecesBoard[piece].functionPiece()
+                    this.piecesBoard[piece].possibleSpecialMovements=[]
                 }
         }
     }
@@ -660,7 +662,6 @@ export default class createGame {
                     this.possibleMovimentRoque(TowerRight,"ref68",nameKing)
                 }
             }
-            this.piecesBoard[nameKing].refMovements.push()
         }
     }
 
@@ -671,13 +672,18 @@ export default class createGame {
             ref61:"ref71",
             ref68:"ref78"
         }   
-        const possiblemoviment = towerMoviment[refMovimentTower] 
+        const possibleMoviment = towerMoviment[refMovimentTower] 
         this.specialMoviment.roque.isPossible=true
         this.specialMoviment.roque.king=this.piecesBoard[nameKing]
-        this.specialMoviment.roque.positionKingToRoque.push(possiblemoviment)
+        this.specialMoviment.roque.positionKingToRoque.push(possibleMoviment)
         this.specialMoviment.roque.tower.push(this.piecesBoard[tower])
         this.specialMoviment.roque.newMovimentTower.push(refMovimentTower)
-        this.piecesBoard[nameKing].refMovements.push(possiblemoviment)
+        this.piecesBoard[nameKing].refMovements.push(possibleMoviment)
+        const specialRoque = {
+            positions:possibleMoviment,
+            type:"roque"
+        }
+        this.piecesBoard[nameKing].possibleSpecialMovements.push(specialRoque)
     }
 
     movimentRoque(informationPieceToMove){
@@ -730,6 +736,11 @@ export default class createGame {
         this.specialMoviment.enPassant.pawnPossibleCapture=this.piecesBoard[lastPieceMove.fullName]
         this.specialMoviment.enPassant.refIdAtack=newMovimentPiece
         this.specialMoviment.enPassant.pawnInAtack=this.chessBoard[positionInAtack]
+        const specialEnPassant = {
+            positions: this.specialMoviment.enPassant.refIdAtack,
+            type:"enPassant"
+        }
+        this.chessBoard[positionInAtack].possibleSpecialMovements.push(specialEnPassant)
     }
 
     movimentEnPassant(informationPieceToMove){
@@ -750,17 +761,31 @@ export default class createGame {
                 const positionPawn = this.refIdToArray(this.piecesBoard[piece].position)
                 const directionPawn =(this.piecesBoard[piece].color==this.colorPieceBoard.bottom)?1:-1
                 if((positionPawn[1]+directionPawn)===8 ||(positionPawn[1]+directionPawn)===1){
-                    this.possiblePawnPromotion(piece)
+                    this.possiblePawnPromotion(piece,positionPawn)
                 }
             }
         }
     }
     
-    possiblePawnPromotion(piece){
+    possiblePawnPromotion(piece,positionPawn){
         if(!this.specialMoviment.pawnPromotion.namesPawn.includes(piece)){
             this.specialMoviment.pawnPromotion.isPossible=true
             this.specialMoviment.pawnPromotion.piecesPawn.push(this.piecesBoard[piece])
             this.specialMoviment.pawnPromotion.namesPawn.push(piece)
+            const refId=[]
+            const squareLeft = `ref${positionPawn[0]-1}${positionPawn[1]+directionPawn}`
+            if(this.piecesBoard[piece].refMovements.includes(squareLeft)){
+                refId.push(squareLeft)
+            }
+            const squareRight = `ref${positionPawn[0]+1}${positionPawn[1]+directionPawn}`
+            if(this.piecesBoard[piece].refMovements.includes(squareRight)){
+                refId.push(squareRight)
+            }
+            const specialPawnPromotion = {
+                positions: refId,
+                type:"piecePromotion"
+            }
+            this.piecesBoard[piece].possibleSpecialMovements.push(specialPawnPromotion)
         }
     }
 
