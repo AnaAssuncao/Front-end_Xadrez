@@ -116,15 +116,21 @@ export default function viewController(startBoard){
         chess.informationBoard.imgPiecePromotion=board.imgPiecePromotion
     }
 
-    this.updateHistory=function(history,number){
-        view.playHitory.addPlay(number) 
-        history.plays[history.number].piecesPlayed.forEach((piece,ind)=>{
-            view.playHitory.addImgPiece(piece.img,number)
-            view.playHitory.addRefId(utilities.refIdToCoordinate(piece.position),number,"last")
-            view.playHitory.addRefId(utilities.refIdToCoordinate(history.plays[history.number].newRefId[ind]),number,"new")
-            const imgPieceCaptured = (history.plays[history.number].pieceCaptured && ind!==1)?history.plays[history.number].pieceCaptured.img:null
-            view.playHitory.addPieceCaptured(imgPieceCaptured,number)
-        })
+    this.updateHistory=function(history){
+        const number = history.plays.length
+        if(number===0){
+            view.playHitory.clearPlays()
+        }
+        else{
+            view.playHitory.addPlay(number) 
+            history.plays[history.numberPrevious].piecesPlayed.forEach((piece,ind)=>{
+                view.playHitory.addImgPiece(piece.img,number)
+                view.playHitory.addRefId(utilities.refIdToCoordinate(piece.position),number,"last")
+                view.playHitory.addRefId(utilities.refIdToCoordinate(history.plays[history.numberPrevious].newRefId[ind]),number,"new")
+                const imgPieceCaptured = (history.plays[history.numberPrevious].pieceCaptured && ind!==1)?history.plays[history.numberPrevious].pieceCaptured.img:null
+                view.playHitory.addPieceCaptured(imgPieceCaptured,number)
+            })
+        }
     }
 
     this.updateCapturedPieces=function(capturePieces, colorPlayer){

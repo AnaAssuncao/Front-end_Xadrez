@@ -18,9 +18,6 @@ viewController.movePiece.subscribe(movePiece)
 function start(){
     player.play="White"
     game.starObjGame(player.play)
-    if(playHistory.length>0){
-        numberPlays = 0
-    } 
     allUpdates()
 }
 
@@ -58,8 +55,19 @@ function updateInformationGame(){
     }      
 }
 
+function updatePlaysHistory(){
+    const playHistory = game.getHistoryMoves()
+    const history = {
+        plays:playHistory,
+        numberPrevious:numberPlays
+    }
+    viewController.updateHistory(history)
+    numberPlays=playHistory.length
+}
+
 function allUpdates(){
     updateBoard() 
     updateCapturedPiece()
     updateInformationGame()
+    updatePlaysHistory()
 }
