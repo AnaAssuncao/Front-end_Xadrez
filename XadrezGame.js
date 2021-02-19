@@ -975,6 +975,7 @@ export default class createGame {
     }
     getStatusGame(){
         return {
+            colorCheck:this.statusCheckKing.color,
             endGame:this.statusCheckKing.endGame,
             check: this.statusCheckKing.check,
             checkMate: this.statusCheckKing.checkMate,

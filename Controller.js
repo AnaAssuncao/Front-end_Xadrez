@@ -31,7 +31,6 @@ function movePiece(informationPieceSelect){
     if(specialMovements===false){
         const movement=game.verifyMove(informationPieceSelect) 
     }
-
     player.move=(player.top===player.move)?player.bottom:player.top
     allUpdates()   
 }
@@ -53,10 +52,10 @@ function updateBoard(){
 function updateInformationGame(){
     const statusGame = game.getStatusGame()
     if(statusGame.endGame===true){
-        viewController.endGame(statusGame)
+        viewController.endGame(statusGame,player.move)
     }
     else{
-        viewController.updateStatusGame(statusGame)
+        viewController.updateStatusGame(statusGame,player.move)
     }      
 }
 

@@ -152,15 +152,15 @@ export default function viewController(startBoard){
         view.capturePiece.colorBottom(bottom)
     }
 
-    this.updateStatusGame=function(statusGame){
+    this.updateStatusGame=function(statusGame,color){
         if(statusGame.drawn){
             view.informationGame.addinformation("Jogo empatado")
         }
         else if(statusGame.checkMate===true){
-            view.informationGame.addinformation(`Xeque-Mate no King ${chess.informationBoard.playerMove} - Vitória das Peças ${statusGame.playerWin}`)
+            view.informationGame.addinformation(`Xeque-Mate no King ${statusGame.colorCheck} - Vitória das Peças ${statusGame.playerWin}`)
         }
         else if(statusGame.check===true){
-            view.informationGame.addinformation(`Xeque no King ${chess.informationBoard.playerMove}`)
+            view.informationGame.addinformation(`Xeque no King ${statusGame.colorCheck}`)
         }
         else{
             view.informationGame.clearInformation()
@@ -192,13 +192,11 @@ export default function viewController(startBoard){
             } 
             const refId = utilities.coordinateToRefId(coordinate)
             const isMove=utilities.verifyMove(refId)
-            if(isMove){
-                chess.pieceSelect={
+            chess.pieceSelect={
                     position:null
                 }  
             }
         }   
-    }
 
     function updatePieceSelect(idSquare){   
         if(chess.pieceSelect.position){
@@ -211,6 +209,11 @@ export default function viewController(startBoard){
             view.pieceInput.selectNamePiece(chess.pieceSelect.name)
             updateInput.inputCoordinate()
         }
+        else if(chess.pieceSelect.position===idSquare){
+            chess.pieceSelect={
+                position:null
+            }  
+        }
         else if(chess.pieceSelect.position){
             if(chess.pieceSelect.refMovements.includes(idSquare)){
                 const isMove = utilities.verifyMove(idSquare) 
@@ -220,7 +223,6 @@ export default function viewController(startBoard){
                     }  
                 }
             }
-
         }
     }
 
