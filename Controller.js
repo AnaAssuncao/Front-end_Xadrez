@@ -18,18 +18,10 @@ viewController.movePiece.subscribe(movePiece)
 function start(){
     player.play="White"
     game.starObjGame(player.play)
-    const board ={
-        chessBoard:game.getCurrentBoard(),
-        playerMove:player.play
+    if(playHistory.length>0){
+        numberPlays = 0
     } 
-    viewController.updateBoard(board)
-
-    // if(playHistory.length>0){
-    //     view.playHitory.clearPlays()
-    //     numberPlays = 0
-    // } irformar no cv 
-
-    // update capturedPiece
+    allUpdates()
 }
 
 function movePiece(informationPieceSelect){
@@ -38,23 +30,36 @@ function movePiece(informationPieceSelect){
         informationPieceSelect.piecePromotion= informationPieceSelect.piecePromotion.replace("img/","")
         game.updatePiecePromotion(informationPieceSelect.piecePromotion)  
     }
+    allUpdates()
+    player.play=(player.top===informationPieceSelect.color)?player.bottom:player.top
+}
+
+function updateCapturedPiece(){
+    const capturedPieces = game.getCapturedPieces()
+    viewController.updateCapturedPieces(capturedPieces,player)
+}
+
+function updateBoard(){
     const board ={
         chessBoard:game.getCurrentBoard(),
         playerMove:player.play,
         imgPiecePromotion:game.getImgPiecePromotion(player.play)
     } 
     viewController.updateBoard(board) 
-    player.play=(player.top===informationPieceSelect.color)?player.bottom:player.top 
-}
-
-function updateCapturedPiece(){
-    const capturedPieces = game.getCapturedPieces()
-    viewController.updateCapturedPieces(capturePieces,player)
 }
 
 function updateInformationGame(){
     const statusGame = game.getStatusGame()
-    viewController.updateStatusGame(statusGame)
-       
+    if(statusGame.endGame===true){
+        viewController.endGame(statusGame)
+    }
+    else{
+        viewController.updateStatusGame(statusGame)
+    }      
 }
 
+function allUpdates(){
+    updateBoard() 
+    updateCapturedPiece()
+    updateInformationGame()
+}

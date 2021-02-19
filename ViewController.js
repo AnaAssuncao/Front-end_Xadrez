@@ -149,9 +149,6 @@ export default function viewController(startBoard){
         else if(statusGame.checkMate===true){
             view.informationGame.addinformation(`Xeque-Mate no King ${chess.informationBoard.playerMove} - Vitória das Peças ${statusGame.playerWin}`)
         }
-        else if(statusGame.endGame===true){
-            view.informationGame.addinformation(`Vitória das Peças ${statusGame.playerWin}`)
-        }
         else if(statusGame.check===true){
             view.informationGame.addinformation(`Xeque no King ${chess.informationBoard.playerMove}`)
         }
@@ -184,7 +181,7 @@ export default function viewController(startBoard){
                 view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             } 
             const refId = utilities.coordinateToRefId(coordinate)
-            utilities.verifyMove(refId)
+            const isMove=utilities.verifyMove(refId)
             if(isMove){
                 chess.pieceSelect={
                     position:null
