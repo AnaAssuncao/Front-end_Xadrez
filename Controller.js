@@ -14,7 +14,7 @@ const viewController = new ViewController (startboard)
 let numberPlays = 0
 
 viewController.startGameOffline.subscribe(start)
-
+viewController.movePiece.subscribe(movePiece)
 function start(){
     player.play="White"
     game.starObjGame(player.play)
@@ -30,6 +30,18 @@ function start(){
     // } irformar no cv 
 
     // update capturedPiece
+}
+
+function movePiece(informationPieceSelect){
+    // const namePieceSelect = imgPieceSelect.replace("img/","")
+    game.verifyMove(informationPieceSelect)    
+    const board ={
+        chessBoard:game.getCurrentBoard(),
+        playerMove:player.play,
+        imgPiecePromotion:game.getImgPiecePromotion(player.play)
+    } 
+    viewController.updateBoard(board) 
+    player.play=(player.top===informationPieceSelect.color)?player.bottom:player.top 
 }
 
 function updateCapturedPiece(){

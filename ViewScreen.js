@@ -105,7 +105,7 @@ export default function viewScreen(chessBoard){
         },
         highlighSquare:{
             clearHighlightSquares(piece){
-                const selectedSquare = document.getElementById(piece.refId)
+                const selectedSquare = document.getElementById(piece.position)
                 selectedSquare.classList.remove("move__piece--selected-l")
                 selectedSquare.classList.remove("move__piece--selected-d")
                 piece.refMovements.forEach((possibilitie)=>{
@@ -115,7 +115,7 @@ export default function viewScreen(chessBoard){
                 })
             },
             addHighlightSquares(piece){
-                const selectedSquare = document.getElementById(piece.refId)
+                const selectedSquare = document.getElementById(piece.position)
                 const classToAdd = selectedSquare.classList.contains("square__light")?"move__piece--selected-l":"move__piece--selected-d"
                 selectedSquare.classList.add(classToAdd)
                 piece.refMovements.forEach((possibilitie)=>{
@@ -259,9 +259,10 @@ export default function viewScreen(chessBoard){
             })
         },
         pieceInput(){          
+            const inputColor=document.querySelector("#select__color")
             const inputPiece= document.querySelector("#select__name")
             inputPiece.addEventListener("change", () =>{
-                notifyFunctions(functionToCallBack.pieceInput,inputPiece.value)
+                notifyFunctions(functionToCallBack.pieceInput,{piece:inputPiece.value,color:inputColor.value})
             })
         },
         buttomMove(){

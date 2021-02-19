@@ -2,13 +2,16 @@ import viewScreen from "./ViewScreen.js"
 
 export default function viewController(startBoard){
     const view = new viewScreen(startBoard)
-    const pieceSelect= {
-        name:null,
-        refId:null,
-        refMovements:[],
-        color:null
+    const chess= {
+        pieceSelect:{
+            position:null
+        },
+        informationBoard:{
+            chessBoard:null,
+            playerMove:null,
+            imgPiecePromotion:null
+        }
     }
-
     const updateInput ={
         allInput:(board)=>{
             updateInput.inputColor(board)
@@ -39,10 +42,11 @@ export default function viewController(startBoard){
             // Limpar coordenadas e destaque dos movimentos com a mudança de peça
             view.coordinateInput.clearAll()
             // renderizar novas coordenadas e destaque dos movimentos
-            const arrayCoordinates = utilities.coordinateSelection(pieceSelect.refMovements)
-            view.coordinateInput.addPiecesCoordinates(arrayCoordinates)
+            if(chess.pieceSelect.position){
+                const arrayCoordinates = utilities.coordinateSelection(chess.pieceSelect.refMovements)
+                view.coordinateInput.addPiecesCoordinates(arrayCoordinates)
+            }
             view.coordinateInput.selectNamePiece("")
-            // view.chessBoard.highlighSquare.addHighlightSquares(pieceSelect)
         }
     }
 
@@ -95,18 +99,21 @@ export default function viewController(startBoard){
     }
 
     view.buttomStart.subscribeToClick(this.startGameOffline.startGame)
-    view.pieceInput.subscribeToChange(updateInput.inputCoordinate)
-    // view.buttomMove.subscribeToClick(requiredPieceMovement)
-    // view.chessBoard.subscribeToClick(updateChessBoard)
+    view.pieceInput.subscribeToChange(selectPieceInput)
+    view.buttomMove.subscribeToClick(movePieceByButtom)
+    view.chessBoard.subscribeToClick(updatePieceSelect)
     // view.buttomBackMoviment.subscribeToClick(backPreviousMove)
     // view.piecesPromotion.subscribeToClick(changePiecePromotion)
 
     this.updateBoard=function(board){
-        if(pieceSelect.refId){
-            view.chessBoard.highlighSquare.clearHighlightSquares(pieceSelect)
+        if(chess.pieceSelect.position){
+            view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
         }
         view.chessBoard.renderBoard(board.chessBoard)
         updateInput.allInput(board)
+        chess.informationBoard.chessBoard = board.chessBoard
+        chess.informationBoard.playerMove = board.playerMove
+        chess.informationBoard.imgPiecePromotion=board.imgPiecePromotion
     }
 
     this.updateHistory=function(history,number){
@@ -140,13 +147,13 @@ export default function viewController(startBoard){
             view.informationGame.addinformation("Jogo empatado")
         }
         else if(statusGame.checkMate===true){
-            view.informationGame.addinformation(`Xeque-Mate no King ${board.playerMove} - Vitória das Peças ${statusGame.playerWin}`)
+            view.informationGame.addinformation(`Xeque-Mate no King ${chess.informationBoard.playerMove} - Vitória das Peças ${statusGame.playerWin}`)
         }
         else if(statusGame.endGame===true){
             view.informationGame.addinformation(`Vitória das Peças ${statusGame.playerWin}`)
         }
         else if(statusGame.check===true){
-            view.informationGame.addinformation(`Xeque no King ${board.playerMove}`)
+            view.informationGame.addinformation(`Xeque no King ${chess.informationBoard.playerMove}`)
         }
         else{
             view.informationGame.clearInformation()
@@ -164,6 +171,53 @@ export default function viewController(startBoard){
         // demonstrar a cor vitoriosa
     }
 
+    function selectPieceInput({piece,color}){
+        const refPiece=`${piece}${color}`
+        const refId=utilities.discoverRefId(refPiece)
+        updatePieceSelect(refId)
+    }
+    
+    function movePieceByButtom(coordinate){
+        // Modificando o nome da ref ID pela função coordinateToRefId
+        if(coordinate!=="Sem Movimento" && coordinate!==""){
+            if(chess.pieceSelect.position){
+                view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
+            } 
+            const refId = utilities.coordinateToRefId(coordinate)
+            movePiece(refId)
+        }   
+    }
+
+    function updatePieceSelect(idSquare){   
+        if(chess.pieceSelect.position){
+            view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
+        } 
+        if((chess.pieceSelect.position!==idSquare) && (chess.informationBoard.chessBoard[idSquare]!==null) && chess.informationBoard.playerMove===chess.informationBoard.chessBoard[idSquare].color)
+        {
+            chess.pieceSelect=chess.informationBoard.chessBoard[idSquare]
+            view.chessBoard.highlighSquare.addHighlightSquares(chess.pieceSelect)
+            view.pieceInput.selectNamePiece(chess.pieceSelect.name)
+            updateInput.inputCoordinate()
+        }
+        else if(chess.pieceSelect.position){
+            if(chess.pieceSelect.refMovements.includes(idSquare)){
+                movePiece(idSquare) 
+            }
+            chess.pieceSelect={
+                position:null
+            }  
+        }
+    }
+
+    function movePiece(idSquare){
+        const informationPieceSelect={
+            color: chess.pieceSelect.color,
+            fullName:  chess.pieceSelect.fullName,
+            refId:idSquare
+        }   
+        notifyFunctions(functionToCallBack.movePiece,informationPieceSelect)
+    }
+    
     const utilities ={
         refIdToCoordinate: function (coordenadasClass){
             let result = coordenadasClass.substring(3)
@@ -172,6 +226,12 @@ export default function viewController(startBoard){
             return result
             // const conversao = [["1","A"],["2","B"],["3","C"],["4","D"],["5","E"],["6","F"],["7","G"],["8","H"]]
         },
+        coordinateToRefId: function (coordenadasClass){
+            //Edita as coordenadas para renderização, trocando a letra pelo numero usando .charCodeAt
+           let result = "ref"+(String.fromCharCode(coordenadasClass.charCodeAt(0)-16))+coordenadasClass.charAt(1)
+            return result
+        }
+        ,
         coordinateSelection (positions){
             const arrayCoordinates = []
             if(positions.length==0){
@@ -186,15 +246,25 @@ export default function viewController(startBoard){
             return arrayCoordinates
         },
         clearAllBoard: function(){
-            if(pieceSelect.refId){
-                view.chessBoard.highlighSquare.clearHighlightSquares(pieceSelect)
+            if(chess.pieceSelect.position){
+                view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             }
-            pieceSelect.name=null
-            pieceSelect.refId=null           
-            pieceSelect.refMovements=[]
-            pieceSelect.color=null 
+            chess.pieceSelect={
+                position:null
+            }  
+        },
+        discoverRefId: function(fullNamePiece){
+            let position = null
+            for(let refId in chess.informationBoard.chessBoard){
+                if(chess.informationBoard.chessBoard[refId]!==null){
+                    if(chess.informationBoard.chessBoard[refId].fullName===fullNamePiece){
+                        position = refId
+                        break
+                    }
+                }
+            }
+            return position
         }
     }
-
 }
 

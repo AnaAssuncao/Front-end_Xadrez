@@ -761,13 +761,13 @@ export default class createGame {
                 const positionPawn = this.refIdToArray(this.piecesBoard[piece].position)
                 const directionPawn =(this.piecesBoard[piece].color==this.colorPieceBoard.bottom)?1:-1
                 if((positionPawn[1]+directionPawn)===8 ||(positionPawn[1]+directionPawn)===1){
-                    this.possiblePawnPromotion(piece,positionPawn)
+                    this.possiblePawnPromotion(piece,positionPawn,directionPawn)
                 }
             }
         }
     }
     
-    possiblePawnPromotion(piece,positionPawn){
+    possiblePawnPromotion(piece,positionPawn,directionPawn){
         if(!this.specialMoviment.pawnPromotion.namesPawn.includes(piece)){
             this.specialMoviment.pawnPromotion.isPossible=true
             this.specialMoviment.pawnPromotion.piecesPawn.push(this.piecesBoard[piece])
@@ -992,9 +992,8 @@ export default class createGame {
     getCapturedPieces(){
         return this.capturePiece
     }
-    getPiecePromotion(){
-        return {
-            possibleSpecialMove:this.specialMoviment,
-            piecesPromotion:this.piecesPromotion}
+    getImgPiecePromotion(color){
+        return this.piecesPromotion[color].imgs
+           
     }
 }
