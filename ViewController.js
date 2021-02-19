@@ -103,7 +103,7 @@ export default function viewController(startBoard){
     view.buttomMove.subscribeToClick(movePieceByButtom)
     view.chessBoard.subscribeToClick(updatePieceSelect)
     // view.buttomBackMoviment.subscribeToClick(backPreviousMove)
-    // view.piecesPromotion.subscribeToClick(changePiecePromotion)
+    view.piecesPromotion.subscribeToClick(changePiecePromotion)
 
     this.updateBoard=function(board){
         if(chess.pieceSelect.position){
@@ -184,7 +184,12 @@ export default function viewController(startBoard){
                 view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             } 
             const refId = utilities.coordinateToRefId(coordinate)
-            movePiece(refId)
+            utilities.verifyMove(refId)
+            if(isMove){
+                chess.pieceSelect={
+                    position:null
+                }  
+            }
         }   
     }
 
@@ -201,19 +206,28 @@ export default function viewController(startBoard){
         }
         else if(chess.pieceSelect.position){
             if(chess.pieceSelect.refMovements.includes(idSquare)){
-                movePiece(idSquare) 
+                const isMove = utilities.verifyMove(idSquare) 
+                if(isMove){
+                    chess.pieceSelect={
+                        position:null
+                    }  
+                }
             }
-            chess.pieceSelect={
-                position:null
-            }  
+
         }
     }
 
-    function movePiece(idSquare){
+    function changePiecePromotion(imgPieceSelect){
+        view.piecesPromotion.clearPiecePromotion()
+        movePiece(chess.pieceSelect.newMovements,imgPieceSelect)
+    }
+
+    function movePiece(idSquare,piece=null){
         const informationPieceSelect={
             color: chess.pieceSelect.color,
             fullName:  chess.pieceSelect.fullName,
-            refId:idSquare
+            refId:idSquare,
+            piecePromotion:piece
         }   
         notifyFunctions(functionToCallBack.movePiece,informationPieceSelect)
     }
@@ -264,7 +278,30 @@ export default function viewController(startBoard){
                 }
             }
             return position
-        }
+        },
+        verifyMove(idSquare){
+            const specialMovement = utilities.verifyPiecePromotion(idSquare)
+            let isMove = false
+            if(!specialMovement){
+                movePiece(idSquare)
+                isMove = true
+            }
+            return isMove
+        },
+        verifyPiecePromotion: function(idSquare){
+            let specialMovement = false
+            chess.pieceSelect.possibleSpecialMovements.forEach((specialMovements)=>{
+                if(specialMovements.type==="piecePromotion"){
+                    chess.pieceSelect.newMovements=idSquare
+                    const imgPromotion=chess.informationBoard.imgPiecePromotion.map((nameImg)=>{
+                        return `img/${nameImg}`
+                    })
+                    view.piecesPromotion.renderPiecePromotion(imgPromotion)
+                    specialMovement = true
+                }
+            })
+            return specialMovement 
+        }    
     }
 }
 

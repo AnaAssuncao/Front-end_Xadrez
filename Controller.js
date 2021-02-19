@@ -33,8 +33,11 @@ function start(){
 }
 
 function movePiece(informationPieceSelect){
-    // const namePieceSelect = imgPieceSelect.replace("img/","")
-    game.verifyMove(informationPieceSelect)    
+    game.verifyMove(informationPieceSelect) 
+    if(informationPieceSelect.piecePromotion){
+        informationPieceSelect.piecePromotion= informationPieceSelect.piecePromotion.replace("img/","")
+        game.updatePiecePromotion(informationPieceSelect.piecePromotion)  
+    }
     const board ={
         chessBoard:game.getCurrentBoard(),
         playerMove:player.play,
