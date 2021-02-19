@@ -79,7 +79,7 @@ export default class createGame {
 
         this.statusDrawn={}
 
-        this.specialMoviment={}
+        this.specialMovement={}
 
         this.piecesPromotion={}
     
@@ -107,8 +107,8 @@ export default class createGame {
             starPiecesBlack:["towerBlack","knightBlack","bishopBlack","queenBlack","kingBlack","bishopBlack","knightBlack","towerBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack"],
             starPiecesWhite:["towerWhite","knightWhite","bishopWhite","queenWhite","kingWhite","bishopWhite","knightWhite","towerWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite"],
             namePiece:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
-             functionPieces:[this.possibleMovimentTower,this.possibleMovimentKnight,this.possibleMovimentBishop,this.possibleMovimentQueen,this.possibleMovimentKing, this.possibleMovimentBishop,this.possibleMovimentKnight, this.possibleMovimentTower,
-                this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn, this.possibleMovimentPawn]
+             functionPieces:[this.possibleMovementTower,this.possibleMovementKnight,this.possibleMovementBishop,this.possibleMovementQueen,this.possibleMovementKing, this.possibleMovementBishop,this.possibleMovementKnight, this.possibleMovementTower,
+                this.possibleMovementPawn, this.possibleMovementPawn, this.possibleMovementPawn, this.possibleMovementPawn, this.possibleMovementPawn, this.possibleMovementPawn, this.possibleMovementPawn, this.possibleMovementPawn]
         }
         Object.keys(this.chessBoard).forEach((value)=>{this.chessBoard[value]=null})
 
@@ -144,13 +144,13 @@ export default class createGame {
 
         this.playHistory=[]
 
-        this.specialMoviment={
+        this.specialMovement={
             roque:{
                 isPossible:false,
                 king:null,
                 positionKingToRoque:[],
                 tower:[],
-                newMovimentTower:[],
+                newMovementTower:[],
             },
             enPassant:{
                 isPossible:false,
@@ -181,65 +181,65 @@ export default class createGame {
         this.statusDrawn.drawn=false
     }
 
-    possibleMovimentTower(chessBoard=this.chessBoard){//fazer isso
+    possibleMovementTower(chessBoard=this.chessBoard){//fazer isso
         const column=Number(this.position.charAt(3))
         const line=Number(this.position.charAt(4))
         const direction = [[0,1],[0,-1],[1,0],[-1,0]]
         
-        const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,8,chessBoard))
-            return newPossibilitiesMoviment
+        const movement= direction.reduce((possibleMovement,direction)=>{
+            const newPossibilitiesMovement =  possibleMovement.concat(this.checkRegularMovement(direction, column, line, this.color,8,chessBoard))
+            return newPossibilitiesMovement
         },[])
         
-        return moviment
+        return movement
     }
-    possibleMovimentKnight(chessBoard=this.chessBoard){
+    possibleMovementKnight(chessBoard=this.chessBoard){
         const column=Number(this.position.charAt(3))
         const line=Number(this.position.charAt(4))
         const direction = [[2,1],[2,-1],[-2,-1],[-2,1],[1,2],[-1,2],[-1,-2],[1,-2]]
     
-        const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,1,chessBoard))
-            return newPossibilitiesMoviment
+        const movement= direction.reduce((possibleMovement,direction)=>{
+            const newPossibilitiesMovement =  possibleMovement.concat(this.checkRegularMovement(direction, column, line, this.color,1,chessBoard))
+            return newPossibilitiesMovement
         },[])
 
-        return moviment
+        return movement
     }
-    possibleMovimentBishop(chessBoard=this.chessBoard){
+    possibleMovementBishop(chessBoard=this.chessBoard){
         const column=Number(this.position.charAt(3))
         const line=Number(this.position.charAt(4))
         const direction=[[1,1],[1,-1],[-1,-1],[-1,1]]
     
-        const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,8,chessBoard))
-            return newPossibilitiesMoviment
+        const movement= direction.reduce((possibleMovement,direction)=>{
+            const newPossibilitiesMovement =  possibleMovement.concat(this.checkRegularMovement(direction, column, line, this.color,8,chessBoard))
+            return newPossibilitiesMovement
         },[])
 
-        return moviment
+        return movement
     }
-    possibleMovimentQueen(chessBoard=this.chessBoard){
+    possibleMovementQueen(chessBoard=this.chessBoard){
         const column=Number(this.position.charAt(3))
         const line=Number(this.position.charAt(4))
         const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]]
         const a = this.chessBoard
-        const moviment= direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment =  possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,8,chessBoard))
-            return newPossibilitiesMoviment
+        const movement= direction.reduce((possibleMovement,direction)=>{
+            const newPossibilitiesMovement =  possibleMovement.concat(this.checkRegularMovement(direction, column, line, this.color,8,chessBoard))
+            return newPossibilitiesMovement
         },[])
 
-        return moviment
+        return movement
     }
-    possibleMovimentKing(chessBoard=this.chessBoard){
+    possibleMovementKing(chessBoard=this.chessBoard){
         const column=Number(this.position.charAt(3))
         const line=Number(this.position.charAt(4))
         const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]]
     
-        let moviment = direction.reduce((possibleMoviment,direction)=>{
-            const newPossibilitiesMoviment = possibleMoviment.concat(this.checkRegularMovement(direction, column, line, this.color,1,chessBoard))
-            return newPossibilitiesMoviment
+        let movement = direction.reduce((possibleMovement,direction)=>{
+            const newPossibilitiesMovement = possibleMovement.concat(this.checkRegularMovement(direction, column, line, this.color,1,chessBoard))
+            return newPossibilitiesMovement
         },[])
 
-        return moviment
+        return movement
     }
 
     checkRegularMovement([column,line], columnPosition, linePosition, color, maximumPaces,chessBoard){
@@ -264,21 +264,21 @@ export default class createGame {
         return possibleDirection
     }
 
-    possibleMovimentPawn(chessBoard=this.chessBoard){
+    possibleMovementPawn(chessBoard=this.chessBoard){
         const column=Number(this.position.charAt(3))
         const line =Number(this.position.charAt(4))
-        const movimentPawn = []
+        const movementPawn = []
         const direction=[(this.color==this.colorPieceBoard.bottom)?1:-1]
     //Peças Pretas aumentam a linha e as Brancas diminuem.
     if((line+Number(direction))>=1 && (line+Number(direction))<=8){
         const possibleMovement=`ref${column}${(line+Number(direction))}`
         if(chessBoard[possibleMovement]===null){
-            movimentPawn.push(possibleMovement)
+            movementPawn.push(possibleMovement)
 
             if(this.qtMovements==0){
                 const fistMovement=`ref${column}${(line+direction*2)}`
                 if(chessBoard[fistMovement]===null){
-                    movimentPawn.push(fistMovement)
+                    movementPawn.push(fistMovement)
                 }
             }
         }    
@@ -286,11 +286,11 @@ export default class createGame {
         const possibleEat=[`ref${column-1}${(line+Number(direction))}`,`ref${column+1}${(line+Number(direction))}`]
         possibleEat.forEach((position)=>{
             if((chessBoard[position]!==null) && (chessBoard[position]!==undefined) && (chessBoard[position].color!==this.color)){
-                movimentPawn.push(position)
+                movementPawn.push(position)
             }
         })   
     }
-        return movimentPawn
+        return movementPawn
     }
 
     checkMovementsAllPieces(){
@@ -305,12 +305,12 @@ export default class createGame {
 
         // Movimentação peça no tabuleiro  
     verifyMove(informationPieceSelect){
-        if(!this.verifySpecialMoviment(informationPieceSelect)){
+        const piece = this.piecesBoard[informationPieceSelect.fullName]
+        if(!this.verifySpecialMovement(informationPieceSelect)){
             this.updateHistory([informationPieceSelect],"movimentPiece")
             this.changePiecePosition(informationPieceSelect)
         }
- 
-        this.updateStatusGame(informationPieceSelect.color)
+        this.updateStatusGame(piece.color)
     }
 
     changePiecePosition(informationPiecetoMove){
@@ -325,35 +325,35 @@ export default class createGame {
         this.chessBoard[newRefId]= movePiece
     }
 
-    updateHistory(arrayPiece,typeMoviment){
-        const moviment={
+    updateHistory(arrayPiece,typeMovement){
+        const movement={
             piecesPlayed:[],
             pieceCaptured:null,
             newRefId:[],
-            typeMoviment:null
+            typeMovement:null
         }
         arrayPiece.forEach(piece=> {
             if(this.piecesBoard[piece.fullName]){
-                moviment.piecesPlayed.push({__proto__:this,
+                movement.piecesPlayed.push({__proto__:this,
                     ...this.piecesBoard[piece.fullName]})   
                 if(this.chessBoard[piece.refId]!==null){
-                    moviment.pieceCaptured={__proto__:this,
+                    movement.pieceCaptured={__proto__:this,
                         ...this.piecesBoard[this.chessBoard[piece.refId].fullName]}
                 }
-                if(typeMoviment==="enPassant"){
-                    moviment.pieceCaptured={__proto__:this,
-                        ...this.piecesBoard[this.specialMoviment.enPassant.pawnPossibleCapture.fullName]}
+                if(typeMovement==="enPassant"){
+                    movement.pieceCaptured={__proto__:this,
+                        ...this.piecesBoard[this.specialMovement.enPassant.pawnPossibleCapture.fullName]}
                 }
             }
-            else if(typeMoviment==="piecePromotion" ){
-                moviment.piecesPlayed.push({__proto__:this,
+            else if(typeMovement==="piecePromotion" ){
+                movement.piecesPlayed.push({__proto__:this,
                      ...this.piecesPromotion.newPiece})
             }
-            moviment.newRefId.push(piece.refId)
+            movement.newRefId.push(piece.refId)
         })
-        moviment.typeMoviment=typeMoviment
+        movement.typeMovement=typeMovement
      
-        this.playHistory.push(moviment)
+        this.playHistory.push(movement)
     }
 
     eatPiece(nameCapturePiece){
@@ -366,23 +366,23 @@ export default class createGame {
         }
     }
 
-    verifySpecialMoviment(informationPieceToMove){
-        if(this.specialMoviment.roque.isPossible===true){
-            if(informationPieceToMove.fullName===this.specialMoviment.roque.king.fullName){
-                if(this.specialMoviment.roque.positionKingToRoque.includes(informationPieceToMove.refId)){
-                    this.movimentRoque(informationPieceToMove)
+    verifySpecialMovement(informationPieceToMove){
+        if(this.specialMovement.roque.isPossible===true){
+            if(informationPieceToMove.fullName===this.specialMovement.roque.king.fullName){
+                if(this.specialMovement.roque.positionKingToRoque.includes(informationPieceToMove.refId)){
+                    this.movementRoque(informationPieceToMove)
                     return true
                 } 
             }
         }
-        if(this.specialMoviment.enPassant.isPossible===true){
-            if(this.specialMoviment.enPassant.refIdAtack===informationPieceToMove.refId){
-                this.movimentEnPassant(informationPieceToMove)
+        if(this.specialMovement.enPassant.isPossible===true){
+            if(this.specialMovement.enPassant.refIdAtack===informationPieceToMove.refId){
+                this.movementEnPassant(informationPieceToMove)
                 return true
             }
         }
-        if(this.specialMoviment.pawnPromotion.isPossible===true){
-            if(this.specialMoviment.pawnPromotion.namesPawn.includes(informationPieceToMove.fullName)){
+        if(this.specialMovement.pawnPromotion.isPossible===true){
+            if(this.specialMovement.pawnPromotion.namesPawn.includes(informationPieceToMove.fullName)){
                 this.informPawnPromotion(informationPieceToMove)
                 return true
             }
@@ -395,7 +395,7 @@ export default class createGame {
         const nextColor=(this.colorPieceBoard.top===colorMove)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
         this.updateStatusCheck(nextColor)
         this.updateSpecialMoves(nextColor)
-        this.updateFilterMoviment(nextColor)
+        this.updateFilterMovement(nextColor)
         this.verifyDrawGame(nextColor)
         this.colorPieceBoard.play=nextColor
     }
@@ -406,7 +406,7 @@ export default class createGame {
         this.verifyPawnPromotion(nextColor)
     }
 
-    updateFilterMoviment(color){
+    updateFilterMovement(color){
         if(this.statusCheckKing.checkMate===false){
             if(this.statusCheckKing.check===true ){
                 this.checkAssistance(color)
@@ -479,10 +479,10 @@ export default class createGame {
             for(let refId in this.chessBoard){
                 if(this.chessBoard[refId]!==null && this.chessBoard[refId].color===colorKing && this.chessBoard[refId].name!=="King")
                 {
-                    for(let refMovimentFriend of this.chessBoard[refId].refMovements){
+                    for(let refMovementFriend of this.chessBoard[refId].refMovements){
                         for(let refIdPossiblePath of this.statusCheckKing.refIdPathsToCheck){
-                            if(refMovimentFriend===refIdPossiblePath){
-                                const fakeChessBoard = this.newFakeChessBoard(refId,refMovimentFriend)
+                            if(refMovementFriend===refIdPossiblePath){
+                                const fakeChessBoard = this.newFakeChessBoard(refId,refMovementFriend)
                                 if(this.verifyCheckInFakeBoard(fakeChessBoard,positionInitialKing,colorKing) === false){//se na nova refId do rei não tem check, não há checkMate
                                     return false 
                                 }
@@ -515,12 +515,12 @@ export default class createGame {
         let direction = [0,0]
 
         // descobrir direção
-        for(let refMovimentKing of this.piecesBoard[nameKing].refMovements){
-           for(let refMovimentAdversary of this.piecesBoard[checks.pieceCheck].refMovements){
-               if(refMovimentKing===refMovimentAdversary){
-                    refIdPossiblePaths.push(refMovimentAdversary)
+        for(let refMovementKing of this.piecesBoard[nameKing].refMovements){
+           for(let refMovementAdversary of this.piecesBoard[checks.pieceCheck].refMovements){
+               if(refMovementKing===refMovementAdversary){
+                    refIdPossiblePaths.push(refMovementAdversary)
                     const arrayPositionKing=this.refIdToArray(positionInitialKing)
-                    const arrayPositionAdversary=this.refIdToArray(refMovimentAdversary)
+                    const arrayPositionAdversary=this.refIdToArray(refMovementAdversary)
                     direction = [(arrayPositionAdversary[0]-arrayPositionKing[0]),(arrayPositionAdversary[1]-arrayPositionKing[1])]
                     break
                 }
@@ -531,8 +531,8 @@ export default class createGame {
         while(currentRefid){
             const refId = this.refIdToArray(currentRefid)
             const possibleRefid = `ref${refId[0]+direction[0]}${refId[1]+direction[1]}`
-            for(let refMovimentAdversary of this.piecesBoard[checks.pieceCheck].refMovements){
-                if(possibleRefid===refMovimentAdversary){
+            for(let refMovementAdversary of this.piecesBoard[checks.pieceCheck].refMovements){
+                if(possibleRefid===refMovementAdversary){
                     refIdPossiblePaths.push(possibleRefid)
                     currentRefid = possibleRefid
                     break
@@ -557,12 +557,12 @@ export default class createGame {
     assistantKing(assistantPieceColor){
         const nameKing =`King${assistantPieceColor}` 
         const positionInitialKing = this.piecesBoard[nameKing].position
-        this.piecesBoard[nameKing].refMovements=this.piecesBoard[nameKing].refMovements.reduce((possibleMovimentKing,refIdKing)=>{
+        this.piecesBoard[nameKing].refMovements=this.piecesBoard[nameKing].refMovements.reduce((possibleMovementKing,refIdKing)=>{
                const fakeChessBoard = this.newFakeChessBoard(positionInitialKing,refIdKing)
                if(this.verifyCheckInFakeBoard(fakeChessBoard,refIdKing,assistantPieceColor) === false){
-                    possibleMovimentKing.push(refIdKing)
+                    possibleMovementKing.push(refIdKing)
                }
-               return possibleMovimentKing
+               return possibleMovementKing
         },[])
     }
 
@@ -574,16 +574,16 @@ export default class createGame {
         const arrayNamesPieces = Object.keys(this.piecesBoard)
         arrayNamesPieces.forEach((namePiece)=>{
             if((assistantPieceColor===this.piecesBoard[namePiece].color)&&(this.piecesBoard[namePiece].isAtive===true)&&(namePiece!==nameKing)){
-                this.piecesBoard[namePiece].refMovements=this.piecesBoard[namePiece].refMovements.reduce((possibleMovimentPiece,refIdpiece)=>{
+                this.piecesBoard[namePiece].refMovements=this.piecesBoard[namePiece].refMovements.reduce((possibleMovementPiece,refIdpiece)=>{
                     for(let refIdPossiblePath of this.statusCheckKing.refIdPathsToCheck){
                         if(refIdPossiblePath===refIdpiece){
                             const fakeChessBoard = this.newFakeChessBoard(this.piecesBoard[namePiece].position,refIdpiece)
                             if(this.verifyCheckInFakeBoard(fakeChessBoard,positionInitialKing,assistantPieceColor) === false){//se na nova refId do rei não tem check, não há checkMate
-                                possibleMovimentPiece.push(refIdpiece)
+                                possibleMovementPiece.push(refIdpiece)
                             }                
                         }
                     }
-                    return possibleMovimentPiece
+                    return possibleMovementPiece
                 },[])
             }
         })
@@ -605,28 +605,28 @@ export default class createGame {
         }
     )}
 
-    returnMoviment(){
+    returnMovement(){
         this.returnChangePiece( )
         this.updateStatusGame(this.colorPieceBoard.play)
         this.colorPieceBoard.play=(this.colorPieceBoard.top===this.colorPieceBoard.play)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
     }
 
     returnChangePiece(){
-        const lastMoviment= this.playHistory.length-1
-        if(lastMoviment>=0){
-            this.playHistory[lastMoviment].piecesPlayed.forEach((piecesPlayed,ind)=>{
-                if(this.playHistory[lastMoviment].typeMoviment==="piecePromotion" && ind===1){
+        const lastMovement= this.playHistory.length-1
+        if(lastMovement>=0){
+            this.playHistory[lastMovement].piecesPlayed.forEach((piecesPlayed,ind)=>{
+                if(this.playHistory[lastMovement].typeMovement==="piecePromotion" && ind===1){
                     const namePiece=piecesPlayed.fullName
                     delete this.piecesBoard[namePiece]
                 }
                 else{
-                    const position = this.playHistory[lastMoviment].newRefId[ind]
+                    const position = this.playHistory[lastMovement].newRefId[ind]
                     this.chessBoard[position]=null
-                    if(this.playHistory[lastMoviment].pieceCaptured!==null){
-                        const namePieceCaptured =this.playHistory[lastMoviment].pieceCaptured.fullName
-                        this.piecesBoard[namePieceCaptured]=this.playHistory[lastMoviment].pieceCaptured
-                        const positionPieceCaptured=this.playHistory[lastMoviment].pieceCaptured.position
-                        this.chessBoard[positionPieceCaptured]=this.playHistory[lastMoviment].pieceCaptured   
+                    if(this.playHistory[lastMovement].pieceCaptured!==null){
+                        const namePieceCaptured =this.playHistory[lastMovement].pieceCaptured.fullName
+                        this.piecesBoard[namePieceCaptured]=this.playHistory[lastMovement].pieceCaptured
+                        const positionPieceCaptured=this.playHistory[lastMovement].pieceCaptured.position
+                        this.chessBoard[positionPieceCaptured]=this.playHistory[lastMovement].pieceCaptured   
                         delete this.capturePiece[namePieceCaptured]
                     }
                     const positionBack = piecesPlayed.position
@@ -640,60 +640,60 @@ export default class createGame {
     }
 
     verifyRoque(color){
-        this.specialMoviment.roque.isPossible=false
-        this.specialMoviment.roque.positionKingToRoque=[]
-        this.specialMoviment.roque.tower=[]
-        this.specialMoviment.roque.newMovimentTower=[]
+        this.specialMovement.roque.isPossible=false
+        this.specialMovement.roque.positionKingToRoque=[]
+        this.specialMovement.roque.tower=[]
+        this.specialMovement.roque.newMovementTower=[]
         const nameKing = `King${color}`
         if(this.piecesBoard[nameKing].qtMovements===0 && this.statusCheckKing.check===false){
             const TowerLeft = `Tower-Left${color}`
             const TowerRight = `Tower-Right${color}`
             if(this.piecesBoard[TowerLeft].qtMovements===0){
                 if(this.piecesBoard[TowerLeft].refMovements.includes("ref41")){    
-                    this.possibleMovimentRoque(TowerLeft,"ref41",nameKing)
+                    this.possibleMovementRoque(TowerLeft,"ref41",nameKing)
                 } 
                 if(this.piecesBoard[TowerLeft].refMovements.includes("ref48")){
-                    this.possibleMovimentRoque(TowerLeft,"ref48",nameKing)
+                    this.possibleMovementRoque(TowerLeft,"ref48",nameKing)
                 }         
             }
             if(this.piecesBoard[TowerRight].qtMovements===0){
                 if(this.piecesBoard[TowerRight].refMovements.includes("ref61")){
-                    this.possibleMovimentRoque(TowerRight,"ref61",nameKing)
+                    this.possibleMovementRoque(TowerRight,"ref61",nameKing)
                 } 
                 if(this.piecesBoard[TowerRight].refMovements.includes("ref68")){ 
-                    this.possibleMovimentRoque(TowerRight,"ref68",nameKing)
+                    this.possibleMovementRoque(TowerRight,"ref68",nameKing)
                 }
             }
         }
     }
 
-    possibleMovimentRoque(tower,refMovimentTower,nameKing){
-        const towerMoviment = {
+    possibleMovementRoque(tower,refMovementTower,nameKing){
+        const towerMovement = {
             ref41:"ref31",
             ref48:"ref38",
             ref61:"ref71",
             ref68:"ref78"
         }   
-        const possibleMoviment = towerMoviment[refMovimentTower] 
-        this.specialMoviment.roque.isPossible=true
-        this.specialMoviment.roque.king=this.piecesBoard[nameKing]
-        this.specialMoviment.roque.positionKingToRoque.push(possibleMoviment)
-        this.specialMoviment.roque.tower.push(this.piecesBoard[tower])
-        this.specialMoviment.roque.newMovimentTower.push(refMovimentTower)
-        this.piecesBoard[nameKing].refMovements.push(possibleMoviment)
+        const possibleMovement = towerMovement[refMovementTower] 
+        this.specialMovement.roque.isPossible=true
+        this.specialMovement.roque.king=this.piecesBoard[nameKing]
+        this.specialMovement.roque.positionKingToRoque.push(possibleMovement)
+        this.specialMovement.roque.tower.push(this.piecesBoard[tower])
+        this.specialMovement.roque.newMovementTower.push(refMovementTower)
+        this.piecesBoard[nameKing].refMovements.push(possibleMovement)
         const specialRoque = {
-            positions:possibleMoviment,
+            positions:possibleMovement,
             type:"roque"
         }
         this.piecesBoard[nameKing].possibleSpecialMovements.push(specialRoque)
     }
 
-    movimentRoque(informationPieceToMove){
-        const indice = this.specialMoviment.roque.positionKingToRoque.indexOf(informationPieceToMove.refId)
+    movementRoque(informationPieceToMove){
+        const indice = this.specialMovement.roque.positionKingToRoque.indexOf(informationPieceToMove.refId)
         const informationTowerMove={
-            color: this.specialMoviment.roque.tower[indice].color,
-            fullName: this.specialMoviment.roque.tower[indice].fullName,
-            refId:this.specialMoviment.roque.newMovimentTower[indice]
+            color: this.specialMovement.roque.tower[indice].color,
+            fullName: this.specialMovement.roque.tower[indice].fullName,
+            refId:this.specialMovement.roque.newMovementTower[indice]
         }
         const roque = "roque"
         this.updateHistory([informationPieceToMove,informationTowerMove],roque)
@@ -702,11 +702,11 @@ export default class createGame {
     }
     
     verifyEnPassant(nextColor){
-        this.specialMoviment.enPassant.isPossible=false
+        this.specialMovement.enPassant.isPossible=false
         if(this.playHistory.length>0){
-            const lastMoviment=this.playHistory.length-1
-            if(this.playHistory[lastMoviment].piecesPlayed.length===1){
-                const lastPieceMove=this.playHistory[lastMoviment].piecesPlayed[0]
+            const lastMovement=this.playHistory.length-1
+            if(this.playHistory[lastMovement].piecesPlayed.length===1){
+                const lastPieceMove=this.playHistory[lastMovement].piecesPlayed[0]
                 if(lastPieceMove.name.includes("Pawn") && lastPieceMove.qtMovements===0){
                     const directionLastPawn =(lastPieceMove.color==this.colorPieceBoard.bottom)?1:-1
                     const positionLastPawn= this.refIdToArray(lastPieceMove.position)
@@ -715,13 +715,13 @@ export default class createGame {
                         const positionInAtackLeft = `ref${(newPositionPawn[0]-1)}${newPositionPawn[1]}`
                         if(!!this.chessBoard[positionInAtackLeft]){
                             if(this.chessBoard[positionInAtackLeft].fullName.includes("Pawn") && this.chessBoard[positionInAtackLeft].color===nextColor){
-                                this.possibleMovimentEnPassant(lastPieceMove,directionLastPawn,positionInAtackLeft)
+                                this.possibleMovementEnPassant(lastPieceMove,directionLastPawn,positionInAtackLeft)
                             }
                         }
                         const positionInAtackRigth = `ref${(newPositionPawn[0]+1)}${newPositionPawn[1]}`
                         if(!!this.chessBoard[positionInAtackRigth]){
                             if(this.chessBoard[positionInAtackRigth].fullName.includes("Pawn") && this.chessBoard[positionInAtackRigth].color===nextColor){
-                                this.possibleMovimentEnPassant(lastPieceMove,directionLastPawn,positionInAtackRigth)
+                                this.possibleMovementEnPassant(lastPieceMove,directionLastPawn,positionInAtackRigth)
                             }
                         }
                     }
@@ -730,33 +730,33 @@ export default class createGame {
         }  
     }
 
-    possibleMovimentEnPassant(lastPieceMove,direction,positionInAtack){
-        const moviment = this.refIdToArray(lastPieceMove.position)
-        const newMovimentPiece= `ref${moviment[0]}${moviment[1]+direction}`
-        this.chessBoard[positionInAtack].refMovements.push(newMovimentPiece)
-        this.specialMoviment.enPassant.isPossible=true
-        this.specialMoviment.enPassant.pawnPossibleCapture=this.piecesBoard[lastPieceMove.fullName]
-        this.specialMoviment.enPassant.refIdAtack=newMovimentPiece
-        this.specialMoviment.enPassant.pawnInAtack=this.chessBoard[positionInAtack]
+    possibleMovementEnPassant(lastPieceMove,direction,positionInAtack){
+        const movement = this.refIdToArray(lastPieceMove.position)
+        const newMovementPiece= `ref${movement[0]}${movement[1]+direction}`
+        this.chessBoard[positionInAtack].refMovements.push(newMovementPiece)
+        this.specialMovement.enPassant.isPossible=true
+        this.specialMovement.enPassant.pawnPossibleCapture=this.piecesBoard[lastPieceMove.fullName]
+        this.specialMovement.enPassant.refIdAtack=newMovementPiece
+        this.specialMovement.enPassant.pawnInAtack=this.chessBoard[positionInAtack]
         const specialEnPassant = {
-            positions: this.specialMoviment.enPassant.refIdAtack,
+            positions: this.specialMovement.enPassant.refIdAtack,
             type:"enPassant"
         }
         this.chessBoard[positionInAtack].possibleSpecialMovements.push(specialEnPassant)
     }
 
-    movimentEnPassant(informationPieceToMove){
+    movementEnPassant(informationPieceToMove){
            const enPassant = "enPassant"
             this.updateHistory([informationPieceToMove],enPassant)
             this.changePiecePosition(informationPieceToMove)
-            this.eatPiece(this.specialMoviment.enPassant.pawnPossibleCapture.fullName)
-            this.chessBoard[this.specialMoviment.enPassant.pawnPossibleCapture.position]=null
+            this.eatPiece(this.specialMovement.enPassant.pawnPossibleCapture.fullName)
+            this.chessBoard[this.specialMovement.enPassant.pawnPossibleCapture.position]=null
     }
 
     verifyPawnPromotion(color){
-        this.specialMoviment.pawnPromotion.piecesPawn=[]
-        this.specialMoviment.pawnPromotion.namesPawn=[]
-        this.specialMoviment.pawnPromotion.isPossible=false
+        this.specialMovement.pawnPromotion.piecesPawn=[]
+        this.specialMovement.pawnPromotion.namesPawn=[]
+        this.specialMovement.pawnPromotion.isPossible=false
     
         for(let piece in this.piecesBoard){
             if(piece.includes("Pawn")){
@@ -770,10 +770,10 @@ export default class createGame {
     }
     
     possiblePawnPromotion(piece,positionPawn,directionPawn){
-        if(!this.specialMoviment.pawnPromotion.namesPawn.includes(piece)){
-            this.specialMoviment.pawnPromotion.isPossible=true
-            this.specialMoviment.pawnPromotion.piecesPawn.push(this.piecesBoard[piece])
-            this.specialMoviment.pawnPromotion.namesPawn.push(piece)
+        if(!this.specialMovement.pawnPromotion.namesPawn.includes(piece)){
+            this.specialMovement.pawnPromotion.isPossible=true
+            this.specialMovement.pawnPromotion.piecesPawn.push(this.piecesBoard[piece])
+            this.specialMovement.pawnPromotion.namesPawn.push(piece)
             const refId=[]
             const squareLeft = `ref${positionPawn[0]-1}${positionPawn[1]+directionPawn}`
             if(this.piecesBoard[piece].refMovements.includes(squareLeft)){
@@ -829,7 +829,7 @@ export default class createGame {
     createNewPiece(namePieceSelect){
         const chancePiece={
             names:["Tower","Knight","Bishop","Queen"],
-            functionPieces:[this.possibleMovimentTower,this.possibleMovimentKnight,this.possibleMovimentBishop,this.possibleMovimentQueen],
+            functionPieces:[this.possibleMovementTower,this.possibleMovementKnight,this.possibleMovementBishop,this.possibleMovementQueen],
             Black:{
                 fullName:["towerBlack","knightBlack","bishopBlack","queenBlack"],
             },
@@ -946,13 +946,13 @@ export default class createGame {
         draw.push(this.drawByDrowning("Black"))
 
         this.statusCheckKing.check=true
-        this.playHistory=[{piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMoviment:null},
-        {piecesPlayed:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMoviment:null},
-        {piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMoviment:null},
-        {piecesPlayed:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref44"], typeMoviment:null},
-        {piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMoviment:null},
-        {piecesPlayed:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMoviment:null},
-        {piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMoviment:null}]
+        this.playHistory=[{piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMovement:null},
+        {piecesPlayed:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMovement:null},
+        {piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMovement:null},
+        {piecesPlayed:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref44"], typeMovement:null},
+        {piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMovement:null},
+        {piecesPlayed:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMovement:null},
+        {piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMovement:null}]
 
         draw.push(this.drawByReplayThreeMoves())
         draw.push(this.drawByFiftyRules(7))

@@ -352,7 +352,7 @@
     scrollbar-width: thin;
     border-radius: 0 0 2px 2px;
 }
-#button__back__moviment{
+#button__back__movement{
     display: flex;
     flex-flow: row nowrap;
     align-items: center;

@@ -5,7 +5,7 @@ export default function viewScreen(chessBoard){
         pieceInput:[],
         buttomMove:[],
         clickChessBoard:[],
-        buttomBackMoviment:[],
+        buttomBackMovement:[],
         piecesPromotion:[]
     }
 
@@ -15,9 +15,9 @@ export default function viewScreen(chessBoard){
         }
     }
 
-    this.buttomBackMoviment={
+    this.buttomBackMovement={
         subscribeToClick(fn){
-            functionToCallBack.buttomBackMoviment.push(fn)
+            functionToCallBack.buttomBackMovement.push(fn)
         }
     }
 
@@ -294,10 +294,10 @@ export default function viewScreen(chessBoard){
             // console.log(`drop ${tagPosition.id}`)
             })
         },
-        buttomBackMoviment(){
-            const buttomBackMoviment= document.querySelector("#button__back__moviment")
-            buttomBackMoviment.addEventListener("click", ()=>{
-                notifyFunctions(functionToCallBack.buttomBackMoviment)
+        buttomBackMovement(){
+            const buttomBackMovement= document.querySelector("#button__back__movement")
+            buttomBackMovement.addEventListener("click", ()=>{
+                notifyFunctions(functionToCallBack.buttomBackMovement)
             })
         },
         piecesPromotion(img,pieceImg){
@@ -309,7 +309,7 @@ export default function viewScreen(chessBoard){
     starGameEvent.buttomStart()
     starGameEvent.pieceInput()
     starGameEvent.buttomMove()
-    starGameEvent.buttomBackMoviment()
+    starGameEvent.buttomBackMovement()
     starGameEvent.buttonModal()
     boardCreation(chessBoard)
     

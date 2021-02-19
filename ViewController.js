@@ -108,7 +108,7 @@ export default function viewController(startBoard){
     view.pieceInput.subscribeToChange(selectPieceInput)
     view.buttomMove.subscribeToClick(movePieceByButtom)
     view.chessBoard.subscribeToClick(updatePieceSelect)
-    view.buttomBackMoviment.subscribeToClick(this.underHistory.previoushistory)
+    view.buttomBackMovement.subscribeToClick(this.underHistory.previoushistory)
     view.piecesPromotion.subscribeToClick(changePiecePromotion)
 
     this.updateBoard=function(board){
@@ -231,7 +231,6 @@ export default function viewController(startBoard){
 
     function movePiece(idSquare,piece=null){
         const informationPieceSelect={
-            color: chess.pieceSelect.color,
             fullName:  chess.pieceSelect.fullName,
             refId:idSquare,
             piecePromotion:piece

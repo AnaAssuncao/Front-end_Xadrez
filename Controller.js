@@ -29,7 +29,7 @@ function movePiece(informationPieceSelect){
         informationPieceSelect.piecePromotion= informationPieceSelect.piecePromotion.replace("img/","")
         game.updatePiecePromotion(informationPieceSelect.piecePromotion)  
     }
-    player.move=(player.top===informationPieceSelect.color)?player.bottom:player.top
+    player.move=(player.top===player.move)?player.bottom:player.top
     allUpdates()   
 }
 
@@ -76,7 +76,7 @@ function allUpdates(){
 function backPreviousMove(){
     const playHistory = game.getHistoryMoves()
     if(playHistory.length>0){
-        game.returnMoviment()
+        game.returnMovement()
         player.move=(player.top===player.move)?player.bottom:player.top
         allUpdates()
     }
