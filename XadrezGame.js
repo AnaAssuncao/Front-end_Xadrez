@@ -613,7 +613,7 @@ export default class createGame {
 
     returnChangePiece(){
         const lastMoviment= this.playHistory.length-1
-        if(lastMoviment>0){
+        if(lastMoviment>=0){
             this.playHistory[lastMoviment].piecesPlayed.forEach((piecesPlayed,ind)=>{
                 if(this.playHistory[lastMoviment].typeMoviment==="piecePromotion" && ind===1){
                     const namePiece=piecesPlayed.fullName

@@ -77,7 +77,7 @@ function backPreviousMove(){
     const playHistory = game.getHistoryMoves()
     if(playHistory.length>0){
         game.returnMoviment()
-        allUpdates()
         player.move=(player.top===player.move)?player.bottom:player.top
+        allUpdates()
     }
 }
