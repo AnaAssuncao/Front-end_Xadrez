@@ -24,11 +24,14 @@ function start(){
 }
 
 function movePiece(informationPieceSelect){
-    game.verifyMove(informationPieceSelect) 
     if(informationPieceSelect.piecePromotion){
         informationPieceSelect.piecePromotion= informationPieceSelect.piecePromotion.replace("img/","")
-        game.updatePiecePromotion(informationPieceSelect.piecePromotion)  
     }
+    const specialMovements =game.verifySpecialMovement(informationPieceSelect)
+    if(specialMovements===false){
+        const movement=game.verifyMove(informationPieceSelect) 
+    }
+
     player.move=(player.top===player.move)?player.bottom:player.top
     allUpdates()   
 }

@@ -306,11 +306,13 @@ export default class createGame {
         // Movimentação peça no tabuleiro  
     verifyMove(informationPieceSelect){
         const piece = this.piecesBoard[informationPieceSelect.fullName]
-        if(!this.verifySpecialMovement(informationPieceSelect)){
+        const isMove = piece.refMovements.includes(informationPieceSelect.refId)
+        if(isMove){
             this.updateHistory([informationPieceSelect],"movimentPiece")
             this.changePiecePosition(informationPieceSelect)
+            this.updateStatusGame(piece.color)
         }
-        this.updateStatusGame(piece.color)
+        return isMove
     }
 
     changePiecePosition(informationPiecetoMove){
@@ -367,10 +369,12 @@ export default class createGame {
     }
 
     verifySpecialMovement(informationPieceToMove){
+        const piece = this.piecesBoard[informationPieceToMove.fullName]
         if(this.specialMovement.roque.isPossible===true){
             if(informationPieceToMove.fullName===this.specialMovement.roque.king.fullName){
                 if(this.specialMovement.roque.positionKingToRoque.includes(informationPieceToMove.refId)){
                     this.movementRoque(informationPieceToMove)
+                    this.updateStatusGame(piece.color)
                     return true
                 } 
             }
@@ -378,12 +382,14 @@ export default class createGame {
         if(this.specialMovement.enPassant.isPossible===true){
             if(this.specialMovement.enPassant.refIdAtack===informationPieceToMove.refId){
                 this.movementEnPassant(informationPieceToMove)
+                this.updateStatusGame(piece.color)
                 return true
             }
         }
         if(this.specialMovement.pawnPromotion.isPossible===true){
             if(this.specialMovement.pawnPromotion.namesPawn.includes(informationPieceToMove.fullName)){
-                this.informPawnPromotion(informationPieceToMove)
+                this.movementPawnPromotion(informationPieceToMove)
+                this.updateStatusGame(piece.color)
                 return true
             }
         }
@@ -791,42 +797,33 @@ export default class createGame {
         }
     }
 
-    informPawnPromotion(informationPieceToMove){
-        this.piecesPromotion.chancePiece=true
-        this.piecesPromotion.color=this.piecesBoard[informationPieceToMove.fullName].color
-        this.piecesPromotion.promotedPawn=this.piecesBoard[informationPieceToMove.fullName]
-        this.piecesPromotion.newPositionPromotion=informationPieceToMove.refId
-    }
-
-    updatePiecePromotion(namePieceSelect){
-        this.piecesPromotion.chancePiece=false
-        this.createNewPiece(namePieceSelect)
+    movementPawnPromotion(informationPieceToMove){
+        const pawn = this.piecesBoard[informationPieceToMove.fullName]
         const informationPawnToMove={
-            color: this.piecesPromotion.promotedPawn.color,
-            fullName:  this.piecesPromotion.promotedPawn.fullName,
-            refId:this.piecesPromotion.newPositionPromotion
+            fullName: pawn.fullName,
+            refId:informationPieceToMove.refId
         }  
+        this.createNewPiece(informationPieceToMove,pawn)
         const informationPiecePromotion={
-            color: this.piecesPromotion.newPiece.color,
             fullName: this.piecesPromotion.newPiece.fullName,
-            refId:this.piecesPromotion.newPositionPromotion
+            refId:informationPieceToMove.refId
         }  
-
         const piecePromotion = "piecePromotion"
         this.updateHistory([informationPawnToMove,informationPiecePromotion],piecePromotion)
         this.changePiecePromotion(informationPawnToMove)
-        this.updateStatusGame(this.piecesPromotion.newPiece.color)
+        this.updateStatusGame(pawn.color)
+
     }
 
     changePiecePromotion(informationPawnToMove){
         this.changePiecePosition(informationPawnToMove)
         this.piecesBoard[this.piecesPromotion.newPiece.fullName]=this.piecesPromotion.newPiece
         this.chessBoard[this.piecesPromotion.newPiece.position]=this.piecesPromotion.newPiece
-        this.piecesBoard[this.piecesPromotion.promotedPawn.fullName].isAtive=false
-        this.piecesBoard[this.piecesPromotion.promotedPawn.fullName].refMovements=[]
+        this.piecesBoard[informationPawnToMove.fullName].isAtive=false
+        this.piecesBoard[informationPawnToMove.fullName].refMovements=[]
     }
 
-    createNewPiece(namePieceSelect){
+    createNewPiece(informationNewPiece,changePawn){
         const chancePiece={
             names:["Tower","Knight","Bishop","Queen"],
             functionPieces:[this.possibleMovementTower,this.possibleMovementKnight,this.possibleMovementBishop,this.possibleMovementQueen],
@@ -837,16 +834,16 @@ export default class createGame {
                 fullName:["towerWhite","knightWhite","bishopWhite","queenWhite"],
             }
         }
-        const color = this.piecesPromotion.color
-        const indChangePiece= chancePiece[color].fullName.indexOf(namePieceSelect)
+        const color = changePawn.color
+        const indChangePiece= chancePiece[color].fullName.indexOf(informationNewPiece.piecePromotion)
         const namePiece=`${chancePiece.names[indChangePiece]}-${this.piecesPromotion[color].qtPiece[indChangePiece]}`
         const fullName=namePiece+color
-        const img = namePieceSelect
-        const position = this.piecesPromotion.newPositionPromotion
+        const img = informationNewPiece.piecePromotion
+        const position = informationNewPiece.refId
         const functionPiece = chancePiece.functionPieces[indChangePiece]
         this.piecesPromotion[color].qtPiece[indChangePiece]++
         this.piecesPromotion.newPiece= this.makePiece(namePiece,fullName,color,img,position,functionPiece)
-        this.piecesPromotion.newPiece.refMovements=this.piecesPromotion.promotedPawn.qtMovements
+        this.piecesPromotion.newPiece.refMovements=changePawn.qtMovements
     }
 
     verifyDrawGame(color){
