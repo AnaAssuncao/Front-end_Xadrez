@@ -613,28 +613,30 @@ export default class createGame {
 
     returnChangePiece(){
         const lastMoviment= this.playHistory.length-1
-        this.playHistory[lastMoviment].piecesPlayed.forEach((piecesPlayed,ind)=>{
-            if(this.playHistory[lastMoviment].typeMoviment==="piecePromotion" && ind===1){
-                const namePiece=piecesPlayed.fullName
-                delete this.piecesBoard[namePiece]
-            }
-            else{
-                const position = this.playHistory[lastMoviment].newRefId[ind]
-                this.chessBoard[position]=null
-                if(this.playHistory[lastMoviment].pieceCaptured!==null){
-                    const namePieceCaptured =this.playHistory[lastMoviment].pieceCaptured.fullName
-                    this.piecesBoard[namePieceCaptured]=this.playHistory[lastMoviment].pieceCaptured
-                    const positionPieceCaptured=this.playHistory[lastMoviment].pieceCaptured.position
-                    this.chessBoard[positionPieceCaptured]=this.playHistory[lastMoviment].pieceCaptured   
-                    delete this.capturePiece[namePieceCaptured]
+        if(lastMoviment>0){
+            this.playHistory[lastMoviment].piecesPlayed.forEach((piecesPlayed,ind)=>{
+                if(this.playHistory[lastMoviment].typeMoviment==="piecePromotion" && ind===1){
+                    const namePiece=piecesPlayed.fullName
+                    delete this.piecesBoard[namePiece]
                 }
-                const positionBack = piecesPlayed.position
-                const namePiece=piecesPlayed.fullName
-                this.chessBoard[positionBack]=piecesPlayed
-                this.piecesBoard[namePiece]=piecesPlayed
-            }
-        })
-        this.playHistory.pop()   
+                else{
+                    const position = this.playHistory[lastMoviment].newRefId[ind]
+                    this.chessBoard[position]=null
+                    if(this.playHistory[lastMoviment].pieceCaptured!==null){
+                        const namePieceCaptured =this.playHistory[lastMoviment].pieceCaptured.fullName
+                        this.piecesBoard[namePieceCaptured]=this.playHistory[lastMoviment].pieceCaptured
+                        const positionPieceCaptured=this.playHistory[lastMoviment].pieceCaptured.position
+                        this.chessBoard[positionPieceCaptured]=this.playHistory[lastMoviment].pieceCaptured   
+                        delete this.capturePiece[namePieceCaptured]
+                    }
+                    const positionBack = piecesPlayed.position
+                    const namePiece=piecesPlayed.fullName
+                    this.chessBoard[positionBack]=piecesPlayed
+                    this.piecesBoard[namePiece]=piecesPlayed
+                }
+            })
+            this.playHistory.pop()  
+        } 
     }
 
     verifyRoque(color){

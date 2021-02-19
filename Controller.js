@@ -4,7 +4,7 @@ import ViewController from "./ViewController.js"
 const player={
     top:"Black",
     bottom:"White",
-    play:null
+    move:null
 }
 
 const game = new createGame(player)
@@ -15,9 +15,11 @@ let numberPlays = 0
 
 viewController.startGameOffline.subscribe(start)
 viewController.movePiece.subscribe(movePiece)
+viewController.underHistory.subscribe(backPreviousMove)
+
 function start(){
-    player.play="White"
-    game.starObjGame(player.play)
+    player.move="White"
+    game.starObjGame(player.move)
     allUpdates()
 }
 
@@ -27,8 +29,8 @@ function movePiece(informationPieceSelect){
         informationPieceSelect.piecePromotion= informationPieceSelect.piecePromotion.replace("img/","")
         game.updatePiecePromotion(informationPieceSelect.piecePromotion)  
     }
-    allUpdates()
-    player.play=(player.top===informationPieceSelect.color)?player.bottom:player.top
+    player.move=(player.top===informationPieceSelect.color)?player.bottom:player.top
+    allUpdates()   
 }
 
 function updateCapturedPiece(){
@@ -39,8 +41,8 @@ function updateCapturedPiece(){
 function updateBoard(){
     const board ={
         chessBoard:game.getCurrentBoard(),
-        playerMove:player.play,
-        imgPiecePromotion:game.getImgPiecePromotion(player.play)
+        playerMove:player.move,
+        imgPiecePromotion:game.getImgPiecePromotion(player.move)
     } 
     viewController.updateBoard(board) 
 }
@@ -59,7 +61,6 @@ function updatePlaysHistory(){
     const playHistory = game.getHistoryMoves()
     const history = {
         plays:playHistory,
-        numberPrevious:numberPlays
     }
     viewController.updateHistory(history)
     numberPlays=playHistory.length
@@ -70,4 +71,13 @@ function allUpdates(){
     updateCapturedPiece()
     updateInformationGame()
     updatePlaysHistory()
+}
+
+function backPreviousMove(){
+    const playHistory = game.getHistoryMoves()
+    if(playHistory.length>0){
+        game.returnMoviment()
+        allUpdates()
+        player.move=(player.top===player.move)?player.bottom:player.top
+    }
 }

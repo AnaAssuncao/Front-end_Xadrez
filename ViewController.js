@@ -90,6 +90,12 @@ export default function viewController(startBoard){
     this.underHistory={
         subscribe(fn){
             functionToCallBack.underHistory.push(fn)
+        },
+        previoushistory(){
+            if(chess.pieceSelect.refId){
+                view.chessBoard.highlighSquare.clearHighlightSquares(pieceSelect)
+            }
+            notifyFunctions (functionToCallBack.underHistory)
         }
     }
     this.giveUp={
@@ -102,7 +108,7 @@ export default function viewController(startBoard){
     view.pieceInput.subscribeToChange(selectPieceInput)
     view.buttomMove.subscribeToClick(movePieceByButtom)
     view.chessBoard.subscribeToClick(updatePieceSelect)
-    // view.buttomBackMoviment.subscribeToClick(backPreviousMove)
+    view.buttomBackMoviment.subscribeToClick(this.underHistory.previoushistory)
     view.piecesPromotion.subscribeToClick(changePiecePromotion)
 
     this.updateBoard=function(board){
@@ -117,17 +123,15 @@ export default function viewController(startBoard){
     }
 
     this.updateHistory=function(history){
-        const number = history.plays.length
-        if(number===0){
-            view.playHitory.clearPlays()
-        }
-        else{
+        view.playHitory.clearPlays()
+        for(let indPlay in history.plays){
+            const number = Number(indPlay)+1
             view.playHitory.addPlay(number) 
-            history.plays[history.numberPrevious].piecesPlayed.forEach((piece,ind)=>{
+            history.plays[indPlay].piecesPlayed.forEach((piece,ind)=>{
                 view.playHitory.addImgPiece(piece.img,number)
                 view.playHitory.addRefId(utilities.refIdToCoordinate(piece.position),number,"last")
-                view.playHitory.addRefId(utilities.refIdToCoordinate(history.plays[history.numberPrevious].newRefId[ind]),number,"new")
-                const imgPieceCaptured = (history.plays[history.numberPrevious].pieceCaptured && ind!==1)?history.plays[history.numberPrevious].pieceCaptured.img:null
+                view.playHitory.addRefId(utilities.refIdToCoordinate(history.plays[indPlay].newRefId[ind]),number,"new")
+                const imgPieceCaptured = (history.plays[indPlay].pieceCaptured && ind!==1)?history.plays[indPlay].pieceCaptured.img:null
                 view.playHitory.addPieceCaptured(imgPieceCaptured,number)
             })
         }
