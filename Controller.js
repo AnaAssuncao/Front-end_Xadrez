@@ -4,7 +4,7 @@ import ViewController from "./ViewController.js"
 const player={
     top:"Black",
     bottom:"White",
-    move:null
+    currentMove:null
 }
 
 const game = new createGame(player)
@@ -13,73 +13,83 @@ const startboard = game.getCurrentBoard()
 const viewController = new ViewController (startboard)
 let numberPlays = 0
 
-viewController.startGameOffline.subscribe(start)
+viewController.startGameOffline.subscribe(startOff)
 viewController.movePiece.subscribe(movePiece)
 viewController.underHistory.subscribe(backPreviousMove)
 
-function start(){
-    player.move="White"
-    game.starObjGame(player.move)
-    allUpdates()
+function startOff(){
+    player.currentMove="White"
+    start(player.currentMove, player.top)
+}
+
+function start(colorInitial, colorTop){
+    game.starObjGame(colorInitial)
+    const chessBoard=game.getCurrentBoard()
+    updateBoard(colorInitial,chessBoard) 
+    const statusGame = game.getStatusGame() 
+    updateInformationGame(colorInitial,statusGame)
+    const capturedPieces = game.getCapturedPieces()
+    updateCapturedPiece(colorTop,capturedPieces)
+    const playHistory = game.getHistoryMoves()
+    updatePlaysHistory(playHistory)   
 }
 
 function movePiece(informationPieceSelect){
-    if(informationPieceSelect.piecePromotion){
-        informationPieceSelect.piecePromotion= informationPieceSelect.piecePromotion.replace("img/","")
-    }
     const specialMovements =game.verifySpecialMovement(informationPieceSelect)
     if(specialMovements===false){
         const movement=game.verifyMove(informationPieceSelect) 
     }
-    player.move=(player.top===player.move)?player.bottom:player.top
-    allUpdates()   
-}
-
-function updateCapturedPiece(){
+    const nextPlayer=(player.top===player.currentMove)?player.bottom:player.top
+    const chessBoard=game.getCurrentBoard()
+    updateBoard(nextPlayer,chessBoard) 
+    const statusGame = game.getStatusGame() 
+    updateInformationGame(nextPlayer,statusGame)
     const capturedPieces = game.getCapturedPieces()
-    viewController.updateCapturedPieces(capturedPieces,player)
+    updateCapturedPiece(player.top,capturedPieces)
+    const playHistory = game.getHistoryMoves()
+    updatePlaysHistory(playHistory)   
+    player.currentMove=nextPlayer
 }
 
-function updateBoard(){
-    const board ={
-        chessBoard:game.getCurrentBoard(),
-        playerMove:player.move,
-        imgPiecePromotion:game.getImgPiecePromotion(player.move)
+function updateBoard(nextPlayer,board){
+    const informationBoard ={
+        chessBoard:board,
+        playerMove:nextPlayer,
+        imgPiecePromotion:game.getImgPiecePromotion(nextPlayer)//deixar constante viewController
     } 
-    viewController.updateBoard(board) 
+    viewController.updateBoard(informationBoard) 
 }
 
-function updateInformationGame(){
-    const statusGame = game.getStatusGame()
+function updateInformationGame(nextPlayer,statusGame){  
     if(statusGame.endGame===true){
-        viewController.endGame(statusGame,player.move)
+        viewController.endGame(statusGame,nextPlayer)
     }
     else{
-        viewController.updateStatusGame(statusGame,player.move)
+        viewController.updateStatusGame(statusGame,nextPlayer)
     }      
 }
 
-function updatePlaysHistory(){
-    const playHistory = game.getHistoryMoves()
-    const history = {
-        plays:playHistory,
-    }
-    viewController.updateHistory(history)
-    numberPlays=playHistory.length
+function updateCapturedPiece(colorTop,capturedPieces){
+    viewController.updateCapturedPieces(colorTop,capturedPieces)
 }
 
-function allUpdates(){
-    updateBoard() 
-    updateCapturedPiece()
-    updateInformationGame()
-    updatePlaysHistory()
+function updatePlaysHistory(history){
+    viewController.updateHistory(history)
+    numberPlays=history.length
 }
 
 function backPreviousMove(){
     const playHistory = game.getHistoryMoves()
     if(playHistory.length>0){
         game.returnMovement()
-        player.move=(player.top===player.move)?player.bottom:player.top
-        allUpdates()
+        player.currentMove=(player.top===player.currentMove)?player.bottom:player.top
+        const chessBoard=game.getCurrentBoard()
+        updateBoard(nextPlayer,chessBoard) 
+        const statusGame = game.getStatusGame() 
+        updateInformationGame(nextPlayer,statusGame)
+        const capturedPieces = game.getCapturedPieces()
+        updateCapturedPiece(player.top,capturedPieces)
+        const playHistory = game.getHistoryMoves()
+        updatePlaysHistory(playHistory)   
     }
 }

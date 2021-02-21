@@ -87,6 +87,9 @@ export default function viewController(startBoard){
             functionToCallBack.movePiece.push(fn)
         }
     }
+    this.subscribeHistory=function(fn){
+        this.underHistory.subscribe(fn)
+    }
     this.underHistory={
         subscribe(fn){
             functionToCallBack.underHistory.push(fn)
@@ -124,24 +127,24 @@ export default function viewController(startBoard){
 
     this.updateHistory=function(history){
         view.playHitory.clearPlays()
-        for(let indPlay in history.plays){
+        for(let indPlay in history){
             const number = Number(indPlay)+1
             view.playHitory.addPlay(number) 
-            history.plays[indPlay].piecesPlayed.forEach((piece,ind)=>{
+            history[indPlay].piecesPlayed.forEach((piece,ind)=>{
                 view.playHitory.addImgPiece(piece.img,number)
                 view.playHitory.addRefId(utilities.refIdToCoordinate(piece.position),number,"last")
-                view.playHitory.addRefId(utilities.refIdToCoordinate(history.plays[indPlay].newRefId[ind]),number,"new")
-                const imgPieceCaptured = (history.plays[indPlay].pieceCaptured && ind!==1)?history.plays[indPlay].pieceCaptured.img:null
+                view.playHitory.addRefId(utilities.refIdToCoordinate(history[indPlay].newRefId[ind]),number,"new")
+                const imgPieceCaptured = (history[indPlay].pieceCaptured && ind!==1)?history[indPlay].pieceCaptured.img:null
                 view.playHitory.addPieceCaptured(imgPieceCaptured,number)
             })
         }
     }
 
-    this.updateCapturedPieces=function(capturePieces, colorPlayer){
+    this.updateCapturedPieces=function(color,capturePieces){
         const top = []
         const bottom=[]
         for(let capturePiece in capturePieces){ 
-            if(colorPlayer.top==capturePieces[capturePiece].color){
+            if(color==capturePieces[capturePiece].color){
                 top.push(capturePieces[capturePiece].img)
             }
             else{
@@ -232,6 +235,9 @@ export default function viewController(startBoard){
     }
 
     function movePiece(idSquare,piece=null){
+        if(piece){
+            piece= piece.replace("img/","")
+        }
         const informationPieceSelect={
             fullName:  chess.pieceSelect.fullName,
             refId:idSquare,
