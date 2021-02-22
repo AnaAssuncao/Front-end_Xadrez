@@ -170,10 +170,8 @@ export default class createGame {
             promotedPawn:null,
             color:null,
             Black:{
-                imgs:["towerBlack","knightBlack","bishopBlack","queenBlack"],
                 qtPiece:[1,1,1,1]},
             White:{
-                imgs:["towerWhite","knightWhite","bishopWhite","queenWhite"],
                 qtPiece:[1,1,1,1]},
             newPiece:null,
         }
@@ -308,7 +306,7 @@ export default class createGame {
         const piece = this.piecesBoard[informationPieceSelect.fullName]
         const isMove = piece.refMovements.includes(informationPieceSelect.refId)
         if(isMove){
-            this.updateHistory([informationPieceSelect],"movimentPiece")
+            this.updateHistory([informationPieceSelect],"movementPiece")
             this.changePiecePosition(informationPieceSelect)
             this.updateStatusGame(piece.color)
         }

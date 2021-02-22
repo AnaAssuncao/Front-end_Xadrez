@@ -35,8 +35,10 @@ function start(colorInitial, colorTop){
 }
 
 function movePiece(informationPieceSelect){
-    const specialMovements =game.verifySpecialMovement(informationPieceSelect)
-    if(specialMovements===false){
+    if(informationPieceSelect.specialMovement){
+        const specialMovements = game.verifySpecialMovement(informationPieceSelect)
+    }
+    else{
         const movement=game.verifyMove(informationPieceSelect) 
     }
     const nextPlayer=(player.top===player.currentMove)?player.bottom:player.top
@@ -82,14 +84,15 @@ function backPreviousMove(){
     const playHistory = game.getHistoryMoves()
     if(playHistory.length>0){
         game.returnMovement()
-        player.currentMove=(player.top===player.currentMove)?player.bottom:player.top
+        const pastColor=(player.top===player.currentMove)?player.bottom:player.top
         const chessBoard=game.getCurrentBoard()
-        updateBoard(nextPlayer,chessBoard) 
+        updateBoard(pastColor,chessBoard) 
         const statusGame = game.getStatusGame() 
-        updateInformationGame(nextPlayer,statusGame)
+        updateInformationGame(pastColor,statusGame)
         const capturedPieces = game.getCapturedPieces()
         updateCapturedPiece(player.top,capturedPieces)
         const playHistory = game.getHistoryMoves()
         updatePlaysHistory(playHistory)   
+        player.currentMove=pastColor
     }
 }

@@ -9,7 +9,6 @@ export default function viewController(startBoard){
         informationBoard:{
             chessBoard:null,
             playerMove:null,
-            imgPiecePromotion:null
         }
     }
     const updateInput ={
@@ -122,7 +121,6 @@ export default function viewController(startBoard){
         updateInput.allInput(board)
         chess.informationBoard.chessBoard = board.chessBoard
         chess.informationBoard.playerMove = board.playerMove
-        chess.informationBoard.imgPiecePromotion=board.imgPiecePromotion
     }
 
     this.updateHistory=function(history){
@@ -194,10 +192,13 @@ export default function viewController(startBoard){
                 view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             } 
             const refId = utilities.coordinateToRefId(coordinate)
-            const isMove=utilities.verifyMove(refId)
-            chess.pieceSelect={
-                    position:null
-                }  
+            const informationMove=utilities.verifyMove(refId)
+            if(informationMove.isMove){
+                movePiece(refId,informationMove)
+                chess.pieceSelect={
+                        position:null
+                    }  
+                }
             }
         }   
 
@@ -218,28 +219,35 @@ export default function viewController(startBoard){
             }  
         }
         else if(chess.pieceSelect.position){
-            if(chess.pieceSelect.refMovements.includes(idSquare)){
-                const isMove = utilities.verifyMove(idSquare) 
-                if(isMove){
-                    chess.pieceSelect={
+            const informationMove=utilities.verifyMove(idSquare)
+            if(informationMove.isMove){
+                movePiece(idSquare,informationMove)
+                chess.pieceSelect={
                         position:null
                     }  
                 }
-            }
-        }
+            } 
     }
 
-    function changePiecePromotion(imgPieceSelect){
+    function changePiecePromotion(pieceSelect){
         view.piecesPromotion.clearPiecePromotion()
-        movePiece(chess.pieceSelect.newMovements,imgPieceSelect)
+        const informationMove={
+            namePiece:chess.pieceSelect.fullName,
+            isMove: true,
+            type:"piecePromotion",
+            specialMovement:true
+        } 
+        movePiece(chess.pieceSelect.newMovements,informationMove,pieceSelect)
     }
 
-    function movePiece(idSquare,piece=null){
+    function movePiece(idSquare,informationMove,piece=null){
         if(piece){
             piece= piece.replace("img/","")
         }
         const informationPieceSelect={
-            fullName:  chess.pieceSelect.fullName,
+            fullName:  informationMove.namePiece,
+            typeMovement: informationMove.type,
+            specialMovement:informationMove.specialMovement,
             refId:idSquare,
             piecePromotion:piece
         }   
@@ -293,28 +301,60 @@ export default function viewController(startBoard){
             }
             return position
         },
-        verifyMove(idSquare){
-            const specialMovement = utilities.verifyPiecePromotion(idSquare)
-            let isMove = false
-            if(!specialMovement){
-                movePiece(idSquare)
-                isMove = true
-            }
-            return isMove
-        },
-        verifyPiecePromotion: function(idSquare){
-            let specialMovement = false
-            chess.pieceSelect.possibleSpecialMovements.forEach((specialMovements)=>{
-                if(specialMovements.type==="piecePromotion"){
-                    chess.pieceSelect.newMovements=idSquare
-                    const imgPromotion=chess.informationBoard.imgPiecePromotion.map((nameImg)=>{
-                        return `img/${nameImg}`
-                    })
-                    view.piecesPromotion.renderPiecePromotion(imgPromotion)
-                    specialMovement = true
+        verifyMove: function(idSquare){
+            const informationMove={
+                namePiece:null,
+                isMove: false,
+                type:null,
+                specialMovement:false,
+            } 
+            if(chess.pieceSelect.refMovements.includes(idSquare)){
+                informationMove.namePiece= chess.pieceSelect.fullName
+                informationMove.isMove=true
+                const specialMovement = utilities.verifySpecialMovement(idSquare)
+                if(specialMovement.isMovement){
+                    informationMove.specialMovement = specialMovement.isMovement
+                    informationMove.type= specialMovement.type
                 }
-            })
-            return specialMovement 
+                else{
+                    informationMove.type= "movementPiece"
+                }
+                if(specialMovement.piecePromotion){
+                    informationMove.isMove=false
+                }
+            }
+            return informationMove
+        },
+        verifySpecialMovement: function(idSquare){
+           const specialMovement = {
+                isMovement: false,
+                type: null,
+                piecePromotion: false
+            }
+            chess.pieceSelect.possibleSpecialMovements.forEach((movements)=>{
+                if(movements.type!=="movementPiece"){
+                    specialMovement.isMovement = true
+                    specialMovement.type=movements.type
+                    if(movements.type==="piecePromotion"){
+                        specialMovement.piecePromotion=utilities.piecePromotion(idSquare,movements.type)
+                    }
+                }
+            })   
+            return specialMovement
+        },
+        piecePromotion: function(idSquare,typeMovement){
+            let piecePromotion = false
+            const imgPiecePromotion={
+                Black:["img/towerBlack","img/knightBlack","img/bishopBlack","img/queenBlack"],
+                White:["img/towerWhite","img/knightWhite","img/bishopWhite","img/queenWhite"]
+            }
+            if(typeMovement==="piecePromotion"){
+                chess.pieceSelect.newMovements=idSquare
+                const imgPromotion=imgPiecePromotion[chess.pieceSelect.color]
+                view.piecesPromotion.renderPiecePromotion(imgPromotion)
+                piecePromotion = true
+            }
+            return piecePromotion 
         }    
     }
 }
