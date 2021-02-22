@@ -302,7 +302,7 @@ export default class createGame {
     }
 
         // Movimentação peça no tabuleiro  
-    verifyMove(informationPieceSelect){
+    informMove(informationPieceSelect){
         const piece = this.piecesBoard[informationPieceSelect.fullName]
         const isMove = piece.refMovements.includes(informationPieceSelect.refId)
         if(isMove){
@@ -366,7 +366,7 @@ export default class createGame {
         }
     }
 
-    verifySpecialMovement(informationPieceToMove){
+    informSpecialMovement(informationPieceToMove){
         const piece = this.piecesBoard[informationPieceToMove.fullName]
         if(this.specialMovement.roque.isPossible===true){
             if(informationPieceToMove.fullName===this.specialMovement.roque.king.fullName){

@@ -36,10 +36,10 @@ function start(colorInitial, colorTop){
 
 function movePiece(informationPieceSelect){
     if(informationPieceSelect.specialMovement){
-        const specialMovements = game.verifySpecialMovement(informationPieceSelect)
+        const specialMovements = game.informSpecialMovement(informationPieceSelect)
     }
     else{
-        const movement=game.verifyMove(informationPieceSelect) 
+        const movement=game.informMove(informationPieceSelect) 
     }
     const nextPlayer=(player.top===player.currentMove)?player.bottom:player.top
     const chessBoard=game.getCurrentBoard()
