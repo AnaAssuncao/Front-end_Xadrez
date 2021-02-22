@@ -127,16 +127,16 @@ export default function viewScreen(chessBoard){
         }, 
     }
 
-    this.capturePiece={
-        colorTop(capturePiece){
+    this.capturedPiece={
+        colorTop(capturedPiece){
             clearOptionsInput("#colorTop")
-            for (let img of capturePiece){
+            for (let img of capturedPiece){
                addImagem(img,"#colorTop")            
             }
         },
-        colorBottom(capturePiece){
+        colorBottom(capturedPiece){
             clearOptionsInput("#colorBottom")
-            for (let img of capturePiece){
+            for (let img of capturedPiece){
                addImagem(img,"#colorBottom")            
             }
         }
@@ -229,10 +229,10 @@ export default function viewScreen(chessBoard){
             clearOptionsInput("#information__history")
         }
     }
-    function addImagem(capturePieceImg,player){
+    function addImagem(capturedPieceImg,player){
         const divSquare= document.querySelector(player)
         const img = document.createElement("img")
-        img.src=`${capturePieceImg}.png`
+        img.src=`${capturedPieceImg}.png`
         img.classList.add("pieceDead__img")
         divSquare.appendChild(img) 
     }

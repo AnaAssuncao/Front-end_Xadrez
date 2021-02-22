@@ -13,9 +13,9 @@ const startboard = game.getCurrentBoard()
 const viewController = new ViewController (startboard)
 let numberPlays = 0
 
-viewController.startGameOffline.subscribe(startOff)
-viewController.movePiece.subscribe(movePiece)
-viewController.underHistory.subscribe(backPreviousMove)
+viewController.subscribeStartOffline(startOff)
+viewController.subscribeMovePiece(movePiece)
+viewController.subscribeHistory(backPreviousMove)
 
 function startOff(){
     player.currentMove="White"
@@ -64,7 +64,11 @@ function updateBoard(nextPlayer,board){
 
 function updateInformationGame(nextPlayer,statusGame){  
     if(statusGame.endGame===true){
-        viewController.endGame(statusGame,nextPlayer)
+        const status ={
+            endGame:statusGame.endGame,
+            playerWin:statusGame.playerWin
+        }
+        viewController.endGame(status,nextPlayer)
     }
     else{
         viewController.updateStatusGame(statusGame,nextPlayer)
@@ -94,5 +98,6 @@ function backPreviousMove(){
         const playHistory = game.getHistoryMoves()
         updatePlaysHistory(playHistory)   
         player.currentMove=pastColor
+        numberPlays=playHistory.length
     }
 }
