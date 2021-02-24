@@ -262,7 +262,7 @@ export default function viewScreen(chessBoard){
             const inputColor=document.querySelector("#select__color")
             const inputPiece= document.querySelector("#select__name")
             inputPiece.addEventListener("change", () =>{
-                notifyFunctions(functionToCallBack.pieceInput,{piece:inputPiece.value,color:inputColor.value})
+                notifyFunctions(functionToCallBack.pieceInput,{namePiece:inputPiece.value,color:inputColor.value})
             })
         },
         buttomMove(){

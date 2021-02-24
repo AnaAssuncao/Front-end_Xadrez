@@ -8,28 +8,28 @@ export default function viewController(startBoard){
         },
         informationBoard:{
             chessBoard:null,
-            playerMove:null,
+            currentPlayer:null,
         }
     }
     const updateInput ={
-        allInput:(board)=>{
-            updateInput.inputColor(board)
-            updateInput.inputPieces(board)
-            updateInput.inputCoordinate(board)
+        allInput:(chessBoard,currentPlayer)=>{
+            updateInput.inputColor(currentPlayer)
+            updateInput.inputPieces(chessBoard,currentPlayer)
+            updateInput.inputCoordinate()
         },
-        inputColor: (board) => {
+        inputColor: (color) => {
             // limpar tabuleiro e input
             view.colorInput.clearAll()
             // iniciar ou reiniciar tabuleiro e input
-            view.colorInput.addPiecesColor([board.playerMove])  
+            view.colorInput.addPiecesColor([color])  
         },
-        inputPieces: (board) =>{
+        inputPieces: (chessBoard,currentPlayer) =>{
             view.pieceInput.clearAll()
             const arrayPieces = []
-            for(let refId in board.chessBoard){ 
-                if(board.chessBoard[refId]!==null){
-                    if(board.chessBoard[refId].color==board.playerMove && board.chessBoard[refId].isAtive==true){
-                        arrayPieces.push(board.chessBoard[refId].name)
+            for(let refId in chessBoard){ 
+                if(chessBoard[refId]!==null){
+                    if(chessBoard[refId].color==currentPlayer && chessBoard[refId].isAtive==true){
+                        arrayPieces.push(chessBoard[refId].name)
                     }
                 }
             }
@@ -37,7 +37,7 @@ export default function viewController(startBoard){
             view.pieceInput.addPiecesName(arrayPieces)
             view.pieceInput.selectNamePiece("")
         },
-        inputCoordinate: (board)=>{
+        inputCoordinate: ()=>{
             // Limpar coordenadas e destaque dos movimentos com a mudança de peça
             view.coordinateInput.clearAll()
             // renderizar novas coordenadas e destaque dos movimentos
@@ -50,14 +50,14 @@ export default function viewController(startBoard){
     }
 
     const board={
-        update:function(board){
+        update:function(chessBoard,currentPlayer){
             if(chess.pieceSelect.position){
             view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             }
-            view.chessBoard.renderBoard(board.chessBoard)
-            updateInput.allInput(board)
-            chess.informationBoard.chessBoard = board.chessBoard
-            chess.informationBoard.playerMove = board.playerMove
+            view.chessBoard.renderBoard(chessBoard)
+            updateInput.allInput(chessBoard,currentPlayer)
+            chess.informationBoard.chessBoard = chessBoard
+            chess.informationBoard.currentPlayer = currentPlayer
         },
         clearAllBoard: function(){
             if(chess.pieceSelect.position){
@@ -142,17 +142,12 @@ export default function viewController(startBoard){
         }
     }
 
-    const pieceSelect={
-        selectPieceInput:function({piece,color}){
-            const refPiece=`${piece}${color}`
-            const refId=utilities.discoverRefId(refPiece)
-            pieceSelect.updatePieceSelect(refId)
-        },
+    const piece={
         updatePieceSelect:function(idSquare){   
             if(chess.pieceSelect.position){
                 view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             } 
-            if((chess.pieceSelect.position!==idSquare) && (chess.informationBoard.chessBoard[idSquare]!==null) && chess.informationBoard.playerMove===chess.informationBoard.chessBoard[idSquare].color)
+            if((chess.pieceSelect.position!==idSquare) && (chess.informationBoard.chessBoard[idSquare]!==null) && chess.informationBoard.currentPlayer===chess.informationBoard.chessBoard[idSquare].color)
             {
                 chess.pieceSelect=chess.informationBoard.chessBoard[idSquare]
                 view.chessBoard.highlighSquare.addHighlightSquares(chess.pieceSelect)
@@ -165,18 +160,20 @@ export default function viewController(startBoard){
                 }  
             }
             else if(chess.pieceSelect.position){
-                const informationMove=movePiece.verifyMove(idSquare)
+                const informationMove=piece.verifyMove(idSquare)
                 if(informationMove.isMove){
-                    movePiece.movePiece(idSquare,informationMove)
+                    piece.movePiece(idSquare,informationMove)
                     chess.pieceSelect={
                             position:null
                         }  
                     }
                 } 
-        }
-    }
-
-    const movePiece = {
+        },
+        selectPieceInput:function({namePiece,color}){
+            const refPiece=`${namePiece}${color}`
+            const refId=utilities.discoverRefId(refPiece)
+            piece.updatePieceSelect(refId)
+        },
         movePieceByButtom: function(coordinate){
             // Modificando o nome da ref ID pela função coordinateToRefId
             if(coordinate!=="Sem Movimento" && coordinate!==""){
@@ -184,9 +181,9 @@ export default function viewController(startBoard){
                     view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
                 } 
                 const refId = utilities.coordinateToRefId(coordinate)
-                const informationMove=movePiece.verifyMove(refId)
+                const informationMove=piece.verifyMove(refId)
                 if(informationMove.isMove){
-                    movePiece.movePiece(refId,informationMove)
+                    piece.movePiece(refId,informationMove)
                     chess.pieceSelect={
                         position:null
                     }  
@@ -216,7 +213,7 @@ export default function viewController(startBoard){
             if(chess.pieceSelect.refMovements.includes(idSquare)){
                 informationMove.namePiece= chess.pieceSelect.fullName
                 informationMove.isMove=true
-                const specialMovement = movePiece.verifySpecialMovement(idSquare)
+                const specialMovement = piece.verifySpecialMovement(idSquare)
                 if(specialMovement.isMovement){
                     informationMove.specialMovement = specialMovement.isMovement
                     informationMove.type= specialMovement.type
@@ -246,6 +243,16 @@ export default function viewController(startBoard){
                 }
             })   
             return specialMovement
+        },
+        changePiecePromotion: function(piecePromotion){
+            view.piecesPromotion.clearPiecePromotion()
+            const informationMove={
+                namePiece:chess.pieceSelect.fullName,
+                isMove: true,
+                type:"piecePromotion",
+                specialMovement:true
+            } 
+            piece.movePiece(chess.pieceSelect.newMovements,informationMove,piecePromotion)
         }
     }
 
@@ -278,14 +285,14 @@ export default function viewController(startBoard){
     }
 
     view.buttomStart.subscribeToClick(statusGame.startGameOff)
-    view.pieceInput.subscribeToChange(pieceSelect.selectPieceInput)
-    view.buttomMove.subscribeToClick(movePiece.movePieceByButtom)
-    view.chessBoard.subscribeToClick(pieceSelect.updatePieceSelect)
+    view.pieceInput.subscribeToChange(piece.selectPieceInput)
+    view.buttomMove.subscribeToClick(piece.movePieceByButtom)
+    view.chessBoard.subscribeToClick(piece.updatePieceSelect)
     view.buttomBackMovement.subscribeToClick(history.previoushistory)
-    view.piecesPromotion.subscribeToClick(changePiecePromotion)
+    view.piecesPromotion.subscribeToClick(piece.changePiecePromotion)
 
-    this.updateBoard=function(chessboard){
-        board.update(chessboard)
+    this.updateBoard=function(chessBoard,currentPlayer){
+        board.update(chessBoard,currentPlayer)
     }
 
     this.updateHistory=function(historys){
@@ -308,17 +315,6 @@ export default function viewController(startBoard){
         statusGame.endGame(status)
     }
 
-    function changePiecePromotion(pieceSelect){
-        view.piecesPromotion.clearPiecePromotion()
-        const informationMove={
-            namePiece:chess.pieceSelect.fullName,
-            isMove: true,
-            type:"piecePromotion",
-            specialMovement:true
-        } 
-        movePiece.movePiece(chess.pieceSelect.newMovements,informationMove,pieceSelect)
-    }
-    
     const utilities ={
         refIdToCoordinate: function (coordenadasClass){
             let result = coordenadasClass.substring(3)

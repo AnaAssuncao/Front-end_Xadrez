@@ -1,36 +1,35 @@
 import createGame from "./XadrezGame.js"
 import ViewController from "./ViewController.js"
 
-const player={
+const playerConfig={
     top:"Black",
     bottom:"White",
-    currentMove:null
+    currentPlayer:null
 }
 
-const game = new createGame(player)
+const game = new createGame(playerConfig)
 const startboard = game.getCurrentBoard()
 
 const viewController = new ViewController (startboard)
-let numberPlays = 0
 
-viewController.subscribeStartOffline(startOff)
+viewController.subscribeStartOffline(startOfflineGame)
 viewController.subscribeMovePiece(movePiece)
 viewController.subscribeHistory(backPreviousMove)
 
-function startOff(){
-    player.currentMove="White"
-    start(player.currentMove, player.top)
+function startOfflineGame(){
+    playerConfig.currentPlayer="White"
+    startGame(playerConfig.currentPlayer, playerConfig.top)
 }
 
-function start(colorInitial, colorTop){
+function startGame(colorInitial, colorTop){
     game.starObjGame(colorInitial)
     const chessBoard=game.getCurrentBoard()
-    updateBoard(colorInitial,chessBoard) 
     const statusGame = game.getStatusGame() 
-    updateInformationGame(colorInitial,statusGame)
     const capturedPieces = game.getCapturedPieces()
-    updateCapturedPiece(colorTop,capturedPieces)
     const playHistory = game.getHistoryMoves()
+    updateBoard(colorInitial,chessBoard) 
+    updateInformationGame(colorInitial,statusGame)
+    updateCapturedPiece(colorTop,capturedPieces)
     updatePlaysHistory(playHistory)   
 }
 
@@ -41,38 +40,32 @@ function movePiece(informationPieceSelect){
     else{
         const movement=game.informMove(informationPieceSelect) 
     }
-    const nextPlayer=(player.top===player.currentMove)?player.bottom:player.top
+    const nextPlayer=(playerConfig.top===playerConfig.currentPlayer)?playerConfig.bottom:playerConfig.top
     const chessBoard=game.getCurrentBoard()
-    updateBoard(nextPlayer,chessBoard) 
     const statusGame = game.getStatusGame() 
-    updateInformationGame(nextPlayer,statusGame)
     const capturedPieces = game.getCapturedPieces()
-    updateCapturedPiece(player.top,capturedPieces)
     const playHistory = game.getHistoryMoves()
+    updateBoard(nextPlayer,chessBoard) 
+    updateInformationGame(nextPlayer,statusGame)
+    updateCapturedPiece(playerConfig.top,capturedPieces)
     updatePlaysHistory(playHistory)   
-    player.currentMove=nextPlayer
+    playerConfig.currentPlayer=nextPlayer
 }
 
 function updateBoard(nextPlayer,board){
-    const informationBoard ={
-        chessBoard:board,
-        playerMove:nextPlayer,
-        imgPiecePromotion:game.getImgPiecePromotion(nextPlayer)//deixar constante viewController
-    } 
-    viewController.updateBoard(informationBoard) 
+    viewController.updateBoard(board,nextPlayer) 
 }
 
 function updateInformationGame(nextPlayer,statusGame){  
     if(statusGame.endGame===true){
         const status ={
             endGame:statusGame.endGame,
-            playerWin:statusGame.playerWin
+            playerConfigWin:statusGame.playerConfigWin
         }
         viewController.endGame(status,nextPlayer)
     }
-    else{
-        viewController.updateStatusGame(statusGame,nextPlayer)
-    }      
+    viewController.updateStatusGame(statusGame,nextPlayer)
+   
 }
 
 function updateCapturedPiece(colorTop,capturedPieces){
@@ -81,23 +74,21 @@ function updateCapturedPiece(colorTop,capturedPieces){
 
 function updatePlaysHistory(history){
     viewController.updateHistory(history)
-    numberPlays=history.length
 }
 
 function backPreviousMove(){
     const playHistory = game.getHistoryMoves()
     if(playHistory.length>0){
         game.returnMovement()
-        const pastColor=(player.top===player.currentMove)?player.bottom:player.top
+        const pastColor=(playerConfig.top===playerConfig.currentPlayer)?playerConfig.bottom:playerConfig.top
         const chessBoard=game.getCurrentBoard()
-        updateBoard(pastColor,chessBoard) 
         const statusGame = game.getStatusGame() 
-        updateInformationGame(pastColor,statusGame)
         const capturedPieces = game.getCapturedPieces()
-        updateCapturedPiece(player.top,capturedPieces)
         const playHistory = game.getHistoryMoves()
+        updateBoard(pastColor,chessBoard)       
+        updateInformationGame(pastColor,statusGame)
+        updateCapturedPiece(playerConfig.top,capturedPieces)        
         updatePlaysHistory(playHistory)   
-        player.currentMove=pastColor
-        numberPlays=playHistory.length
+        playerConfig.currentPlayer=pastColor
     }
 }
