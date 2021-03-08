@@ -1,23 +1,30 @@
 export default function viewScreen(chessBoard){
 
     const functionToCallBack= {
-        buttomStart:[],
+        buttonStartSinglePlayer:[],
+        buttonStartMultiPlayer:[],
         pieceInput:[],
-        buttomMove:[],
+        buttonMove:[],
         clickChessBoard:[],
-        buttomBackMovement:[],
+        buttonBackMovement:[],
         piecesPromotion:[]
     }
 
-    this.buttomStart={
+    this.buttonStartSinglePlayer={
         subscribeToClick(fn){
-            functionToCallBack.buttomStart.push(fn)
+            functionToCallBack.buttonStartSinglePlayer.push(fn)
         }
     }
 
-    this.buttomBackMovement={
+    this.buttonStartMultiPlayer={
         subscribeToClick(fn){
-            functionToCallBack.buttomBackMovement.push(fn)
+            functionToCallBack.buttonStartMultiPlayer.push(fn)
+        }
+    }
+
+    this.buttonBackMovement={
+        subscribeToClick(fn){
+            functionToCallBack.buttonBackMovement.push(fn)
         }
     }
 
@@ -71,9 +78,9 @@ export default function viewScreen(chessBoard){
         }
     }
 
-    this.buttomMove={
+    this.buttonMove={
         subscribeToClick(fn){
-            functionToCallBack.buttomMove.push(fn)
+            functionToCallBack.buttonMove.push(fn)
         }
     }
 
@@ -242,17 +249,44 @@ export default function viewScreen(chessBoard){
     }
 
     const starGameEvent={
-        buttomStart(){
-            const buttomStar= document.querySelector("#button__start")
-            buttomStar.addEventListener("click", ()=>{
-                notifyFunctions(functionToCallBack.buttomStart)
+        buttonStartSinglePlayer(){
+            const selectModal = document.querySelector("#startGame")
+            const buttonStar= document.querySelector("#button__startSingle")
+            buttonStar.addEventListener("click", ()=>{
+                 notifyFunctions(functionToCallBack.buttonStartSinglePlayer)
+                 selectModal.classList.toggle('chess__startGame--display')
+            })
+        },
+        buttonStartMultiPlayer(){
+            const buttonStar= document.querySelector("#button__startMulti")
+            buttonStar.addEventListener("click", ()=>{
+                renderInputMultiPlayer()
+            })
+        },
+        buttonMultiplayerInf(buttonStart){
+            const selectModal = document.querySelector("#startGame")
+            buttonStart.addEventListener("click", ()=>{
+                const inputName = document.querySelector(".input__multiplayer--name")
+                const inputKey = document.querySelector(".input__multiplayer--key")
+                if(inputName.value!=="" && inputKey.value!==""){
+                    selectModal.classList.toggle('chess__startGame--display')
+                    const infToStartGame= document.querySelector(".start__infMultiPlayer")
+                    selectModal.removeChild(infToStartGame)
+                    notifyFunctions(functionToCallBack.buttonStartMultiPlayer,{name:inputName.value, key:inputKey.value})
+                }
+            })
+        }, 
+        buttonNewGame(){
+            const buttonStar= document.querySelector("#button__newGame")
+            buttonStar.addEventListener("click", ()=>{
+                renderModalStartGame()
             })
         },
         buttonModal(){
-            const buttomStar= document.querySelector("#button__details__modal")
+            const buttonStar= document.querySelector("#button__details__modal")
             const modal= document.querySelector(".modal__details")
             const icon = document.querySelector(".icon_micro")
-            buttomStar.addEventListener("click", ()=>{
+            buttonStar.addEventListener("click", ()=>{
                 const srcImg = icon.getAttribute('src')!=='img/down-chevron.svg'?'img/down-chevron.svg':'img/up-chevron.svg'
                 icon.setAttribute('src',srcImg)
                 modal.classList.toggle('modal__details--display')
@@ -265,10 +299,10 @@ export default function viewScreen(chessBoard){
                 notifyFunctions(functionToCallBack.pieceInput,{namePiece:inputPiece.value,color:inputColor.value})
             })
         },
-        buttomMove(){
+        buttonMove(){
             const inputCoordinate = document.querySelector("#select__coordinate")
             document.querySelector("#button__movement").addEventListener("click", () =>{
-                notifyFunctions(functionToCallBack.buttomMove,inputCoordinate.value)
+                notifyFunctions(functionToCallBack.buttonMove,inputCoordinate.value)
             }) 
         },
         clickChessBoard(tagPosition){
@@ -294,10 +328,10 @@ export default function viewScreen(chessBoard){
             // console.log(`drop ${tagPosition.id}`)
             })
         },
-        buttomBackMovement(){
-            const buttomBackMovement= document.querySelector("#button__back__movement")
-            buttomBackMovement.addEventListener("click", ()=>{
-                notifyFunctions(functionToCallBack.buttomBackMovement)
+        buttonBackMovement(){
+            const buttonBackMovement= document.querySelector("#button__back__movement")
+            buttonBackMovement.addEventListener("click", ()=>{
+                notifyFunctions(functionToCallBack.buttonBackMovement)
             })
         },
         piecesPromotion(img,pieceImg){
@@ -306,11 +340,13 @@ export default function viewScreen(chessBoard){
             })
         }
     }
-    starGameEvent.buttomStart()
+    starGameEvent.buttonStartSinglePlayer()
+    starGameEvent.buttonStartMultiPlayer()
     starGameEvent.pieceInput()
-    starGameEvent.buttomMove()
-    starGameEvent.buttomBackMovement()
+    starGameEvent.buttonMove()
+    starGameEvent.buttonBackMovement()
     starGameEvent.buttonModal()
+    starGameEvent.buttonNewGame()
     boardCreation(chessBoard)
     
     function boardCreation(chessBoard){
@@ -375,5 +411,28 @@ export default function viewScreen(chessBoard){
             optionPiece.innerHTML= value
             selectPiece.appendChild(optionPiece)
         })
+    }
+
+    function renderInputMultiPlayer(){
+        const selectModal = document.querySelector("#startGame")
+        const infMultiPlayer = document.createElement("div")
+        const inputName = document.createElement("input")
+        const inputKey = document.createElement("input")
+        const buttonStart = document.createElement("button")
+        infMultiPlayer.classList.add("start__infMultiPlayer")
+        inputName.classList.add("input__multiplayer--name")
+        inputKey.classList.add("input__multiplayer--key")
+        buttonStart.classList.add("button__multiplayer--key")
+        starGameEvent.buttonMultiplayerInf(buttonStart)
+        buttonStart.innerHTML = "Iniciar"
+        infMultiPlayer.appendChild(inputName)
+        infMultiPlayer.appendChild(inputKey)
+        infMultiPlayer.appendChild(buttonStart)
+        selectModal.appendChild(infMultiPlayer)
+    }
+
+    function renderModalStartGame(){
+        const selectModal = document.querySelector("#startGame")
+        selectModal.classList.toggle('chess__startGame--display')
     }
 }

@@ -12,13 +12,18 @@ const startboard = game.getCurrentBoard()
 
 const viewController = new ViewController (startboard)
 
-viewController.subscribeStartOffline(startOfflineGame)
+viewController.subscribeStartSinglePlayer(startSinglePlayer)
+viewController.subscribeStartMultiPlayer(startMultiPlayer)
 viewController.subscribeMovePiece(movePiece)
 viewController.subscribeHistory(backPreviousMove)
 
-function startOfflineGame(){
+function startSinglePlayer(){
     playerConfig.currentPlayer="White"
     startGame(playerConfig.currentPlayer, playerConfig.top)
+}
+
+function startMultiPlayer(infGame){
+    console.log(infGame)
 }
 
 function startGame(colorInitial, colorTop){

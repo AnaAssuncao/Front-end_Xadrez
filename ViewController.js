@@ -130,15 +130,13 @@ export default function viewController(startBoard){
             }
             // demonstrar a cor vitoriosa
         },
-        startGameOff:function(){
+        startGameSinglePlayer:function(){
             board.clearAllBoard()
-            notifyFunctions(functionToCallBack.startGameOffline)
+            notifyFunctions(functionToCallBack.startGameSinglePlayer)
         },
-        startGameOn:function(){
+        startGameMultiPlayer:function(infGame){
             board.clearAllBoard()
-            // input para digitar a chave
-            const key = ""
-            notifyFunctions (functionToCallBack.startGameOffline,key)
+            notifyFunctions (functionToCallBack.startGameMultiPlayer,infGame)
         }
     }
 
@@ -258,8 +256,8 @@ export default function viewController(startBoard){
 
     const functionToCallBack= {
         movePiece:[],
-        startGameOffline:[],
-        startGameOnline:[],
+        startGameSinglePlayer:[],
+        startGameMultiPlayer:[],
         underHistory:[],
         giveUp:[],
     }
@@ -267,12 +265,12 @@ export default function viewController(startBoard){
     function notifyFunctions (objToCallBack,parameters){
         objToCallBack.forEach((fn)=>fn(parameters))
     }
-
-    this.subscribeStartOffline=function(fn){
-        functionToCallBack.startGameOffline.push(fn)   
+   
+    this.subscribeStartSinglePlayer=function(fn){
+        functionToCallBack.startGameSinglePlayer.push(fn)   
     }
-    this.subscribeStartOnline=function(fn){
-        functionToCallBack.startGameOnline.push(fn)
+    this.subscribeStartMultiPlayer=function(fn){
+        functionToCallBack.startGameMultiPlayer.push(fn)
     }
     this.subscribeMovePiece=function(fn){
         functionToCallBack.movePiece.push(fn)
@@ -284,11 +282,12 @@ export default function viewController(startBoard){
         functionToCallBack.giveUp.push(fn)
     }
 
-    view.buttomStart.subscribeToClick(statusGame.startGameOff)
+    view.buttonStartSinglePlayer.subscribeToClick(statusGame.startGameSinglePlayer)
+    view.buttonStartMultiPlayer.subscribeToClick(statusGame.startGameMultiPlayer)
     view.pieceInput.subscribeToChange(piece.selectPieceInput)
-    view.buttomMove.subscribeToClick(piece.movePieceByButtom)
+    view.buttonMove.subscribeToClick(piece.movePieceByButtom)
     view.chessBoard.subscribeToClick(piece.updatePieceSelect)
-    view.buttomBackMovement.subscribeToClick(history.previoushistory)
+    view.buttonBackMovement.subscribeToClick(history.previoushistory)
     view.piecesPromotion.subscribeToClick(piece.changePiecePromotion)
 
     this.updateBoard=function(chessBoard,currentPlayer){

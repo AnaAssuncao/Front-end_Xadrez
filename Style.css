@@ -25,8 +25,9 @@
 }
 .chess__button{
     background-color: rgb(117, 155, 112);
-    width:70%;
+    width:40%;
     height:10%;
+    margin:2%;
 }
 .icon_micro{
     width: 1em;
@@ -394,4 +395,29 @@
 }
 .play__img{
     width: 5%;
+}
+.chess__startGame{
+    background-color:#fff;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index:9999;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+.start__infMultiPlayer{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+.button__multiplayer--inf{
+    background-color: rgb(117, 155, 112);
+    width:10%;
+    height: 5%;
+}
+.chess__startGame--display{
+    display: none;
 }

@@ -11,7 +11,7 @@
 <body class="chess">
     <header class="chess__header">
         <h1 class="chess__tittle">Jogo Xadrez</h1>
-        <button class="chess__button" id="button__start">Iniciar Jogo</button>
+        <button class="chess__button" id="button__newGame">Novo Jogo</button>
         <div class="chess__move">
             <p>Cor Peça</p>
             <select class="move__color" id="select__color">
@@ -28,6 +28,10 @@
         </div>    
     </header> 
     
+    <div class="chess__startGame" id="startGame">
+        <button class="chess__button" id="button__startSingle">Iniciar Jogo Single Player</button>
+        <button class="chess__button" id="button__startMulti">Iniciar Jogo Multiplayer</button>
+    </div>
     <div class="main__column">
      <div class="status__game__row">
          <div class="status__game status__game--player">
