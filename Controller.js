@@ -1,6 +1,6 @@
-import createGame from "./XadrezGame.js"
-import ViewController from "./ViewController.js"
-import interfaceNetwork from "./InterfaceNetwork.js"
+import createGame from "./Game/XadrezGame.js"
+import ViewController from "./View/ViewController.js"
+import interfaceNetwork from "./Network/Network.js"
 
 const playerConfig={
     top:"Black",
@@ -19,6 +19,11 @@ viewController.subscribeStartMultiPlayer(startMultiPlayer)
 viewController.subscribeMovePiece(movePiece)
 viewController.subscribeHistory(backPreviousMove)
 
+network.subscribeInformationStart(test)
+function test(inf){
+    console.log(inf)
+}
+
 function startSinglePlayer(){
     playerConfig.currentPlayer="White"
     startGame(playerConfig.currentPlayer, playerConfig.top)
@@ -26,7 +31,6 @@ function startSinglePlayer(){
 
 function startMultiPlayer(infGame){
     network.send.infStartGame(infGame)
-    console.log(infGame)
 }
 
 function startGame(colorInitial, colorTop){

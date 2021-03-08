@@ -424,6 +424,8 @@ export default function viewScreen(chessBoard){
         inputKey.classList.add("input__multiplayer--key")
         buttonStart.classList.add("button__multiplayer--key")
         starGameEvent.buttonMultiplayerInf(buttonStart)
+        inputName.placeholder="Nome"
+        inputKey.placeholder="Chave"
         buttonStart.innerHTML = "Iniciar"
         infMultiPlayer.appendChild(inputName)
         infMultiPlayer.appendChild(inputKey)
