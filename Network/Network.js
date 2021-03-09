@@ -1,10 +1,10 @@
 
 export default function interfaceNetwork(){
     this.send={
-        infStartGame(infGame){
+            infStartGame: async(infGame) =>{
             const url = 'http://localhost:3030/api/v1/startGame/infGame'
-            sendPost(infGame,url,functionToCallBack.informationStart)
-            return true
+            const msgRes = await sendPost(infGame,url,functionToCallBack.informationStart)
+            return msgRes
         },
         aMoveGame(move){
             const url = 'http://localhost:3030/api/v1/movementGame'
@@ -50,9 +50,9 @@ export default function interfaceNetwork(){
         objToCallBack.forEach((fn)=>fn(parameters))
     }
     
-    function sendPost(obj,url,functioncallback){
+    async function sendPost(obj,url){
         const msgSend = JSON.stringify(obj)
-        fetch(url,{
+        const resp = await fetch(url,{
             method: "POST",
             body: msgSend,
             headers:{
@@ -61,13 +61,8 @@ export default function interfaceNetwork(){
                 "Content-Length" : msgSend.length.toString(),
                 "Access-Control-Allow-Origin": "*"
             }
-        })               
-        .then(resp => {
-            return resp.text()
-        })
-        .then(resp => {
-            const msgRec = JSON.parse(resp)
-            notifyFunctions(functioncallback,msgRec)
-        })
+        })   
+        const msgRes = await resp.json()     
+        return msgRes
     }
 }

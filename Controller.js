@@ -19,18 +19,14 @@ viewController.subscribeStartMultiPlayer(startMultiPlayer)
 viewController.subscribeMovePiece(movePiece)
 viewController.subscribeHistory(backPreviousMove)
 
-network.subscribeInformationStart(test)
-function test(inf){
-    console.log(inf)
-}
-
 function startSinglePlayer(){
     playerConfig.currentPlayer="White"
     startGame(playerConfig.currentPlayer, playerConfig.top)
 }
 
-function startMultiPlayer(infGame){
-    network.send.infStartGame(infGame)
+async function startMultiPlayer(infGame){
+    const inf= await network.send.infStartGame(infGame)
+    console.log(inf)
 }
 
 function startGame(colorInitial, colorTop){
