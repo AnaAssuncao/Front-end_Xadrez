@@ -253,6 +253,14 @@ export default function viewController(startBoard){
             piece.movePiece(chess.pieceSelect.newMovements,informationMove,piecePromotion)
         }
     }
+    const modalStartGame = {
+        addModal(){
+            view.modalStartGame.render()
+        },
+        clearModal(){
+            view.modalStartGame.clear()
+        }
+    }
 
     const functionToCallBack= {
         movePiece:[],
@@ -289,7 +297,12 @@ export default function viewController(startBoard){
     view.chessBoard.subscribeToClick(piece.updatePieceSelect)
     view.buttonBackMovement.subscribeToClick(history.previoushistory)
     view.piecesPromotion.subscribeToClick(piece.changePiecePromotion)
+    view.buttonNewGame.subscribeToClick(modalStartGame.addModal)
 
+    this.clearModalStartGame=function(){
+        modalStartGame.clearModal()
+    }
+    
     this.updateBoard=function(chessBoard,currentPlayer){
         board.update(chessBoard,currentPlayer)
     }

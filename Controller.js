@@ -21,11 +21,15 @@ viewController.subscribeHistory(backPreviousMove)
 
 function startSinglePlayer(){
     playerConfig.currentPlayer="White"
+    viewController.clearModalStartGame()
     startGame(playerConfig.currentPlayer, playerConfig.top)
 }
 
 async function startMultiPlayer(infGame){
     const inf= await network.send.infStartGame(infGame)
+    if(inf){
+        viewController.clearModalStartGame()
+    }
     console.log(inf)
 }
 
