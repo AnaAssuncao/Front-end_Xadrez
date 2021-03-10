@@ -53,7 +53,19 @@ export default function interfaceNetwork(){
                     notifyFunctions(functionToCallBack.moveAdversary,msgRes.move)
                 }
             },1000)
-        }
+        },
+        playerConnection: async()=>{
+            const url = `http://localhost:3030/api/v1/statusGame?key=${game.keys.main}&player=${game.keys.secretPlayer}`
+            let msgRes
+            const waitInf = await setInterval(async()=>{
+                msgRes = await getInf(url)
+                if(msgRes.statusGame.connection==="connected players"){
+                    clearInterval(waitInf) 
+                    notifyFunctions(functionToCallBack.playerConnection)
+                }
+            },1000)
+            return msgRes
+        },
     }
 
     const functionToCallBack= {
@@ -61,6 +73,7 @@ export default function interfaceNetwork(){
         informationStart:[],
         endGame:[],
         giveUpAdv:[],
+        playerConnection:[]
     }
     this.subscribeMoveAdversary=function(fn){
         functionToCallBack.moveAdversary.push(fn)   
@@ -73,6 +86,9 @@ export default function interfaceNetwork(){
     }
     this.subscribeGiveUpAdv=function(fn){
         functionToCallBack.giveUpAdv.push(fn)
+    }
+    this.subscribePlayerConnection=function(fn){
+        functionToCallBack.playerConnection.push(fn)
     }
 
     function notifyFunctions (objToCallBack,parameters){

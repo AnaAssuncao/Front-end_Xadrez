@@ -22,12 +22,13 @@ viewController.subscribeMovePiece(moveTypeGame)
 viewController.subscribeHistory(backPreviousMove)
 
 network.subscribeMoveAdversary(receiveMoveAdv)
+network.subscribePlayerConnection(connectionPlayerTwo)
 
 function startSinglePlayer(){
     playerConfig.currentPlayer="White"
     playerConfig.typeGame="SinglePlayer"
     viewController.clearModalStartGame()
-    startGame(playerConfig.currentPlayer, playerConfig.top)
+    startGame(playerConfig.currentPlayer, playerConfig.top, playerConfig.currentPlayer)
 }
 
 async function startMultiPlayer(infGame){
@@ -35,28 +36,32 @@ async function startMultiPlayer(infGame){
     if(inf){
         viewController.clearModalStartGame()
         playerConfig.typeGame="MultiPlayer"
-        if(infGame.name===inf.players.playerOne){
+        if(inf.players.playerTwo===null){
             playerConfig.colorMultiPlayer="White"
-            playerConfig.currentPlayer=playerConfig.colorMultiPlayer
-            startGame(playerConfig.currentPlayer, playerConfig.top)
+            const newPlayer = await network.receibe.playerConnection()
         }
         else{
             playerConfig.colorMultiPlayer="Black"
-            playerConfig.currentPlayer=null
-            startGame(playerConfig.currentPlayer, playerConfig.top)
+            playerConfig.currentPlayer=playerConfig.colorMultiPlayer
+            const isPlayerInitial = false
+            startGame(playerConfig.currentPlayer, playerConfig.top, isPlayerInitial)
             network.receibe.moveAdversary()
         }
     }
 }
+async function connectionPlayerTwo(){
+    playerConfig.currentPlayer=playerConfig.colorMultiPlayer
+    startGame(playerConfig.currentPlayer, playerConfig.top,playerConfig.colorMultiPlayer)
+}
 
-function startGame(colorInitial, colorTop){
-    game.starObjGame(colorInitial)
+function startGame(colorPlayer, colorTop, playerInitial){
+    game.starObjGame(colorPlayer)
     const chessBoard=game.getCurrentBoard()
     const statusGame = game.getStatusGame() 
     const capturedPieces = game.getCapturedPieces()
     const playHistory = game.getHistoryMoves()
-    updateBoard(colorInitial,chessBoard,colorInitial) 
-    updateInformationGame(colorInitial,statusGame)
+    updateBoard(playerInitial,chessBoard,colorPlayer) 
+    updateInformationGame(colorPlayer,statusGame)
     updateCapturedPiece(colorTop,capturedPieces)
     updatePlaysHistory(playHistory)   
 }
@@ -70,8 +75,8 @@ function moveTypeGame(informationPieceSelect){
         }
     }
     else if(playerConfig.typeGame==="MultiPlayer"){
-        const nextPlayer=null
-        const isMove = movePiece(informationPieceSelect,nextPlayer,playerConfig.colorMultiPlayer)
+        const isNextPlayer=false
+        const isMove = movePiece(informationPieceSelect,isNextPlayer,playerConfig.colorMultiPlayer)
         if(isMove){
             network.send.aMoveGame(informationPieceSelect)
             network.receibe.moveAdversary()
@@ -86,6 +91,7 @@ function receiveMoveAdv(informationPieceSelect){
             // network.send.recMoveGame("true")
         }
         else{
+            // enviar caso tiver movimento invalido
             // network.send.recMoveGame("false")
         }
 }
