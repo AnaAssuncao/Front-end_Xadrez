@@ -1,30 +1,46 @@
 
 export default function interfaceNetwork(){
+    const game={
+        keys:{
+            main:null,
+            secretPlayer:null
+        }
+    }
     this.send={
-            infStartGame: async(infGame) =>{
+        infStartGame: async(infGame) =>{
             const url = 'http://localhost:3030/api/v1/startGame/infGame'
-            const msgRes = await sendPost(infGame,url,functionToCallBack.informationStart)
+            const msgRes = await sendPost(infGame,url)
+            game.keys = msgRes.keyGame
+            const sendController={
+                players:msgRes.players,
+                statusGame:msgRes.statusGame
+            }
+            return sendController
+        },
+        aMoveGame: async(move) =>{
+            const url = 'http://localhost:3030/api/v1/movementGame'
+            const objsend={
+                key:game.keys.main,
+                player:game.keys.secretPlayer,
+                movement:move
+            }
+            const msgRes = await sendPost(objsend,url)
+            console.log(msgRes)
             return msgRes
         },
-        aMoveGame(move){
-            const url = 'http://localhost:3030/api/v1/movementGame'
-            sendPost(move,url,functionToCallBack.informationStart)
-            return true
-        },
-        giveUp(giveUp){
+        giveUp: async(giveUp) =>{
             if (giveUp === true){
                 const url = 'http://localhost:3030/api/v1/giveUpGame'
-                sendPost(giveUp,url,functionToCallBack.informationStart)
+                const msgRes = await sendPost(giveUp,url,functionToCallBack.informationStart)
             }
-
-            return true
+            return msgRes
         },
-        endGame(endGame){
+        endGame: async(endGame) =>{
             if (endGame === true){
                 const url = 'http://localhost:3030/api/v1/endGame'
-                sendPost(endGame,url,functionToCallBack.informationStart)
+                const msgRes = await sendPost(endGame,url,functionToCallBack.informationStart)
             }
-            return true
+            return msgRes
         }
     }
     const functionToCallBack= {

@@ -3,9 +3,11 @@ import ViewController from "./View/ViewController.js"
 import interfaceNetwork from "./Network/Network.js"
 
 const playerConfig={
+    typeGame:null,
     top:"Black",
     bottom:"White",
-    currentPlayer:null
+    currentPlayer:null,
+    colorMultiPlayer:null
 }
 
 const game = new createGame(playerConfig)
@@ -16,11 +18,12 @@ const network = new interfaceNetwork()
 
 viewController.subscribeStartSinglePlayer(startSinglePlayer)
 viewController.subscribeStartMultiPlayer(startMultiPlayer)
-viewController.subscribeMovePiece(movePiece)
+viewController.subscribeMovePiece(moveTypeGame)
 viewController.subscribeHistory(backPreviousMove)
 
 function startSinglePlayer(){
     playerConfig.currentPlayer="White"
+    playerConfig.typeGame="SinglePlayer"
     viewController.clearModalStartGame()
     startGame(playerConfig.currentPlayer, playerConfig.top)
 }
@@ -29,6 +32,10 @@ async function startMultiPlayer(infGame){
     const inf= await network.send.infStartGame(infGame)
     if(inf){
         viewController.clearModalStartGame()
+        playerConfig.typeGame="MultiPlayer"
+        playerConfig.colorMultiPlayer=(infGame.name===inf.players.playerOne)?"White":"Black"
+        playerConfig.currentPlayer=playerConfig.colorMultiPlayer
+        startGame(playerConfig.currentPlayer, playerConfig.top)
     }
     console.log(inf)
 }
@@ -39,33 +46,53 @@ function startGame(colorInitial, colorTop){
     const statusGame = game.getStatusGame() 
     const capturedPieces = game.getCapturedPieces()
     const playHistory = game.getHistoryMoves()
-    updateBoard(colorInitial,chessBoard) 
+    updateBoard(colorInitial,chessBoard,colorInitial) 
     updateInformationGame(colorInitial,statusGame)
     updateCapturedPiece(colorTop,capturedPieces)
     updatePlaysHistory(playHistory)   
 }
 
-function movePiece(informationPieceSelect){
+function moveTypeGame(informationPieceSelect){
+    if(playerConfig.typeGame==="SinglePlayer"){
+        const nextPlayer=(playerConfig.top===playerConfig.currentPlayer)?playerConfig.bottom:playerConfig.top
+        const isMove = movePiece(informationPieceSelect,nextPlayer,nextPlayer)
+        if(isMove){
+            playerConfig.currentPlayer=nextPlayer
+        }
+    }
+    else if(playerConfig.typeGame==="MultiPlayer"){
+        const nextPlayer=null
+        const isMove = movePiece(informationPieceSelect,nextPlayer,playerConfig.colorMultiPlayer)
+        if(isMove){
+            network.send.aMoveGame(informationPieceSelect)
+        }
+        else{
+            network.send.aMoveGame("false")
+        }
+    }
+}
+
+function movePiece(informationPieceSelect,nextPlayer,colorPlayer){
+    let isMove = false
     if(informationPieceSelect.specialMovement){
-        const specialMovements = game.informSpecialMovement(informationPieceSelect)
+        isMove=game.informSpecialMovement(informationPieceSelect)
     }
     else{
-        const movement=game.informMove(informationPieceSelect) 
-    }
-    const nextPlayer=(playerConfig.top===playerConfig.currentPlayer)?playerConfig.bottom:playerConfig.top
+        isMove=game.informMove(informationPieceSelect) 
+    }  
     const chessBoard=game.getCurrentBoard()
     const statusGame = game.getStatusGame() 
     const capturedPieces = game.getCapturedPieces()
     const playHistory = game.getHistoryMoves()
-    updateBoard(nextPlayer,chessBoard) 
+    updateBoard(nextPlayer,chessBoard,colorPlayer) 
     updateInformationGame(nextPlayer,statusGame)
     updateCapturedPiece(playerConfig.top,capturedPieces)
     updatePlaysHistory(playHistory)   
-    playerConfig.currentPlayer=nextPlayer
+    return isMove
 }
 
-function updateBoard(nextPlayer,board){
-    viewController.updateBoard(board,nextPlayer) 
+function updateBoard(nextPlayer,board,colorPlayer){
+    viewController.updateBoard(board,nextPlayer,colorPlayer) 
 }
 
 function updateInformationGame(nextPlayer,statusGame){  
@@ -77,7 +104,6 @@ function updateInformationGame(nextPlayer,statusGame){
         viewController.endGame(status,nextPlayer)
     }
     viewController.updateStatusGame(statusGame,nextPlayer)
-   
 }
 
 function updateCapturedPiece(colorTop,capturedPieces){
@@ -97,7 +123,7 @@ function backPreviousMove(){
         const statusGame = game.getStatusGame() 
         const capturedPieces = game.getCapturedPieces()
         const playHistory = game.getHistoryMoves()
-        updateBoard(pastColor,chessBoard)       
+        updateBoard(pastColor,chessBoard,pastColor)       
         updateInformationGame(pastColor,statusGame)
         updateCapturedPiece(playerConfig.top,capturedPieces)        
         updatePlaysHistory(playHistory)   

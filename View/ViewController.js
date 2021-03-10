@@ -8,13 +8,14 @@ export default function viewController(startBoard){
         },
         informationBoard:{
             chessBoard:null,
+            colorPlayer:null,
             currentPlayer:null,
         }
     }
     const updateInput ={
-        allInput:(chessBoard,currentPlayer)=>{
-            updateInput.inputColor(currentPlayer)
-            updateInput.inputPieces(chessBoard,currentPlayer)
+        allInput:(chessBoard,colorPlayer)=>{
+            updateInput.inputColor(colorPlayer)
+            updateInput.inputPieces(chessBoard,colorPlayer)
             updateInput.inputCoordinate()
         },
         inputColor: (color) => {
@@ -23,12 +24,12 @@ export default function viewController(startBoard){
             // iniciar ou reiniciar tabuleiro e input
             view.colorInput.addPiecesColor([color])  
         },
-        inputPieces: (chessBoard,currentPlayer) =>{
+        inputPieces: (chessBoard,colorPlayer) =>{
             view.pieceInput.clearAll()
             const arrayPieces = []
             for(let refId in chessBoard){ 
                 if(chessBoard[refId]!==null){
-                    if(chessBoard[refId].color==currentPlayer && chessBoard[refId].isAtive==true){
+                    if(chessBoard[refId].color==colorPlayer && chessBoard[refId].isAtive==true){
                         arrayPieces.push(chessBoard[refId].name)
                     }
                 }
@@ -50,14 +51,16 @@ export default function viewController(startBoard){
     }
 
     const board={
-        update:function(chessBoard,currentPlayer){
+        update:function(chessBoard,currentPlayer,colorPlayer){
             if(chess.pieceSelect.position){
-            view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
+                view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             }
             view.chessBoard.renderBoard(chessBoard)
-            updateInput.allInput(chessBoard,currentPlayer)
+            updateInput.allInput(chessBoard,colorPlayer)
             chess.informationBoard.chessBoard = chessBoard
             chess.informationBoard.currentPlayer = currentPlayer
+            chess.informationBoard.colorPlayer=colorPlayer
+            // aqui muda
         },
         clearAllBoard: function(){
             if(chess.pieceSelect.position){
@@ -145,7 +148,7 @@ export default function viewController(startBoard){
             if(chess.pieceSelect.position){
                 view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             } 
-            if((chess.pieceSelect.position!==idSquare) && (chess.informationBoard.chessBoard[idSquare]!==null) && chess.informationBoard.currentPlayer===chess.informationBoard.chessBoard[idSquare].color)
+            if((chess.pieceSelect.position!==idSquare) && (chess.informationBoard.chessBoard[idSquare]!==null) && chess.informationBoard.colorPlayer===chess.informationBoard.chessBoard[idSquare].color)
             {
                 chess.pieceSelect=chess.informationBoard.chessBoard[idSquare]
                 view.chessBoard.highlighSquare.addHighlightSquares(chess.pieceSelect)
@@ -157,7 +160,7 @@ export default function viewController(startBoard){
                     position:null
                 }  
             }
-            else if(chess.pieceSelect.position){
+            else if(chess.pieceSelect.position && chess.informationBoard.currentPlayer===chess.pieceSelect.color){
                 const informationMove=piece.verifyMove(idSquare)
                 if(informationMove.isMove){
                     piece.movePiece(idSquare,informationMove)
@@ -174,17 +177,17 @@ export default function viewController(startBoard){
         },
         movePieceByButtom: function(coordinate){
             // Modificando o nome da ref ID pela função coordinateToRefId
-            if(coordinate!=="Sem Movimento" && coordinate!==""){
-                if(chess.pieceSelect.position){
+            if(chess.informationBoard.currentPlayer===chess.pieceSelect.color){
+                if(coordinate!=="Sem Movimento" && coordinate!=="" && chess.pieceSelect.position){
                     view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
-                } 
-                const refId = utilities.coordinateToRefId(coordinate)
-                const informationMove=piece.verifyMove(refId)
-                if(informationMove.isMove){
-                    piece.movePiece(refId,informationMove)
-                    chess.pieceSelect={
-                        position:null
-                    }  
+                    const refId = utilities.coordinateToRefId(coordinate)
+                    const informationMove=piece.verifyMove(refId)
+                    if(informationMove.isMove){
+                        piece.movePiece(refId,informationMove)
+                        chess.pieceSelect={
+                            position:null
+                        }  
+                    }
                 }
             }
         },
@@ -208,19 +211,21 @@ export default function viewController(startBoard){
                 type:null,
                 specialMovement:false,
             } 
-            if(chess.pieceSelect.refMovements.includes(idSquare)){
-                informationMove.namePiece= chess.pieceSelect.fullName
-                informationMove.isMove=true
-                const specialMovement = piece.verifySpecialMovement(idSquare)
-                if(specialMovement.isMovement){
-                    informationMove.specialMovement = specialMovement.isMovement
-                    informationMove.type= specialMovement.type
-                }
-                else{
-                    informationMove.type= "movementPiece"
-                }
-                if(specialMovement.piecePromotion){
-                    informationMove.isMove=false
+            if(chess.pieceSelect.position!==null){
+                  if(chess.pieceSelect.refMovements.includes(idSquare)){
+                    informationMove.namePiece= chess.pieceSelect.fullName
+                    informationMove.isMove=true
+                    const specialMovement = piece.verifySpecialMovement(idSquare)
+                    if(specialMovement.isMovement){
+                        informationMove.specialMovement = specialMovement.isMovement
+                        informationMove.type= specialMovement.type
+                    }
+                    else{
+                        informationMove.type= "movementPiece"
+                    }
+                    if(specialMovement.piecePromotion){
+                        informationMove.isMove=false
+                    }
                 }
             }
             return informationMove
@@ -303,8 +308,8 @@ export default function viewController(startBoard){
         modalStartGame.clearModal()
     }
     
-    this.updateBoard=function(chessBoard,currentPlayer){
-        board.update(chessBoard,currentPlayer)
+    this.updateBoard=function(chessBoard,currentPlayer,colorPlayer){
+        board.update(chessBoard,currentPlayer,colorPlayer)
     }
 
     this.updateHistory=function(historys){
