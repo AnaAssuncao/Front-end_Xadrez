@@ -43,6 +43,19 @@ export default function interfaceNetwork(){
             return msgRes
         }
     }
+    this.receibe={
+        moveAdversary: async()=>{
+            const url = `http://localhost:3030/api/v1/movementGame?key=${game.keys.main}&player=${game.keys.secretPlayer}`
+            const waitMove = setInterval(async()=>{
+                const msgRes = await getInf(url)
+                if(msgRes.msg!=="noMove"){
+                    clearInterval(waitMove) 
+                    notifyFunctions(functionToCallBack.moveAdversary,msgRes.move)
+                }
+            },1000)
+        }
+    }
+
     const functionToCallBack= {
         moveAdversary:[],
         informationStart:[],
@@ -81,4 +94,17 @@ export default function interfaceNetwork(){
         const msgRes = await resp.json()     
         return msgRes
     }
+
+    async function getInf(url){
+        const resp = await fetch(url,{
+            method: "GET",
+            headers:{
+                "content-type": "application/json; charset=UTF-8",
+                "accept": "*/*",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })   
+        const msgRes = await resp.json()     
+        return msgRes
+    }   
 }

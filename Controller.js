@@ -21,6 +21,8 @@ viewController.subscribeStartMultiPlayer(startMultiPlayer)
 viewController.subscribeMovePiece(moveTypeGame)
 viewController.subscribeHistory(backPreviousMove)
 
+network.subscribeMoveAdversary(receiveMoveAdv)
+
 function startSinglePlayer(){
     playerConfig.currentPlayer="White"
     playerConfig.typeGame="SinglePlayer"
@@ -33,11 +35,18 @@ async function startMultiPlayer(infGame){
     if(inf){
         viewController.clearModalStartGame()
         playerConfig.typeGame="MultiPlayer"
-        playerConfig.colorMultiPlayer=(infGame.name===inf.players.playerOne)?"White":"Black"
-        playerConfig.currentPlayer=playerConfig.colorMultiPlayer
-        startGame(playerConfig.currentPlayer, playerConfig.top)
+        if(infGame.name===inf.players.playerOne){
+            playerConfig.colorMultiPlayer="White"
+            playerConfig.currentPlayer=playerConfig.colorMultiPlayer
+            startGame(playerConfig.currentPlayer, playerConfig.top)
+        }
+        else{
+            playerConfig.colorMultiPlayer="Black"
+            playerConfig.currentPlayer=null
+            startGame(playerConfig.currentPlayer, playerConfig.top)
+            network.receibe.moveAdversary()
+        }
     }
-    console.log(inf)
 }
 
 function startGame(colorInitial, colorTop){
@@ -65,11 +74,20 @@ function moveTypeGame(informationPieceSelect){
         const isMove = movePiece(informationPieceSelect,nextPlayer,playerConfig.colorMultiPlayer)
         if(isMove){
             network.send.aMoveGame(informationPieceSelect)
-        }
-        else{
-            network.send.aMoveGame("false")
+            network.receibe.moveAdversary()
         }
     }
+}
+
+function receiveMoveAdv(informationPieceSelect){
+    const nextPlayer=playerConfig.colorMultiPlayer
+        const isMove = movePiece(informationPieceSelect,nextPlayer,playerConfig.colorMultiPlayer)
+        if(isMove){
+            // network.send.recMoveGame("true")
+        }
+        else{
+            // network.send.recMoveGame("false")
+        }
 }
 
 function movePiece(informationPieceSelect,nextPlayer,colorPlayer){
