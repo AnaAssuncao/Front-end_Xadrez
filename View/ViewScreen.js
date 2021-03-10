@@ -429,21 +429,24 @@ export default function viewScreen(chessBoard){
 
     function renderInputMultiPlayer(){
         const selectModal = document.querySelector("#startGame")
-        const infMultiPlayer = document.createElement("div")
-        const inputName = document.createElement("input")
-        const inputKey = document.createElement("input")
-        const buttonStart = document.createElement("button")
-        infMultiPlayer.classList.add("start__infMultiPlayer")
-        inputName.classList.add("input__multiplayer--name")
-        inputKey.classList.add("input__multiplayer--key")
-        buttonStart.classList.add("button__multiplayer--key")
-        starGameEvent.buttonMultiplayerInf(buttonStart)
-        inputName.placeholder="Nome"
-        inputKey.placeholder="Chave"
-        buttonStart.innerHTML = "Iniciar"
-        infMultiPlayer.appendChild(inputName)
-        infMultiPlayer.appendChild(inputKey)
-        infMultiPlayer.appendChild(buttonStart)
-        selectModal.appendChild(infMultiPlayer)
+        const selectInfMultiPlayer= document.querySelector(".start__infMultiPlayer")
+        if(selectInfMultiPlayer===null){
+            const infMultiPlayer = document.createElement("div")
+            const inputName = document.createElement("input")
+            const inputKey = document.createElement("input")
+            const buttonStart = document.createElement("button")
+            infMultiPlayer.classList.add("start__infMultiPlayer")
+            inputName.classList.add("input__multiplayer--name")
+            inputKey.classList.add("input__multiplayer--key")
+            buttonStart.classList.add("button__multiplayer--key")
+            starGameEvent.buttonMultiplayerInf(buttonStart)
+            inputName.placeholder="Nome"
+            inputKey.placeholder="Chave"
+            buttonStart.innerHTML = "Iniciar"
+            infMultiPlayer.appendChild(inputName)
+            infMultiPlayer.appendChild(inputKey)
+            infMultiPlayer.appendChild(buttonStart)
+            selectModal.appendChild(infMultiPlayer)  
+        }
     }
 }
