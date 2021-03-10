@@ -421,3 +421,6 @@
 .chess__startGame--display{
     display: none;
 }
+#button__back__movement--display{
+    display: none;
+}

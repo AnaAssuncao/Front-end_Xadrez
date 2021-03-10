@@ -92,6 +92,12 @@ export default function viewController(startBoard){
                 view.chessBoard.highlighSquare.clearHighlightSquares(pieceSelect)
             }
             notifyFunctions (functionToCallBack.underHistory)
+        },
+        addButtonBackMovement:function(){
+            view.buttonBackMovement.renderButton()
+        },
+        clearButtonBackMovement:function(){
+            view.buttonBackMovement.clearButton()
         }
     }
 
@@ -307,7 +313,14 @@ export default function viewController(startBoard){
     this.clearModalStartGame=function(){
         modalStartGame.clearModal()
     }
+
+    this.addButtonBackMovement=function(){
+        history.addButtonBackMovement()
+    }
     
+    this.clearButtonBackMovement=function(){
+        history.clearButtonBackMovement()
+    }
     this.updateBoard=function(chessBoard,currentPlayer,colorPlayer){
         board.update(chessBoard,currentPlayer,colorPlayer)
     }

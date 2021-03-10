@@ -45,6 +45,14 @@ export default function viewScreen(chessBoard){
     this.buttonBackMovement={
         subscribeToClick(fn){
             functionToCallBack.buttonBackMovement.push(fn)
+        },
+        renderButton(){
+            const buttonMove = document.querySelector("#button__back__movement")
+            buttonMove.id = "button__back__movement"
+        },
+        clearButton(){
+            const buttonMove = document.querySelector("#button__back__movement")
+            buttonMove.id = "button__back__movement--display"
         }
     }
 

@@ -29,9 +29,11 @@ function startSinglePlayer(){
     playerConfig.typeGame="SinglePlayer"
     viewController.clearModalStartGame()
     startGame(playerConfig.currentPlayer, playerConfig.top, playerConfig.currentPlayer)
+    viewController.addButtonBackMovement()
 }
 
 async function startMultiPlayer(infGame){
+    viewController.clearButtonBackMovement()
     const inf= await network.send.infStartGame(infGame)
     if(inf){
         viewController.clearModalStartGame()
