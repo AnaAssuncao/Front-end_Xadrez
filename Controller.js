@@ -21,7 +21,7 @@ viewController.subscribeStartMultiPlayer(startMultiPlayer)
 viewController.subscribeMovePiece(moveTypeGame)
 viewController.subscribeHistory(backPreviousMove)
 
-network.subscribeMoveAdversary(receiveMoveAdv)
+network.subscribeMoveAdversary(getMoveAdv)
 network.subscribePlayerConnection(connectionPlayerTwo)
 
 function startSinglePlayer(){
@@ -40,17 +40,18 @@ async function startMultiPlayer(infGame){
         playerConfig.typeGame="MultiPlayer"
         if(inf.players.playerTwo===null){
             playerConfig.colorMultiPlayer="White"
-            const newPlayer = await network.receibe.playerConnection()
+            network.get.playerConnection()
         }
         else{
             playerConfig.colorMultiPlayer="Black"
             playerConfig.currentPlayer=playerConfig.colorMultiPlayer
             const isPlayerInitial = false
             startGame(playerConfig.currentPlayer, playerConfig.top, isPlayerInitial)
-            network.receibe.moveAdversary()
+            network.get.moveAdversary()
         }
     }
 }
+
 async function connectionPlayerTwo(){
     playerConfig.currentPlayer=playerConfig.colorMultiPlayer
     startGame(playerConfig.currentPlayer, playerConfig.top,playerConfig.colorMultiPlayer)
@@ -80,13 +81,13 @@ function moveTypeGame(informationPieceSelect){
         const isNextPlayer=false
         const isMove = movePiece(informationPieceSelect,isNextPlayer,playerConfig.colorMultiPlayer)
         if(isMove){
-            network.send.aMoveGame(informationPieceSelect)
-            network.receibe.moveAdversary()
+            network.send.moveGame(informationPieceSelect)
+            network.get.moveAdversary()
         }
     }
 }
 
-function receiveMoveAdv(informationPieceSelect){
+function getMoveAdv(informationPieceSelect){
     const nextPlayer=playerConfig.colorMultiPlayer
         const isMove = movePiece(informationPieceSelect,nextPlayer,playerConfig.colorMultiPlayer)
         if(isMove){
