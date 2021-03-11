@@ -85,6 +85,7 @@ function moveTypeGame(informationPieceSelect){
         const nextPlayer=(playerConfig.top===playerConfig.currentPlayer)?playerConfig.bottom:playerConfig.top
         const isMove = movePiece(informationPieceSelect,nextPlayer,isPlayable)
         if(isMove){
+            // {informationPieceSelect: fullName,color,typeMovement,specialMovement,refId e piecePromotion}
             network.send.moveGame(informationPieceSelect)
             network.get.moveAdversary()
         }

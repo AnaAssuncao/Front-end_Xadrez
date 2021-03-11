@@ -205,6 +205,7 @@ export default function viewController(startBoard){
                 fullName:  informationMove.namePiece,
                 typeMovement: informationMove.type,
                 specialMovement:informationMove.specialMovement,
+                color:informationMove.color,
                 refId:idSquare,
                 piecePromotion:piece
             }   
@@ -216,10 +217,12 @@ export default function viewController(startBoard){
                 isMove: false,
                 type:null,
                 specialMovement:false,
+                color:null,
             } 
             if(chess.pieceSelect.position!==null){
                   if(chess.pieceSelect.refMovements.includes(idSquare)){
                     informationMove.namePiece= chess.pieceSelect.fullName
+                    informationMove.color= chess.pieceSelect.color
                     informationMove.isMove=true
                     const specialMovement = piece.verifySpecialMovement(idSquare)
                     if(specialMovement.isMovement){
