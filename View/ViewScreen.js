@@ -52,7 +52,9 @@ export default function viewScreen(chessBoard){
         },
         clearButton(){
             const buttonMove = document.querySelector("#button__back__movement")
-            buttonMove.id = "button__back__movement--display"
+            if(buttonMove){
+                buttonMove.id = "button__back__movement--display"
+            }
         }
     }
 

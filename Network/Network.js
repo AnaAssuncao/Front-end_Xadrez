@@ -6,10 +6,14 @@ export default function interfaceNetwork(){
             secretPlayer:null
         }
     }
-    
+
+    const networkConf={
+        url:"http://localhost:3030/api/v1"
+    }
+
     this.send={
         infStartGame: async(infGame) =>{
-            const url = 'http://localhost:3030/api/v1/startGame/infGame'
+            const url = networkConf.url+'/startGame/infGame'
             const msgRes = await httpPost(infGame,url)
             game.keys = msgRes.keyGame
             const sendController={
@@ -19,7 +23,7 @@ export default function interfaceNetwork(){
             return sendController
         },
         moveGame: async(move) =>{
-            const url = 'http://localhost:3030/api/v1/movementGame'
+            const url = networkConf.url+'/movementGame'
             const objsend={
                 key:game.keys.main,
                 player:game.keys.secretPlayer,
@@ -31,23 +35,30 @@ export default function interfaceNetwork(){
         },
         giveUp: async(giveUp) =>{
             if (giveUp === true){
-                const url = 'http://localhost:3030/api/v1/giveUpGame'
+                const url = networkConf.url+'/giveUpGame'
                 const msgRes = await httpPost(giveUp,url,functionToCallBack.informationStart)
             }
             return msgRes
         },
         endGame: async(endGame) =>{
             if (endGame === true){
-                const url = 'http://localhost:3030/api/v1/endGame'
+                const url = networkConf.url+'/endGame'
                 const msgRes = await httpPost(endGame,url,functionToCallBack.informationStart)
             }
             return msgRes
         }
     }
-
+   
     this.get={
         moveAdversary: async()=>{
-            const url = `http://localhost:3030/api/v1/movementGame?key=${game.keys.main}&player=${game.keys.secretPlayer}`
+            const params = {
+                key: game.keys.main,
+                player: game.keys.secretPlayer
+              }
+            let query = Object.keys(params)
+                    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+                    .join('&');
+            const url = networkConf.url+"/movementGame?" +query
             const waitMove = 
                 setInterval(
                         async()=>{
@@ -59,7 +70,14 @@ export default function interfaceNetwork(){
                         },1000)
         },
         playerConnection: async()=>{
-            const url = `http://localhost:3030/api/v1/statusGame?key=${game.keys.main}&player=${game.keys.secretPlayer}`
+            const params = {
+                key: game.keys.main,
+                player: game.keys.secretPlayer
+              }
+            let query = Object.keys(params)
+                    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+                    .join('&');
+            const url = networkConf.url+"/statusGame?"+query
             let msgRes
             const waitInf = 
                 await setInterval(
