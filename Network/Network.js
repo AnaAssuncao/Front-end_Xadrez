@@ -22,7 +22,6 @@ export default function interfaceNetwork(){
             gameCong.codes = msgRes.codes
             const sendController={
                 players:msgRes.players,
-                statusGame:msgRes.statusGame
             }
             return sendController
         },

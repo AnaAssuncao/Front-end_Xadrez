@@ -8,14 +8,14 @@ export default function viewController(startBoard){
         },
         informationBoard:{
             chessBoard:null,
-            colorPlayer:null,
+            isPlayable:null,
             currentPlayer:null,
         }
     }
     const updateInput ={
-        allInput:(chessBoard,colorPlayer)=>{
-            updateInput.inputColor(colorPlayer)
-            updateInput.inputPieces(chessBoard,colorPlayer)
+        allInput:(chessBoard,currentPlayer)=>{
+            updateInput.inputColor(currentPlayer)
+            updateInput.inputPieces(chessBoard,currentPlayer)
             updateInput.inputCoordinate()
         },
         inputColor: (color) => {
@@ -24,12 +24,12 @@ export default function viewController(startBoard){
             // iniciar ou reiniciar tabuleiro e input
             view.colorInput.addPiecesColor([color])  
         },
-        inputPieces: (chessBoard,colorPlayer) =>{
+        inputPieces: (chessBoard,currentPlayer) =>{
             view.pieceInput.clearAll()
             const arrayPieces = []
             for(let refId in chessBoard){ 
                 if(chessBoard[refId]!==null){
-                    if(chessBoard[refId].color==colorPlayer && chessBoard[refId].isAtive==true){
+                    if(chessBoard[refId].color==currentPlayer && chessBoard[refId].isAtive==true){
                         arrayPieces.push(chessBoard[refId].name)
                     }
                 }
@@ -51,16 +51,15 @@ export default function viewController(startBoard){
     }
 
     const board={
-        update:function(chessBoard,currentPlayer,colorPlayer){
+        update:function(chessBoard,currentPlayer,isPlayable){
             if(chess.pieceSelect.position){
                 view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             }
             view.chessBoard.renderBoard(chessBoard)
-            updateInput.allInput(chessBoard,colorPlayer)
+            updateInput.allInput(chessBoard,currentPlayer)
             chess.informationBoard.chessBoard = chessBoard
             chess.informationBoard.currentPlayer = currentPlayer
-            chess.informationBoard.colorPlayer=colorPlayer
-            // aqui muda
+            chess.informationBoard.isPlayable=isPlayable
         },
         clearAllBoard: function(){
             if(chess.pieceSelect.position){
@@ -154,7 +153,8 @@ export default function viewController(startBoard){
             if(chess.pieceSelect.position){
                 view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             } 
-            if((chess.pieceSelect.position!==idSquare) && (chess.informationBoard.chessBoard[idSquare]!==null) && chess.informationBoard.colorPlayer===chess.informationBoard.chessBoard[idSquare].color)
+            if((chess.pieceSelect.position!==idSquare) && (chess.informationBoard.chessBoard[idSquare]!==null) 
+            && (chess.informationBoard.isPlayable===true) && (chess.informationBoard.currentPlayer===chess.informationBoard.chessBoard[idSquare].color)) 
             {
                 chess.pieceSelect=chess.informationBoard.chessBoard[idSquare]
                 view.chessBoard.highlighSquare.addHighlightSquares(chess.pieceSelect)
@@ -166,7 +166,7 @@ export default function viewController(startBoard){
                     position:null
                 }  
             }
-            else if(chess.pieceSelect.position && chess.informationBoard.currentPlayer===chess.pieceSelect.color){
+            else if(chess.pieceSelect.position){
                 const informationMove=piece.verifyMove(idSquare)
                 if(informationMove.isMove){
                     piece.movePiece(idSquare,informationMove)
@@ -321,8 +321,8 @@ export default function viewController(startBoard){
     this.clearButtonBackMovement=function(){
         history.clearButtonBackMovement()
     }
-    this.updateBoard=function(chessBoard,currentPlayer,colorPlayer){
-        board.update(chessBoard,currentPlayer,colorPlayer)
+    this.updateBoard=function(chessBoard,currentPlayer,isPlayable){
+        board.update(chessBoard,currentPlayer,isPlayable)
     }
 
     this.updateHistory=function(historys){
