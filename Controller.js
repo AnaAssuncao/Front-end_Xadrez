@@ -33,6 +33,7 @@ function startSinglePlayer(){
 }
 
 async function startMultiPlayer(infGame){
+    // infGame = {name:value, roomCode:value}
     viewController.clearButtonBackMovement()
     const inf= await network.send.infStartGame(infGame)
     if(inf){

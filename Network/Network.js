@@ -1,9 +1,8 @@
-
 export default function interfaceNetwork(){
-    const game={
-        keys:{
-            main:null,
-            secretPlayer:null
+    const gameCong={
+        codes:{
+            room:null,
+            player:null
         }
     }
 
@@ -14,8 +13,13 @@ export default function interfaceNetwork(){
     this.send={
         infStartGame: async(infGame) =>{
             const url = networkConf.url+'/startGame/infGame'
-            const msgRes = await httpPost(infGame,url)
-            game.keys = msgRes.keyGame
+            // infGame = {name:value, roomCode:value}
+            const infMultiplayer = {
+                playerName:infGame.name,
+                roomCode:infGame.roomCode
+            }
+            const msgRes = await httpPost(infMultiplayer,url)
+            gameCong.codes = msgRes.codes
             const sendController={
                 players:msgRes.players,
                 statusGame:msgRes.statusGame
@@ -25,8 +29,8 @@ export default function interfaceNetwork(){
         moveGame: async(move) =>{
             const url = networkConf.url+'/movementGame'
             const objsend={
-                key:game.keys.main,
-                player:game.keys.secretPlayer,
+                roomCode:gameCong.codes.room,
+                playerCode:gameCong.codes.player,
                 movement:move
             }
             const msgRes = await httpPost(objsend,url)
@@ -52,8 +56,8 @@ export default function interfaceNetwork(){
     this.get={
         moveAdversary: async()=>{
             const params = {
-                key: game.keys.main,
-                player: game.keys.secretPlayer
+                roomCode: gameCong.codes.room,
+                playerCode: gameCong.codes.player
               }
             let query = Object.keys(params)
                     .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
@@ -63,7 +67,7 @@ export default function interfaceNetwork(){
                 setInterval(
                         async()=>{
                             const msgRes = await httpGet(url)
-                            if(msgRes.msg!=="noMove"){
+                            if(msgRes.msg!=="no Move"){
                                 clearInterval(waitMove) 
                                 notifyFunctions(functionToCallBack.moveAdversary,msgRes.move)
                             }
@@ -71,8 +75,8 @@ export default function interfaceNetwork(){
         },
         playerConnection: async()=>{
             const params = {
-                key: game.keys.main,
-                player: game.keys.secretPlayer
+                roomCode: gameCong.codes.room,
+                player: gameCong.codes.player
               }
             let query = Object.keys(params)
                     .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))

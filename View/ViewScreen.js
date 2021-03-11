@@ -294,9 +294,9 @@ export default function viewScreen(chessBoard){
         buttonMultiplayerInf(buttonStart){
             buttonStart.addEventListener("click", ()=>{
                 const inputName = document.querySelector(".input__multiplayer--name")
-                const inputKey = document.querySelector(".input__multiplayer--key")
-                if(inputName.value!=="" && inputKey.value!==""){
-                    notifyFunctions(functionToCallBack.buttonStartMultiPlayer,{name:inputName.value, key:inputKey.value})
+                const inputRoomCode= document.querySelector(".input__multiplayer--code")
+                if(inputName.value!=="" && inputRoomCode.value!==""){
+                    notifyFunctions(functionToCallBack.buttonStartMultiPlayer,{name:inputName.value, roomCode:inputRoomCode.value})
                 }
             })
         }, 
@@ -443,18 +443,18 @@ export default function viewScreen(chessBoard){
         if(selectInfMultiPlayer===null){
             const infMultiPlayer = document.createElement("div")
             const inputName = document.createElement("input")
-            const inputKey = document.createElement("input")
+            const inputCode = document.createElement("input")
             const buttonStart = document.createElement("button")
             infMultiPlayer.classList.add("start__infMultiPlayer")
             inputName.classList.add("input__multiplayer--name")
-            inputKey.classList.add("input__multiplayer--key")
-            buttonStart.classList.add("button__multiplayer--key")
+            inputCode.classList.add("input__multiplayer--code")
+            buttonStart.classList.add("button__multiplayer--code")
             starGameEvent.buttonMultiplayerInf(buttonStart)
-            inputName.placeholder="Nome"
-            inputKey.placeholder="Chave"
+            inputName.placeholder="Nome do jogador"
+            inputCode.placeholder="Código da sala"
             buttonStart.innerHTML = "Iniciar"
             infMultiPlayer.appendChild(inputName)
-            infMultiPlayer.appendChild(inputKey)
+            infMultiPlayer.appendChild(inputCode)
             infMultiPlayer.appendChild(buttonStart)
             selectModal.appendChild(infMultiPlayer)  
         }
