@@ -56,9 +56,15 @@ async function startMultiPlayer(infGame){
     }
 }
 
-async function connectionPlayerTwo(){
-    startGame(playerConfig.currentPlayer, playerConfig.top)
+async function connectionPlayerTwo(connection){
+    if(connection===false){
+        console.log("alerta e novo jogo")
+    }
+    else{
+        startGame(playerConfig.currentPlayer, playerConfig.top)
+    }
 }
+    
 
 function startGame(colorPlayer, colorTop, isPlayable){
     game.starObjGame(colorPlayer)
@@ -93,14 +99,19 @@ function moveTypeGame(informationPieceSelect){
 }
 
 function getMoveAdv(informationPieceSelect){
-    const nextPlayer=playerConfig.colorMultiPlayer
-    const isMove = movePiece(informationPieceSelect,nextPlayer)
-    if(isMove){
-        // network.send.recMoveGame("true")
+    if(connection===false){
+        console.log("alerta e novo jogo")
     }
     else{
-        // enviar caso tiver movimento invalido
-        // network.send.recMoveGame("false")
+        const nextPlayer=playerConfig.colorMultiPlayer
+        const isMove = movePiece(informationPieceSelect,nextPlayer)
+        if(isMove){
+            // network.send.recMoveGame("true")
+        }
+        else{
+            // enviar caso tiver movimento invalido
+            // network.send.recMoveGame("false")
+        }
     }
 }
 

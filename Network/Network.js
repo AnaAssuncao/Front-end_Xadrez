@@ -62,15 +62,8 @@ export default function interfaceNetwork(){
                     .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
                     .join('&');
             const url = networkConf.url+"/movementGame?" +query
-            const waitMove = 
-                setInterval(
-                        async()=>{
-                            const msgRes = await httpGet(url)
-                            if(msgRes.msg!=="no Move"){
-                                clearInterval(waitMove) 
-                                notifyFunctions(functionToCallBack.moveAdversary,msgRes.move)
-                            }
-                        },1000)
+            let time = 0
+            setTimeMoveAdv(url,time)
         },
         playerConnection: async()=>{
             const params = {
@@ -81,17 +74,45 @@ export default function interfaceNetwork(){
                     .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
                     .join('&');
             const url = networkConf.url+"/statusGame?"+query
-            let msgRes
-            const waitInf = 
-                await setInterval(
-                            async()=>{
-                                msgRes = await httpGet(url)
-                                if(msgRes.statusGame.connection==="connected players"){
-                                    clearInterval(waitInf) 
-                                    notifyFunctions(functionToCallBack.playerConnection)
-                                }
-                            },1000)
+            let time = 0
+            await setTimePlayer(url,time)
         }
+    }
+
+    async function setTimeMoveAdv(url,time){
+        await setTimeout(
+            async()=>{
+                const msgRes = await httpGet(url)
+                if(msgRes.msg!=="no Move"){
+                    notifyFunctions(functionToCallBack.moveAdversary,msgRes.move)
+                }
+                else if(time===10){
+                    const connection = false
+                    notifyFunctions(functionToCallBack.playerConnection,connection)
+                }
+                else{
+                    time++
+                    setTimeMoveAdv(url,time)
+                }
+            },1000)
+    }
+
+    async function setTimePlayer(url,time){
+        await setTimeout(
+            async()=>{
+                const msgRes = await httpGet(url)
+                if(msgRes.statusGame.connection==="connected players"){
+                    notifyFunctions(functionToCallBack.playerConnection)
+                }
+                else if(time===10){
+                    const connection = false
+                    notifyFunctions(functionToCallBack.playerConnection,connection)
+                }
+                else{
+                    time++
+                    setTimePlayer(url,time)
+                }
+            },1000)
     }
 
     const functionToCallBack= {
