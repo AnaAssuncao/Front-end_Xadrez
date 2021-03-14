@@ -33,7 +33,6 @@ export default function interfaceNetwork(){
                 movement:move
             }
             const msgRes = await httpPost(objsend,url)
-            console.log(msgRes)
             return msgRes
         },
         giveUp: async(giveUp) =>{
@@ -68,7 +67,7 @@ export default function interfaceNetwork(){
         playerConnection: async()=>{
             const params = {
                 roomCode: gameCong.codes.room,
-                player: gameCong.codes.player
+                playerCode: gameCong.codes.player
               }
             let query = Object.keys(params)
                     .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
@@ -76,6 +75,29 @@ export default function interfaceNetwork(){
             const url = networkConf.url+"/statusGame?"+query
             let time = 0
             await setTimePlayer(url,time)
+        },
+        statusGame: async()=>{ 
+            const params = {
+                roomCode: gameCong.codes.room,  
+                playerCode: gameCong.codes.player
+              }
+            let query = Object.keys(params)
+                    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+                    .join('&');
+                    
+            const url = networkConf.url+"/statusGame?"+query
+            const waitInf = setInterval(async()=>{
+                    const infGame = await httpGet(url)
+                    if(infGame.statusGame.giveUP===true || infGame.statusGame.endGame===true ){
+                        clearInterval(waitInf) 
+                        const statusGame = waitInf.statusGame
+                        notifyFunctions(functionToCallBack.endGame,statusGame)
+                    }
+                    else if(infGame==="err"){
+                        clearInterval(waitInf) 
+                    }
+
+            },1000)
         }
     }
 
@@ -101,7 +123,7 @@ export default function interfaceNetwork(){
         await setTimeout(
             async()=>{
                 const msgRes = await httpGet(url)
-                if(msgRes.statusGame.connection==="connected players"){
+                if(msgRes.players.playerTwo!==null){
                     notifyFunctions(functionToCallBack.playerConnection)
                 }
                 else if(time===10){
@@ -164,6 +186,5 @@ export default function interfaceNetwork(){
             }
         })   
         const msgRes = await resp.json()     
-        return msgRes
     }   
 }

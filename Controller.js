@@ -53,6 +53,7 @@ async function startMultiPlayer(infGame){
             startGame(playerConfig.currentPlayer, playerConfig.top, isPlayable)
             network.get.moveAdversary()
         }
+        network.get.statusGame()
     }
 }
 
@@ -79,7 +80,7 @@ function startGame(colorPlayer, colorTop, isPlayable){
 }
 
 function moveTypeGame(informationPieceSelect){
-    if(playerConfig.typeGame==="SinglePslayer"){
+    if(playerConfig.typeGame==="SinglePlayer"){
         const nextPlayer=(playerConfig.top===playerConfig.currentPlayer)?playerConfig.bottom:playerConfig.top
         const isMove = movePiece(informationPieceSelect,nextPlayer)
         if(isMove){
@@ -99,7 +100,7 @@ function moveTypeGame(informationPieceSelect){
 }
 
 function getMoveAdv(informationPieceSelect){
-    if(connection===false){
+    if(informationPieceSelect===false){
         console.log("alerta e novo jogo")
     }
     else{
