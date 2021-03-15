@@ -169,6 +169,12 @@ export default function viewController(startBoard){
         }
     }
 
+    const informationDetails={
+        updateLog(text){
+            view.informationDetails.updateLog(text)
+        }
+    }
+
     const piece={
         updatePieceSelect:function(idSquare){   
             if(chess.pieceSelect.position){
@@ -379,6 +385,10 @@ export default function viewController(startBoard){
 
     this.clearinformationModal=function(information){
         statusGame.clearModal(information)
+    }
+
+    this.informationLog=function(text){
+        informationDetails.updateLog(text)
     }
 
     const utilities ={

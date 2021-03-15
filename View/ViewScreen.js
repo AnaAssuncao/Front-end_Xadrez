@@ -288,6 +288,13 @@ export default function viewScreen(chessBoard){
         }
     }
 
+    this.informationDetails={
+        updateLog(text){
+            const msg = document.querySelector("#details_msg")
+            msg.innerText = text
+        }
+    }
+
     function addImagem(capturedPieceImg,player){
         const divSquare= document.querySelector(player)
         const img = document.createElement("img")
