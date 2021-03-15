@@ -21,7 +21,8 @@ export default function interfaceNetwork(){
             const msgRes = await httpPost(infMultiplayer,url)
             gameCong.codes = msgRes.codes
             const sendController={
-                players:msgRes.players,
+                playerAdv:msgRes.infPlayerAdv,
+                connection:msgRes.statusGame.connection,
             }
             return sendController
         },
@@ -88,10 +89,17 @@ export default function interfaceNetwork(){
             const url = networkConf.url+"/statusGame?"+query
             const waitInf = setInterval(async()=>{
                     const infGame = await httpGet(url)
-                    if(infGame.statusGame.giveUP===true || infGame.statusGame.endGame===true ){
+                    if((infGame.statusGame.giveUP===true) || (infGame.statusGame.endGame===true)){
                         clearInterval(waitInf) 
-                        const statusGame = waitInf.statusGame
+                        const statusGame = infGame.statusGame
                         notifyFunctions(functionToCallBack.endGame,statusGame)
+                    }
+                    if(infGame.statusGame.connection===false){
+                        if(infGame.infPlayerAdv.connection===false){
+                            clearInterval(waitInf) 
+                            const statusGame = infGame.infPlayerAdv
+                            notifyFunctions(functionToCallBack.playerConnection,statusGame)
+                        }
                     }
                     else if(infGame==="err"){
                         clearInterval(waitInf) 
@@ -108,7 +116,7 @@ export default function interfaceNetwork(){
                 if(msgRes.msg!=="no Move"){
                     notifyFunctions(functionToCallBack.moveAdversary,msgRes.move)
                 }
-                else if(time===10){
+                else if(time===100){
                     const connection = false
                     notifyFunctions(functionToCallBack.playerConnection,connection)
                 }
@@ -123,12 +131,13 @@ export default function interfaceNetwork(){
         await setTimeout(
             async()=>{
                 const msgRes = await httpGet(url)
-                if(msgRes.players.playerTwo!==null){
-                    notifyFunctions(functionToCallBack.playerConnection)
+                if(msgRes.infPlayerAdv.namePlayer!==null){
+                    notifyFunctions(functionToCallBack.playerConnection,msgRes.infPlayerAdv)
                 }
-                else if(time===10){
-                    const connection = false
-                    notifyFunctions(functionToCallBack.playerConnection,connection)
+                else if(time===100){
+                    const infPlayerAdv={
+                        connection:false}
+                    notifyFunctions(functionToCallBack.playerConnection,infPlayerAdv)
                 }
                 else{
                     time++
@@ -185,6 +194,7 @@ export default function interfaceNetwork(){
                 "Access-Control-Allow-Origin": "*"
             }
         })   
-        const msgRes = await resp.json()     
+        const msgRes = await resp.json()   
+        return msgRes  
     }   
 }

@@ -119,14 +119,18 @@ export default function viewController(startBoard){
 
     const statusGame={
         update:function(statusGame,color){
+            const colors={
+                White:"Brancas",
+                Black:"Pretas"
+            }
             if(statusGame.draw){
                 view.informationGame.addinformation("Jogo empatado")
             }
             else if(statusGame.checkMate===true){
-                view.informationGame.addinformation(`Xeque-Mate no King ${color} - Vitória das Peças ${statusGame.playerWin}`)
+                view.informationGame.addinformation(`Xeque-Mate no Rei da peças ${colors[color]} - Vitória das Peças ${colors[statusGame.playerWin]}`)
             }
             else if(statusGame.check===true){
-                view.informationGame.addinformation(`Xeque no King ${color}`)
+                view.informationGame.addinformation(`Xeque no Rei da peças ${colors[color]}`)
             }
             else{
                 view.informationGame.clearInformation()
@@ -134,7 +138,7 @@ export default function viewController(startBoard){
         },
         endGame:function(status){
             if(status.endGame===true){
-                view.informationGame.addinformation(`Vitória das Peças ${status.playerWin}`)
+                view.informationGame.addinformation(`Vitória das Peças ${colors[status.playerWin]}`)
             }
             // demonstrar a cor vitoriosa
         },

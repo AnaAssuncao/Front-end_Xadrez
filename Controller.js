@@ -42,7 +42,8 @@ async function startMultiPlayer(infGame){
         viewController.clearModalStartGame()
         playerConfig.typeGame="MultiPlayer"
         if(infPlayers.playerAdv.connection===false){
-            viewController.addStatusConection(playerConfig.typeGame,"Jogo Online")
+            const msgConnection = "Aguardando adversário"
+            viewController.addStatusConection(playerConfig.typeGame,msgConnection)
             playerConfig.colorMultiPlayer="White"
             playerConfig.currentPlayer =playerConfig.colorMultiPlayer
             const isPlayable = false
@@ -50,7 +51,8 @@ async function startMultiPlayer(infGame){
             network.get.playerConnection()
         }
         else{
-            viewController.addStatusConection(playerConfig.typeGame,"Jogo Online")
+            const msgConnection = "Conectado com "+ infPlayers.playerAdv.namePlayer
+            viewController.addStatusConection(playerConfig.typeGame,msgConnection)
             playerConfig.colorMultiPlayer="Black"
             playerConfig.currentPlayer="White"
             const isPlayable = false
@@ -61,11 +63,14 @@ async function startMultiPlayer(infGame){
     }
 }
 
-async function connectionPlayerTwo(connection){
-    if(connection===false){
+async function connectionPlayerTwo(infPlayerAdv){
+    if(infPlayerAdv.connection===false){
         console.log("alerta e novo jogo")
+        // view sem conexão com jogador adversario e começar um novo jogo
     }
     else{
+        const msgConnection = "Conectado com "+ infPlayerAdv.namePlayer
+        viewController.updateStatusConection(msgConnection)
         startGame(playerConfig.currentPlayer, playerConfig.top)
     }
 }
@@ -171,7 +176,7 @@ function backPreviousMove(){
         const statusGame = game.getStatusGame() 
         const capturedPieces = game.getCapturedPieces()
         const playHistory = game.getHistoryMoves()
-        updateBoard(pastColor,chessBoard,pastColor)       
+        updateBoard(pastColor,chessBoard)        
         updateInformationGame(pastColor,statusGame)
         updateCapturedPiece(playerConfig.top,capturedPieces)        
         updatePlaysHistory(playHistory)   
