@@ -179,28 +179,16 @@ export default function viewScreen(chessBoard){
         }
     }
 
-    this.informationConnection={
-        imgs:{
-            SinglePlayer:"img/Offline_logo.svg",
-            MultiPlayer:"img/Online_logo.svg"
-        },
-        renderConnection(type, text){
-            const status=document.querySelector("#status__connection")
-            const img = document.createElement("img")
-            img.src=this.imgs[type]
-            img.classList.add("icon_min")
-            status.appendChild(img)
-            const p = document.createElement("p")
-            p.innerText = text
-            p.id="information__connection"
-            status.appendChild(p)
-        },
-        updateInformation(text){
-            document.querySelector("#information__connection").innerText = text
-        }
-    }
-
     this.informationGame={
+        imgs:{
+            offline:"img/Offline_logo.svg",
+            online:"img/Online_logo.svg"
+        },
+        updateInformation(typeImg,text){       
+            const img=document.querySelector("#connection__img")
+            img.src=this.imgs[typeImg]
+            document.querySelector("#information__connection").innerText = text
+        },
         addinformation(text){
             document.querySelector("#information__game").innerText = text
             document.querySelector(".status__game--board").classList.add("check-alert-effect")
@@ -217,7 +205,7 @@ export default function viewScreen(chessBoard){
         clearModal(){
             const selectModal = document.querySelector("#modal__information")
             const classModal = selectModal.className
-            if(!classModal.indexOf("chess__modal--display")){
+            if(classModal.indexOf("chess__modal--display")===-1){
                 selectModal.classList.toggle("chess__modal--display")
             }
         }

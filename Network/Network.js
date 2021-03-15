@@ -134,7 +134,7 @@ export default function interfaceNetwork(){
                 if(msgRes.infPlayerAdv.namePlayer!==null){
                     notifyFunctions(functionToCallBack.playerConnection,msgRes.infPlayerAdv)
                 }
-                else if(time===100){
+                else if(time===10){
                     const infPlayerAdv={
                         connection:false}
                     notifyFunctions(functionToCallBack.playerConnection,infPlayerAdv)

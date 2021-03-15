@@ -125,11 +125,11 @@ export default function viewController(startBoard){
         update:function(statusGame,color){
             if(statusGame.draw){
                 view.informationGame.addinformation("Jogo empatado")
-                view.informationGame.renderModal("Jogo empatado")
+                this.addModal("draw")
             }
             else if(statusGame.checkMate===true){
                 view.informationGame.addinformation("Xeque-Mate na Peças " + this.colors[color])
-                view.informationGame.renderModal("Vitória das Peças " + this.colors[statusGame.playerWin])
+                this.addModal("win")
             }
             else if(statusGame.check===true){
                 view.informationGame.addinformation("Xeque na Peças " + this.colors[color])
@@ -141,24 +141,31 @@ export default function viewController(startBoard){
         endGame:function(status){
             if(status.endGame===true){
                 view.informationGame.addinformation("Vitória das Peças " + this.colors[statusGame.playerWin])
-                view.informationGame.renderModal("Vitória das Peças " + this.colors[statusGame.playerWin])
+                this.addModal("win")
             }
         },
         startGameSinglePlayer:function(){
-            view.informationGame.clearModal()
             board.clearAllBoard()
             notifyFunctions(functionToCallBack.startGameSinglePlayer)
         },
         startGameMultiPlayer:function(infGame){
-            view.informationGame.clearModal()
             board.clearAllBoard()
             notifyFunctions (functionToCallBack.startGameMultiPlayer,infGame)
         },
-        addConnection(type,statusConection){
-            view.informationConnection.renderConnection(type,statusConection)
+        updateConnection(type,statusConection){
+            view.informationGame.updateInformation(type,statusConection)
         },
-        updateConnection(text){
-            view.informationConnection.updateInformation(text)
+        addModal(information){
+            const informations={
+                win:("Vitória das Peças " + this.colors[statusGame.playerWin]),
+                draw:"Jogo empatado",
+                noConnection:"Sem conexão",
+                noAdv:"Sem adversario"
+            }
+            view.informationGame.renderModal(informations[information])
+        },
+        clearModal(){
+            view.informationGame.clearModal()
         }
     }
 
@@ -358,16 +365,20 @@ export default function viewController(startBoard){
         statusGame.update(status,color)
     }
 
-    this.updateStatusConection=function(statusConection){
-        statusGame.updateConnection(statusConection)
-    }
-
-    this.addStatusConection=function(type,statusConection){
-        statusGame.addConnection(type,statusConection)
+    this.updateStatusConection=function(statusConection,text){
+        statusGame.updateConnection(statusConection,text)
     }
 
     this.endGame=function(status){
         statusGame.endGame(status)
+    }
+
+    this.addinformationModal=function(information){
+        statusGame.addModal(information)
+    }
+
+    this.clearinformationModal=function(information){
+        statusGame.clearModal(information)
     }
 
     const utilities ={

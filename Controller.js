@@ -29,9 +29,11 @@ function startSinglePlayer(){
     playerConfig.currentPlayer="White"
     playerConfig.typeGame="SinglePlayer"
     viewController.clearModalStartGame()
-    viewController.addStatusConection(playerConfig.typeGame,"Jogo Local")
-    startGame(playerConfig.currentPlayer, playerConfig.top)
+    viewController.clearinformationModal()
+    const msgConnection="Jogo Local"
+    viewController.updateStatusConection("offline",msgConnection)
     viewController.addButtonBackMovement()
+    startGame(playerConfig.currentPlayer, playerConfig.top)
 }
 
 async function startMultiPlayer(infGame){
@@ -40,10 +42,11 @@ async function startMultiPlayer(infGame){
     const infPlayers= await network.send.infStartGame(infGame)
     if(infPlayers){
         viewController.clearModalStartGame()
+        viewController.clearinformationModal()
         playerConfig.typeGame="MultiPlayer"
         if(infPlayers.playerAdv.connection===false){
             const msgConnection = "Aguardando adversário"
-            viewController.addStatusConection(playerConfig.typeGame,msgConnection)
+            viewController.updateStatusConection("online",msgConnection)
             playerConfig.colorMultiPlayer="White"
             playerConfig.currentPlayer =playerConfig.colorMultiPlayer
             const isPlayable = false
@@ -52,7 +55,7 @@ async function startMultiPlayer(infGame){
         }
         else{
             const msgConnection = "Conectado com "+ infPlayers.playerAdv.namePlayer
-            viewController.addStatusConection(playerConfig.typeGame,msgConnection)
+            viewController.updateStatusConection("online",msgConnection)
             playerConfig.colorMultiPlayer="Black"
             playerConfig.currentPlayer="White"
             const isPlayable = false
@@ -65,12 +68,15 @@ async function startMultiPlayer(infGame){
 
 async function connectionPlayerTwo(infPlayerAdv){
     if(infPlayerAdv.connection===false){
-        console.log("alerta e novo jogo")
-        // view sem conexão com jogador adversario e começar um novo jogo
+        viewController.addinformationModal("noAdv")
+        setTimeout(()=>{
+            viewController.clearinformationModal()
+            viewController.addModalStartGame()
+        },5000)
     }
     else{
         const msgConnection = "Conectado com "+ infPlayerAdv.namePlayer
-        viewController.updateStatusConection(msgConnection)
+        viewController.updateStatusConection("online",msgConnection)
         startGame(playerConfig.currentPlayer, playerConfig.top)
     }
 }
