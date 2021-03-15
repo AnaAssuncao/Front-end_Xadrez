@@ -13,7 +13,7 @@ export default function viewScreen(chessBoard){
     this.modalStartGame={
         clear(){
             const selectModal = document.querySelector("#startGame")
-            selectModal.classList.toggle('chess__startGame--display')
+            selectModal.classList.toggle("chess__startGame--display")
             const infToStartGame= document.querySelector(".start__infMultiPlayer")
             if(infToStartGame){
                 selectModal.removeChild(infToStartGame)
@@ -21,7 +21,7 @@ export default function viewScreen(chessBoard){
         },
         render(){
             const selectModal = document.querySelector("#startGame")
-            selectModal.classList.toggle('chess__startGame--display')
+            selectModal.classList.toggle("chess__startGame--display")
         }
     }
     this.buttonStartSinglePlayer={
@@ -208,7 +208,19 @@ export default function viewScreen(chessBoard){
         clearInformation(){
             document.querySelector("#information__game").innerText = "Nenhum Xeque Identificado"
             document.querySelector(".status__game--board").classList.remove("check-alert-effect")
-        }   
+        },   
+        renderModal(text){
+            const selectModal = document.querySelector("#modal__information")
+            selectModal.classList.toggle("chess__modal--display")
+            document.querySelector("#chess__inf").innerText = text
+        },
+        clearModal(){
+            const selectModal = document.querySelector("#modal__information")
+            const classModal = selectModal.className
+            if(!classModal.indexOf("chess__modal--display")){
+                selectModal.classList.toggle("chess__modal--display")
+            }
+        }
     }
 
     this.piecesPromotion={
@@ -287,6 +299,7 @@ export default function viewScreen(chessBoard){
             clearOptionsInput("#information__history")
         }
     }
+
     function addImagem(capturedPieceImg,player){
         const divSquare= document.querySelector(player)
         const img = document.createElement("img")
@@ -332,9 +345,9 @@ export default function viewScreen(chessBoard){
             const modal= document.querySelector(".modal__details")
             const icon = document.querySelector(".icon_micro")
             buttonStar.addEventListener("click", ()=>{
-                const srcImg = icon.getAttribute('src')!=='img/down-chevron.svg'?'img/down-chevron.svg':'img/up-chevron.svg'
-                icon.setAttribute('src',srcImg)
-                modal.classList.toggle('modal__details--display')
+                const srcImg = icon.getAttribute("src")!=="img/down-chevron.svg"?"img/down-chevron.svg":"img/up-chevron.svg"
+                icon.setAttribute("src",srcImg)
+                modal.classList.toggle("modal__details--display")
             })
         },
         pieceInput(){          

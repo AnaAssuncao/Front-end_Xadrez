@@ -137,6 +137,9 @@ function movePiece(informationPieceSelect,colorPlayer,isPlayable){
     const statusGame = game.getStatusGame() 
     const capturedPieces = game.getCapturedPieces()
     const playHistory = game.getHistoryMoves()
+    if(statusGame.endGame){
+        isPlayable=false
+    }
     updateBoard(colorPlayer,chessBoard,isPlayable) 
     updateInformationGame(colorPlayer,statusGame)
     updateCapturedPiece(playerConfig.top,capturedPieces)
@@ -149,14 +152,14 @@ function updateBoard(colorPlayer,board,isPlayable=true){
 }
 
 function updateInformationGame(colorPlayer,statusGame){  
-    if(statusGame.endGame===true){
+    viewController.updateStatusGame(statusGame,colorPlayer)
+    if(statusGame.endGame===true && statusGame.checkMate===false){
         const status ={
             endGame:statusGame.endGame,
             playerConfigWin:statusGame.playerConfigWin
         }
         viewController.endGame(status,colorPlayer)
-    }
-    viewController.updateStatusGame(statusGame,colorPlayer)
+    } 
 }
 
 function updateCapturedPiece(colorTop,capturedPieces){
@@ -176,10 +179,12 @@ function backPreviousMove(){
         const statusGame = game.getStatusGame() 
         const capturedPieces = game.getCapturedPieces()
         const playHistory = game.getHistoryMoves()
-        updateBoard(pastColor,chessBoard)        
-        updateInformationGame(pastColor,statusGame)
-        updateCapturedPiece(playerConfig.top,capturedPieces)        
-        updatePlaysHistory(playHistory)   
-        playerConfig.currentPlayer=pastColor
+        if(statusGame.endGame===false){
+            updateBoard(pastColor,chessBoard)        
+            updateInformationGame(pastColor,statusGame)
+            updateCapturedPiece(playerConfig.top,capturedPieces)        
+            updatePlaysHistory(playHistory)   
+            playerConfig.currentPlayer=pastColor
+        }
     }
 }

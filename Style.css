@@ -30,7 +30,7 @@
     margin:2%;
 }
 .icon_micro{
-    width: 1em;
+    width: 0.8em;
     margin: 0px 5px 0px 10px;
 }
 .icon_min{
@@ -81,7 +81,7 @@
 }
 .status__game{
     color:black;
-    font-size: 2vh;
+    font-size: 0.8em;
     color:black;
     font-weight: 500;
     border-right: 1px solid rgb(77, 77, 77);
@@ -124,7 +124,7 @@
   #history__header{
       background-color: #8379E8;
       font-weight: 500;
-      font-size: 2vh;
+      font-size: 0.8em;
       display:flex;
       flex-flow: row nowrap;
       height: 6vh;
@@ -362,7 +362,7 @@
     width:3vw; 
     height: 5vh; 
     background-color: #7169b8;
-    font-size: 2vh;
+    font-size: 0.8em;
     font-weight: 500;
     border-radius: 1px;
     position: absolute;
@@ -390,7 +390,7 @@
 }
 .play__number
 .play__refIdPiece{
-    font-size:16px;
+    font-size:0.8em;
     width: 5%;
 }
 .play__img{
@@ -424,4 +424,21 @@
 }
 #button__back__movement--display{
     display: none;
+}
+.chess__modal{
+    background-color: rgba(117, 155, 112, .8);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index:9999;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+.chess__modal--display{
+    display:none
+}
+#chess__inf{
+    font-size:2em;
 }

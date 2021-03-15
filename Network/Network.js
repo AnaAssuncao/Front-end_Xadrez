@@ -12,7 +12,7 @@ export default function interfaceNetwork(){
 
     this.send={
         infStartGame: async(infGame) =>{
-            const url = networkConf.url+'/startGame/infGame'
+            const url = networkConf.url+"/startGame/infGame"
             // infGame = {name:value, roomCode:value}
             const infMultiplayer = {
                 playerName:infGame.name,
@@ -27,7 +27,7 @@ export default function interfaceNetwork(){
             return sendController
         },
         moveGame: async(move) =>{
-            const url = networkConf.url+'/movementGame'
+            const url = networkConf.url+"/movementGame"
             const objsend={
                 roomCode:gameCong.codes.room,
                 playerCode:gameCong.codes.player,
@@ -38,14 +38,14 @@ export default function interfaceNetwork(){
         },
         giveUp: async(giveUp) =>{
             if (giveUp === true){
-                const url = networkConf.url+'/giveUpGame'
+                const url = networkConf.url+"/giveUpGame"
                 const msgRes = await httpPost(giveUp,url,functionToCallBack.informationStart)
             }
             return msgRes
         },
         endGame: async(endGame) =>{
             if (endGame === true){
-                const url = networkConf.url+'/endGame'
+                const url = networkConf.url+"/endGame"
                 const msgRes = await httpPost(endGame,url,functionToCallBack.informationStart)
             }
             return msgRes
@@ -59,8 +59,8 @@ export default function interfaceNetwork(){
                 playerCode: gameCong.codes.player
               }
             let query = Object.keys(params)
-                    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-                    .join('&');
+                    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
+                    .join("&");
             const url = networkConf.url+"/movementGame?" +query
             let time = 0
             setTimeMoveAdv(url,time)
@@ -71,8 +71,8 @@ export default function interfaceNetwork(){
                 playerCode: gameCong.codes.player
               }
             let query = Object.keys(params)
-                    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-                    .join('&');
+                    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
+                    .join("&");
             const url = networkConf.url+"/statusGame?"+query
             let time = 0
             await setTimePlayer(url,time)
@@ -83,8 +83,8 @@ export default function interfaceNetwork(){
                 playerCode: gameCong.codes.player
               }
             let query = Object.keys(params)
-                    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-                    .join('&');
+                    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
+                    .join("&");
                     
             const url = networkConf.url+"/statusGame?"+query
             const waitInf = setInterval(async()=>{

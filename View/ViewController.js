@@ -118,19 +118,21 @@ export default function viewController(startBoard){
     }
 
     const statusGame={
+        colors:{
+            White:"Brancas",
+            Black:"Pretas"
+        },
         update:function(statusGame,color){
-            const colors={
-                White:"Brancas",
-                Black:"Pretas"
-            }
             if(statusGame.draw){
                 view.informationGame.addinformation("Jogo empatado")
+                view.informationGame.renderModal("Jogo empatado")
             }
             else if(statusGame.checkMate===true){
-                view.informationGame.addinformation(`Xeque-Mate no Rei da peças ${colors[color]} - Vitória das Peças ${colors[statusGame.playerWin]}`)
+                view.informationGame.addinformation("Xeque-Mate na Peças " + this.colors[color])
+                view.informationGame.renderModal("Vitória das Peças " + this.colors[statusGame.playerWin])
             }
             else if(statusGame.check===true){
-                view.informationGame.addinformation(`Xeque no Rei da peças ${colors[color]}`)
+                view.informationGame.addinformation("Xeque na Peças " + this.colors[color])
             }
             else{
                 view.informationGame.clearInformation()
@@ -138,15 +140,17 @@ export default function viewController(startBoard){
         },
         endGame:function(status){
             if(status.endGame===true){
-                view.informationGame.addinformation(`Vitória das Peças ${colors[status.playerWin]}`)
+                view.informationGame.addinformation("Vitória das Peças " + this.colors[statusGame.playerWin])
+                view.informationGame.renderModal("Vitória das Peças " + this.colors[statusGame.playerWin])
             }
-            // demonstrar a cor vitoriosa
         },
         startGameSinglePlayer:function(){
+            view.informationGame.clearModal()
             board.clearAllBoard()
             notifyFunctions(functionToCallBack.startGameSinglePlayer)
         },
         startGameMultiPlayer:function(infGame){
+            view.informationGame.clearModal()
             board.clearAllBoard()
             notifyFunctions (functionToCallBack.startGameMultiPlayer,infGame)
         },
