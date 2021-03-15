@@ -402,10 +402,8 @@
     width: 100vw;
     height: 100vh;
     z-index:9999;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: center;
+    display: none;
+
 }
 .start__infMultiPlayer{
     display: flex;
@@ -419,7 +417,10 @@
     height: 5%;
 }
 .chess__startGame--display{
-    display: none;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
 }
 #button__back__movement--display{
     display: none;

@@ -323,6 +323,10 @@ export default function viewController(startBoard){
         modalStartGame.clearModal()
     }
 
+    this.addModalStartGame=function(){
+        modalStartGame.addModal()
+    }
+
     this.addButtonBackMovement=function(){
         history.addButtonBackMovement()
     }

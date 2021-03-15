@@ -16,6 +16,7 @@ const startboard = game.getCurrentBoard()
 const viewController = new ViewController (startboard)
 const network = new interfaceNetwork()
 
+viewController.addModalStartGame()
 viewController.subscribeStartSinglePlayer(startSinglePlayer)
 viewController.subscribeStartMultiPlayer(startMultiPlayer)
 viewController.subscribeMovePiece(moveTypeGame)
@@ -28,6 +29,7 @@ function startSinglePlayer(){
     playerConfig.currentPlayer="White"
     playerConfig.typeGame="SinglePlayer"
     viewController.clearModalStartGame()
+    viewController.addStatusConection(playerConfig.typeGame,"Jogo Local")
     startGame(playerConfig.currentPlayer, playerConfig.top)
     viewController.addButtonBackMovement()
 }
@@ -39,7 +41,8 @@ async function startMultiPlayer(infGame){
     if(infPlayers){
         viewController.clearModalStartGame()
         playerConfig.typeGame="MultiPlayer"
-        if(infPlayers.players.playerTwo===null){
+        if(infPlayers.playerAdv.connection===false){
+            viewController.addStatusConection(playerConfig.typeGame,"Jogo Online")
             playerConfig.colorMultiPlayer="White"
             playerConfig.currentPlayer =playerConfig.colorMultiPlayer
             const isPlayable = false
@@ -47,6 +50,7 @@ async function startMultiPlayer(infGame){
             network.get.playerConnection()
         }
         else{
+            viewController.addStatusConection(playerConfig.typeGame,"Jogo Online")
             playerConfig.colorMultiPlayer="Black"
             playerConfig.currentPlayer="White"
             const isPlayable = false
