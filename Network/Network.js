@@ -1,3 +1,6 @@
+import methodsHTTP from "./methodsHTTP.js"
+const httpMethods = new methodsHTTP()
+
 export default function interfaceNetwork(){
     const gameCong={
         codes:{
@@ -18,7 +21,7 @@ export default function interfaceNetwork(){
                 playerName:infGame.name,
                 roomCode:infGame.roomCode
             }
-            const msgRes = await httpPost(infMultiplayer,url)
+            const msgRes = await httpMethods.post(infMultiplayer,url)
             gameCong.codes = msgRes.codes
             const sendController={
                 playerAdv:msgRes.infPlayerAdv,
@@ -33,20 +36,20 @@ export default function interfaceNetwork(){
                 playerCode:gameCong.codes.player,
                 movement:move
             }
-            const msgRes = await httpPost(objsend,url)
+            const msgRes = await httpMethods.post(objsend,url)
             return msgRes
         },
         giveUp: async(giveUp) =>{
             if (giveUp === true){
                 const url = networkConf.url+"/giveUpGame"
-                const msgRes = await httpPost(giveUp,url,functionToCallBack.informationStart)
+                const msgRes = await httpMethods.post(giveUp,url,functionToCallBack.informationStart)
             }
             return msgRes
         },
         endGame: async(endGame) =>{
             if (endGame === true){
                 const url = networkConf.url+"/endGame"
-                const msgRes = await httpPost(endGame,url,functionToCallBack.informationStart)
+                const msgRes = await httpMethods.post(endGame,url)
             }
             return msgRes
         }
@@ -88,7 +91,7 @@ export default function interfaceNetwork(){
                     
             const url = networkConf.url+"/statusGame?"+query
             const waitInf = setInterval(async()=>{
-                    const infGame = await httpGet(url)
+                    const infGame = await httpMethods.get(url)
                     if((infGame.statusGame.giveUP===true) || (infGame.statusGame.endGame===true)){
                         clearInterval(waitInf) 
                         const statusGame = infGame.statusGame
@@ -112,7 +115,7 @@ export default function interfaceNetwork(){
     async function setTimeMoveAdv(url,time){
         await setTimeout(
             async()=>{
-                const msgRes = await httpGet(url)
+                const msgRes = await httpMethods.get(url)
                 if(msgRes.msg!=="no Move"){
                     notifyFunctions(functionToCallBack.moveAdversary,msgRes.move)
                 }
@@ -130,11 +133,11 @@ export default function interfaceNetwork(){
     async function setTimePlayer(url,time){
         await setTimeout(
             async()=>{
-                const msgRes = await httpGet(url)
+                const msgRes = await httpMethods.get(url)
                 if(msgRes.infPlayerAdv.namePlayer!==null){
                     notifyFunctions(functionToCallBack.playerConnection,msgRes.infPlayerAdv)
                 }
-                else if(time===10){
+                else if(time===100){
                     const infPlayerAdv={
                         connection:false}
                     notifyFunctions(functionToCallBack.playerConnection,infPlayerAdv)
@@ -168,33 +171,4 @@ export default function interfaceNetwork(){
     function notifyFunctions (objToCallBack,parameters){
         objToCallBack.forEach((fn)=>fn(parameters))
     }
-    
-    async function httpPost(obj,url){
-        const msgSend = JSON.stringify(obj)
-        const resp = await fetch(url,{
-            method: "POST",
-            body: msgSend,
-            headers:{
-                "content-type": "application/json; charset=UTF-8",
-                "accept": "*/*",
-                "Content-Length" : msgSend.length.toString(),
-                "Access-Control-Allow-Origin": "*"
-            }
-        })   
-        const msgRes = await resp.json()     
-        return msgRes
-    }
-
-    async function httpGet(url){
-        const resp = await fetch(url,{
-            method: "GET",
-            headers:{
-                "content-type": "application/json; charset=UTF-8",
-                "accept": "*/*",
-                "Access-Control-Allow-Origin": "*"
-            }
-        })   
-        const msgRes = await resp.json()   
-        return msgRes  
-    }   
 }
