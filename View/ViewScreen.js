@@ -179,6 +179,27 @@ export default function viewScreen(chessBoard){
         }
     }
 
+    this.informationConnection={
+        imgs:{
+            SinglePlayer:"img/Offline_logo.svg",
+            MultiPlayer:"img/Online_logo.svg"
+        },
+        renderConnection(type, text){
+            const status=document.querySelector("#status__connection")
+            const img = document.createElement("img")
+            img.src=this.imgs[type]
+            img.classList.add("icon_min")
+            status.appendChild(img)
+            const p = document.createElement("p")
+            p.innerText = text
+            p.id="information__connection"
+            status.appendChild(p)
+        },
+        updateInformation(text){
+            document.querySelector("#information__connection").innerText = text
+        }
+    }
+
     this.informationGame={
         addinformation(text){
             document.querySelector("#information__game").innerText = text

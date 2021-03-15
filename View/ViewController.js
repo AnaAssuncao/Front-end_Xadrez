@@ -145,6 +145,12 @@ export default function viewController(startBoard){
         startGameMultiPlayer:function(infGame){
             board.clearAllBoard()
             notifyFunctions (functionToCallBack.startGameMultiPlayer,infGame)
+        },
+        addConnection(type,statusConection){
+            view.informationConnection.renderConnection(type,statusConection)
+        },
+        updateConnection(text){
+            view.informationConnection.updateInformation(text)
         }
     }
 
@@ -341,7 +347,11 @@ export default function viewController(startBoard){
     }
 
     this.updateStatusConection=function(statusConection){
-        // enviar para view renderizar o status do jogo
+        statusGame.updateConnection(statusConection)
+    }
+
+    this.addStatusConection=function(type,statusConection){
+        statusGame.addConnection(type,statusConection)
     }
 
     this.endGame=function(status){
