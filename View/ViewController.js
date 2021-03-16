@@ -128,11 +128,11 @@ export default function viewController(startBoard){
                 this.addModal("draw")
             }
             else if(statusGame.checkMate===true){
-                view.informationGame.addinformation("Xeque-Mate na Peças " + this.colors[color])
-                this.addModal("win")
+                view.informationGame.addinformation("Xeque-Mate nas Peças " + this.colors[color])
+                this.addModal("win",statusGame.playerWin)
             }
             else if(statusGame.check===true){
-                view.informationGame.addinformation("Xeque na Peças " + this.colors[color])
+                view.informationGame.addinformation("Xeque nas Peças " + this.colors[color])
             }
             else{
                 view.informationGame.clearInformation()
@@ -141,7 +141,7 @@ export default function viewController(startBoard){
         endGame:function(status){
             if(status.endGame===true){
                 view.informationGame.addinformation("Vitória das Peças " + this.colors[statusGame.playerWin])
-                this.addModal("win")
+                this.addModal("win",statusGame.playerWin)
             }
         },
         startGameSinglePlayer:function(){
@@ -155,9 +155,10 @@ export default function viewController(startBoard){
         updateConnection(type,statusConection){
             view.informationGame.updateInformation(type,statusConection)
         },
-        addModal(information){
+        // outro objeto
+        addModal(information,color){
             const informations={
-                win:("Vitória das Peças " + this.colors[statusGame.playerWin]),
+                win:("Vitória das Peças " + this.colors[color]),
                 draw:"Jogo empatado",
                 noConnection:"Sem conexão",
                 noAdv:"Sem adversario"

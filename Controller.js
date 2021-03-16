@@ -39,7 +39,7 @@ function startSinglePlayer(){
 async function startMultiPlayer(infGame){
     // infGame = {name:value, roomCode:value}
     viewController.clearButtonBackMovement()
-    const infPlayers= await network.send.infStartGame(infGame)
+    const infPlayers= await network.sendSever.infStartGame(infGame)
     if(infPlayers){
         viewController.clearModalStartGame()
         viewController.clearinformationModal()
@@ -51,7 +51,7 @@ async function startMultiPlayer(infGame){
             playerConfig.currentPlayer =playerConfig.colorMultiPlayer
             const isPlayable = false
             startGame(playerConfig.currentPlayer, playerConfig.top, isPlayable)
-            network.get.playerConnection()
+            network.enableCalls.playerConnection()
         }
         else{
             const msgConnection = "Conectado com "+ infPlayers.playerAdv.namePlayer
@@ -60,9 +60,9 @@ async function startMultiPlayer(infGame){
             playerConfig.currentPlayer="White"
             const isPlayable = false
             startGame(playerConfig.currentPlayer, playerConfig.top, isPlayable)
-            network.get.moveAdversary()
+            network.enableCalls.moveAdversary()
         }
-        network.get.statusGame()
+        network.enableCalls.statusGame()
     }
 }
 
@@ -108,8 +108,8 @@ function moveTypeGame(informationPieceSelect){
         const isMove = movePiece(informationPieceSelect,nextPlayer,isPlayable)
         if(isMove){
             // {informationPieceSelect: fullName,color,typeMovement,specialMovement,refId e piecePromotion}
-            network.send.moveGame(informationPieceSelect)
-            network.get.moveAdversary()
+            network.sendSever.moveGame(informationPieceSelect)
+            network.enableCalls.moveAdversary()
         }
     }
 }
@@ -122,11 +122,11 @@ function getMoveAdv(informationPieceSelect){
         const nextPlayer=playerConfig.colorMultiPlayer
         const isMove = movePiece(informationPieceSelect,nextPlayer)
         if(isMove){
-            // network.send.recMoveGame("true")
+            // network.sendSever.recMoveGame("true")
         }
         else{
             // enviar caso tiver movimento invalido
-            // network.send.recMoveGame("false")
+            // network.sendSever.recMoveGame("false")
         }
     }
 }

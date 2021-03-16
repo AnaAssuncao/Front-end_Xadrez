@@ -1,4 +1,4 @@
-import methodsHTTP from "./methodsHTTP.js"
+import methodsHTTP from "./MethodsHTTP.js"
 const httpMethods = new methodsHTTP()
 
 export default function interfaceNetwork(){
@@ -13,7 +13,7 @@ export default function interfaceNetwork(){
         url:"http://localhost:3030/api/v1"
     }
 
-    this.send={
+    this.sendSever={
         infStartGame: async(infGame) =>{
             const url = networkConf.url+"/startGame/infGame"
             // infGame = {name:value, roomCode:value}
@@ -55,8 +55,8 @@ export default function interfaceNetwork(){
         }
     }
    
-    this.get={
-        moveAdversary: async()=>{
+    this.enableCalls={
+        moveAdversary: ()=>{
             const params = {
                 roomCode: gameCong.codes.room,
                 playerCode: gameCong.codes.player
@@ -65,10 +65,9 @@ export default function interfaceNetwork(){
                     .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
                     .join("&");
             const url = networkConf.url+"/movementGame?" +query
-            let time = 0
-            setTimeMoveAdv(url,time)
+            setTimeMoveAdv(url)
         },
-        playerConnection: async()=>{
+        playerConnection: ()=>{
             const params = {
                 roomCode: gameCong.codes.room,
                 playerCode: gameCong.codes.player
@@ -77,10 +76,9 @@ export default function interfaceNetwork(){
                     .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
                     .join("&");
             const url = networkConf.url+"/statusGame?"+query
-            let time = 0
-            await setTimePlayer(url,time)
+            setTimePlayer(url)
         },
-        statusGame: async()=>{ 
+        statusGame: ()=>{ 
             const params = {
                 roomCode: gameCong.codes.room,  
                 playerCode: gameCong.codes.player
@@ -90,63 +88,68 @@ export default function interfaceNetwork(){
                     .join("&");
                     
             const url = networkConf.url+"/statusGame?"+query
-            const waitInf = setInterval(async()=>{
-                    const infGame = await httpMethods.get(url)
-                    if((infGame.statusGame.giveUP===true) || (infGame.statusGame.endGame===true)){
-                        clearInterval(waitInf) 
-                        const statusGame = infGame.statusGame
-                        notifyFunctions(functionToCallBack.endGame,statusGame)
-                    }
-                    if(infGame.statusGame.connection===false){
-                        if(infGame.infPlayerAdv.connection===false){
-                            clearInterval(waitInf) 
-                            const statusGame = infGame.infPlayerAdv
-                            notifyFunctions(functionToCallBack.playerConnection,statusGame)
-                        }
-                    }
-                    else if(infGame==="err"){
-                        clearInterval(waitInf) 
-                    }
-
-            },1000)
+            setTimeStatusGame(url)
         }
     }
 
-    async function setTimeMoveAdv(url,time){
-        await setTimeout(
+    function setTimeMoveAdv(url,timeCounter=0,timeLimite=1000){
+        setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
-                if(msgRes.msg!=="no Move"){
+                if(msgRes.msg!=="no Move"){//ficar nun objeto
                     notifyFunctions(functionToCallBack.moveAdversary,msgRes.move)
                 }
-                else if(time===100){
+                else if(timeCounter===timeLimite){
                     const connection = false
                     notifyFunctions(functionToCallBack.playerConnection,connection)
                 }
                 else{
-                    time++
-                    setTimeMoveAdv(url,time)
+                    timeCounter++
+                    setTimeMoveAdv(url,timeCounter)
                 }
             },1000)
     }
 
-    async function setTimePlayer(url,time){
-        await setTimeout(
+    function setTimePlayer(url,timeCounter=0,timeLimite=1000){
+        setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
                 if(msgRes.infPlayerAdv.namePlayer!==null){
                     notifyFunctions(functionToCallBack.playerConnection,msgRes.infPlayerAdv)
                 }
-                else if(time===100){
+                else if(timeCounter===timeLimite){
                     const infPlayerAdv={
                         connection:false}
                     notifyFunctions(functionToCallBack.playerConnection,infPlayerAdv)
                 }
                 else{
-                    time++
-                    setTimePlayer(url,time)
+                    timeCounter++
+                    setTimePlayer(url,timeCounter)
                 }
             },1000)
+    }
+
+    function setTimeStatusGame(url){
+        const waitInf = 
+        setInterval(
+            async()=>{
+                const infGame = await httpMethods.get(url)
+                if((infGame.statusGame.giveUP===true) || (infGame.statusGame.endGame===true)){
+                    clearInterval(waitInf) 
+                    const statusGame = infGame.statusGame
+                    notifyFunctions(functionToCallBack.endGame,statusGame)
+                }
+                if(infGame.statusGame.connection===false){
+                    if(infGame.infPlayerAdv.connection===false){
+                        clearInterval(waitInf) 
+                        const statusGame = infGame.infPlayerAdv
+                        notifyFunctions(functionToCallBack.playerConnection,statusGame)
+                    }
+                }
+                else if(infGame==="err"){
+                    clearInterval(waitInf) 
+                }
+        },1000)
     }
 
     const functionToCallBack= {
