@@ -75,7 +75,12 @@ export default class createGame {
 
         this.capturePiece={}
 
-        this.statusCheckKing={}
+        this.statusGame={
+            checkKing:null,
+            statusDrawn:null,
+            endGame:false,
+            winColor:null,
+        }
 
         this.statusDrawn={}
 
@@ -133,13 +138,18 @@ export default class createGame {
         
         this.checkMovementsAllPieces()
 
-        this.statusCheckKing={
-            color:null,
-            check:false,
-            checkMate:false,
-            endGame:null,
+        this.statusGame={
+            checkKing:{
+                color:null,
+                check:false,
+                checkMate:false,
+                refIdPathsToCheck: []
+            },
+            statusDrawn:{
+                drawn:false
+            },
+            endGame:false,
             winColor:null,
-            refIdPathsToCheck: []
         }
 
         this.playHistory=[]
@@ -175,8 +185,6 @@ export default class createGame {
                 qtPiece:[1,1,1,1]},
             newPiece:null,
         }
-
-        this.statusDrawn.drawn=false
     }
 
     possibleMovementTower(chessBoard=this.chessBoard){//fazer isso
@@ -361,8 +369,8 @@ export default class createGame {
         this.piecesBoard[nameCapturePiece].refMovements=[]
         this.capturePiece[nameCapturePiece]=this.piecesBoard[nameCapturePiece]
         if(nameCapturePiece==="KingWhite"||nameCapturePiece==="KingBlack"){
-            this.statusCheckKing.endGame=true
-            this.statusCheckKing.winColor=(this.colorPieceBoard.top===this.colorPieceBoard.play)?this.colorPieceBoard.bottom:this.colorPieceBoard.top 
+            this.statusGame.endGame=true
+            this.statusGame.winColor=(this.colorPieceBoard.top===this.colorPieceBoard.play)?this.colorPieceBoard.bottom:this.colorPieceBoard.top 
         }
     }
 
@@ -411,8 +419,8 @@ export default class createGame {
     }
 
     updateFilterMovement(color){
-        if(this.statusCheckKing.checkMate===false){
-            if(this.statusCheckKing.check===true ){
+        if(this.statusGame.checkKing.checkMate===false){
+            if(this.statusGame.checkKing.check===true ){
                 this.checkAssistance(color)
             }
             else{
@@ -424,17 +432,17 @@ export default class createGame {
 
 // Check and ChekMate
     updateStatusCheck(color){
-        this.statusCheckKing.check=false
+        this.statusGame.checkKing.check=false
         const nameKing =`King${color}` 
         const checks=this.verifyCheck(this.piecesBoard[nameKing].position,color,nameKing)
 
         if(checks.qt!==0){
-            this.statusCheckKing.refIdPathsToCheck = this.pathToCheck(nameKing,checks)
-            this.statusCheckKing.check=true
-            this.statusCheckKing.checkMate=this.checkMate(nameKing,color,checks)
-                if( this.statusCheckKing.checkMate===true){
-                    this.statusCheckKing.endGame=true
-                    this.statusCheckKing.winColor=(this.colorPieceBoard.top===color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
+            this.statusGame.checkKing.refIdPathsToCheck = this.pathToCheck(nameKing,checks)
+            this.statusGame.checkKing.check=true
+            this.statusGame.checkKing.checkMate=this.checkMate(nameKing,color,checks)
+                if( this.statusGame.checkKing.checkMate===true){
+                    this.statusGame.endGame=true
+                    this.statusGame.winColor=(this.colorPieceBoard.top===color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
                 }
         }
     } 
@@ -484,7 +492,7 @@ export default class createGame {
                 if(this.chessBoard[refId]!==null && this.chessBoard[refId].color===colorKing && this.chessBoard[refId].name!=="King")
                 {
                     for(let refMovementFriend of this.chessBoard[refId].refMovements){
-                        for(let refIdPossiblePath of this.statusCheckKing.refIdPathsToCheck){
+                        for(let refIdPossiblePath of this.statusGame.checkKing.refIdPathsToCheck){
                             if(refMovementFriend===refIdPossiblePath){
                                 const fakeChessBoard = this.newFakeChessBoard(refId,refMovementFriend)
                                 if(this.verifyCheckInFakeBoard(fakeChessBoard,positionInitialKing,colorKing) === false){//se na nova refId do rei não tem check, não há checkMate
@@ -579,7 +587,7 @@ export default class createGame {
         arrayNamesPieces.forEach((namePiece)=>{
             if((assistantPieceColor===this.piecesBoard[namePiece].color)&&(this.piecesBoard[namePiece].isAtive===true)&&(namePiece!==nameKing)){
                 this.piecesBoard[namePiece].refMovements=this.piecesBoard[namePiece].refMovements.reduce((possibleMovementPiece,refIdpiece)=>{
-                    for(let refIdPossiblePath of this.statusCheckKing.refIdPathsToCheck){
+                    for(let refIdPossiblePath of this.statusGame.checkKing.refIdPathsToCheck){
                         if(refIdPossiblePath===refIdpiece){
                             const fakeChessBoard = this.newFakeChessBoard(this.piecesBoard[namePiece].position,refIdpiece)
                             if(this.verifyCheckInFakeBoard(fakeChessBoard,positionInitialKing,assistantPieceColor) === false){//se na nova refId do rei não tem check, não há checkMate
@@ -610,6 +618,8 @@ export default class createGame {
     )}
 
     returnMovement(){
+        this.statusGame.endGame=false
+        this.statusGame.winColor=null
         this.returnChangePiece( )
         this.updateStatusGame(this.colorPieceBoard.play)
         this.colorPieceBoard.play=(this.colorPieceBoard.top===this.colorPieceBoard.play)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
@@ -649,7 +659,7 @@ export default class createGame {
         this.specialMovement.roque.tower=[]
         this.specialMovement.roque.newMovementTower=[]
         const nameKing = `King${color}`
-        if(this.piecesBoard[nameKing].qtMovements===0 && this.statusCheckKing.check===false){
+        if(this.piecesBoard[nameKing].qtMovements===0 && this.statusGame.checkKing.check===false){
             const TowerLeft = `Tower-Left${color}`
             const TowerRight = `Tower-Right${color}`
             if(this.piecesBoard[TowerLeft].qtMovements===0){
@@ -851,12 +861,13 @@ export default class createGame {
         draw.push(this.drawByFiftyRules())
         draw.push(this.drawByChequeMateImpossibility())
         if(draw.includes(true)){
-            this.statusDrawn.drawn=true
+            this.statusGame.statusDrawn.drawn=true
+            this.statusGame.endGame=true
         }
     }
     
     drawByDrowning(color){
-        if(this.statusCheckKing.check===false){
+        if(this.statusGame.checkKing.check===false){
             for(let piece in this.piecesBoard){
                 if(this.piecesBoard[piece].color===color){
                     if(this.piecesBoard[piece].refMovements.length>0){
@@ -871,7 +882,7 @@ export default class createGame {
     
     drawByReplayThreeMoves(){
         const qtPlays= this.playHistory.length-1
-        if(qtPlays>=6 && this.statusCheckKing.check===true){
+        if(qtPlays>=6 && this.statusGame.checkKing.check===true){
             const lastPlay=this.playHistory[qtPlays]
             const penultimatePlay=this.playHistory[qtPlays-1]
             if(lastPlay.piecesPlayed[0].fullName.includes("King")||penultimatePlay.piecesPlayed[0].fullName.includes("King")){
@@ -933,14 +944,14 @@ export default class createGame {
     
     testDraw(){
         const draw=[]
-        this.statusCheckKing.check===false
+        this.statusGame.checkKing.check===false
         for(let piece in this.piecesBoard){
                 this.piecesBoard[piece].refMovements=[]
                 this.piecesBoard[piece].isAtive=false
         }
         draw.push(this.drawByDrowning("Black"))
 
-        this.statusCheckKing.check=true
+        this.statusGame.checkKing.check=true
         this.playHistory=[{piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMovement:null},
         {piecesPlayed:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMovement:null},
         {piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMovement:null},
@@ -968,16 +979,16 @@ export default class createGame {
         draw.push(this.drawByChequeMateImpossibility())
 
         if(draw.includes(true)){
-            this.statusDrawn.drawn=true
+            this.statusGame.statusDrawn.drawn=true
         }
     }
     getStatusGame(){
         return {
-            endGame:this.statusCheckKing.endGame,
-            check: this.statusCheckKing.check,
-            checkMate: this.statusCheckKing.checkMate,
-            draw: this.statusDrawn.draw,
-            playerWin:this.statusCheckKing.winColor
+            endGame:this.statusGame.endGame,
+            check: this.statusGame.checkKing.check,
+            checkMate: this.statusGame.checkKing.checkMate,
+            draw: this.statusGame.statusDrawn.draw,
+            playerWin:this.statusGame.winColor
         }
     }
     getCurrentBoard(){
