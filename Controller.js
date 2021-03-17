@@ -33,6 +33,7 @@ function startMultiPlayer(infGame){
     viewController.subscribeRestartGame(playerConfig.functionsGame.restartGame)
     network.subscribeMoveAdversary(playerConfig.functionsGame.getMoveAdv)
     network.subscribePlayerConnection(playerConfig.functionsGame.connectionPlayerTwo)
+    network.subscribeGiveUp(playerConfig.functionsGame.advGiveUp)
     playerConfig.functionsGame.start(infGame)
 }
 
@@ -83,6 +84,7 @@ class offline{
         viewController.clearEndGameInformation()
         viewController.clearBackMovement()
         viewController.addHomePage()
+        viewController.clearSubscribes()
     }
 }
 
@@ -170,13 +172,18 @@ class online{
     }
 
     restartGame(){
+        network.sendSever.giveUp()
         playerConfig.functionsGame = null
         playerConfig.currentPlayer= null
         playerConfig.colorMultiPlayer= null
-        // giveUp
         viewController.clearEndGameInformation()
         viewController.clearBackMovement()
         viewController.addHomePage()
+        viewController.clearSubscribes()
+    }
+
+    advGiveUp(namePlayer){
+        viewController.addEndGameInformation("giveUp",namePlayer)
     }
 }
 

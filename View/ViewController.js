@@ -161,12 +161,17 @@ export default function viewController(startBoard){
     }
 
     const endGameinformation={
-        addModal(information,color){
+        addModal(information,complementInf){
+            if(complementInf==="Black"||complementInf==="White"){
+                complementInf= this.color[complementInf]
+            }
             const informations={
-                win:("Vitória das Peças " + this.colors[color]),
+                winPiece:("Vitória das Peças " + complementInf),
+                winPlayer:("Vitória do jogador " + complementInf),
                 draw:"Jogo empatado",
                 noConnection:"Sem conexão",
-                noAdv:"Sem adversario"
+                noAdv:"Sem adversario",
+                giveUp:("Desistência do jogador " + complementInf)
             }
             view.modalOnBoard.renderModal(informations[information])
         },
@@ -401,8 +406,8 @@ export default function viewController(startBoard){
         statusGame.endGame(status)
     }
 
-    this.addEndGameInformation=function(information){
-        endGameinformation.addModal(information)
+    this.addEndGameInformation=function(information,complement){
+        endGameinformation.addModal(information,complement)
     }
 
     this.clearEndGameInformation=function(information){
@@ -415,6 +420,10 @@ export default function viewController(startBoard){
 
     this.informationProminent=function(text){
         gameAlerts.informationAlert(text)
+    }
+
+    this.clearSubscribes=function(){
+        utilities.clearFunctionToCallBack()
     }
 
     const utilities ={
@@ -469,7 +478,12 @@ export default function viewController(startBoard){
                 piecePromotion = true
             }
             return piecePromotion 
-        }    
+        },
+        clearFunctionToCallBack: function(){
+            functionToCallBack.movePiece=[]
+            functionToCallBack.restartGame=[]
+            functionToCallBack.backPreviousMove=[]
+        }
     }
 }
 

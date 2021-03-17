@@ -60,12 +60,12 @@ export default function interfaceNetwork(){
         },
         moveGame: async(move) =>{
             const url = networkConf.url+"/movementGame"
-            const objsend={
+            const objSend={
                 roomCode:gameCong.codes.room,
                 playerCode:gameCong.codes.player,
                 movement:move
             }
-            const msgRes = await httpMethods.post(objsend,url)
+            const msgRes = await httpMethods.post(objSend,url)
             if(msgServer.connectionServer===msgRes){
                 const sendController={
                     connectedServer:false,
@@ -81,17 +81,25 @@ export default function interfaceNetwork(){
                 return sendController
             }
         },
-        giveUp: async(giveUp) =>{
-            if (giveUp === true){
-                const url = networkConf.url+"/giveUpGame"
-                const msgRes = await httpMethods.post(giveUp,url,functionToCallBack.informationStart)
-            }
+        giveUp: async() =>{
+            const url = networkConf.url+"/giveUpGame"
+            const objSend={
+                roomCode:gameCong.codes.room,
+                playerCode:gameCong.codes.player,
+                giveUp:true
+            } 
+            const msgRes = await httpMethods.post(objSend,url)
             return msgRes
         },
         endGame: async(endGame) =>{
             if (endGame === true){
+                const objSend={
+                    roomCode:gameCong.codes.room,
+                    playerCode:gameCong.codes.player,
+                    endGame:true
+                } 
                 const url = networkConf.url+"/endGame"
-                const msgRes = await httpMethods.post(endGame,url)
+                const msgRes = await httpMethods.post(objSend,url)
             }
             return msgRes
         }
@@ -176,12 +184,17 @@ export default function interfaceNetwork(){
         setInterval(
             async()=>{
                 const infGame = await httpMethods.get(url)
-                if((infGame.statusGame.giveUP===true) || (infGame.statusGame.endGame===true)){
+                if(infGame.infPlayerAdv.giveUp===true){
+                    clearInterval(waitInf) 
+                    const namePlayer = infGame.infPlayerAdv.namePlayer
+                    notifyFunctions(functionToCallBack.giveUp,namePlayer)
+                }
+                else if(infGame.statusGame.endGame===true){
                     clearInterval(waitInf) 
                     const statusGame = infGame.statusGame
                     notifyFunctions(functionToCallBack.endGame,statusGame)
                 }
-                if(infGame.statusGame.connection===false){
+                else if(infGame.statusGame.connection===false){
                     if(infGame.infPlayerAdv.connection===false){
                         clearInterval(waitInf) 
                         const statusGame = infGame.infPlayerAdv
@@ -197,6 +210,7 @@ export default function interfaceNetwork(){
     const functionToCallBack= {
         moveAdversary:[],
         informationStart:[],
+        giveUp:[],
         endGame:[],
         playerConnection:[]
     }
@@ -208,7 +222,10 @@ export default function interfaceNetwork(){
         functionToCallBack.informationStart.push(fn)
     }
     this.subscribeEndGame=function(fn){
-        functionToCallBack.endGam.push(fn)
+        functionToCallBack.endGame.push(fn)
+    }
+    this.subscribeGiveUp=function(fn){
+        functionToCallBack.giveUp.push(fn)
     }
     this.subscribePlayerConnection=function(fn){
         functionToCallBack.playerConnection.push(fn)
