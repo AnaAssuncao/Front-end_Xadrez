@@ -155,7 +155,9 @@ export default function viewController(startBoard){
         updateConnection(type,statusConection){
             view.informationGame.updateInformation(type,statusConection)
         },
-        // outro objeto
+    }
+
+    const endGameinformation={
         addModal(information,color){
             const informations={
                 win:("Vitória das Peças " + this.colors[color]),
@@ -163,12 +165,13 @@ export default function viewController(startBoard){
                 noConnection:"Sem conexão",
                 noAdv:"Sem adversario"
             }
-            view.informationGame.renderModal(informations[information])
+            view.modalOnBoard.renderModal(informations[information])
         },
         clearModal(){
-            view.informationGame.clearModal()
+            view.modalOnBoard.clearModal()
         }
     }
+
 
     const informationDetails={
         updateLog(text){
@@ -352,19 +355,19 @@ export default function viewController(startBoard){
     view.piecesPromotion.subscribeToClick(piece.changePiecePromotion)
     view.buttonNewGame.subscribeToClick(homePage.addModal)
 
-    this.clearModalStartGame=function(){
+    this.clearHomePage=function(){
         homePage.clearModal()
     }
 
-    this.addModalStartGame=function(){
+    this.addHomePage=function(){
         homePage.addModal()
     }
 
-    this.addButtonBackMovement=function(){
+    this.addBackMovement=function(){
         history.addButtonBackMovement()
     }
     
-    this.clearButtonBackMovement=function(){
+    this.clearBackMovement=function(){
         history.clearButtonBackMovement()
     }
     this.updateBoard=function(chessBoard,currentPlayer,isPlayable){
@@ -391,12 +394,12 @@ export default function viewController(startBoard){
         statusGame.endGame(status)
     }
 
-    this.addinformationModal=function(information){
-        statusGame.addModal(information)
+    this.addEndGameInformation=function(information){
+        endGameinformation.addModal(information)
     }
 
-    this.clearinformationModal=function(information){
-        statusGame.clearModal(information)
+    this.clearEndGameInformation=function(information){
+        endGameinformation.clearModal(information)
     }
 
     this.informationLog=function(text){

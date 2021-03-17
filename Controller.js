@@ -16,7 +16,7 @@ const startboard = game.getCurrentBoard()
 const viewController = new ViewController (startboard)
 const network = new interfaceNetwork()
 
-viewController.addModalStartGame()
+viewController.addHomePage()
 viewController.subscribeStartSinglePlayer(startSinglePlayer)
 viewController.subscribeStartMultiPlayer(startMultiPlayer)
 viewController.subscribeMovePiece(moveTypeGame)
@@ -28,21 +28,21 @@ network.subscribePlayerConnection(connectionPlayerTwo)
 function startSinglePlayer(){
     playerConfig.currentPlayer="White"
     playerConfig.typeGame="SinglePlayer"
-    viewController.clearModalStartGame()
-    viewController.clearinformationModal()
+    viewController.clearHomePage()
+    viewController.clearEndGameInformation()
     const msgConnection="Jogo Local"
     viewController.updateStatusConection("offline",msgConnection)
-    viewController.addButtonBackMovement()
+    viewController.addBackMovement()
     startGame(playerConfig.currentPlayer, playerConfig.top)
 }
 
 async function startMultiPlayer(infGame){
     // infGame = {name:value, roomCode:value}
-    viewController.clearButtonBackMovement()
+    viewController.clearBackMovement()
     const infCode= await network.sendSever.infStartGame(infGame)
     if(infCode.connectedServer){
-        viewController.clearModalStartGame()
-        viewController.clearinformationModal()
+        viewController.clearHomePage()
+        viewController.clearEndGameInformation()
         playerConfig.typeGame="MultiPlayer"
         if(infCode.playerAdv.connection===false){
             const msgConnection = "Aguardando adversário"
@@ -71,10 +71,10 @@ async function startMultiPlayer(infGame){
 
 function connectionPlayerTwo(infPlayerAdv){
     if(infPlayerAdv.connection===false){
-        viewController.addinformationModal("noAdv")
+        viewController.addEndGameInformation("noAdv")
         setTimeout(()=>{
             viewController.clearinformationModal()
-            viewController.addModalStartGame()
+            viewController.addHomePage()
         },5000)
     }
     else{

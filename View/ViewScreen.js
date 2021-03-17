@@ -203,7 +203,10 @@ export default function viewScreen(chessBoard){
         clearInformation(){
             document.querySelector("#information__game").innerText = "Nenhum Xeque Identificado"
             document.querySelector(".status__game--board").classList.remove("check-alert-effect")
-        },   
+        }
+    }
+
+    this.modalOnBoard={
         renderModal(text){
             const selectModal = document.querySelector("#modal__information")
             selectModal.classList.toggle("chess__modal--display")
