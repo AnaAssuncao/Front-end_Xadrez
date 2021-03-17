@@ -17,7 +17,10 @@ export default function interfaceNetwork(){
         room:{
             exist:"codeExist"
         },
-        connectionServer:"errServe"
+        connectionServer:"errServe",
+        move:{
+            noMove:"no Move"
+        }
     }
 
     this.sendSever={
@@ -71,7 +74,7 @@ export default function interfaceNetwork(){
                 return sendController
             }
             else{
-                sendController={
+                const sendController={
                     connectedServer:true,
                     msg:msgRes
                 }
@@ -135,7 +138,7 @@ export default function interfaceNetwork(){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
-                if(msgRes.msg!=="no Move"){//ficar nun objeto
+                if(msgRes.msg!==msgServer.move.noMove){//ficar nun objeto
                     notifyFunctions(functionToCallBack.moveAdversary,msgRes.move)
                 }
                 else if(timeCounter===timeLimite){
