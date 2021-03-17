@@ -64,9 +64,13 @@ async function startMultiPlayer(infGame){
         }
         network.enableCalls.statusGame()
     }
+    else{
+        const infCode = "codeExist"
+        viewController.informationProminent(infCode)
+    }
 }
 
-async function connectionPlayerTwo(infPlayerAdv){
+function connectionPlayerTwo(infPlayerAdv){
     if(infPlayerAdv.connection===false){
         viewController.addinformationModal("noAdv")
         setTimeout(()=>{

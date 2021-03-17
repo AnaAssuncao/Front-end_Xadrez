@@ -13,6 +13,12 @@ export default function interfaceNetwork(){
         url:"http://localhost:3030/api/v1"
     }
 
+    const msgServer={
+        room:{
+            exist:"exist"
+        }
+    }
+
     this.sendSever={
         infStartGame: async(infGame) =>{
             const url = networkConf.url+"/startGame/infGame"
@@ -22,12 +28,18 @@ export default function interfaceNetwork(){
                 roomCode:infGame.roomCode
             }
             const msgRes = await httpMethods.post(infMultiplayer,url)
-            gameCong.codes = msgRes.codes
-            const sendController={
-                playerAdv:msgRes.infPlayerAdv,
-                connection:msgRes.statusGame.connection,
+            if(msgServer.room.exist===msgRes.codes.room){
+                return false
             }
-            return sendController
+            else{
+                gameCong.codes = msgRes.codes
+                const sendController={
+                    playerAdv:msgRes.infPlayerAdv,
+                    connection:msgRes.statusGame.connection,
+                }
+                return sendController
+            }
+
         },
         moveGame: async(move) =>{
             const url = networkConf.url+"/movementGame"
