@@ -353,7 +353,7 @@
     scrollbar-width: thin;
     border-radius: 0 0 2px 2px;
 }
-#button__back__movement{
+.move__back{
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
@@ -422,7 +422,7 @@
     justify-content: center;
     align-items: center;
 }
-#button__back__movement--display{
+.move__back--display{
     display: none;
 }
 .chess__modal{

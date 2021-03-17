@@ -55,12 +55,12 @@ export default function viewScreen(chessBoard){
         },
         renderButton(){
             const buttonMove = document.querySelector("#button__back__movement")
-            buttonMove.id = "button__back__movement"
+            buttonMove.classList.toggle("move__back--display")
         },
         clearButton(){
             const buttonMove = document.querySelector("#button__back__movement")
             if(buttonMove){
-                buttonMove.id = "button__back__movement--display"
+                buttonMove.classList.toggle("move__back--display")
             }
         }
     }
