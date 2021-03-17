@@ -21,15 +21,15 @@ viewController.subscribeStartSinglePlayer(startSinglePlayer)
 viewController.subscribeStartMultiPlayer(startMultiPlayer)
 viewController.subscribeMovePiece(moveTypeGame)
 viewController.subscribeHistory(backPreviousMove)
+viewController.subscribeRestartGame(restartGame)
 
 network.subscribeMoveAdversary(getMoveAdv)
 network.subscribePlayerConnection(connectionPlayerTwo)
 
 function startSinglePlayer(){
+    viewController.clearHomePage()
     playerConfig.currentPlayer="White"
     playerConfig.typeGame="SinglePlayer"
-    viewController.clearHomePage()
-    viewController.clearEndGameInformation()
     const msgConnection="Jogo Local"
     viewController.updateStatusConection("offline",msgConnection)
     viewController.addBackMovement()
@@ -38,11 +38,9 @@ function startSinglePlayer(){
 
 async function startMultiPlayer(infGame){
     // infGame = {name:value, roomCode:value}
-    viewController.clearBackMovement()
     const infCode= await network.sendSever.infStartGame(infGame)
     if(infCode.connectedServer){
         viewController.clearHomePage()
-        viewController.clearEndGameInformation()
         playerConfig.typeGame="MultiPlayer"
         if(infCode.playerAdv.connection===false){
             const msgConnection = "Aguardando adversário"
@@ -201,4 +199,10 @@ function backPreviousMove(){
             playerConfig.currentPlayer=pastColor
         }
     }
+}
+
+function restartGame(){
+    viewController.addHomePage()
+    viewController.clearEndGameInformation()
+    viewController.clearBackMovement()
 }

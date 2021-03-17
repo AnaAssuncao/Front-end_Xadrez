@@ -152,9 +152,12 @@ export default function viewController(startBoard){
             board.clearAllBoard()
             notifyFunctions (functionToCallBack.startGameMultiPlayer,infGame)
         },
+        restartGame(){
+            notifyFunctions (functionToCallBack.restartGame)
+        },
         updateConnection(type,statusConection){
             view.informationGame.updateInformation(type,statusConection)
-        },
+        }
     }
 
     const endGameinformation={
@@ -324,6 +327,7 @@ export default function viewController(startBoard){
         startGameMultiPlayer:[],
         underHistory:[],
         giveUp:[],
+        restartGame:[]
     }
 
     function notifyFunctions (objToCallBack,parameters){
@@ -345,6 +349,9 @@ export default function viewController(startBoard){
     this.subscribeGiveUp=function(fn){
         functionToCallBack.giveUp.push(fn)
     }
+    this.subscribeRestartGame=function(fn){
+        functionToCallBack.restartGame.push(fn)
+    }
 
     view.buttonStartSinglePlayer.subscribeToClick(statusGame.startGameSinglePlayer)
     view.buttonStartMultiPlayer.subscribeToClick(statusGame.startGameMultiPlayer)
@@ -353,7 +360,7 @@ export default function viewController(startBoard){
     view.chessBoard.subscribeToClick(piece.updatePieceSelect)
     view.buttonBackMovement.subscribeToClick(history.previoushistory)
     view.piecesPromotion.subscribeToClick(piece.changePiecePromotion)
-    view.buttonNewGame.subscribeToClick(homePage.addModal)
+    view.buttonNewGame.subscribeToClick(statusGame.restartGame)
 
     this.clearHomePage=function(){
         homePage.clearModal()
