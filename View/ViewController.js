@@ -295,14 +295,24 @@ export default function viewController(startBoard){
             piece.movePiece(chess.pieceSelect.newMovements,informationMove,piecePromotion)
         }
     }
-    const modalStartGame = {
+
+    const homePage = {
         addModal(){
-            view.modalStartGame.render()
+            view.homePage.render()
         },
         clearModal(){
-            view.modalStartGame.clear()
+            view.homePage.clear()
         }
     }
+
+    const gameAlerts={
+        informationAlert(text){
+            const msgAlert={
+                codeExist: "Neste código já está acontecendo um jogo, tente outro código"
+            }
+            view.alerts.alertInformation(msgAlert[text])
+        }
+    }      
 
     const functionToCallBack= {
         movePiece:[],
@@ -339,14 +349,14 @@ export default function viewController(startBoard){
     view.chessBoard.subscribeToClick(piece.updatePieceSelect)
     view.buttonBackMovement.subscribeToClick(history.previoushistory)
     view.piecesPromotion.subscribeToClick(piece.changePiecePromotion)
-    view.buttonNewGame.subscribeToClick(modalStartGame.addModal)
+    view.buttonNewGame.subscribeToClick(homePage.addModal)
 
     this.clearModalStartGame=function(){
-        modalStartGame.clearModal()
+        homePage.clearModal()
     }
 
     this.addModalStartGame=function(){
-        modalStartGame.addModal()
+        homePage.addModal()
     }
 
     this.addButtonBackMovement=function(){
@@ -390,6 +400,10 @@ export default function viewController(startBoard){
 
     this.informationLog=function(text){
         informationDetails.updateLog(text)
+    }
+
+    this.informationProminent=function(text){
+        gameAlerts.informationAlert(text)
     }
 
     const utilities ={

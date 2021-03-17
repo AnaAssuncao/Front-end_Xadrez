@@ -10,7 +10,7 @@ export default function viewScreen(chessBoard){
         buttonBackMovement:[],
         piecesPromotion:[]
     }
-    this.modalStartGame={
+    this.homePage={
         clear(){
             const selectModal = document.querySelector("#startGame")
             selectModal.classList.toggle("chess__startGame--display")
@@ -24,6 +24,13 @@ export default function viewScreen(chessBoard){
             selectModal.classList.toggle("chess__startGame--display")
         }
     }
+
+    this.alerts={
+        alertInformation(text){
+            alert(text)
+        }
+    }
+
     this.buttonStartSinglePlayer={
         subscribeToClick(fn){
             functionToCallBack.buttonStartSinglePlayer.push(fn)
