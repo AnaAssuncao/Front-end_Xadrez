@@ -15,8 +15,9 @@ export default function interfaceNetwork(){
 
     const msgServer={
         room:{
-            exist:"exist"
-        }
+            exist:"codeExist"
+        },
+        connectionServer:"errServe"
     }
 
     this.sendSever={
@@ -28,18 +29,31 @@ export default function interfaceNetwork(){
                 roomCode:infGame.roomCode
             }
             const msgRes = await httpMethods.post(infMultiplayer,url)
-            if(msgServer.room.exist===msgRes.codes.room){
-                return false
-            }
-            else{
-                gameCong.codes = msgRes.codes
+            if(msgServer.connectionServer===msgRes){
                 const sendController={
-                    playerAdv:msgRes.infPlayerAdv,
-                    connection:msgRes.statusGame.connection,
+                    connectedServer:false,
+                    msg:msgServer.connectionServer
                 }
                 return sendController
             }
-
+            else{
+                if(msgServer.room.exist===msgRes.codes.room){
+                    const sendController={
+                        connectedServer:false,
+                        msg:msgServer.room.exist
+                    }
+                    return sendController
+                }
+                else{
+                    gameCong.codes = msgRes.codes
+                    const sendController={
+                        connectedServer:true,
+                        playerAdv:msgRes.infPlayerAdv,
+                        connection:msgRes.statusGame.connection,
+                    }
+                    return sendController
+                }
+            }
         },
         moveGame: async(move) =>{
             const url = networkConf.url+"/movementGame"
@@ -49,7 +63,20 @@ export default function interfaceNetwork(){
                 movement:move
             }
             const msgRes = await httpMethods.post(objsend,url)
-            return msgRes
+            if(msgServer.connectionServer===msgRes){
+                const sendController={
+                    connectedServer:false,
+                    msg:msgServer.connectionServer
+                }
+                return sendController
+            }
+            else{
+                sendController={
+                    connectedServer:true,
+                    msg:msgRes
+                }
+                return sendController
+            }
         },
         giveUp: async(giveUp) =>{
             if (giveUp === true){

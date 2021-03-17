@@ -39,12 +39,12 @@ function startSinglePlayer(){
 async function startMultiPlayer(infGame){
     // infGame = {name:value, roomCode:value}
     viewController.clearButtonBackMovement()
-    const infPlayers= await network.sendSever.infStartGame(infGame)
-    if(infPlayers){
+    const infCode= await network.sendSever.infStartGame(infGame)
+    if(infCode.connectedServer){
         viewController.clearModalStartGame()
         viewController.clearinformationModal()
         playerConfig.typeGame="MultiPlayer"
-        if(infPlayers.playerAdv.connection===false){
+        if(infCode.playerAdv.connection===false){
             const msgConnection = "Aguardando adversário"
             viewController.updateStatusConection("online",msgConnection)
             playerConfig.colorMultiPlayer="White"
@@ -54,7 +54,7 @@ async function startMultiPlayer(infGame){
             network.enableCalls.playerConnection()
         }
         else{
-            const msgConnection = "Conectado com "+ infPlayers.playerAdv.namePlayer
+            const msgConnection = "Conectado com "+ infCode.playerAdv.namePlayer
             viewController.updateStatusConection("online",msgConnection)
             playerConfig.colorMultiPlayer="Black"
             playerConfig.currentPlayer="White"
@@ -65,8 +65,7 @@ async function startMultiPlayer(infGame){
         network.enableCalls.statusGame()
     }
     else{
-        const infCode = "codeExist"
-        viewController.informationProminent(infCode)
+        viewController.informationProminent(infCode.msg)
     }
 }
 
@@ -112,15 +111,20 @@ function moveTypeGame(informationPieceSelect){
         const isMove = movePiece(informationPieceSelect,nextPlayer,isPlayable)
         if(isMove){
             // {informationPieceSelect: fullName,color,typeMovement,specialMovement,refId e piecePromotion}
-            network.sendSever.moveGame(informationPieceSelect)
-            network.enableCalls.moveAdversary()
+            const infSendMove = network.sendSever.moveGame(informationPieceSelect)
+            if(infSendMove.connectedServer===true){
+                network.enableCalls.moveAdversary()
+            }
+            else{
+                viewController.informationProminent(infCode.msg)
+            }
         }
     }
 }
 
 function getMoveAdv(informationPieceSelect){
     if(informationPieceSelect===false){
-        console.log("alerta e novo jogo")
+        viewController.informationProminent(infCode.msg)
     }
     else{
         const nextPlayer=playerConfig.colorMultiPlayer

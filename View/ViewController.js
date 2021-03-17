@@ -308,7 +308,8 @@ export default function viewController(startBoard){
     const gameAlerts={
         informationAlert(text){
             const msgAlert={
-                codeExist: "Neste código já está acontecendo um jogo, tente outro código"
+                codeExist: "Neste código já está acontecendo um jogo, tente outro código",
+                errServe: "Erro no servidor, tente mais tarde"
             }
             view.alerts.alertInformation(msgAlert[text])
         }
