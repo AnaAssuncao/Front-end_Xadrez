@@ -125,11 +125,11 @@ export default function viewController(startBoard){
         update:function(statusGame,color){
             if(statusGame.draw){
                 view.informationGame.addinformation("Jogo empatado")
-                this.addModal("draw")
+                endGameinformation.addModal("draw")
             }
             else if(statusGame.checkMate===true){
                 view.informationGame.addinformation("Xeque-Mate nas Peças " + this.colors[color])
-                this.addModal("win",statusGame.playerWin)
+                endGameinformation.addModal("win",statusGame.playerWin)
             }
             else if(statusGame.check===true){
                 view.informationGame.addinformation("Xeque nas Peças " + this.colors[color])
@@ -141,7 +141,7 @@ export default function viewController(startBoard){
         endGame:function(status){
             if(status.endGame===true){
                 view.informationGame.addinformation("Vitória das Peças " + this.colors[statusGame.playerWin])
-                this.addModal("win",statusGame.playerWin)
+                endGameinformation.addModal("win",statusGame.playerWin)
             }
         },
         startGameSinglePlayer:function(){
@@ -155,31 +155,42 @@ export default function viewController(startBoard){
         restartGame(){
             notifyFunctions (functionToCallBack.restartGame)
         },
-        updateConnection(type,statusConection){
-            view.informationGame.updateInformation(type,statusConection)
+        updateConnection(connection,complementMsg=""){
+            const msgs={
+                place:"Jogo Local",
+                wait:"Aguardando adversário",
+                connected:"conectado com "
+            }
+            const img = connection.type
+            const msgConnection = msgs[connection.msg] + complementMsg
+            view.informationGame.updateInformation(img,msgConnection)
         }
     }
 
     const endGameinformation={
-        addModal(information,complementInf){
+        colors:{
+            White:"Brancas",
+            Black:"Pretas"
+        },
+        addModal(typeInformation,complementInf=""){
             if(complementInf==="Black"||complementInf==="White"){
                 complementInf= this.color[complementInf]
             }
             const informations={
-                winPiece:("Vitória das Peças " + complementInf),
-                winPlayer:("Vitória do jogador " + complementInf),
+                winPiece:"Vitória das Peças ",
+                winPlayer:"Vitória do jogador ",
                 draw:"Jogo empatado",
                 noConnection:"Sem conexão",
                 noAdv:"Sem adversario",
-                giveUp:("Desistência do jogador " + complementInf)
+                giveUp:"Desistência do jogador "
             }
-            view.modalOnBoard.renderModal(informations[information])
+            const msg = informations[typeInformation]+complementInf
+            view.modalOnBoard.renderModal(msg)
         },
         clearModal(){
             view.modalOnBoard.clearModal()
         }
     }
-
 
     const informationDetails={
         updateLog(text){
@@ -398,8 +409,8 @@ export default function viewController(startBoard){
         statusGame.update(status,color)
     }
 
-    this.updateStatusConection=function(statusConection,text){
-        statusGame.updateConnection(statusConection,text)
+    this.updateStatusConection=function(connection,complementMsg){
+        statusGame.updateConnection(connection,complementMsg)
     }
 
     this.endGame=function(status){

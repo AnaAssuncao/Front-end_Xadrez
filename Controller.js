@@ -42,10 +42,10 @@ class offline{
         viewController.clearHomePage()
         playerConfig.currentPlayer="White"
         const connection={
-            msgConnection:"Jogo Local",
+            msg:"place",
             type:"offline"
         }
-        viewController.updateStatusConection(connection.type,connection.msgConnection)
+        viewController.updateStatusConection(connection)
         viewController.addBackMovement()
         generalFunctions.startGame(playerConfig.currentPlayer, playerConfig.top)
     }
@@ -93,10 +93,10 @@ class online{
             viewController.clearHomePage()
             if(infCode.playerAdv.connection===false){
                 const connection={
-                    msgConnection: "Aguardando adversário",
+                    msg: "wait",
                     type:"online"
                 } 
-                viewController.updateStatusConection(connection.type,connection.msgConnection)
+                viewController.updateStatusConection(connection)
                 playerConfig.colorMultiPlayer="White"
                 playerConfig.currentPlayer =playerConfig.colorMultiPlayer
                 const isPlayable = false
@@ -105,10 +105,10 @@ class online{
             }
             else{
                 const connection={
-                    msgConnection: ("Conectado com "+ infCode.playerAdv.namePlayer),
+                    msg: "connected",
                     type:"online"
                 } 
-                viewController.updateStatusConection(connection.type,connection.msgConnection)
+                viewController.updateStatusConection(connection,infCode.playerAdv.namePlayer)
                 playerConfig.colorMultiPlayer="Black"
                 playerConfig.currentPlayer="White"
                 const isPlayable = false
@@ -132,10 +132,10 @@ class online{
         }
         else{
             const connection={
-                msgConnection: ("Conectado com "+ infPlayerAdv.namePlayer),
+                msg: "connected",
                 type:"online"
             } 
-            viewController.updateStatusConection(connection.type,connection.msgConnection)
+            viewController.updateStatusConection(connection,infPlayerAdv.namePlayer)
             generalFunctions.startGame(playerConfig.currentPlayer, playerConfig.top)
         }
     }
