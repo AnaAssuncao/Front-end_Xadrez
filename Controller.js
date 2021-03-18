@@ -3,58 +3,80 @@ import ViewController from "./View/ViewController.js"
 import interfaceNetwork from "./Network/Network.js"
 
 const playerConfig={
-    functionsGame:null,
-    top:"Black", //colorTop
-    bottom:"White", //colorBottom
-    currentPlayer:null, //colorcurrentPlayer
-    colorOnlineGame:null
+    game:null,
+    colorsGame:{   
+        top:"Black", //colorTop
+        bottom:"White", //colorBottom
+    },
+    currentPlayerColor:null, //colorCurrentPlayer
+    onlinePlayerColor:null
 }
-const game = new createGame(playerConfig)
+let game = new createGame(playerConfig.colorsGame)
 const startBoard = game.getCurrentBoard()
 
 const viewController = new ViewController (startBoard)
 const network = new interfaceNetwork()
 
+const functionsGame={
+    startOfflineGame:function(){
+        game = new createGame(playerConfig.colorsGame)
+        playerConfig.game = new offlineGame()
+        playerConfig.game.start()
+    },  
+    startOnlineGame:function(infGame){
+        game = new createGame(playerConfig.colorsGame)
+        playerConfig.game = new onlineGame()
+        playerConfig.game.start(infGame)
+    },
+    restartGame:function(){
+        playerConfig.game.restartGame()
+    },
+    move:function(informationPieceSelect){
+        playerConfig.game.move(informationPieceSelect)
+    },
+    backPreviousMove:function(){
+        playerConfig.game.backPreviousMove()
+    },
+    moveAdv:function(){
+        playerConfig.game.getMoveAdv()
+    },
+    playerConnection:function(){
+        playerConfig.game.connectionPlayerTwo()
+    },
+    giveUp:function(){
+        playerConfig.game.advGiveUp()
+    }
+}
+
 viewController.exposeHomePage()
-viewController.subscribeStartOfflineGame(startOfflineGame)
-viewController.subscribeStartOnlineGame(startOnlineGame)
-
-function startOfflineGame(){
-    playerConfig.functionsGame = new offlineGame()
-    viewController.subscribeMovePiece(playerConfig.functionsGame.move)
-    viewController.subscribeHistory(playerConfig.functionsGame.backPreviousMove)
-    viewController.subscribeRestartGame(playerConfig.functionsGame.restartGame)
-    playerConfig.functionsGame.start()
-}
-
-function startOnlineGame(infGame){
-    playerConfig.functionsGame = new onlineGame()
-    viewController.subscribeMovePiece(playerConfig.functionsGame.move)
-    viewController.subscribeRestartGame(playerConfig.functionsGame.restartGame)
-    network.subscribeMoveAdversary(playerConfig.functionsGame.getMoveAdv)
-    network.subscribePlayerConnection(playerConfig.functionsGame.connectionPlayerTwo)
-    network.subscribeGiveUp(playerConfig.functionsGame.advGiveUp)
-    playerConfig.functionsGame.start(infGame)
-}
+viewController.subscribeStartOfflineGame(functionsGame.startOfflineGame)
+viewController.subscribeStartOnlineGame(functionsGame.startOnlineGame)
+viewController.subscribeMovePiece(functionsGame.move)
+viewController.subscribeHistory(functionsGame.backPreviousMove)
+viewController.subscribeRestartGame(functionsGame.restartGame)
+network.subscribeMoveAdversary(functionsGame.moveAdv)
+network.subscribePlayerConnection(functionsGame.playerConnection)
+network.subscribeGiveUp(functionsGame.giveUp)
 
 class offlineGame{
     start(){
         viewController.hideHomePage()
-        playerConfig.currentPlayer="White"
+        playerConfig.currentPlayerColor="White"
         const connection={
             msg:"place",
             type:"offline"
         }
         viewController.updateStatusConection(connection)
         viewController.exposeBackMovement()
-        generalFunctions.startGame(playerConfig.currentPlayer, playerConfig.top)
+        game.starObjGame(playerConfig.currentPlayerColor)
+        generalFunctions.updateGame(playerConfig.currentPlayerColor, playerConfig.colorsGame.top)
     }
 
     move(informationPieceSelect){
-        const nextPlayer=(playerConfig.top===playerConfig.currentPlayer)?playerConfig.bottom:playerConfig.top
+        const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
         const isMove =generalFunctions.movePiece(informationPieceSelect,nextPlayer)
         if(isMove){
-            playerConfig.currentPlayer=nextPlayer
+            playerConfig.currentPlayerColor=nextPlayer
         }
     }
 
@@ -62,26 +84,22 @@ class offlineGame{
         const playHistory = game.getHistoryMoves()
         if(playHistory.length>0){
             game.returnMovement()
-            const pastColor=(playerConfig.top===playerConfig.currentPlayer)?playerConfig.bottom:playerConfig.top
+            const pastColor=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
             const statusGame = game.getStatusGame() 
             if(statusGame.endGame===false){
-                generalFunctions.updateBoard(pastColor)        
-                generalFunctions.updateInformationGame(pastColor)
-                generalFunctions.updateCapturedPiece(playerConfig.top)        
-                generalFunctions.updatePlaysHistory()   
-                playerConfig.currentPlayer=pastColor
+                generalFunctions.updateGame(pastColor, playerConfig.colorsGame.top)
+                playerConfig.currentPlayerColor=pastColor
             }
         }
     }
 
     restartGame(){
-        playerConfig.functionsGame = null
-        playerConfig.currentPlayer= null
-        playerConfig.colorOnlineGame= null
+        playerConfig.game = null
+        playerConfig.currentPlayerColor= null
+        playerConfig.onlinePlayerColor= null
         viewController.hideEndGameInformation()
         viewController.hideBackMovement()
         viewController.exposeHomePage()
-        viewController.hideSubscribes()
     }
 }
 
@@ -97,10 +115,11 @@ class onlineGame{
                     type:"online"
                 } 
                 viewController.updateStatusConection(connection)
-                playerConfig.colorOnlineGame="White"
-                playerConfig.currentPlayer =playerConfig.colorOnlineGame
+                playerConfig.onlinePlayerColor="White"
+                playerConfig.currentPlayerColor =playerConfig.onlinePlayerColor
                 const isPlayable = false
-                generalFunctions.startGame(playerConfig.currentPlayer, playerConfig.top, isPlayable)
+                game.starObjGame(playerConfig.currentPlayerColor)
+                generalFunctions.updateGame(playerConfig.currentPlayerColor, playerConfig.colorsGame.top, isPlayable)
                 network.enableCalls.playerConnection()
             }
             else{
@@ -109,10 +128,10 @@ class onlineGame{
                     type:"online"
                 } 
                 viewController.updateStatusConection(connection,infCode.playerAdv.namePlayer)
-                playerConfig.colorOnlineGame="Black"
-                playerConfig.currentPlayer="White"
+                playerConfig.onlinePlayerColor="Black"
+                playerConfig.currentPlayerColor="White"
                 const isPlayable = false
-                generalFunctions.startGame(playerConfig.currentPlayer, playerConfig.top, isPlayable)
+                generalFunctions.updateGame(playerConfig.currentPlayerColor, playerConfig.colorsGame.top, isPlayable)
                 network.enableCalls.moveAdversary()
             }
             network.enableCalls.statusGame()
@@ -136,13 +155,13 @@ class onlineGame{
                 type:"online"
             } 
             viewController.updateStatusConection(connection,infPlayerAdv.namePlayer)
-            generalFunctions.startGame(playerConfig.currentPlayer, playerConfig.top)
+            generalFunctions.updateGame(playerConfig.currentPlayerColor, playerConfig.colorsGame.top)
         }
     }
 
     move(informationPieceSelect){
         const isPlayable=false
-        const nextPlayer=(playerConfig.top===playerConfig.currentPlayer)?playerConfig.bottom:playerConfig.top
+        const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
         const isMove = generalFunctions.movePiece(informationPieceSelect,nextPlayer,isPlayable)
         if(isMove){
             // {informationPieceSelect: fullName,color,typeMovement,specialMovement,refId e piecePromotion}
@@ -156,7 +175,7 @@ class onlineGame{
             viewController.informationProminent(infCode.msg)
         }
         else{
-            const nextPlayer=playerConfig.colorOnlineGame
+            const nextPlayer=playerConfig.onlinePlayerColor
             const isMove = generalFunctions.movePiece(informationPieceSelect,nextPlayer)
             if(isMove){
                 // network.sendSever.recMoveGame("true")
@@ -170,13 +189,12 @@ class onlineGame{
 
     restartGame(){
         network.sendSever.giveUp()
-        playerConfig.functionsGame = null
-        playerConfig.currentPlayer= null
-        playerConfig.colorOnlineGame= null
+        playerConfig.game = null
+        playerConfig.currentPlayerColor= null
+        playerConfig.onlinePlayerColor= null
         viewController.hideEndGameInformation()
         viewController.hideBackMovement()
         viewController.exposeHomePage()
-        viewController.hideSubscribes()
     }
 
     advGiveUp(namePlayer){
@@ -185,8 +203,7 @@ class onlineGame{
 }
 
 class generalFunctions{
-     static startGame(colorPlayer, colorTop, isPlayable){
-        game.starObjGame(colorPlayer)
+    static updateGame(colorPlayer, colorTop, isPlayable){
         this.updateBoard(colorPlayer,isPlayable) 
         this.updateInformationGame(colorPlayer)
         this.updateCapturedPiece(colorTop)
@@ -207,7 +224,7 @@ class generalFunctions{
         }
         this.updateBoard(colorPlayer,isPlayable) 
         this.updateInformationGame(colorPlayer)
-        this.updateCapturedPiece(playerConfig.top)
+        this.updateCapturedPiece(playerConfig.colorsGame.top)
         this.updatePlaysHistory()   
         return isMove
     }

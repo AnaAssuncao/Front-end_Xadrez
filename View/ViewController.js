@@ -141,7 +141,7 @@ export default function viewController(startBoard){
         endGame:function(status){
             if(status.endGame===true){
                 view.informationGame.addinformation("Vitória das Peças " + this.colors[statusGame.playerWin])
-                endGameinformation.addModal("win",statusGame.playerWin)
+                endGameinformation.addModal("win",status.playerWin)
             }
         },
         startGameOfflineGame:function(){
@@ -174,7 +174,7 @@ export default function viewController(startBoard){
         },
         addModal(typeInformation,complementInf=""){
             if(complementInf==="Black"||complementInf==="White"){
-                complementInf= this.color[complementInf]
+                complementInf= this.colors[complementInf]
             }
             const informations={
                 winPiece:"Vitória das Peças ",

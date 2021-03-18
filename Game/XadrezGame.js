@@ -87,8 +87,6 @@ export default class createGame {
         this.specialMovement={}
 
         this.piecesPromotion={}
-    
-        this.starObjGame()
     }
 
     makePiece (name,fullName,color,img,position,functionPiece,isAtive=true){  
