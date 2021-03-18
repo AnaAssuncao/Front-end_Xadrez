@@ -1,8 +1,8 @@
 export default function viewScreen(chessBoard){
 
     const functionToCallBack= {
-        buttonStartSinglePlayer:[],
-        buttonStartMultiPlayer:[],
+        buttonStartOfflineGame:[],
+        buttonStartOnlineGame:[],
         buttonNewGame:[],
         pieceInput:[],
         buttonMove:[],
@@ -14,7 +14,7 @@ export default function viewScreen(chessBoard){
         clear(){
             const selectModal = document.querySelector("#startGame")
             selectModal.classList.toggle("chess__startGame--display")
-            const infToStartGame= document.querySelector(".start__infMultiPlayer")
+            const infToStartGame= document.querySelector(".start__infOnlineGame")
             if(infToStartGame){
                 selectModal.removeChild(infToStartGame)
             }
@@ -31,15 +31,15 @@ export default function viewScreen(chessBoard){
         }
     }
 
-    this.buttonStartSinglePlayer={
+    this.buttonStartOfflineGame={
         subscribeToClick(fn){
-            functionToCallBack.buttonStartSinglePlayer.push(fn)
+            functionToCallBack.buttonStartOfflineGame.push(fn)
         }
     }
 
-    this.buttonStartMultiPlayer={
+    this.buttonStartOnlineGame={
         subscribeToClick(fn){
-            functionToCallBack.buttonStartMultiPlayer.push(fn)
+            functionToCallBack.buttonStartOnlineGame.push(fn)
         }
     }
 
@@ -318,16 +318,16 @@ export default function viewScreen(chessBoard){
     }
 
     const starGameEvent={
-        buttonStartSinglePlayer(){
+        buttonStartOfflineGame(){
             const buttonStar= document.querySelector("#button__startSingle")
             buttonStar.addEventListener("click", ()=>{
-                 notifyFunctions(functionToCallBack.buttonStartSinglePlayer)
+                 notifyFunctions(functionToCallBack.buttonStartOfflineGame)
             })
         },
-        buttonStartMultiPlayer(){
+        buttonStartOnlineGame(){
             const buttonStar= document.querySelector("#button__startMulti")
             buttonStar.addEventListener("click", ()=>{
-                renderInputMultiPlayer()
+                renderInputOnlineGame()
             })
         },
         buttonMultiplayerInf(buttonStart){
@@ -335,7 +335,7 @@ export default function viewScreen(chessBoard){
                 const inputName = document.querySelector(".input__multiplayer--name")
                 const inputRoomCode= document.querySelector(".input__multiplayer--code")
                 if(inputName.value!=="" && inputRoomCode.value!==""){
-                    notifyFunctions(functionToCallBack.buttonStartMultiPlayer,{name:inputName.value, roomCode:inputRoomCode.value})
+                    notifyFunctions(functionToCallBack.buttonStartOnlineGame,{name:inputName.value, roomCode:inputRoomCode.value})
                 }
             })
         }, 
@@ -403,8 +403,8 @@ export default function viewScreen(chessBoard){
             })
         }
     }
-    starGameEvent.buttonStartSinglePlayer()
-    starGameEvent.buttonStartMultiPlayer()
+    starGameEvent.buttonStartOfflineGame()
+    starGameEvent.buttonStartOnlineGame()
     starGameEvent.pieceInput()
     starGameEvent.buttonMove()
     starGameEvent.buttonBackMovement()
@@ -476,15 +476,15 @@ export default function viewScreen(chessBoard){
         })
     }
 
-    function renderInputMultiPlayer(){
+    function renderInputOnlineGame(){
         const selectModal = document.querySelector("#startGame")
-        const selectInfMultiPlayer= document.querySelector(".start__infMultiPlayer")
-        if(selectInfMultiPlayer===null){
-            const infMultiPlayer = document.createElement("div")
+        const selectInfOnlineGame= document.querySelector(".start__infOnlineGame")
+        if(selectInfOnlineGame===null){
+            const infOnlineGame = document.createElement("div")
             const inputName = document.createElement("input")
             const inputCode = document.createElement("input")
             const buttonStart = document.createElement("button")
-            infMultiPlayer.classList.add("start__infMultiPlayer")
+            infOnlineGame.classList.add("start__infOnlineGame")
             inputName.classList.add("input__multiplayer--name")
             inputCode.classList.add("input__multiplayer--code")
             buttonStart.classList.add("button__multiplayer--code")
@@ -492,10 +492,10 @@ export default function viewScreen(chessBoard){
             inputName.placeholder="Nome do jogador"
             inputCode.placeholder="Código da sala"
             buttonStart.innerHTML = "Iniciar"
-            infMultiPlayer.appendChild(inputName)
-            infMultiPlayer.appendChild(inputCode)
-            infMultiPlayer.appendChild(buttonStart)
-            selectModal.appendChild(infMultiPlayer)  
+            infOnlineGame.appendChild(inputName)
+            infOnlineGame.appendChild(inputCode)
+            infOnlineGame.appendChild(buttonStart)
+            selectModal.appendChild(infOnlineGame)  
         }
     }
 }

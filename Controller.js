@@ -7,7 +7,7 @@ const playerConfig={
     top:"Black", //colorTop
     bottom:"White", //colorBottom
     currentPlayer:null, //colorcurrentPlayer
-    colorMultiPlayer:null
+    colorOnlineGame:null
 }
 const game = new createGame(playerConfig)
 const startBoard = game.getCurrentBoard()
@@ -15,20 +15,20 @@ const startBoard = game.getCurrentBoard()
 const viewController = new ViewController (startBoard)
 const network = new interfaceNetwork()
 
-viewController.addHomePage()
-viewController.subscribeStartSinglePlayer(startSinglePlayer)
-viewController.subscribeStartMultiPlayer(startMultiPlayer)
+viewController.exposeHomePage()
+viewController.subscribeStartOfflineGame(startOfflineGame)
+viewController.subscribeStartOnlineGame(startOnlineGame)
 
-function startSinglePlayer(){
-    playerConfig.functionsGame = new offline()
+function startOfflineGame(){
+    playerConfig.functionsGame = new offlineGame()
     viewController.subscribeMovePiece(playerConfig.functionsGame.move)
     viewController.subscribeHistory(playerConfig.functionsGame.backPreviousMove)
     viewController.subscribeRestartGame(playerConfig.functionsGame.restartGame)
     playerConfig.functionsGame.start()
 }
 
-function startMultiPlayer(infGame){
-    playerConfig.functionsGame = new online()
+function startOnlineGame(infGame){
+    playerConfig.functionsGame = new onlineGame()
     viewController.subscribeMovePiece(playerConfig.functionsGame.move)
     viewController.subscribeRestartGame(playerConfig.functionsGame.restartGame)
     network.subscribeMoveAdversary(playerConfig.functionsGame.getMoveAdv)
@@ -37,16 +37,16 @@ function startMultiPlayer(infGame){
     playerConfig.functionsGame.start(infGame)
 }
 
-class offline{
+class offlineGame{
     start(){
-        viewController.clearHomePage()
+        viewController.hideHomePage()
         playerConfig.currentPlayer="White"
         const connection={
             msg:"place",
             type:"offline"
         }
         viewController.updateStatusConection(connection)
-        viewController.addBackMovement()
+        viewController.exposeBackMovement()
         generalFunctions.startGame(playerConfig.currentPlayer, playerConfig.top)
     }
 
@@ -77,28 +77,28 @@ class offline{
     restartGame(){
         playerConfig.functionsGame = null
         playerConfig.currentPlayer= null
-        playerConfig.colorMultiPlayer= null
-        viewController.clearEndGameInformation()
-        viewController.clearBackMovement()
-        viewController.addHomePage()
-        viewController.clearSubscribes()
+        playerConfig.colorOnlineGame= null
+        viewController.hideEndGameInformation()
+        viewController.hideBackMovement()
+        viewController.exposeHomePage()
+        viewController.hideSubscribes()
     }
 }
 
-class online{
+class onlineGame{
     async start(infGame){
         // infGame = {name:value, roomCode:value}
         const infCode= await network.sendSever.infStartGame(infGame)
         if(infCode.connectedServer){
-            viewController.clearHomePage()
+            viewController.hideHomePage()
             if(infCode.playerAdv.connection===false){
                 const connection={
                     msg: "wait",
                     type:"online"
                 } 
                 viewController.updateStatusConection(connection)
-                playerConfig.colorMultiPlayer="White"
-                playerConfig.currentPlayer =playerConfig.colorMultiPlayer
+                playerConfig.colorOnlineGame="White"
+                playerConfig.currentPlayer =playerConfig.colorOnlineGame
                 const isPlayable = false
                 generalFunctions.startGame(playerConfig.currentPlayer, playerConfig.top, isPlayable)
                 network.enableCalls.playerConnection()
@@ -109,7 +109,7 @@ class online{
                     type:"online"
                 } 
                 viewController.updateStatusConection(connection,infCode.playerAdv.namePlayer)
-                playerConfig.colorMultiPlayer="Black"
+                playerConfig.colorOnlineGame="Black"
                 playerConfig.currentPlayer="White"
                 const isPlayable = false
                 generalFunctions.startGame(playerConfig.currentPlayer, playerConfig.top, isPlayable)
@@ -124,10 +124,10 @@ class online{
     
     connectionPlayerTwo(infPlayerAdv){
         if(infPlayerAdv.connection===false){
-            viewController.addEndGameInformation("noAdv")
+            viewController.exposeEndGameInformation("noAdv")
             setTimeout(()=>{
-                viewController.clearinformationModal()
-                viewController.addHomePage()
+                viewController.hideinformationModal()
+                viewController.exposeHomePage()
             },5000)
         }
         else{
@@ -156,7 +156,7 @@ class online{
             viewController.informationProminent(infCode.msg)
         }
         else{
-            const nextPlayer=playerConfig.colorMultiPlayer
+            const nextPlayer=playerConfig.colorOnlineGame
             const isMove = generalFunctions.movePiece(informationPieceSelect,nextPlayer)
             if(isMove){
                 // network.sendSever.recMoveGame("true")
@@ -172,15 +172,15 @@ class online{
         network.sendSever.giveUp()
         playerConfig.functionsGame = null
         playerConfig.currentPlayer= null
-        playerConfig.colorMultiPlayer= null
-        viewController.clearEndGameInformation()
-        viewController.clearBackMovement()
-        viewController.addHomePage()
-        viewController.clearSubscribes()
+        playerConfig.colorOnlineGame= null
+        viewController.hideEndGameInformation()
+        viewController.hideBackMovement()
+        viewController.exposeHomePage()
+        viewController.hideSubscribes()
     }
 
     advGiveUp(namePlayer){
-        viewController.addEndGameInformation("giveUp",namePlayer)
+        viewController.exposeEndGameInformation("giveUp",namePlayer)
     }
 }
 

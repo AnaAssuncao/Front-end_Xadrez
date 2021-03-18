@@ -144,13 +144,13 @@ export default function viewController(startBoard){
                 endGameinformation.addModal("win",statusGame.playerWin)
             }
         },
-        startGameSinglePlayer:function(){
+        startGameOfflineGame:function(){
             board.clearAllBoard()
-            notifyFunctions(functionToCallBack.startGameSinglePlayer)
+            notifyFunctions(functionToCallBack.startGameOfflineGame)
         },
-        startGameMultiPlayer:function(infGame){
+        startGameOnlineGame:function(infGame){
             board.clearAllBoard()
-            notifyFunctions (functionToCallBack.startGameMultiPlayer,infGame)
+            notifyFunctions (functionToCallBack.startGameOnlineGame,infGame)
         },
         restartGame(){
             notifyFunctions (functionToCallBack.restartGame)
@@ -339,8 +339,8 @@ export default function viewController(startBoard){
 
     const functionToCallBack= {
         movePiece:[],
-        startGameSinglePlayer:[],
-        startGameMultiPlayer:[],
+        startGameOfflineGame:[],
+        startGameOnlineGame:[],
         underHistory:[],
         giveUp:[],
         restartGame:[]
@@ -350,11 +350,11 @@ export default function viewController(startBoard){
         objToCallBack.forEach((fn)=>fn(parameters))
     }
    
-    this.subscribeStartSinglePlayer=function(fn){
-        functionToCallBack.startGameSinglePlayer.push(fn)   
+    this.subscribeStartOfflineGame=function(fn){
+        functionToCallBack.startGameOfflineGame.push(fn)   
     }
-    this.subscribeStartMultiPlayer=function(fn){
-        functionToCallBack.startGameMultiPlayer.push(fn)
+    this.subscribeStartOnlineGame=function(fn){
+        functionToCallBack.startGameOnlineGame.push(fn)
     }
     this.subscribeMovePiece=function(fn){
         functionToCallBack.movePiece.push(fn)
@@ -369,8 +369,8 @@ export default function viewController(startBoard){
         functionToCallBack.restartGame.push(fn)
     }
 
-    view.buttonStartSinglePlayer.subscribeToClick(statusGame.startGameSinglePlayer)
-    view.buttonStartMultiPlayer.subscribeToClick(statusGame.startGameMultiPlayer)
+    view.buttonStartOfflineGame.subscribeToClick(statusGame.startGameOfflineGame)
+    view.buttonStartOnlineGame.subscribeToClick(statusGame.startGameOnlineGame)
     view.pieceInput.subscribeToChange(piece.selectPieceInput)
     view.buttonMove.subscribeToClick(piece.movePieceByButtom)
     view.chessBoard.subscribeToClick(piece.updatePieceSelect)
@@ -378,19 +378,19 @@ export default function viewController(startBoard){
     view.piecesPromotion.subscribeToClick(piece.changePiecePromotion)
     view.buttonNewGame.subscribeToClick(statusGame.restartGame)
 
-    this.clearHomePage=function(){
+    this.hideHomePage=function(){
         homePage.clearModal()
     }
 
-    this.addHomePage=function(){
+    this.exposeHomePage=function(){
         homePage.addModal()
     }
 
-    this.addBackMovement=function(){
+    this.exposeBackMovement=function(){
         history.addButtonBackMovement()
     }
     
-    this.clearBackMovement=function(){
+    this.hideBackMovement=function(){
         history.clearButtonBackMovement()
     }
     this.updateBoard=function(chessBoard,currentPlayer,isPlayable){
@@ -417,11 +417,11 @@ export default function viewController(startBoard){
         statusGame.endGame(status)
     }
 
-    this.addEndGameInformation=function(information,complement){
+    this.exposeEndGameInformation=function(information,complement){
         endGameinformation.addModal(information,complement)
     }
 
-    this.clearEndGameInformation=function(information){
+    this.hideEndGameInformation=function(information){
         endGameinformation.clearModal(information)
     }
 
@@ -433,7 +433,7 @@ export default function viewController(startBoard){
         gameAlerts.informationAlert(text)
     }
 
-    this.clearSubscribes=function(){
+    this.hideSubscribes=function(){
         utilities.clearFunctionToCallBack()
     }
 
