@@ -146,7 +146,7 @@ export default function interfaceNetwork(){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
-                if(msgRes.msg!==msgServer.move.noMove){//ficar nun objeto
+                if(msgRes.msg!==msgServer.move.noMove){
                     notifyFunctions(functionToCallBack.moveAdversary,msgRes.move)
                 }
                 else if(timeCounter===timeLimite){

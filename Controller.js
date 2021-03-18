@@ -4,15 +4,15 @@ import interfaceNetwork from "./Network/Network.js"
 
 const playerConfig={
     functionsGame:null,
-    top:"Black",
-    bottom:"White",
-    currentPlayer:null,
+    top:"Black", //colorTop
+    bottom:"White", //colorBottom
+    currentPlayer:null, //colorcurrentPlayer
     colorMultiPlayer:null
 }
 const game = new createGame(playerConfig)
-const startboard = game.getCurrentBoard()
+const startBoard = game.getCurrentBoard()
 
-const viewController = new ViewController (startboard)
+const viewController = new ViewController (startBoard)
 const network = new interfaceNetwork()
 
 viewController.addHomePage()
@@ -63,15 +63,12 @@ class offline{
         if(playHistory.length>0){
             game.returnMovement()
             const pastColor=(playerConfig.top===playerConfig.currentPlayer)?playerConfig.bottom:playerConfig.top
-            const chessBoard=game.getCurrentBoard()
             const statusGame = game.getStatusGame() 
-            const capturedPieces = game.getCapturedPieces()
-            const playHistory = game.getHistoryMoves()
             if(statusGame.endGame===false){
-                generalFunctions.updateBoard(pastColor,chessBoard)        
-                generalFunctions.updateInformationGame(pastColor,statusGame)
-                generalFunctions.updateCapturedPiece(playerConfig.top,capturedPieces)        
-                generalFunctions.updatePlaysHistory(playHistory)   
+                generalFunctions.updateBoard(pastColor)        
+                generalFunctions.updateInformationGame(pastColor)
+                generalFunctions.updateCapturedPiece(playerConfig.top)        
+                generalFunctions.updatePlaysHistory()   
                 playerConfig.currentPlayer=pastColor
             }
         }
@@ -190,14 +187,10 @@ class online{
 class generalFunctions{
      static startGame(colorPlayer, colorTop, isPlayable){
         game.starObjGame(colorPlayer)
-        const chessBoard=game.getCurrentBoard()
-        const statusGame = game.getStatusGame() 
-        const capturedPieces = game.getCapturedPieces()
-        const playHistory = game.getHistoryMoves()
-        this.updateBoard(colorPlayer,chessBoard,isPlayable) 
-        this.updateInformationGame(colorPlayer,statusGame)
-        this.updateCapturedPiece(colorTop,capturedPieces)
-        this.updatePlaysHistory(playHistory)   
+        this.updateBoard(colorPlayer,isPlayable) 
+        this.updateInformationGame(colorPlayer)
+        this.updateCapturedPiece(colorTop)
+        this.updatePlaysHistory()   
     }
     
     static movePiece(informationPieceSelect,colorPlayer,isPlayable){
@@ -208,25 +201,24 @@ class generalFunctions{
         else{
             isMove=game.informMove(informationPieceSelect) 
         }  
-        const chessBoard=game.getCurrentBoard()
         const statusGame = game.getStatusGame() 
-        const capturedPieces = game.getCapturedPieces()
-        const playHistory = game.getHistoryMoves()
         if(statusGame.endGame){
             isPlayable=false
         }
-        this.updateBoard(colorPlayer,chessBoard,isPlayable) 
-        this.updateInformationGame(colorPlayer,statusGame)
-        this.updateCapturedPiece(playerConfig.top,capturedPieces)
-        this.updatePlaysHistory(playHistory)   
+        this.updateBoard(colorPlayer,isPlayable) 
+        this.updateInformationGame(colorPlayer)
+        this.updateCapturedPiece(playerConfig.top)
+        this.updatePlaysHistory()   
         return isMove
     }
     
-    static updateBoard(colorPlayer,board,isPlayable=true){
-        viewController.updateBoard(board,colorPlayer,isPlayable) 
+    static updateBoard(colorPlayer,isPlayable=true){
+        const chessBoard=game.getCurrentBoard()
+        viewController.updateBoard(chessBoard,colorPlayer,isPlayable) 
     }
     
-    static updateInformationGame(colorPlayer,statusGame){  
+    static updateInformationGame(colorPlayer){  
+        const statusGame = game.getStatusGame() 
         viewController.updateStatusGame(statusGame,colorPlayer)
         if(statusGame.endGame===true && statusGame.checkMate===false){
             const status ={
@@ -237,11 +229,13 @@ class generalFunctions{
         } 
     }
     
-    static updateCapturedPiece(colorTop,capturedPieces){
+    static updateCapturedPiece(colorTop){
+        const capturedPieces = game.getCapturedPieces()
         viewController.updateCapturedPieces(colorTop,capturedPieces)
     }
     
-    static updatePlaysHistory(history){
-        viewController.updateHistory(history)
+    static updatePlaysHistory(){
+        const playHistory = game.getHistoryMoves()
+        viewController.updateHistory(playHistory)
     }
 }
