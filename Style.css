@@ -405,13 +405,13 @@
     display: none;
 
 }
-.start__infMultiPlayer{
+.start__infOnlineGame{
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
 }
-.button__multiplayer--inf{
+.button__gameOnline--inf{
     background-color: rgb(117, 155, 112);
     width:10%;
     height: 5%;

@@ -319,21 +319,21 @@ export default function viewScreen(chessBoard){
 
     const starGameEvent={
         buttonStartOfflineGame(){
-            const buttonStar= document.querySelector("#button__startSingle")
+            const buttonStar= document.querySelector("#button__startGameOffline")
             buttonStar.addEventListener("click", ()=>{
                  notifyFunctions(functionToCallBack.buttonStartOfflineGame)
             })
         },
         buttonStartOnlineGame(){
-            const buttonStar= document.querySelector("#button__startMulti")
+            const buttonStar= document.querySelector("#button__startGameOnline")
             buttonStar.addEventListener("click", ()=>{
                 renderInputOnlineGame()
             })
         },
-        buttonMultiplayerInf(buttonStart){
+        buttonGameOnlineInf(buttonStart){
             buttonStart.addEventListener("click", ()=>{
-                const inputName = document.querySelector(".input__multiplayer--name")
-                const inputRoomCode= document.querySelector(".input__multiplayer--code")
+                const inputName = document.querySelector(".input__gameOnline--name")
+                const inputRoomCode= document.querySelector(".input__gameOnline--code")
                 if(inputName.value!=="" && inputRoomCode.value!==""){
                     notifyFunctions(functionToCallBack.buttonStartOnlineGame,{name:inputName.value, roomCode:inputRoomCode.value})
                 }
@@ -483,18 +483,23 @@ export default function viewScreen(chessBoard){
             const infOnlineGame = document.createElement("div")
             const inputName = document.createElement("input")
             const inputCode = document.createElement("input")
-            const buttonStart = document.createElement("button")
+            const buttonStartCode = document.createElement("button")
+            const buttonStartRoom = document.createElement("button")
             infOnlineGame.classList.add("start__infOnlineGame")
-            inputName.classList.add("input__multiplayer--name")
-            inputCode.classList.add("input__multiplayer--code")
-            buttonStart.classList.add("button__multiplayer--code")
-            starGameEvent.buttonMultiplayerInf(buttonStart)
+            inputName.classList.add("input__gameOnline--name")
+            inputCode.classList.add("input__gameOnline--code")
+            buttonStartCode.classList.add("button__gameOnline--code")
+            starGameEvent.buttonGameOnlineInf(buttonStartCode)
+            buttonStartRoom.classList.add("button__gameOnline--code")
+            starGameEvent.buttonGameOnlineInf(buttonStartRoom)
             inputName.placeholder="Nome do jogador"
             inputCode.placeholder="Código da sala"
-            buttonStart.innerHTML = "Iniciar"
+            buttonStartCode.innerHTML = "Iniciar Código"
+            buttonStartRoom.innerHTML = "Iniciar em uma Sala"
             infOnlineGame.appendChild(inputName)
             infOnlineGame.appendChild(inputCode)
-            infOnlineGame.appendChild(buttonStart)
+            infOnlineGame.appendChild(buttonStartCode)
+            infOnlineGame.appendChild(buttonStartRoom)
             selectModal.appendChild(infOnlineGame)  
         }
     }
