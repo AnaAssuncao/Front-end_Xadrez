@@ -122,26 +122,15 @@ export default function viewController(startBoard){
             White:"Brancas",
             Black:"Pretas"
         },
-        update:function(statusGame,color){
-            if(statusGame.draw){
-                view.informationGame.addinformation("Jogo empatado")
-                endGameinformation.addModal("draw")
-            }
-            else if(statusGame.checkMate===true){
+        updateCheck:function(statusCheck,color){
+            if(statusCheck==="checkMate"){
                 view.informationGame.addinformation("Xeque-Mate nas Peças " + this.colors[color])
-                endGameinformation.addModal("win",statusGame.playerWin)
             }
-            else if(statusGame.check===true){
+            else if(statusCheck==="check"){
                 view.informationGame.addinformation("Xeque nas Peças " + this.colors[color])
             }
             else{
                 view.informationGame.clearInformation()
-            }
-        },
-        endGame:function(status){
-            if(status.endGame===true){
-                view.informationGame.addinformation("Vitória das Peças " + this.colors[statusGame.playerWin])
-                endGameinformation.addModal("win",status.playerWin)
             }
         },
         startGameOfflineGame:function(){
@@ -172,22 +161,25 @@ export default function viewController(startBoard){
             White:"Brancas",
             Black:"Pretas"
         },
-        addModal(typeInformation,complementInf=""){
-            if(complementInf==="Black"||complementInf==="White"){
-                complementInf= this.colors[complementInf]
+        addModal(typeInformation,complementColor="",complementoName=null){
+            if(complementColor==="Black"||complementColor==="White"){
+                complementColor= this.colors[complementColor]
             }
             const informations={
                 winPiece:"Vitória das Peças ",
-                winPlayer:"Vitória do jogador ",
+                player:" Jogador ",
                 draw:"Jogo empatado",
                 noConnection:"Sem conexão",
                 noAdv:"Sem adversario",
-                giveUp:"Desistência do jogador "
+                giveUp:"Desistência das Peças "
             }
-            const msg = informations[typeInformation]+complementInf
+            let msg = informations[typeInformation]+complementColor
+            if(complementoName){
+                msg = msg + informations.player + complementoName
+            }
             view.modalOnBoard.renderModal(msg)
         },
-        clearModal(){
+        clearModal(){   
             view.modalOnBoard.clearModal()
         }
     }
@@ -405,8 +397,8 @@ export default function viewController(startBoard){
         capturedPieces.update(captured,color)
     }
 
-    this.updateStatusGame=function(status,color){
-        statusGame.update(status,color)
+    this.updateStatusCheck=function(status,color){
+        statusGame.updateCheck(status,color)
     }
 
     this.updateStatusConection=function(connection,complementMsg){
@@ -417,8 +409,8 @@ export default function viewController(startBoard){
         statusGame.endGame(status)
     }
 
-    this.exposeEndGameInformation=function(information,complement){
-        endGameinformation.addModal(information,complement)
+    this.exposeEndGameInformation=function(information,complementColor,complementoName){
+        endGameinformation.addModal(information,complementColor,complementoName)
     }
 
     this.hideEndGameInformation=function(information){

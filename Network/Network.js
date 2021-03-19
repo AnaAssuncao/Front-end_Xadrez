@@ -91,17 +91,14 @@ export default function interfaceNetwork(){
             const msgRes = await httpMethods.post(objSend,url)
             return msgRes
         },
-        endGame: async(endGame) =>{
-            if (endGame === true){
-                const objSend={
-                    roomCode:gameCong.codes.room,
-                    playerCode:gameCong.codes.player,
-                    endGame:true
-                } 
-                const url = networkConf.url+"/endGame"
-                const msgRes = await httpMethods.post(objSend,url)
-            }
-            return msgRes
+        endGame: async() =>{
+            const objSend={
+                roomCode:gameCong.codes.room,
+                playerCode:gameCong.codes.player,
+                endGame:true
+            } 
+            const url = networkConf.url+"/endGame"
+            const msgRes = await httpMethods.post(objSend,url)
         }
     }
    
@@ -147,7 +144,11 @@ export default function interfaceNetwork(){
             async()=>{
                 const msgRes = await httpMethods.get(url)
                 if(msgRes.msg!==msgServer.move.noMove){
-                    notifyFunctions(functionToCallBack.moveAdversary,msgRes.move)
+                    const sendController={
+                        move:msgRes.move,
+                        infPlayerAdv:msgRes.infPlayerAdv
+                    }
+                    notifyFunctions(functionToCallBack.moveAdversary,sendController)
                 }
                 else if(timeCounter===timeLimite){
                     const connection = false
@@ -186,8 +187,8 @@ export default function interfaceNetwork(){
                 const infGame = await httpMethods.get(url)
                 if(infGame.infPlayerAdv.giveUp===true){
                     clearInterval(waitInf) 
-                    const namePlayer = infGame.infPlayerAdv.namePlayer
-                    notifyFunctions(functionToCallBack.giveUp,namePlayer)
+                    const infPlayerAdv= infGame.infPlayerAdv
+                    notifyFunctions(functionToCallBack.giveUp,infPlayerAdv)
                 }
                 else if(infGame.statusGame.endGame===true){
                     clearInterval(waitInf) 

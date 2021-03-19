@@ -144,7 +144,7 @@ export default class createGame {
                 refIdPathsToCheck: []
             },
             statusDrawn:{
-                drawn:false
+                draw:false
             },
             endGame:false,
             winColor:null,
@@ -859,7 +859,7 @@ export default class createGame {
         draw.push(this.drawByFiftyRules())
         draw.push(this.drawByChequeMateImpossibility())
         if(draw.includes(true)){
-            this.statusGame.statusDrawn.drawn=true
+            this.statusGame.statusDrawn.draw=true
             this.statusGame.endGame=true
         }
     }
@@ -977,7 +977,7 @@ export default class createGame {
         draw.push(this.drawByChequeMateImpossibility())
 
         if(draw.includes(true)){
-            this.statusGame.statusDrawn.drawn=true
+            this.statusGame.statusDrawn.draw=true
         }
     }
     getStatusGame(){

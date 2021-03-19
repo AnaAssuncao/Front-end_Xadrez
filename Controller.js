@@ -9,7 +9,11 @@ const playerConfig={
         bottom:"White", //colorBottom
     },
     currentPlayerColor:null, //colorCurrentPlayer
-    onlinePlayerColor:null
+    onlinePlayer:{
+        color:null,
+        name:null
+    },
+    endGame:false
 }
 let game = new createGame(playerConfig.colorsGame)
 const startBoard = game.getCurrentBoard()
@@ -37,14 +41,14 @@ const functionsGame={
     backPreviousMove:function(){
         playerConfig.game.backPreviousMove()
     },
-    moveAdv:function(){
-        playerConfig.game.getMoveAdv()
+    moveAdv:function(infMoveAdv){
+        playerConfig.game.getMoveAdv(infMoveAdv)
     },
-    playerConnection:function(){
-        playerConfig.game.connectionPlayerTwo()
+    playerConnection:function(infPlayerAdv){
+        playerConfig.game.connectionPlayerTwo(infPlayerAdv)
     },
-    giveUp:function(){
-        playerConfig.game.advGiveUp()
+    giveUp:function(infPlayerAdv){
+        playerConfig.game.advGiveUp(infPlayerAdv)
     }
 }
 
@@ -69,14 +73,18 @@ class offlineGame{
         viewController.updateStatusConection(connection)
         viewController.exposeBackMovement()
         game.starObjGame(playerConfig.currentPlayerColor)
-        generalFunctions.updateGame(playerConfig.currentPlayerColor, playerConfig.colorsGame.top)
+        generalFunctions.updateGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor)
     }
 
     move(informationPieceSelect){
         const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
-        const isMove =generalFunctions.movePiece(informationPieceSelect,nextPlayer)
+        const isMove =generalFunctions.movePiece(informationPieceSelect)
         if(isMove){
             playerConfig.currentPlayerColor=nextPlayer
+        }
+        const infEndGame=generalFunctions.updateGame(playerConfig.colorsGame.top,nextPlayer)
+        if(infEndGame.endGame){
+            this.endGame(infEndGame)
         }
     }
 
@@ -87,7 +95,7 @@ class offlineGame{
             const pastColor=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
             const statusGame = game.getStatusGame() 
             if(statusGame.endGame===false){
-                generalFunctions.updateGame(pastColor, playerConfig.colorsGame.top)
+                generalFunctions.updateGame(playerConfig.colorsGame.top,pastColor)
                 playerConfig.currentPlayerColor=pastColor
             }
         }
@@ -96,10 +104,19 @@ class offlineGame{
     restartGame(){
         playerConfig.game = null
         playerConfig.currentPlayerColor= null
-        playerConfig.onlinePlayerColor= null
+        playerConfig.onlinePlayer.color= null
         viewController.hideEndGameInformation()
         viewController.hideBackMovement()
         viewController.exposeHomePage()
+    }
+
+    endGame(infEndGame){
+        const endGameType = {
+            checkMate:"winPiece",
+            draw: "draw",
+            endGame: "winPiece",
+        }
+        viewController.exposeEndGameInformation(endGameType[infEndGame.endGame],infEndGame.colorWin)
     }
 }
 
@@ -115,11 +132,12 @@ class onlineGame{
                     type:"online"
                 } 
                 viewController.updateStatusConection(connection)
-                playerConfig.onlinePlayerColor="White"
-                playerConfig.currentPlayerColor =playerConfig.onlinePlayerColor
+                playerConfig.onlinePlayer.color="White"
+                playerConfig.onlinePlayer.name=infGame.name
+                playerConfig.currentPlayerColor =playerConfig.onlinePlayer.color
                 const isPlayable = false
                 game.starObjGame(playerConfig.currentPlayerColor)
-                generalFunctions.updateGame(playerConfig.currentPlayerColor, playerConfig.colorsGame.top, isPlayable)
+                generalFunctions.updateGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor, isPlayable)
                 network.enableCalls.playerConnection()
             }
             else{
@@ -128,10 +146,11 @@ class onlineGame{
                     type:"online"
                 } 
                 viewController.updateStatusConection(connection,infCode.playerAdv.namePlayer)
-                playerConfig.onlinePlayerColor="Black"
+                playerConfig.onlinePlayer.color="Black"
                 playerConfig.currentPlayerColor="White"
                 const isPlayable = false
-                generalFunctions.updateGame(playerConfig.currentPlayerColor, playerConfig.colorsGame.top, isPlayable)
+                game.starObjGame(playerConfig.currentPlayerColor)
+                generalFunctions.updateGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor, isPlayable)
                 network.enableCalls.moveAdversary()
             }
             network.enableCalls.statusGame()
@@ -143,7 +162,8 @@ class onlineGame{
     
     connectionPlayerTwo(infPlayerAdv){
         if(infPlayerAdv.connection===false){
-            viewController.exposeEndGameInformation("noAdv")
+            const noAdv = "noAdv"
+            viewController.exposeEndGameInformation(noAdv)
             setTimeout(()=>{
                 viewController.hideinformationModal()
                 viewController.exposeHomePage()
@@ -155,34 +175,52 @@ class onlineGame{
                 type:"online"
             } 
             viewController.updateStatusConection(connection,infPlayerAdv.namePlayer)
-            generalFunctions.updateGame(playerConfig.currentPlayerColor, playerConfig.colorsGame.top)
+            generalFunctions.updateGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor)
         }
     }
 
     move(informationPieceSelect){
-        const isPlayable=false
-        const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
-        const isMove = generalFunctions.movePiece(informationPieceSelect,nextPlayer,isPlayable)
+        const isMove = generalFunctions.movePiece(informationPieceSelect)
         if(isMove){
             // {informationPieceSelect: fullName,color,typeMovement,specialMovement,refId e piecePromotion}
             const infSendMove = network.sendSever.moveGame(informationPieceSelect)
             network.enableCalls.moveAdversary()
         }
+        const isPlayable=false
+        const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
+        const infEndGame=generalFunctions.updateGame(nextPlayer,playerConfig.colorsGame.top,isPlayable)
+        if(infEndGame.endGame){
+            const endGame={
+                endGame:infEndGame.endGame,
+                colorWin: infEndGame.endGame.colorWin, 
+                namePlayer:playerConfig.onlinePlayer.name
+            }
+            this.endGame(endGame)
+        }
     }
 
-    getMoveAdv(informationPieceSelect){
-        if(informationPieceSelect===false){
+    getMoveAdv(infMoveAdv){
+        if(infMoveAdv.movet===false){
             viewController.informationProminent(infCode.msg)
         }
         else{
-            const nextPlayer=playerConfig.onlinePlayerColor
-            const isMove = generalFunctions.movePiece(informationPieceSelect,nextPlayer)
+            const isMove = generalFunctions.movePiece(infMoveAdv.move)
             if(isMove){
                 // network.sendSever.recMoveGame("true")
             }
             else{
                 // enviar caso tiver movimento invalido
                 // network.sendSever.recMoveGame("false")
+            }
+            const nextPlayer=playerConfig.onlinePlayer.color
+            const infEndGame=generalFunctions.updateGame(playerConfig.colorsGame.top,nextPlayer)
+            if(infEndGame.endGame){
+                const endGame={
+                    endGame:infEndGame.endGame,
+                    colorWin: infEndGame.colorWin, 
+                    namePlayer:infMoveAdv.infPlayerAdv.namePlayer
+                }
+                this.endGame(endGame)
             }
         }
     }
@@ -191,26 +229,48 @@ class onlineGame{
         network.sendSever.giveUp()
         playerConfig.game = null
         playerConfig.currentPlayerColor= null
-        playerConfig.onlinePlayerColor= null
+        playerConfig.onlinePlayer.color= null
         viewController.hideEndGameInformation()
         viewController.hideBackMovement()
         viewController.exposeHomePage()
     }
 
-    advGiveUp(namePlayer){
-        viewController.exposeEndGameInformation("giveUp",namePlayer)
+    advGiveUp(infPlayerAdv){
+        const infGiveUp={
+            endGame:"giveUp",
+            colorWin: infPlayerAdv.color, 
+            namePlayer:infPlayerAdv.namePlayer,
+            sendServer:true
+        }
+        this.endGame(infGiveUp)
+    }
+
+    endGame(infEndGame){
+        const endGameType = {
+            checkMate:"winPiece",
+            draw: "draw",
+            endGame: "winPiece",
+            giveUp: "giveUp"
+        }
+        viewController.exposeEndGameInformation(endGameType[infEndGame.endGame],infEndGame.colorWin,infEndGame.namePlayer)
+        network.sendSever.endGame()
     }
 }
 
 class generalFunctions{
-    static updateGame(colorPlayer, colorTop, isPlayable){
+    static updateGame(colorTop,colorPlayer, isPlayable){
+        const statusGame = game.getStatusGame() 
+        if(statusGame.endGame){
+            isPlayable=false
+        }
         this.updateBoard(colorPlayer,isPlayable) 
-        this.updateInformationGame(colorPlayer)
+        const infEndGame= this.updateInformationGame(colorPlayer)
         this.updateCapturedPiece(colorTop)
-        this.updatePlaysHistory()   
+        this.updatePlaysHistory()    
+        return infEndGame
     }
     
-    static movePiece(informationPieceSelect,colorPlayer,isPlayable){
+    static movePiece(informationPieceSelect){
         let isMove = false
         if(informationPieceSelect.specialMovement){
             isMove=game.informSpecialMovement(informationPieceSelect)
@@ -218,14 +278,6 @@ class generalFunctions{
         else{
             isMove=game.informMove(informationPieceSelect) 
         }  
-        const statusGame = game.getStatusGame() 
-        if(statusGame.endGame){
-            isPlayable=false
-        }
-        this.updateBoard(colorPlayer,isPlayable) 
-        this.updateInformationGame(colorPlayer)
-        this.updateCapturedPiece(playerConfig.colorsGame.top)
-        this.updatePlaysHistory()   
         return isMove
     }
     
@@ -235,15 +287,34 @@ class generalFunctions{
     }
     
     static updateInformationGame(colorPlayer){  
+        let infEndGame ={
+            endGame:null,
+            colorWin:null
+        }
         const statusGame = game.getStatusGame() 
-        viewController.updateStatusGame(statusGame,colorPlayer)
-        if(statusGame.endGame===true && statusGame.checkMate===false){
-            const status ={
-                endGame:statusGame.endGame,
-                playerConfigWin:statusGame.playerConfigWin
-            }
-            viewController.endGame(status,colorPlayer)
-        } 
+        if(statusGame.checkMate===true){
+            const checkMate = "checkMate"
+            infEndGame.endGame= "checkMate"
+            viewController.updateStatusCheck(checkMate,colorPlayer)
+        }
+        else if(statusGame.check===true){
+            const check= "check"
+            viewController.updateStatusCheck(check,colorPlayer)
+        }
+        else{
+            const noCheck= "noCheck"
+            viewController.updateStatusCheck(noCheck)
+        }
+        if(statusGame.draw===true){
+            infEndGame.endGame= "draw"
+        }
+        else if(statusGame.endGame===true ||statusGame.checkMate===true){
+            infEndGame.endGame= "endGame"
+        }
+        if(statusGame.playerWin){
+            infEndGame.colorWin=statusGame.playerWin
+        }
+        return infEndGame
     }
     
     static updateCapturedPiece(colorTop){
