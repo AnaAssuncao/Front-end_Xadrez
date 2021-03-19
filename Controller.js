@@ -49,6 +49,9 @@ const functionsGame={
     },
     giveUp:function(infPlayerAdv){
         playerConfig.game.advGiveUp(infPlayerAdv)
+    },
+    errConnection(msgErr){
+        playerConfig.game.informationProminent(msgErr)
     }
 }
 
@@ -61,6 +64,7 @@ viewController.subscribeRestartGame(functionsGame.restartGame)
 network.subscribeMoveAdversary(functionsGame.moveAdv)
 network.subscribePlayerConnection(functionsGame.playerConnection)
 network.subscribeGiveUp(functionsGame.giveUp)
+network.subscribeErrConnection(functionsGame.errConnection)
 
 
 class genericGame{
@@ -94,13 +98,13 @@ class genericGame{
     
     updateInformationGame(colorPlayer){  
         let infEndGame ={
-            endGame:null,
+            typeEndGame:null,
             colorWin:null
         }
         const statusGame = game.getStatusGame() 
         if(statusGame.checkMate===true){
             const checkMate = "checkMate"
-            infEndGame.endGame= "checkMate"
+            infEndGame.typeEndGame= "checkMate"
             viewController.updateStatusCheck(checkMate,colorPlayer)
         }
         else if(statusGame.check===true){
@@ -112,10 +116,10 @@ class genericGame{
             viewController.updateStatusCheck(noCheck)
         }
         if(statusGame.draw===true){
-            infEndGame.endGame= "draw"
+            infEndGame.typeEndGame= "draw"
         }
         else if(statusGame.endGame===true ||statusGame.checkMate===true){
-            infEndGame.endGame= "endGame"
+            infEndGame.typeEndGame= "endGame"
         }
         if(statusGame.playerWin){
             infEndGame.colorWin=statusGame.playerWin
@@ -155,12 +159,13 @@ class offlineGame extends genericGame{
             playerConfig.currentPlayerColor=nextPlayer
         }
         const infEndGame=this.updateGame(playerConfig.colorsGame.top,nextPlayer)
-        if(infEndGame.endGame){
+        if(infEndGame.typeEndGame){
             this.endGame(infEndGame)
         }
     }
 
     backPreviousMove(){
+        viewController.hideEndGameInformation()
         const playHistory = game.getHistoryMoves()
         if(playHistory.length>0){
             game.returnMovement()
@@ -188,7 +193,7 @@ class offlineGame extends genericGame{
             draw: "draw",
             endGame: "winPiece",
         }
-        viewController.exposeEndGameInformation(endGameType[infEndGame.endGame],infEndGame.colorWin)
+        viewController.exposeEndGameInformation(endGameType[infEndGame.typeEndGame],infEndGame.colorWin)
     }
 }
 
@@ -227,19 +232,15 @@ class onlineGame extends genericGame{
             }
             network.enableCalls.statusGame()
         }
-        else{
-            viewController.informationProminent(infCode.msg)
-        }
     }
     
     connectionPlayerTwo(infPlayerAdv){
         if(infPlayerAdv.connection===false){
-            const noAdv = "noAdv"
-            viewController.exposeEndGameInformation(noAdv)
-            setTimeout(()=>{
-                viewController.hideinformationModal()
-                viewController.exposeHomePage()
-            },5000)
+            const noAdv={
+                typeEndGame: "noAdv",
+                sendServer:true
+            }
+            this.endGame(noAdv)
         }
         else{
             const connection={
@@ -256,15 +257,17 @@ class onlineGame extends genericGame{
         if(isMove){
             // {informationPieceSelect: fullName,color,typeMovement,specialMovement,refId e piecePromotion}
             const infSendMove = network.sendSever.moveGame(informationPieceSelect)
-            network.enableCalls.moveAdversary()
+            if(infSendMove){
+                network.enableCalls.moveAdversary()
+            }
         }
         const isPlayable=false
         const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
         const infEndGame=this.updateGame(nextPlayer,playerConfig.colorsGame.top,isPlayable)
-        if(infEndGame.endGame){
+        if(infEndGame.typeEndGame){
             const endGame={
-                endGame:infEndGame.endGame,
-                colorWin: infEndGame.endGame.colorWin, 
+                typeEndGame:infEndGame.typeEndGame,
+                colorWin: infEndGame.typeEndGame.colorWin, 
                 namePlayer:playerConfig.onlinePlayer.name
             }
             this.endGame(endGame)
@@ -286,9 +289,9 @@ class onlineGame extends genericGame{
             }
             const nextPlayer=playerConfig.onlinePlayer.color
             const infEndGame=this.updateGame(playerConfig.colorsGame.top,nextPlayer)
-            if(infEndGame.endGame){
+            if(infEndGame.typeEndGame){
                 const endGame={
-                    endGame:infEndGame.endGame,
+                    typeEndGame:infEndGame.typeEndGame,
                     colorWin: infEndGame.colorWin, 
                     namePlayer:infMoveAdv.infPlayerAdv.namePlayer
                 }
@@ -309,7 +312,7 @@ class onlineGame extends genericGame{
 
     advGiveUp(infPlayerAdv){
         const infGiveUp={
-            endGame:"giveUp",
+            typeEndGame:"giveUp",
             colorWin: infPlayerAdv.color, 
             namePlayer:infPlayerAdv.namePlayer,
             sendServer:true
@@ -322,9 +325,16 @@ class onlineGame extends genericGame{
             checkMate:"winPiece",
             draw: "draw",
             endGame: "winPiece",
-            giveUp: "giveUp"
+            giveUp: "giveUp",
+            noAdv:"noAdv"
         }
-        viewController.exposeEndGameInformation(endGameType[infEndGame.endGame],infEndGame.colorWin,infEndGame.namePlayer)
+        viewController.exposeEndGameInformation(endGameType[infEndGame.typeEndGame],infEndGame.colorWin,infEndGame.namePlayer)
         network.sendSever.endGame()
+    }
+
+    informationProminent(infConnetion){
+        if(infConnetion.connectedServer === false){
+            viewController.informationProminent(infConnetion.msg)
+        }
     }
 }

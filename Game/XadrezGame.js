@@ -617,6 +617,7 @@ export default class createGame {
 
     returnMovement(){
         this.statusGame.endGame=false
+        this.statusGame.checkKing.checkMate=false
         this.statusGame.winColor=null
         this.returnChangePiece( )
         this.updateStatusGame(this.colorPieceBoard.play)
