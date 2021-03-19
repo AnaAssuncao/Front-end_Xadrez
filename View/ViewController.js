@@ -184,9 +184,23 @@ export default function viewController(startBoard){
         }
     }
 
-    const informationDetails={
-        updateLog(text){
-            view.informationDetails.updateLog(text)
+    const statusLog={
+        updateLog(arrayInfLog){
+            // fazer um forEach para andar no array
+            const typeMsgLog={
+                start:"Jogo iniciado",
+                win:"Vitória das Peças ",
+                returnMovement:"Retorno das Peças ",
+                movement:"Movimento das Peças",
+                nextPlayer:"Vez das Peças",
+                checkMate:"CheckMate nas Peças",
+                check:"Check nas Peças",
+                draw:"Jogo empatado",
+                waitAdv:"Aguardando próximo",
+                room:"Conectado a sala ",
+                colorPlayer:"A cor da sua Peça é "
+            }
+            view.statusLog.updateLog(text)
         }
     }
 
@@ -417,16 +431,16 @@ export default function viewController(startBoard){
         endGameinformation.clearModal(information)
     }
 
-    this.informationLog=function(text){
-        informationDetails.updateLog(text)
-    }
-
     this.informationProminent=function(text){
         gameAlerts.informationAlert(text)
     }
 
     this.hideSubscribes=function(){
         utilities.clearFunctionToCallBack()
+    }
+
+    this.exposeInfLog=function(infGameLog){
+        statusLog.updateLog(text)
     }
 
     const utilities ={

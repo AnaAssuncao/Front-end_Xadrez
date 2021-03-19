@@ -102,13 +102,19 @@ class genericGame{
             colorWin:null
         }
         const statusGame = game.getStatusGame() 
+        if(statusGame.playerWin){
+            infEndGame.colorWin=statusGame.playerWin
+        }
         if(statusGame.checkMate===true){
             const checkMate = "checkMate"
             infEndGame.typeEndGame= "checkMate"
+            this.gameLog(this.typeMsgLog.checkMate,colorPlayer)
             viewController.updateStatusCheck(checkMate,colorPlayer)
+            this.gameLog(this.typeMsgLog.win,statusGame.playerWin)
         }
         else if(statusGame.check===true){
             const check= "check"
+            this.gameLog(this.typeMsgLog.check,colorPlayer)
             viewController.updateStatusCheck(check,colorPlayer)
         }
         else{
@@ -116,13 +122,12 @@ class genericGame{
             viewController.updateStatusCheck(noCheck)
         }
         if(statusGame.draw===true){
+            this.gameLog(this.typeMsgLog.draw)
             infEndGame.typeEndGame= "draw"
         }
         else if(statusGame.endGame===true ||statusGame.checkMate===true){
+            this.gameLog(this.typeMsgLog.win,statusGame.playerWin)
             infEndGame.typeEndGame= "endGame"
-        }
-        if(statusGame.playerWin){
-            infEndGame.colorWin=statusGame.playerWin
         }
         return infEndGame
     }
@@ -139,6 +144,19 @@ class genericGame{
 }
 
 class offlineGame extends genericGame{
+    constructor(){
+        this.infGameLog=[]
+        this.typeMsgLog={
+            start:"start",
+            win:"win",
+            returnMovement:"returnMovement",
+            movement:"movement",
+            nextColor:"nextColor",
+            checkMate:"checkMate",
+            check:"check",
+            draw:"draw",
+        }
+    }
     start(){
         viewController.hideHomePage()
         playerConfig.currentPlayerColor="White"
@@ -150,13 +168,16 @@ class offlineGame extends genericGame{
         viewController.exposeBackMovement()
         game.starObjGame(playerConfig.currentPlayerColor)
         this.updateGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor)
+        this.gameLog(this.typeMsgLog.start)
     }
 
     move(informationPieceSelect){
         const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
         const isMove =this.movePiece(informationPieceSelect)
         if(isMove){
+            this.gameLog(this.typeMsgLog.movement,playerConfig.currentPlayerColor)
             playerConfig.currentPlayerColor=nextPlayer
+            this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
         }
         const infEndGame=this.updateGame(playerConfig.colorsGame.top,nextPlayer)
         if(infEndGame.typeEndGame){
@@ -172,8 +193,10 @@ class offlineGame extends genericGame{
             const pastColor=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
             const statusGame = game.getStatusGame() 
             if(statusGame.endGame===false){
+                this.gameLog(this.typeMsgLog.returnMovement,playerConfig.currentPlayerColor)
                 this.updateGame(playerConfig.colorsGame.top,pastColor)
                 playerConfig.currentPlayerColor=pastColor
+                this.gameLog(this.typeMsgLog.nextPlayer,pastColor)
             }
         }
     }
@@ -195,14 +218,40 @@ class offlineGame extends genericGame{
         }
         viewController.exposeEndGameInformation(endGameType[infEndGame.typeEndGame],infEndGame.colorWin)
     }
+
+    gameLog(type,color=null){
+        const informativeLog ={
+            time:Date.now(),
+            typeMsg:type,
+            colorPiece:color,
+        }
+        this.infGameLog.push([informativeLog])
+        // viewController.exposeInfLog(this.infGameLog)
+    }
 }
 
 class onlineGame extends genericGame{
+    constructor(){
+        this.infGameLog=[]
+        this.typeMsgLog={
+            start:"start",
+            win:"win",
+            movement:"movement",
+            nextPlayer:"nextColor",
+            checkMate:"checkMate",
+            check:"check",
+            draw:"draw",
+            waitAdv:"waitAdv",
+            room:"room",
+            colorPlayer:"colorPlayer"
+        }
+    }
     async start(infGame){
         // infGame = {name:value, roomCode:value}
         const infCode= await network.sendSever.infStartGame(infGame)
         if(infCode.connectedServer){
             viewController.hideHomePage()
+            this.gameLog(this.typeMsgLog.room, infGame.roomCode)
             if(infCode.playerAdv.connection===false){
                 const connection={
                     msg: "wait",
@@ -214,6 +263,8 @@ class onlineGame extends genericGame{
                 playerConfig.currentPlayerColor =playerConfig.onlinePlayer.color
                 const isPlayable = false
                 game.starObjGame(playerConfig.currentPlayerColor)
+                this.gameLog(this.typeMsgLog.start)
+                this.gameLog(this.typeMsgLog.colorPlayer,playerConfig.onlinePlayer.color)
                 this.updateGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor, isPlayable)
                 network.enableCalls.playerConnection()
             }
@@ -227,6 +278,8 @@ class onlineGame extends genericGame{
                 playerConfig.currentPlayerColor="White"
                 const isPlayable = false
                 game.starObjGame(playerConfig.currentPlayerColor)
+                this.gameLog(this.typeMsgLog.start)
+                this.gameLog(this.typeMsgLog.waitAdv)
                 this.updateGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor, isPlayable)
                 network.enableCalls.moveAdversary()
             }
@@ -248,6 +301,7 @@ class onlineGame extends genericGame{
                 type:"online"
             } 
             viewController.updateStatusConection(connection,infPlayerAdv.namePlayer)
+            this.gameLog(this.typeMsgLog.colorPlayer,playerConfig.onlinePlayer.color)
             this.updateGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor)
         }
     }
@@ -263,6 +317,9 @@ class onlineGame extends genericGame{
         }
         const isPlayable=false
         const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
+        this.gameLog(this.typeMsgLog.movement,playerConfig.currentPlayerColor)
+        playerConfig.currentPlayerColor=nextPlayer
+        this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
         const infEndGame=this.updateGame(nextPlayer,playerConfig.colorsGame.top,isPlayable)
         if(infEndGame.typeEndGame){
             const endGame={
@@ -288,6 +345,9 @@ class onlineGame extends genericGame{
                 // network.sendSever.recMoveGame("false")
             }
             const nextPlayer=playerConfig.onlinePlayer.color
+            this.gameLog(this.typeMsgLog.movement,playerConfig.currentPlayerColor)
+            playerConfig.currentPlayerColor=nextPlayer
+            this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
             const infEndGame=this.updateGame(playerConfig.colorsGame.top,nextPlayer)
             if(infEndGame.typeEndGame){
                 const endGame={
@@ -317,6 +377,7 @@ class onlineGame extends genericGame{
             namePlayer:infPlayerAdv.namePlayer,
             sendServer:true
         }
+        this.gameLog(this.typeMsgLog.fiveUp,infGiveUp.namePlayer)
         this.endGame(infGiveUp)
     }
 
@@ -336,5 +397,15 @@ class onlineGame extends genericGame{
         if(infConnetion.connectedServer === false){
             viewController.informationProminent(infConnetion.msg)
         }
+    }
+
+    gameLog(type,infComplement){
+        const informativeLog ={
+            time:Date.now(),
+            typeMsg:type,
+            infComplement:infComplement,
+        }
+        this.infGameLog.push([informativeLog])
+        // viewController.exposeInfLog(this.infGameLog)
     }
 }

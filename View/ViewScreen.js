@@ -298,7 +298,7 @@ export default function viewScreen(chessBoard){
         }
     }
 
-    this.informationDetails={
+    this.statusLog={
         updateLog(text){
             const msg = document.querySelector("#details_msg")
             msg.innerText = text
