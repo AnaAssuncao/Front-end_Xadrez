@@ -71,10 +71,9 @@ class genericGame{
             isPlayable=false
         }
         this.updateDisplayBoard(colorPlayer,isPlayable) 
-        const infEndGame= this.updateDisplayStatusGame(colorPlayer)
+        this.updateDisplayStatusGame(colorPlayer)
         this.updateDisplayCapturedPieces(colorTop)
         this.updateDisplayHistory()    
-        return infEndGame
     }
     
     movePiece(informationPieceSelect){
@@ -94,22 +93,9 @@ class genericGame{
     }
     
     updateDisplayStatusGame(colorPlayer){  
-        let infEndGame ={
-            typeEndGame:null,
-            colorWin:null,
-            status:{
-                checkMate:"checkMate",
-                noCheck: "noCheck",
-                check: "check"
-            }
-        }
         const statusGame = game.getStatusGame() 
-        if(statusGame.playerWin){
-            infEndGame.colorWin=statusGame.playerWin
-        }
         if(statusGame.checkMate===true){
             const checkMate = "checkMate"
-            infEndGame.typeEndGame= "checkMate"
             // (msgAndAlert.gameMsg.checkMatte(colorPlayer))
             this.gameLog(this.typeMsgLog.checkMate,colorPlayer)
             viewController.updateStatusCheck(checkMate,colorPlayer)
@@ -126,13 +112,10 @@ class genericGame{
         }
         if(statusGame.draw===true){
             this.gameLog(this.typeMsgLog.draw)
-            infEndGame.typeEndGame= "draw"
         }
         else if(statusGame.endGame===true ||statusGame.checkMate===true){
             this.gameLog(this.typeMsgLog.win,statusGame.playerWin)
-            infEndGame.typeEndGame= "endGame"
         }
-        return infEndGame
     }
     
     updateDisplayCapturedPieces(colorTop){
@@ -143,6 +126,33 @@ class genericGame{
     updateDisplayHistory(){
         const playHistory = game.getHistoryMoves()
         viewController.updateHistory(playHistory)
+    }
+
+    getEndGame(){  
+        let infEndGame ={
+            typeEndGame:null,
+            colorWin:null,
+            status:{
+                checkMate:"checkMate",
+                noCheck: "noCheck",
+                check: "check"
+            }
+        }
+        const statusGame = game.getStatusGame() 
+        if(statusGame.playerWin){
+            infEndGame.colorWin=statusGame.playerWin
+        }
+        if(statusGame.checkMate===true){
+            const checkMate = "checkMate"
+            infEndGame.typeEndGame= "checkMate"
+        }
+        else if(statusGame.draw===true){
+            infEndGame.typeEndGame= "draw"
+        }
+        else if(statusGame.endGame===true ||statusGame.checkMate===true){
+            infEndGame.typeEndGame= "endGame"
+        }
+        return infEndGame
     }
 }
 
@@ -183,7 +193,8 @@ class offlineGame extends genericGame{
             playerConfig.currentPlayerColor=nextPlayer
             this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
         }
-        const infEndGame=this.updateDisplayGame(playerConfig.colorsGame.top,nextPlayer)
+        this.updateDisplayGame(playerConfig.colorsGame.top,nextPlayer)
+        const infEndGame = this.getEndGame()
         if(infEndGame.typeEndGame){
             this.endGame(infEndGame)
         }
@@ -325,7 +336,8 @@ class onlineGame extends genericGame{
         this.gameLog(this.typeMsgLog.movement,playerConfig.currentPlayerColor)
         playerConfig.currentPlayerColor=nextPlayer
         this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
-        const infEndGame=this.updateDisplayGame(nextPlayer,playerConfig.colorsGame.top,isPlayable)
+        this.updateDisplayGame(nextPlayer,playerConfig.colorsGame.top,isPlayable)
+        const infEndGame = this.getEndGame()
         if(infEndGame.typeEndGame){
             const endGame={
                 typeEndGame:infEndGame.typeEndGame,
@@ -353,7 +365,8 @@ class onlineGame extends genericGame{
             this.gameLog(this.typeMsgLog.movement,playerConfig.currentPlayerColor)
             playerConfig.currentPlayerColor=nextPlayer
             this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
-            const infEndGame=this.updateDisplayGame(playerConfig.colorsGame.top,nextPlayer)
+            this.updateDisplayGame(playerConfig.colorsGame.top,nextPlayer)
+            const infEndGame = this.getEndGame()
             if(infEndGame.typeEndGame){
                 const endGame={
                     typeEndGame:infEndGame.typeEndGame,
