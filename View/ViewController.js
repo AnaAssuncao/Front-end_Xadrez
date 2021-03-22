@@ -324,12 +324,12 @@ export default function viewController(startBoard){
         }
     }
 
-    const homePage = {
+    const homeMenu = {
         addModal(){
-            view.homePage.render()
+            view.homeMenu.render()
         },
         clearModal(){
-            view.homePage.clear()
+            view.homeMenu.clear()
         }
     }
 
@@ -384,15 +384,15 @@ export default function viewController(startBoard){
     view.piecesPromotion.subscribeToClick(piece.changePiecePromotion)
     view.buttonNewGame.subscribeToClick(statusGame.restartGame)
 
-    this.hideHomePage=function(){
-        homePage.clearModal()
+    this.hideHomeMenu=function(){
+        homeMenu.clearModal()
     }
 
-    this.exposeHomePage=function(){
-        homePage.addModal()
+    this.displayHomeMenu=function(){
+        homeMenu.addModal()
     }
 
-    this.exposeBackMovement=function(){
+    this.displayBackMovement=function(){
         history.addButtonBackMovement()
     }
     
@@ -423,7 +423,7 @@ export default function viewController(startBoard){
         statusGame.endGame(status)
     }
 
-    this.exposeEndGameInformation=function(information,complementColor,complementoName){
+    this.displayEndGameInformation=function(information,complementColor,complementoName){
         endGameinformation.addModal(information,complementColor,complementoName)
     }
 
@@ -439,7 +439,7 @@ export default function viewController(startBoard){
         utilities.clearFunctionToCallBack()
     }
 
-    this.exposeInfLog=function(infGameLog){
+    this.displayInfLog=function(infGameLog){
         statusLog.updateLog(text)
     }
 

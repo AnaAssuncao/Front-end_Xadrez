@@ -10,7 +10,7 @@ export default function viewScreen(chessBoard){
         buttonBackMovement:[],
         piecesPromotion:[]
     }
-    this.homePage={
+    this.homeMenu={
         clear(){
             const selectModal = document.querySelector("#startGame")
             selectModal.classList.toggle("chess__startGame--display")
@@ -55,12 +55,12 @@ export default function viewScreen(chessBoard){
         },
         renderButton(){
             const buttonMove = document.querySelector("#button__back__movement")
-            buttonMove.classList.toggle("move__back--display")
+            buttonMove.classList.remove("move__back--display")
         },
         clearButton(){
             const buttonMove = document.querySelector("#button__back__movement")
             if(buttonMove){
-                buttonMove.classList.toggle("move__back--display")
+                buttonMove.classList.add("move__back--display")
             }
         }
     }

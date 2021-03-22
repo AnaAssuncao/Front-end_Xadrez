@@ -25,12 +25,12 @@ export default function interfaceNetwork(){
     }
 
     this.sendSever={
-        infStartGame: async(infGame) =>{
+        infStartGame: async(nickAndCode) =>{
             const url = networkConf.url+"/startGame/infGame"
-            // infGame = {name:value, roomCode:value}
+            // nickAndCode = {name:value, roomCode:value}
             const infMultiplayer = {
-                playerName:infGame.name,
-                roomCode:infGame.roomCode
+                playerName:nickAndCode.name,
+                roomCode:nickAndCode.roomCode
             }
             const msgRes = await httpMethods.post(infMultiplayer,url)
             if(msgServer.connectionServer===msgRes){
@@ -218,8 +218,8 @@ export default function interfaceNetwork(){
         const waitInf = 
         setInterval(
             async()=>{
-                const infGame = await httpMethods.get(url)
-                if(msgServer.connectionServer===infGame){
+                const statusGame = await httpMethods.get(url)
+                if(msgServer.connectionServer===statusGame){
                     clearInterval(waitInf) 
                     const err={
                         connectedServer:false,
@@ -227,20 +227,20 @@ export default function interfaceNetwork(){
                     }
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
-                else if(infGame.infPlayerAdv.giveUp===true){
+                else if(statusGame.infPlayerAdv.giveUp===true){
                     clearInterval(waitInf) 
-                    const infPlayerAdv= infGame.infPlayerAdv
+                    const infPlayerAdv= statusGame.infPlayerAdv
                     notifyFunctions(functionToCallBack.giveUp,infPlayerAdv)
                 }
-                else if(infGame.statusGame.endGame===true){
+                else if(statusGame.statusGame.endGame===true){
                     clearInterval(waitInf) 
-                    const statusGame = infGame.statusGame
+                    const statusGame = statusGame.statusGame
                     notifyFunctions(functionToCallBack.endGame,statusGame)
                 }
-                else if(infGame.statusGame.connection===false){
-                    if(infGame.infPlayerAdv.connection===false){
+                else if(statusGame.statusGame.connection===false){
+                    if(statusGame.infPlayerAdv.connection===false){
                         clearInterval(waitInf) 
-                        const statusGame = infGame.infPlayerAdv
+                        const statusGame = statusGame.infPlayerAdv
                         notifyFunctions(functionToCallBack.playerConnection,statusGame)
                     }
                 }
