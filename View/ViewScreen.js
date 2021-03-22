@@ -495,9 +495,12 @@ export default function viewScreen(chessBoard){
     function renderInputOnlineGame(){
         const selectModal = document.querySelector("#startGame")
         const selectInfOnlineGame= document.querySelector(".start__infOnlineGame")
-        if(selectInfOnlineGame===null){       
-            renderInputNickAndCode(selectModal)
-            renderButtonStartOnline(selectModal)
+        if(selectInfOnlineGame===null){      
+            const nickAndCode = document.createElement("div") 
+            nickAndCode.classList.add("start__infOnlineGame")
+            renderInputNickAndCode(nickAndCode)
+            renderButtonStartOnline(nickAndCode)
+            selectModal.appendChild(nickAndCode)
         }
     }
 
@@ -505,7 +508,7 @@ export default function viewScreen(chessBoard){
         const inputs = document.createElement("div")
         const inputName = document.createElement("input")
         const inputCode = document.createElement("input")
-        inputs.classList.add("start__infOnlineGame")
+        inputs.classList.add("start__inputsOnlineGame")
         inputName.classList.add("input__gameOnline--name")
         inputCode.classList.add("input__gameOnline--code")
         inputName.placeholder="Nome do jogador"
@@ -519,7 +522,7 @@ export default function viewScreen(chessBoard){
         const buttons = document.createElement("div")
         const buttonStartCode = document.createElement("button")
         const buttonStartRoom = document.createElement("button")
-        buttons.classList.add("start__infOnlineGame")
+        buttons.classList.add("start_buttonOnlineGame")
         buttonStartCode.classList.add("button__gameOnline--code")
         starGameEvent.buttonStartNewRoom(buttonStartCode)
         buttonStartRoom.classList.add("button__gameOnline--code")

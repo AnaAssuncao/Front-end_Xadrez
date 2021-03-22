@@ -442,3 +442,9 @@
 #chess__inf{
     font-size:2em;
 }
+.start__inputsOnlineGame{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
