@@ -69,7 +69,6 @@ network.subscribePlayerConnection(interfaceFunctions.playerConnection)
 network.subscribeGiveUp(interfaceFunctions.giveUp)
 network.subscribeErrConnection(interfaceFunctions.errConnection)
 
-
 class genericGame{
     updateDisplayGame(colorTop,colorPlayer, isPlayable){
         const statusGame = game.getStatusGame() 
@@ -199,7 +198,7 @@ class offlineGame extends genericGame{
             playerConfig.currentPlayerColor=nextPlayer
             this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
         }
-        this.updateDisplayGame(playerConfig.colorsGame.top,nextPlayer)
+        this.updateDisplayGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor)
         const infEndGame = this.getEndGame()
         if(infEndGame.typeEndGame){
             this.endGame(infEndGame)

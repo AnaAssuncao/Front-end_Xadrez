@@ -28,7 +28,7 @@ export default function interfaceNetwork(){
             if(msgsAndAlerts.network.connectedServer.connection===msgRes){
                 const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
-                return err.connectedServer
+                return err
             }
             else{
                 const status= networkFlows.room[msgRes.statusRoom](msgRes.status,networkConf.updateCodes)
@@ -47,7 +47,7 @@ export default function interfaceNetwork(){
             if(msgsAndAlerts.network.connectedServer.connection===msgRes){
                 const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
-                return err.connectedServer
+                return err
             }
             else{
                 const status= networkFlows.room[msgRes.statusRoom](msgRes.status,networkConf.updateCodes)
@@ -66,7 +66,7 @@ export default function interfaceNetwork(){
             if(msgsAndAlerts.network.connectedServer.connection===msgRes){
                 const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
-                return err.connectedServer
+                return err
             }
             else{
                 const status= networkFlows.movement[msgRes.statusMovement](msgRes.move)
@@ -85,7 +85,7 @@ export default function interfaceNetwork(){
             if(msgsAndAlerts.network.connectedServer.connection===msgRes){
                 const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
-                return err.connectedServer
+                return err
             }
         },
 
@@ -100,7 +100,7 @@ export default function interfaceNetwork(){
             if(msgsAndAlerts.network.connectedServer.connection===msgRes){
                 const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
-                return err.connectedServer
+                return err
             }
             return msgRes
         },
@@ -115,7 +115,7 @@ export default function interfaceNetwork(){
             if(msgsAndAlerts.network.connectedServer.connection===msgRes){
                 const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
-                return err.connectedServer
+                return err
             }
             return msgRes
         }
@@ -171,8 +171,8 @@ export default function interfaceNetwork(){
                     notifyFunctions(functionToCallBack.moveAdversary,status)
                 }
                 else if(msgRes.statusMovement===networkFlows.movement.typeStatus.waitAgain){
-                    const status = networkFlows.movement.waitAgain()
-                    notifyFunctions(functionToCallBack.moveAdversary,status)
+                    timeCounter++
+                    setTimeMoveAdv(url,timeCounter)
                 }
                 else if(timeCounter===timeLimite){
                     const connection = false

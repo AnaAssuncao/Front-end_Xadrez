@@ -28,10 +28,8 @@ const msgsAndAlerts={
         incorrectMove:{
             statusMovement:"waitAgain",    
             alertToRender:"Não é sua vez de jogar, aguarde." 
-        },
-
-        
-    }
+        }  
+    }  
 }
 
 export default msgsAndAlerts
