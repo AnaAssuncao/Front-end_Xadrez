@@ -22,7 +22,7 @@ const networkFlows={
             }
             return sendController
         },
-        connectedRoom(statusGame){
+        connectedRoom(statusGame,updateCodes){
             const sendController=  {
                 connectedServer:true,
                 advPlayer:{
@@ -31,6 +31,7 @@ const networkFlows={
                 },
                 msg:msgsAndAlerts.network.connectedRoom.msgToRender
             }
+            updateCodes(statusGame.statusCodes)
             return sendController
         },
         noExistRoom(){
@@ -42,8 +43,9 @@ const networkFlows={
         }
     },
     movement:{
-        status:{
-            movementAvailable:"movementAvailable"
+        typeStatus:{
+            movementAvailable:"movementAvailable",
+            waitAgain:"waitAgain"
         },
         waitAgain(){
             const sendController={
@@ -54,7 +56,7 @@ const networkFlows={
             }
             return sendController
         },
-        correctMove(movement){
+        correctMove(){
             const sendController={
                 connectedServer:true,
                 isCorrectMove:true,
@@ -72,13 +74,34 @@ const networkFlows={
         },
         movementAvailable(movement){
             const sendController={
-                move:msgRes.move,
-                infPlayerAdv:msgRes.infPlayerAdv,
-                move:movement
+                connectedServer:true,
+                move:movement,
             }
             return sendController
         }
+    },
+    statusGame:{
+        advPlayer(statusPlayerAdv){
+            const sendController={
+                connection:true,
+                namePlayer:statusPlayerAdv.namePlayer,
+                colorWin: statusPlayerAdv.color
+            }
+            return sendController
+        },
 
+        giveUp(statusPlayerAdv){
+            const sendController={
+                typeEndGame:"giveUp",
+                colorWin: statusPlayerAdv.color, 
+                namePlayer:statusPlayerAdv.namePlayer,
+                sendServer:true
+            }
+            return sendController
+        } 
+    },
+    timeLimit:{
+        connection:false
     }
 }
 

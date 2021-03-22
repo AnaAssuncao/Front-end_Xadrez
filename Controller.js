@@ -323,8 +323,8 @@ class onlineGame extends genericGame{
         }
     }
     
-    connectionPlayerTwo(infPlayerAdv){
-        if(infPlayerAdv.connection===false){
+    connectionPlayerTwo(statusPlayerAdv){
+        if(statusPlayerAdv.connection===false){
             const noAdv={
                 typeEndGame: "noAdv",
                 sendServer:true
@@ -336,27 +336,28 @@ class onlineGame extends genericGame{
                 msg: "connected",
                 type:"online"
             } 
-            playerConfig.onlinePlayer.advName=infPlayerAdv.playerAdv.namePlayer
-            viewController.updateStatusConection(connection,infPlayerAdv.namePlayer)
+            playerConfig.onlinePlayer.advName=statusPlayerAdv.namePlayer
+            viewController.updateStatusConection(connection,statusPlayerAdv.namePlayer)
             this.gameLog(this.typeMsgLog.colorPlayer,playerConfig.onlinePlayer.color)
             this.updateDisplayGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor)
         }
     }
 
     async move(informationPieceSelect){
+        // {informationPieceSelect: fullName,color,typeMovement,specialMovement,refId e piecePromotion}
         const isMove = this.movePiece(informationPieceSelect)
+        const isPlayable=false
+        const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
+        this.gameLog(this.typeMsgLog.movement,playerConfig.currentPlayerColor)
+        this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
+        this.updateDisplayGame(nextPlayer,playerConfig.colorsGame.top,isPlayable)
+
         if(isMove){
-            // {informationPieceSelect: fullName,color,typeMovement,specialMovement,refId e piecePromotion}
             const infSendMove = await network.sendSever.moveGame(informationPieceSelect)
             if(infSendMove.connectedServer){
                 if(infSendMove.isCorrectMove){
                     network.enableCalls.moveAdversary()
-                    const isPlayable=false
-                    const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
-                    this.gameLog(this.typeMsgLog.movement,playerConfig.currentPlayerColor)
                     playerConfig.currentPlayerColor=nextPlayer
-                    this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
-                    this.updateDisplayGame(nextPlayer,playerConfig.colorsGame.top,isPlayable)
                     const infEndGame = this.getEndGame()
                     if(infEndGame.typeEndGame){
                         const endGame={
@@ -364,7 +365,6 @@ class onlineGame extends genericGame{
                             colorWin: infEndGame.typeEndGame.colorWin, 
                             namePlayer:playerConfig.onlinePlayer.name
                         }
-                        this.endGame(endGame)
                     }
                 }
                 else{
@@ -379,7 +379,7 @@ class onlineGame extends genericGame{
 
     getMoveAdv(moveAdv){
         if(moveAdv.move===null){
-            viewController.informationProminent(infCode.msg)
+            viewController.informationProminent(moveAdv.msg)
         }
         else{
             const isMove = this.movePiece(moveAdv.move)
@@ -399,7 +399,7 @@ class onlineGame extends genericGame{
                 const endGame={
                     typeEndGame:infEndGame.typeEndGame,
                     colorWin: infEndGame.colorWin, 
-                    namePlayer:moveAdv.infPlayerAdv.namePlayer
+                    namePlayer:onlinePlayer.advName
                 }
                 this.endGame(endGame)
             }
@@ -417,14 +417,8 @@ class onlineGame extends genericGame{
     }
 
     advGiveUp(infPlayerAdv){
-        const infGiveUp={
-            typeEndGame:"giveUp",
-            colorWin: infPlayerAdv.color, 
-            namePlayer:infPlayerAdv.namePlayer,
-            sendServer:true
-        }
         this.gameLog(this.typeMsgLog.fiveUp,infGiveUp.namePlayer)
-        this.endGame(infGiveUp)
+        this.endGame(infPlayerAdv)
     }
 
     endGame(infEndGame){

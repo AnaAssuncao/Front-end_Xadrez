@@ -9,6 +9,10 @@ export default function interfaceNetwork(){
             room:null,
             player:null
         },
+        updateCodes(statusCodes){
+            networkConf.codes.room=statusCodes.room
+            networkConf.codes.player=statusCodes.player
+        },
         url:"http://localhost:3030/api/v1"
     }
 
@@ -27,7 +31,7 @@ export default function interfaceNetwork(){
                 return err.connectedServer
             }
             else{
-                const status= networkFlows.room[msgRes.statusRoom](msgRes.status)
+                const status= networkFlows.room[msgRes.statusRoom](msgRes.status,networkConf.updateCodes)
                 return status
             }
         },
@@ -46,7 +50,7 @@ export default function interfaceNetwork(){
                 return err.connectedServer
             }
             else{
-                const status= networkFlows.room[msgRes.statusRoom](msgRes.status)
+                const status= networkFlows.room[msgRes.statusRoom](msgRes.status,networkConf.updateCodes)
                 return status
             }
         },
@@ -65,7 +69,7 @@ export default function interfaceNetwork(){
                 return err.connectedServer
             }
             else{
-                const status= networkFlows.room[msgRes.statusMovement](msgRes.move)
+                const status= networkFlows.movement[msgRes.statusMovement](msgRes.move)
                 return status
             }
         },
@@ -83,10 +87,6 @@ export default function interfaceNetwork(){
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err.connectedServer
             }
-            else{
-                const status= networkFlows.room[msgRes.statusMovement](msgRes.move)
-                return status
-            }
         },
 
         giveUp: async() =>{
@@ -97,11 +97,8 @@ export default function interfaceNetwork(){
                 giveUp:true
             } 
             const msgRes = await httpMethods.post(objSend,url)
-            if(msgServer.connectionServer===msgRes){
-                const err={
-                    connectedServer:false,
-                    msg:msgServer.connectionServer
-                }
+            if(msgsAndAlerts.network.connectedServer.connection===msgRes){
+                const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err.connectedServer
             }
@@ -115,11 +112,8 @@ export default function interfaceNetwork(){
             } 
             const url = networkConf.url+"/endGame"
             const msgRes = await httpMethods.post(objSend,url)
-            if(msgServer.connectionServer===msgRes){
-                const err={
-                    connectedServer:false,
-                    msg:msgServer.connectionServer
-                }
+            if(msgsAndAlerts.network.connectedServer.connection===msgRes){
+                const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err.connectedServer
             }
@@ -136,7 +130,7 @@ export default function interfaceNetwork(){
             let query = Object.keys(params)
                     .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
                     .join("&");
-            const url = networkConf.url+"movementGame/getMovement?" +query
+            const url = networkConf.url+"/movementGame/getMovement?" +query
             setTimeMoveAdv(url)
         },
         playerConnection: ()=>{
@@ -168,16 +162,16 @@ export default function interfaceNetwork(){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
-                if(msgServer.connectionServer===msgRes){
+                if(msgsAndAlerts.network.connectedServer.connection===msgRes){
                     const err=networkFlows.server.errServer
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
-                else if(msgRes.statusMovement===networkConf.movement.status.movementAvailable){
-                    const status = networkConf.movement.movementAvailable()
+                else if(msgRes.statusMovement===networkFlows.movement.typeStatus.movementAvailable){
+                    const status = networkFlows.movement.movementAvailable(msgRes.move)
                     notifyFunctions(functionToCallBack.moveAdversary,status)
                 }
-                else if(msgRes.statusMovement===networkConf.movement.status.waitAgain){
-                    const status = networkConf.movement.waitAgain()
+                else if(msgRes.statusMovement===networkFlows.movement.typeStatus.waitAgain){
+                    const status = networkFlows.movement.waitAgain()
                     notifyFunctions(functionToCallBack.moveAdversary,status)
                 }
                 else if(timeCounter===timeLimite){
@@ -195,17 +189,16 @@ export default function interfaceNetwork(){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
-                if(msgServer.connectionServer===msgRes){
+                if(msgsAndAlerts.network.connectedServer.connection===msgRes){
                     const err=networkFlows.server.errServer
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
-                else if(msgRes.infPlayerAdv.namePlayer!==null){
-                    notifyFunctions(functionToCallBack.playerConnection,msgRes.infPlayerAdv)
+                else if(msgRes.statusPlayerAdv.namePlayer!==null){
+                    const statusPlayerAdv= networkFlows.statusGame.advPlayer(msgRes.statusPlayerAdv)
+                    notifyFunctions(functionToCallBack.playerConnection,statusPlayerAdv)
                 }
                 else if(timeCounter===timeLimite){
-                    const infPlayerAdv={
-                        connection:false}
-                    notifyFunctions(functionToCallBack.playerConnection,infPlayerAdv)
+                    notifyFunctions(functionToCallBack.playerConnection,networkFlows.timeLimit)
                 }
                 else{
                     timeCounter++
@@ -219,30 +212,15 @@ export default function interfaceNetwork(){
         setInterval(
             async()=>{
                 const statusGame = await httpMethods.get(url)
-                if(msgServer.connectionServer===statusGame){
+                if(msgsAndAlerts.network.connectedServer.connection===statusGame){
                     clearInterval(waitInf) 
-                    const err={
-                        connectedServer:false,
-                        msg:msgServer.connectionServer
-                    }
+                    const err=networkFlows.server.errServer  
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
-                else if(statusGame.infPlayerAdv.giveUp===true){
-                    clearInterval(waitInf) 
-                    const infPlayerAdv= statusGame.infPlayerAdv
-                    notifyFunctions(functionToCallBack.giveUp,infPlayerAdv)
-                }
-                else if(statusGame.statusGame.endGame===true){
-                    clearInterval(waitInf) 
-                    const statusGame = statusGame.statusGame
-                    notifyFunctions(functionToCallBack.endGame,statusGame)
-                }
-                else if(statusGame.statusGame.connection===false){
-                    if(statusGame.infPlayerAdv.connection===false){
-                        clearInterval(waitInf) 
-                        const statusGame = statusGame.infPlayerAdv
-                        notifyFunctions(functionToCallBack.playerConnection,statusGame)
-                    }
+                else if(statusGame.statusPlayerAdv.giveUp===true){
+                    clearInterval(waitInf)
+                    const statusGiveUp=networkFlows.statusGame.giveUp(statusPlayerAdv)
+                    notifyFunctions(functionToCallBack.giveUp,statusGiveUp)
                 }
         },1000)
     }
