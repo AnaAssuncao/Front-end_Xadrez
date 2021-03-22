@@ -52,26 +52,43 @@ export default function interfaceNetwork(){
         },
 
         moveGame: async(move) =>{
-            const url = networkConf.url+"/movementGame"
+            const url = networkConf.url+"/movementGame/updateMovement"
             const objSend={
                 roomCode:networkConf.codes.room,
                 playerCode:networkConf.codes.player,
                 movement:move
             }
             const msgRes = await httpMethods.post(objSend,url)
-            if(msgServer.connectionServer===msgRes){
+            if(msgsAndAlerts.network.connectedServer.connection===msgRes){
                 const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err.connectedServer
             }
             else{
-                const sendController={
-                    connectedServer:true,
-                    msg:msgRes
-                }
-                return sendController
+                const status= networkFlows.room[msgRes.statusMovement](msgRes.move)
+                return status
             }
         },
+
+        confirmMovement:function(isCorretMove){
+            const url = networkConf.url+"/movementGame/confirmMovement"
+            const objSend={
+                roomCode:networkConf.codes.room,
+                playerCode:networkConf.codes.player,
+                isCorretMove:isCorretMove
+            }
+            const msgRes = httpMethods.post(objSend,url)
+            if(msgsAndAlerts.network.connectedServer.connection===msgRes){
+                const err=networkFlows.server.errServer
+                notifyFunctions(functionToCallBack.errConnection,err)
+                return err.connectedServer
+            }
+            else{
+                const status= networkFlows.room[msgRes.statusMovement](msgRes.move)
+                return status
+            }
+        },
+
         giveUp: async() =>{
             const url = networkConf.url+"/giveUpGame"
             const objSend={
@@ -115,11 +132,11 @@ export default function interfaceNetwork(){
             const params = {
                 roomCode: networkConf.codes.room,
                 playerCode: networkConf.codes.player
-              }
+            }
             let query = Object.keys(params)
                     .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
                     .join("&");
-            const url = networkConf.url+"/movementGame?" +query
+            const url = networkConf.url+"movementGame/getMovement?" +query
             setTimeMoveAdv(url)
         },
         playerConnection: ()=>{
@@ -152,18 +169,16 @@ export default function interfaceNetwork(){
             async()=>{
                 const msgRes = await httpMethods.get(url)
                 if(msgServer.connectionServer===msgRes){
-                    const err={
-                        connectedServer:false,
-                        msg:msgServer.connectionServer
-                    }
+                    const err=networkFlows.server.errServer
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
-                else if(msgRes.msg===msgServer.move.move){
-                    const sendController={
-                        move:msgRes.move,
-                        infPlayerAdv:msgRes.infPlayerAdv
-                    }
-                    notifyFunctions(functionToCallBack.moveAdversary,sendController)
+                else if(msgRes.statusMovement===networkConf.movement.status.movementAvailable){
+                    const status = networkConf.movement.movementAvailable()
+                    notifyFunctions(functionToCallBack.moveAdversary,status)
+                }
+                else if(msgRes.statusMovement===networkConf.movement.status.waitAgain){
+                    const status = networkConf.movement.waitAgain()
+                    notifyFunctions(functionToCallBack.moveAdversary,status)
                 }
                 else if(timeCounter===timeLimite){
                     const connection = false
@@ -181,10 +196,7 @@ export default function interfaceNetwork(){
             async()=>{
                 const msgRes = await httpMethods.get(url)
                 if(msgServer.connectionServer===msgRes){
-                    const err={
-                        connectedServer:false,
-                        msg:msgServer.connectionServer
-                    }
+                    const err=networkFlows.server.errServer
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
                 else if(msgRes.infPlayerAdv.namePlayer!==null){

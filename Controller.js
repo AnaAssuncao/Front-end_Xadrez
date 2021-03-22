@@ -192,9 +192,9 @@ class offlineGame extends genericGame{
     }
 
     move(informationPieceSelect){
-        const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
         const isMove =this.movePiece(informationPieceSelect)
         if(isMove){
+            const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
             this.gameLog(this.typeMsgLog.movement,playerConfig.currentPlayerColor)
             playerConfig.currentPlayerColor=nextPlayer
             this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
@@ -343,56 +343,63 @@ class onlineGame extends genericGame{
         }
     }
 
-    move(informationPieceSelect){
+    async move(informationPieceSelect){
         const isMove = this.movePiece(informationPieceSelect)
         if(isMove){
             // {informationPieceSelect: fullName,color,typeMovement,specialMovement,refId e piecePromotion}
-            const infSendMove = network.sendSever.moveGame(informationPieceSelect)
-            if(infSendMove){
-                network.enableCalls.moveAdversary()
+            const infSendMove = await network.sendSever.moveGame(informationPieceSelect)
+            if(infSendMove.connectedServer){
+                if(infSendMove.isCorrectMove){
+                    network.enableCalls.moveAdversary()
+                    const isPlayable=false
+                    const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
+                    this.gameLog(this.typeMsgLog.movement,playerConfig.currentPlayerColor)
+                    playerConfig.currentPlayerColor=nextPlayer
+                    this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
+                    this.updateDisplayGame(nextPlayer,playerConfig.colorsGame.top,isPlayable)
+                    const infEndGame = this.getEndGame()
+                    if(infEndGame.typeEndGame){
+                        const endGame={
+                            typeEndGame:infEndGame.typeEndGame,
+                            colorWin: infEndGame.typeEndGame.colorWin, 
+                            namePlayer:playerConfig.onlinePlayer.name
+                        }
+                        this.endGame(endGame)
+                    }
+                }
+                else{
+                    viewController.informationProminent(infSendMove.msg)
+                }
             }
-        }
-        const isPlayable=false
-        const nextPlayer=(playerConfig.colorsGame.top===playerConfig.currentPlayerColor)?playerConfig.colorsGame.bottom:playerConfig.colorsGame.top
-        this.gameLog(this.typeMsgLog.movement,playerConfig.currentPlayerColor)
-        playerConfig.currentPlayerColor=nextPlayer
-        this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
-        this.updateDisplayGame(nextPlayer,playerConfig.colorsGame.top,isPlayable)
-        const infEndGame = this.getEndGame()
-        if(infEndGame.typeEndGame){
-            const endGame={
-                typeEndGame:infEndGame.typeEndGame,
-                colorWin: infEndGame.typeEndGame.colorWin, 
-                namePlayer:playerConfig.onlinePlayer.name
+            else{
+                viewController.informationProminent(infSendMove.msg)
             }
-            this.endGame(endGame)
         }
     }
 
-    getMoveAdv(infMoveAdv){
-        if(infMoveAdv.movet===false){
+    getMoveAdv(moveAdv){
+        if(moveAdv.move===null){
             viewController.informationProminent(infCode.msg)
         }
         else{
-            const isMove = this.movePiece(infMoveAdv.move)
+            const isMove = this.movePiece(moveAdv.move)
             if(isMove){
-                // network.sendSever.recMoveGame("true")
+                const nextPlayer=playerConfig.onlinePlayer.color
+                this.gameLog(this.typeMsgLog.movement,playerConfig.currentPlayerColor)
+                playerConfig.currentPlayerColor=nextPlayer
+                this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
             }
             else{
-                // enviar caso tiver movimento invalido
-                // network.sendSever.recMoveGame("false")
+                this.gameLog(this.typeMsgLog.movement,playerConfig.currentPlayerColor)
             }
-            const nextPlayer=playerConfig.onlinePlayer.color
-            this.gameLog(this.typeMsgLog.movement,playerConfig.currentPlayerColor)
-            playerConfig.currentPlayerColor=nextPlayer
-            this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
-            this.updateDisplayGame(playerConfig.colorsGame.top,nextPlayer)
+            network.sendSever.confirmMovement(isMove)
+            this.updateDisplayGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor)
             const infEndGame = this.getEndGame()
             if(infEndGame.typeEndGame){
                 const endGame={
                     typeEndGame:infEndGame.typeEndGame,
                     colorWin: infEndGame.colorWin, 
-                    namePlayer:infMoveAdv.infPlayerAdv.namePlayer
+                    namePlayer:moveAdv.infPlayerAdv.namePlayer
                 }
                 this.endGame(endGame)
             }

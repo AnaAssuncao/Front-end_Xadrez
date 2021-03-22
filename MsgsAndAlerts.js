@@ -14,12 +14,23 @@ const msgsAndAlerts={
         },
         connectedRoom:{
             statusRoom:"connectedRoom",
-            statusGame:null
+            statusGame:null,
+            msgToRender:"Conectado a sala"
         },
         noExistRoom:{
             statusRoom:"noExistRoom",    
-            alertToRender:"Está sala não existe, cria esta sala"
+            alertToRender:"Está sala não existe, cria esta sala."
         },
+        waitAgain:{
+            statusMovement:"waitAgain",    
+            alertToRender:"Não é sua vez de jogar, aguarde." 
+        },
+        incorrectMove:{
+            statusMovement:"waitAgain",    
+            alertToRender:"Não é sua vez de jogar, aguarde." 
+        },
+
+        
     }
 }
 

@@ -28,7 +28,8 @@ const networkFlows={
                 advPlayer:{
                     advName:statusGame.statusPlayerAdv.namePlayer,
                     advColor:statusGame.statusPlayerAdv.color
-                }
+                },
+                msg:msgsAndAlerts.network.connectedRoom.msgToRender
             }
             return sendController
         },
@@ -39,6 +40,45 @@ const networkFlows={
             }
             return sendController
         }
+    },
+    movement:{
+        status:{
+            movementAvailable:"movementAvailable"
+        },
+        waitAgain(){
+            const sendController={
+                connectedServer:true,
+                isCorrectMove:false,
+                move:null,
+                msg:msgsAndAlerts.network.waitAgain.alertToRender
+            }
+            return sendController
+        },
+        correctMove(movement){
+            const sendController={
+                connectedServer:true,
+                isCorrectMove:true,
+                msg:msgsAndAlerts.network.waitAgain.alertToRender
+            }
+            return sendController
+        },
+        incorrectMove(){
+            const sendController={
+                connectedServer:true,
+                isCorrectMove:false,
+                msg:msgsAndAlerts.network.incorrectMove.alertToRender
+            }
+            return sendController
+        },
+        movementAvailable(movement){
+            const sendController={
+                move:msgRes.move,
+                infPlayerAdv:msgRes.infPlayerAdv,
+                move:movement
+            }
+            return sendController
+        }
+
     }
 }
 
