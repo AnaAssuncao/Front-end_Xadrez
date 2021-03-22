@@ -133,13 +133,17 @@ export default function viewController(startBoard){
                 view.informationGame.clearInformation()
             }
         },
-        startGameOfflineGame:function(){
+        startGameOffline:function(){
             board.clearAllBoard()
-            notifyFunctions(functionToCallBack.startGameOfflineGame)
+            notifyFunctions(functionToCallBack.startGameOffline)
         },
-        startGameOnlineGame:function(infGame){
+        startNewRoom:function(nickAndCode){
             board.clearAllBoard()
-            notifyFunctions (functionToCallBack.startGameOnlineGame,infGame)
+            notifyFunctions (functionToCallBack.startNewRoom,nickAndCode)
+        },
+        connectInARoom:function(nickAndCode){
+            board.clearAllBoard()
+            notifyFunctions (functionToCallBack.connectInARoom,nickAndCode)
         },
         restartGame(){
             notifyFunctions (functionToCallBack.restartGame)
@@ -345,8 +349,9 @@ export default function viewController(startBoard){
 
     const functionToCallBack= {
         movePiece:[],
-        startGameOfflineGame:[],
-        startGameOnlineGame:[],
+        startGameOffline:[],
+        startNewRoom:[],
+        connectInARoom:[],
         underHistory:[],
         giveUp:[],
         restartGame:[]
@@ -356,11 +361,14 @@ export default function viewController(startBoard){
         objToCallBack.forEach((fn)=>fn(parameters))
     }
    
-    this.subscribeStartOfflineGame=function(fn){
-        functionToCallBack.startGameOfflineGame.push(fn)   
+    this.subscribeStartGameOffline=function(fn){
+        functionToCallBack.startGameOffline.push(fn)   
     }
-    this.subscribeStartOnlineGame=function(fn){
-        functionToCallBack.startGameOnlineGame.push(fn)
+    this.subscribeStartNewRoomOnline=function(fn){
+        functionToCallBack.startNewRoom.push(fn)
+    }
+    this.subscribeConnectInARoomOnline=function(fn){
+        functionToCallBack.connectInARoom.push(fn)
     }
     this.subscribeMovePiece=function(fn){
         functionToCallBack.movePiece.push(fn)
@@ -375,8 +383,9 @@ export default function viewController(startBoard){
         functionToCallBack.restartGame.push(fn)
     }
 
-    view.buttonStartOfflineGame.subscribeToClick(statusGame.startGameOfflineGame)
-    view.buttonStartOnlineGame.subscribeToClick(statusGame.startGameOnlineGame)
+    view.buttonStartGameOffline.subscribeToClick(statusGame.startGameOffline)
+    view.buttonStartNewRoom.subscribeToClick(statusGame.startNewRoom)
+    view.buttonConnectInARoom.subscribeToClick(statusGame.connectInARoom)
     view.pieceInput.subscribeToChange(piece.selectPieceInput)
     view.buttonMove.subscribeToClick(piece.movePieceByButtom)
     view.chessBoard.subscribeToClick(piece.updatePieceSelect)

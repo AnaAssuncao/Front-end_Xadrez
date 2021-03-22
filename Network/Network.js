@@ -1,78 +1,66 @@
+import msgsAndAlerts from "../MsgsAndAlerts.js"
+import networkFlows from "./NetworkFlows.js"
 import methodsHTTP from "./MethodsHTTP.js"
 const httpMethods = new methodsHTTP()
 
 export default function interfaceNetwork(){
-    const gameCong={
+    const networkConf={
         codes:{
             room:null,
             player:null
-        }
-    }
-
-    const networkConf={
+        },
         url:"http://localhost:3030/api/v1"
     }
 
-    const msgServer={
-        room:{
-            exist:"codeExist"
-        },
-        connectionServer:"errServe",
-        move:{
-            move:"move",
-            noMove:"no Move"
-        }
-    }
-
     this.sendSever={
-        infStartGame: async(nickAndCode) =>{
-            const url = networkConf.url+"/startGame/infGame"
+        startNewRoom: async(nickAndCode) =>{
+            const url = networkConf.url+"/startGame/startNewRoom"
             // nickAndCode = {name:value, roomCode:value}
             const infMultiplayer = {
                 playerName:nickAndCode.name,
                 roomCode:nickAndCode.roomCode
             }
             const msgRes = await httpMethods.post(infMultiplayer,url)
-            if(msgServer.connectionServer===msgRes){
-                const err={
-                    connectedServer:false,
-                    msg:msgServer.connectionServer
-                }
+            if(msgsAndAlerts.network.connectedServer.connection===msgRes){
+                const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err.connectedServer
             }
             else{
-                if(msgServer.room.exist===msgRes.codes.room){
-                    const sendController={
-                        connectedServer:false,
-                        msg:msgServer.room.exist
-                    }
-                    return sendController
-                }
-                else{
-                    gameCong.codes = msgRes.codes
-                    const sendController={
-                        connectedServer:true,
-                        playerAdv:msgRes.infPlayerAdv,
-                        connection:msgRes.statusGame.connection,
-                    }
-                    return sendController
-                }
+                const status= networkFlows.room[msgRes.statusRoom](msgRes.status)
+                return status
             }
         },
+
+        async connectInARoom(nickAndCode){
+            const url = networkConf.url+"/startGame/connectInARoom"
+            // nickAndCode = {name:value, roomCode:value}
+            const infMultiplayer = {
+                playerName:nickAndCode.name,
+                roomCode:nickAndCode.roomCode
+            }
+            const msgRes = await httpMethods.post(infMultiplayer,url)
+            if(msgsAndAlerts.network.connectedServer.connection===msgRes){
+                const err=networkFlows.server.errServer
+                notifyFunctions(functionToCallBack.errConnection,err)
+                return err.connectedServer
+            }
+            else{
+                const status= networkFlows.room[msgRes.statusRoom](msgRes.status)
+                return status
+            }
+        },
+
         moveGame: async(move) =>{
             const url = networkConf.url+"/movementGame"
             const objSend={
-                roomCode:gameCong.codes.room,
-                playerCode:gameCong.codes.player,
+                roomCode:networkConf.codes.room,
+                playerCode:networkConf.codes.player,
                 movement:move
             }
             const msgRes = await httpMethods.post(objSend,url)
             if(msgServer.connectionServer===msgRes){
-                const err={
-                    connectedServer:false,
-                    msg:msgServer.connectionServer
-                }
+                const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err.connectedServer
             }
@@ -87,8 +75,8 @@ export default function interfaceNetwork(){
         giveUp: async() =>{
             const url = networkConf.url+"/giveUpGame"
             const objSend={
-                roomCode:gameCong.codes.room,
-                playerCode:gameCong.codes.player,
+                roomCode:networkConf.codes.room,
+                playerCode:networkConf.codes.player,
                 giveUp:true
             } 
             const msgRes = await httpMethods.post(objSend,url)
@@ -104,8 +92,8 @@ export default function interfaceNetwork(){
         },
         endGame: async() =>{
             const objSend={
-                roomCode:gameCong.codes.room,
-                playerCode:gameCong.codes.player,
+                roomCode:networkConf.codes.room,
+                playerCode:networkConf.codes.player,
                 endGame:true
             } 
             const url = networkConf.url+"/endGame"
@@ -125,8 +113,8 @@ export default function interfaceNetwork(){
     this.enableCalls={
         moveAdversary: ()=>{
             const params = {
-                roomCode: gameCong.codes.room,
-                playerCode: gameCong.codes.player
+                roomCode: networkConf.codes.room,
+                playerCode: networkConf.codes.player
               }
             let query = Object.keys(params)
                     .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
@@ -136,8 +124,8 @@ export default function interfaceNetwork(){
         },
         playerConnection: ()=>{
             const params = {
-                roomCode: gameCong.codes.room,
-                playerCode: gameCong.codes.player
+                roomCode: networkConf.codes.room,
+                playerCode: networkConf.codes.player
               }
             let query = Object.keys(params)
                     .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
@@ -147,8 +135,8 @@ export default function interfaceNetwork(){
         },
         statusGame: ()=>{ 
             const params = {
-                roomCode: gameCong.codes.room,  
-                playerCode: gameCong.codes.player
+                roomCode: networkConf.codes.room,  
+                playerCode: networkConf.codes.player
               }
             let query = Object.keys(params)
                     .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))

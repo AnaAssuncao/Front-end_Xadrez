@@ -1,8 +1,9 @@
 export default function viewScreen(chessBoard){
 
     const functionToCallBack= {
-        buttonStartOfflineGame:[],
-        buttonStartOnlineGame:[],
+        buttonStartGameOffline:[],
+        buttonStartNewRoom:[],
+        buttonConnectInARoom:[],
         buttonNewGame:[],
         pieceInput:[],
         buttonMove:[],
@@ -31,15 +32,21 @@ export default function viewScreen(chessBoard){
         }
     }
 
-    this.buttonStartOfflineGame={
+    this.buttonStartGameOffline={
         subscribeToClick(fn){
-            functionToCallBack.buttonStartOfflineGame.push(fn)
+            functionToCallBack.buttonStartGameOffline.push(fn)
         }
     }
 
-    this.buttonStartOnlineGame={
+    this.buttonStartNewRoom={
         subscribeToClick(fn){
-            functionToCallBack.buttonStartOnlineGame.push(fn)
+            functionToCallBack.buttonStartNewRoom.push(fn)
+        }
+    }
+
+    this.buttonConnectInARoom={
+        subscribeToClick(fn){
+            functionToCallBack.buttonConnectInARoom.push(fn)
         }
     }
 
@@ -318,10 +325,10 @@ export default function viewScreen(chessBoard){
     }
 
     const starGameEvent={
-        buttonStartOfflineGame(){
+        buttonStartGameOffline(){
             const buttonStar= document.querySelector("#button__startGameOffline")
             buttonStar.addEventListener("click", ()=>{
-                 notifyFunctions(functionToCallBack.buttonStartOfflineGame)
+                 notifyFunctions(functionToCallBack.buttonStartGameOffline)
             })
         },
         buttonStartOnlineGame(){
@@ -330,12 +337,21 @@ export default function viewScreen(chessBoard){
                 renderInputOnlineGame()
             })
         },
-        buttonGameOnlineInf(buttonStart){
+        buttonStartNewRoom(buttonStart){
             buttonStart.addEventListener("click", ()=>{
                 const inputName = document.querySelector(".input__gameOnline--name")
                 const inputRoomCode= document.querySelector(".input__gameOnline--code")
                 if(inputName.value!=="" && inputRoomCode.value!==""){
-                    notifyFunctions(functionToCallBack.buttonStartOnlineGame,{name:inputName.value, roomCode:inputRoomCode.value})
+                    notifyFunctions(functionToCallBack.buttonStartNewRoom,{name:inputName.value, roomCode:inputRoomCode.value})
+                }
+            })
+        },
+        buttonConnectInARoom(buttonStart){
+            buttonStart.addEventListener("click", ()=>{
+                const inputName = document.querySelector(".input__gameOnline--name")
+                const inputRoomCode= document.querySelector(".input__gameOnline--code")
+                if(inputName.value!=="" && inputRoomCode.value!==""){
+                    notifyFunctions(functionToCallBack.buttonConnectInARoom,{name:inputName.value, roomCode:inputRoomCode.value})
                 }
             })
         }, 
@@ -403,7 +419,7 @@ export default function viewScreen(chessBoard){
             })
         }
     }
-    starGameEvent.buttonStartOfflineGame()
+    starGameEvent.buttonStartGameOffline()
     starGameEvent.buttonStartOnlineGame()
     starGameEvent.pieceInput()
     starGameEvent.buttonMove()
@@ -479,28 +495,39 @@ export default function viewScreen(chessBoard){
     function renderInputOnlineGame(){
         const selectModal = document.querySelector("#startGame")
         const selectInfOnlineGame= document.querySelector(".start__infOnlineGame")
-        if(selectInfOnlineGame===null){
-            const infOnlineGame = document.createElement("div")
-            const inputName = document.createElement("input")
-            const inputCode = document.createElement("input")
-            const buttonStartCode = document.createElement("button")
-            const buttonStartRoom = document.createElement("button")
-            infOnlineGame.classList.add("start__infOnlineGame")
-            inputName.classList.add("input__gameOnline--name")
-            inputCode.classList.add("input__gameOnline--code")
-            buttonStartCode.classList.add("button__gameOnline--code")
-            starGameEvent.buttonGameOnlineInf(buttonStartCode)
-            buttonStartRoom.classList.add("button__gameOnline--code")
-            starGameEvent.buttonGameOnlineInf(buttonStartRoom)
-            inputName.placeholder="Nome do jogador"
-            inputCode.placeholder="Código da sala"
-            buttonStartCode.innerHTML = "Iniciar Código"
-            buttonStartRoom.innerHTML = "Iniciar em uma Sala"
-            infOnlineGame.appendChild(inputName)
-            infOnlineGame.appendChild(inputCode)
-            infOnlineGame.appendChild(buttonStartCode)
-            infOnlineGame.appendChild(buttonStartRoom)
-            selectModal.appendChild(infOnlineGame)  
+        if(selectInfOnlineGame===null){       
+            renderInputNickAndCode(selectModal)
+            renderButtonStartOnline(selectModal)
         }
+    }
+
+    function renderInputNickAndCode(selectModal){
+        const inputs = document.createElement("div")
+        const inputName = document.createElement("input")
+        const inputCode = document.createElement("input")
+        inputs.classList.add("start__infOnlineGame")
+        inputName.classList.add("input__gameOnline--name")
+        inputCode.classList.add("input__gameOnline--code")
+        inputName.placeholder="Nome do jogador"
+        inputCode.placeholder="Código da sala"
+        inputs.appendChild(inputName)
+        inputs.appendChild(inputCode)
+        selectModal.appendChild(inputs)
+    }
+
+    function renderButtonStartOnline(selectModal){
+        const buttons = document.createElement("div")
+        const buttonStartCode = document.createElement("button")
+        const buttonStartRoom = document.createElement("button")
+        buttons.classList.add("start__infOnlineGame")
+        buttonStartCode.classList.add("button__gameOnline--code")
+        starGameEvent.buttonStartNewRoom(buttonStartCode)
+        buttonStartRoom.classList.add("button__gameOnline--code")
+        starGameEvent.buttonConnectInARoom(buttonStartRoom)
+        buttonStartCode.innerHTML = "Iniciar Código"
+        buttonStartRoom.innerHTML = "Iniciar em uma Sala"
+        buttons.appendChild(buttonStartCode)
+        buttons.appendChild(buttonStartRoom)
+        selectModal.appendChild(buttons)
     }
 }

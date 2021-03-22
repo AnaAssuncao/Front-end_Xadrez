@@ -11,7 +11,8 @@ const playerConfig={
     currentPlayerColor:null, 
     onlinePlayer:{
         color:null,
-        name:null
+        myName:null,
+        advname:null
     }
 }
 let game = new createGame(playerConfig.colorsGame)
@@ -20,14 +21,18 @@ const startBoard = game.getCurrentBoard()
 const viewController = new ViewController (startBoard)
 const network = new interfaceNetwork()
 
-const functionsGame={ //interfaaceFunctions
-    startOfflineGame:function(){
+const interfaceFunctions={ 
+    startGameOffline:function(){
         playerConfig.game = new offlineGame()
         playerConfig.game.start()
     },  
-    startOnlineGame:function(nickAndKey){
+    startNewRoomOnline:function(nickAndCode){
         playerConfig.game = new onlineGame()
-        playerConfig.game.start(nickAndKey)
+        playerConfig.game.startNewRoom(nickAndCode)
+    },
+    connectInARoomOnline:function(nickAndCode){
+        playerConfig.game = new onlineGame()
+        playerConfig.game.connectInARoom(nickAndCode)
     },
     restartGame:function(){
         playerConfig.game.restartGame()
@@ -53,15 +58,16 @@ const functionsGame={ //interfaaceFunctions
 }
 
 viewController.displayHomeMenu()
-viewController.subscribeStartOfflineGame(functionsGame.startOfflineGame)
-viewController.subscribeStartOnlineGame(functionsGame.startOnlineGame)
-viewController.subscribeMovePiece(functionsGame.move)
-viewController.subscribeHistory(functionsGame.backPreviousMove)
-viewController.subscribeRestartGame(functionsGame.restartGame)
-network.subscribeMoveAdversary(functionsGame.moveAdv)
-network.subscribePlayerConnection(functionsGame.playerConnection)
-network.subscribeGiveUp(functionsGame.giveUp)
-network.subscribeErrConnection(functionsGame.errConnection)
+viewController.subscribeStartGameOffline(interfaceFunctions.startGameOffline)
+viewController.subscribeStartNewRoomOnline(interfaceFunctions.startNewRoomOnline)
+viewController.subscribeConnectInARoomOnline(interfaceFunctions.connectInARoomOnline)
+viewController.subscribeMovePiece(interfaceFunctions.move)
+viewController.subscribeHistory(interfaceFunctions.backPreviousMove)
+viewController.subscribeRestartGame(interfaceFunctions.restartGame)
+network.subscribeMoveAdversary(interfaceFunctions.moveAdv)
+network.subscribePlayerConnection(interfaceFunctions.playerConnection)
+network.subscribeGiveUp(interfaceFunctions.giveUp)
+network.subscribeErrConnection(interfaceFunctions.errConnection)
 
 
 class genericGame{
@@ -173,7 +179,7 @@ class offlineGame extends genericGame{
     }
     start(){
         viewController.hideHomeMenu()
-        playerConfig.currentPlayerColor="White"
+        playerConfig.currentPlayerColor=playerConfig.colorsGame.bottom
         const connection={
             msg:"place",//msgandalets.status.connection.place
             type:"offline"
@@ -262,44 +268,58 @@ class onlineGame extends genericGame{
             colorPlayer:"colorPlayer"
         }
     }
-    async start(nickAndCode){
+
+    async startNewRoom(nickAndCode){
         // nickAndCode = {name:value, roomCode:value}
-        const infCode= await network.sendSever.infStartGame(nickAndCode)
-        if(infCode.connectedServer){
+        const informationConnectionRoom= await network.sendSever.startNewRoom(nickAndCode)
+        if(informationConnectionRoom.connectedServer){
             viewController.hideHomeMenu()
             this.gameLog(this.typeMsgLog.room, nickAndCode.roomCode)
-            if(infCode.playerAdv.connection===false){
-                const connection={
-                    msg: "wait",
-                    type:"online"
-                } 
-                viewController.updateStatusConection(connection)
-                playerConfig.onlinePlayer.color="White"
-                playerConfig.onlinePlayer.name=nickAndCode.name
-                playerConfig.currentPlayerColor =playerConfig.onlinePlayer.color
-                const isPlayable = false
-                game.starObjGame(playerConfig.currentPlayerColor)
-                this.gameLog(this.typeMsgLog.start)
-                this.gameLog(this.typeMsgLog.colorPlayer,playerConfig.onlinePlayer.color)
-                this.updateDisplayGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor, isPlayable)
-                network.enableCalls.playerConnection()
-            }
-            else{
-                const connection={
-                    msg: "connected",
-                    type:"online"
-                } 
-                viewController.updateStatusConection(connection,infCode.playerAdv.namePlayer)
-                playerConfig.onlinePlayer.color="Black"
-                playerConfig.currentPlayerColor="White"
-                const isPlayable = false
-                game.starObjGame(playerConfig.currentPlayerColor)
-                this.gameLog(this.typeMsgLog.start)
-                this.gameLog(this.typeMsgLog.waitAdv)
-                this.updateDisplayGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor, isPlayable)
-                network.enableCalls.moveAdversary()
-            }
+            const connection={
+                msg: "wait",
+                type:"online"
+            } 
+            viewController.updateStatusConection(connection)
+            playerConfig.onlinePlayer.color=playerConfig.colorsGame.bottom
+            playerConfig.onlinePlayer.name=nickAndCode.name
+            playerConfig.currentPlayerColor=playerConfig.onlinePlayer.color
+            const isPlayable = false
+            game.starObjGame(playerConfig.currentPlayerColor)
+            this.gameLog(this.typeMsgLog.start)
+            this.gameLog(this.typeMsgLog.colorPlayer,playerConfig.onlinePlayer.color)
+            this.updateDisplayGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor, isPlayable)
+            network.enableCalls.playerConnection()
             network.enableCalls.statusGame()
+        }
+        else{
+            viewController.informationProminent(informationConnectionRoom.msg)
+        }
+    }
+
+    async connectInARoom(nickAndCode){
+        const informationConnectionRoom= await network.sendSever.connectInARoom(nickAndCode)
+        if(informationConnectionRoom.connectedServer){
+            viewController.hideHomeMenu()
+            this.gameLog(this.typeMsgLog.room, nickAndCode.roomCode)
+            const connection={
+                msg: "connected",
+                type:"online"
+            } 
+            viewController.updateStatusConection(connection,informationConnectionRoom.advPlayer.namePlayer)
+            playerConfig.onlinePlayer.name=nickAndCode.name
+            playerConfig.onlinePlayer.advName=informationConnectionRoom.advPlayer.namePlayer
+            playerConfig.onlinePlayer.color=playerConfig.colorsGame.top
+            playerConfig.currentPlayerColor=playerConfig.colorsGame.bottom
+            const isPlayable = false
+            game.starObjGame(playerConfig.currentPlayerColor)
+            this.gameLog(this.typeMsgLog.start)
+            this.gameLog(this.typeMsgLog.waitAdv)
+            this.updateDisplayGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor, isPlayable)
+            network.enableCalls.moveAdversary()
+            network.enableCalls.statusGame()
+        }
+        else{
+            viewController.informationProminent(informationConnectionRoom.msg)
         }
     }
     
@@ -316,6 +336,7 @@ class onlineGame extends genericGame{
                 msg: "connected",
                 type:"online"
             } 
+            playerConfig.onlinePlayer.advName=infPlayerAdv.playerAdv.namePlayer
             viewController.updateStatusConection(connection,infPlayerAdv.namePlayer)
             this.gameLog(this.typeMsgLog.colorPlayer,playerConfig.onlinePlayer.color)
             this.updateDisplayGame(playerConfig.colorsGame.top,playerConfig.currentPlayerColor)
