@@ -162,9 +162,9 @@ export default function viewController(startBoard){
     }
 
     const statusLog={
-        updateMsgsLog(arrayMsgsLog){
+        updateMsgsLog(arrayMsgsLogs){
             view.statusLog.clearMsgsLog()
-            arrayMsgsLog.forEach((msgsLog)=>view.statusLog.addMsgsLog(msgsLog))
+            arrayMsgsLogs.forEach((msgsLogs)=>view.statusLog.addMsgsLog(msgsLogs))
         }
     }
 
@@ -406,7 +406,7 @@ export default function viewController(startBoard){
         utilities.clearFunctionToCallBack()
     }
 
-    this.displayInfLog=function(infGameLog){
+    this.displayGameLog=function(text){
         statusLog.updateMsgsLog(text)
     }
 

@@ -306,9 +306,18 @@ export default function viewScreen(chessBoard){
     }
 
     this.statusLog={
-        updateLog(text){
-            const msg = document.querySelector("#details_msg")
-            msg.innerText = text
+        addMsgsLog(text){
+            const detailsLog = document.querySelector("#details_log")
+            const log = document.createElement("div")
+            const msgsLog = document.createElement("p")
+            log.classList.add("modal__log")
+            msgsLog.classList.add("log__msgs")
+            msgsLog.innerText = text
+            log.appendChild(msgsLog)
+            detailsLog.appendChild(log)
+        },
+        clearMsgsLog(){
+            clearOptionsInput("#details_log")
         }
     }
 

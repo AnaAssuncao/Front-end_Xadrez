@@ -4,6 +4,8 @@ const colors={
     Black:"Pretas"
 }
 
+const time = new Date()
+
 const roomAndCode={
     roomWithOnePlayer:()=> "Esta sala já foi criada, conecta ao jogador",
     roomUnavailable:()=>"Nesta sala já está acontecendo um jogo, tente outro código",
@@ -58,7 +60,14 @@ const movement={
     nextPlayer:(color,name)=>"Vez das Peças " + colors[color]+" Vez do jogador " + name,
     movementIncorret:(color)=>"Erro na jogada das Peças " + colors[color]
 }
-
+const log={
+    gamelog:(msg)=>{
+        const hours = time.getHours()
+        const minutes = time.getMinutes()
+        const seconds = time.getSeconds()
+        return `${hours}:${minutes}:${seconds} - ${msg}`
+    }
+}
 export default {
     roomAndCode,
     connection,
@@ -68,5 +77,6 @@ export default {
     endGame,
     giveUp,
     startGame,
-    movement
+    movement,
+    log
 }
