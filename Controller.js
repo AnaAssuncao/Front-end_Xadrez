@@ -185,9 +185,9 @@ class offlineGame extends genericGame{
     }
     start(){
         viewController.hideHomeMenu()
-        gameSetup.updateCurrentPlayerColor(gameSetup.colorsGame.bottom)
         viewController.updateStatusConection(msgsAndAlerts.status.connection.place)
         viewController.displayBackMovement()
+        gameSetup.updateCurrentPlayerColor(gameSetup.colorsGame.bottom)
         game.starObjGame(gameSetup.currentPlayerColor)
         this.updateDisplayGame(gameSetup.colorsGame.top,gameSetup.currentPlayerColor)
         const start = msgsAndAlerts.status.start.startGame()
@@ -273,17 +273,17 @@ class onlineGame extends genericGame{
 
     async startNewRoom(nickAndCode){
         // nickAndCode = {name:value, roomCode:value}
-        const informationConnectionRoom= await network.sendSever.startNewRoom(nickAndCode)
+        const informationConnectionRoom= await network.sendServer.startNewRoom(nickAndCode)
         if(informationConnectionRoom.connectedServer){
             viewController.hideHomeMenu()
             this.gameLog(this.typeMsgLog.room, nickAndCode.roomCode)
             viewController.updateStatusConection(msgsAndAlerts.status.connection.waitAdv)
             gameSetup.addInformationPlayerOnline(nickAndCode.name,gameSetup.colorsGame.top)
             gameSetup.updateCurrentPlayerColor(gameSetup.colorsGame.bottom)
-            const isPlayable = false
             game.starObjGame(gameSetup.currentPlayerColor)
             this.gameLog(this.typeMsgLog.start)
             this.gameLog(this.typeMsgLog.colorPlayer,gameSetup.onlineConf.playerColor)
+            const isPlayable = false
             this.updateDisplayGame(gameSetup.colorsGame.top,gameSetup.currentPlayerColor, isPlayable)
             network.enableCalls.playerConnection()
             network.enableCalls.statusGame()
@@ -294,7 +294,7 @@ class onlineGame extends genericGame{
     }
 
     async connectInARoom(nickAndCode){
-        const informationConnectionRoom= await network.sendSever.connectInARoom(nickAndCode)
+        const informationConnectionRoom= await network.sendServer.connectInARoom(nickAndCode)
         if(informationConnectionRoom.connectedServer){
             viewController.hideHomeMenu()
             this.gameLog(this.typeMsgLog.room, nickAndCode.roomCode)
@@ -302,10 +302,10 @@ class onlineGame extends genericGame{
             gameSetup.addInformationPlayerOnline(nickAndCode.name,gameSetup.colorsGame.top)
             gameSetup.addNamePlayerAdv(nickAndCode.name)
             gameSetup.updateCurrentPlayerColor(gameSetup.colorsGame.top)
-            const isPlayable = false
             game.starObjGame(gameSetup.currentPlayerColor)
             this.gameLog(this.typeMsgLog.start)
             this.gameLog(this.typeMsgLog.waitAdv)
+            const isPlayable = false
             this.updateDisplayGame(gameSetup.colorsGame.top,gameSetup.currentPlayerColor, isPlayable)
             network.enableCalls.moveAdversary()
             network.enableCalls.statusGame()
@@ -331,40 +331,39 @@ class onlineGame extends genericGame{
     async move(informationPieceSelect){
         // {informationPieceSelect: fullName,color,typeMovement,specialMovement,refId e piecePromotion}
         const isMove = this.movePiece(informationPieceSelect)
-        const isPlayable=false
         const nextPlayer=(gameSetup.colorsGame.top===gameSetup.currentPlayerColor)?gameSetup.colorsGame.bottom:gameSetup.colorsGame.top
         this.gameLog(this.typeMsgLog.movement,gameSetup.currentPlayerColor)
         this.gameLog(this.typeMsgLog.nextPlayer,nextPlayer)
+        const isPlayable=false
         this.updateDisplayGame(nextPlayer,gameSetup.colorsGame.top,isPlayable)
 
         if(isMove){
-            const infSendMove = await network.sendSever.moveGame(informationPieceSelect)
+            const infSendMove = await network.sendServer.moveGame(informationPieceSelect)
             if(infSendMove.connectedServer){
-                if(infSendMove.isCorrectMove){
-                    network.enableCalls.moveAdversary()
-                    gameSetup.updateCurrentPlayerColor(nextPlayer)
-                    const infEndGame = this.getEndGame()
-                    if(infEndGame.typeEndGame){
-                        const endGame={
-                            typeEndGame:infEndGame.typeEndGame,
-                            colorWin: infEndGame.typeEndGame.colorWin, 
-                            namePlayer:gameSetup.onlineConf.name
-                        }
+                network.enableCalls.moveAdversary()
+                gameSetup.updateCurrentPlayerColor(nextPlayer)
+                const infEndGame = this.getEndGame()
+                if(infEndGame.typeEndGame){
+                    const endGame={
+                        typeEndGame:infEndGame.typeEndGame,
+                        colorWin: infEndGame.typeEndGame.colorWin, 
+                        namePlayer:gameSetup.onlineConf.name
                     }
-                }
-                else{
-                    viewController.informationProminent(infSendMove.msg)
                 }
             }
             else{
                 viewController.informationProminent(infSendMove.msg)
             }
         }
+        else{
+            // viewController.informationProminent(infSendMove.msg) informar que a jogada estava errada
+        }
     }
 
     getMoveAdv(moveAdv){
         if(moveAdv.move===null){
             viewController.informationProminent(moveAdv.msg)
+            network.sendServer.EndGame()
         }
         else{
             const isMove = this.movePiece(moveAdv.move)
@@ -376,8 +375,8 @@ class onlineGame extends genericGame{
             }
             else{
                 this.gameLog(this.typeMsgLog.movement,gameSetup.currentPlayerColor)
+                network.sendServer.movementIncorret()
             }
-            network.sendSever.confirmMovement(isMove)
             this.updateDisplayGame(gameSetup.colorsGame.top,gameSetup.currentPlayerColor)
             const infEndGame = this.getEndGame()
             if(infEndGame.typeEndGame){
@@ -392,7 +391,7 @@ class onlineGame extends genericGame{
     }
 
     restartGame(){
-        network.sendSever.giveUp()
+        network.sendServer.giveUp()
         gameSetup.clearGame()
         gameSetup.updateCurrentPlayerColor(null)
         gameSetup.clearOnlineConf()
@@ -403,7 +402,7 @@ class onlineGame extends genericGame{
 
     advGiveUp(infPlayerAdv){
         this.gameLog(this.typeMsgLog.fiveUp,infGiveUp.namePlayer)
-        this.endGame(infPlayerAdv)
+        network.sendServer.endGame()
     }
 
     endGame(infEndGame){
@@ -415,7 +414,7 @@ class onlineGame extends genericGame{
             noAdv:"noAdv"
         }
         viewController.displayEndGameInformation(endGameType[infEndGame.typeEndGame],infEndGame.colorWin,infEndGame.namePlayer)
-        network.sendSever.endGame()
+        network.sendServer.endGame()
     }
 
     informationProminent(infConnetion){
