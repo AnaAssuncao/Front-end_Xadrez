@@ -3,8 +3,8 @@ import msgsAndAlerts from "../MsgsAndAlerts.js"
 const networkFlows={
     server:{
         errServer:{
+            err:"errServe",
             connectedServer:false,
-            msg:msgsAndAlerts.network.connectedServer.alertToRender
         }
     },
     room:{

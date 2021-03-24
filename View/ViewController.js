@@ -118,16 +118,9 @@ export default function viewController(startBoard){
     }
 
     const statusGame={
-        colors:{
-            White:"Brancas",
-            Black:"Pretas"
-        },
-        updateCheck:function(statusCheck,color){
-            if(statusCheck==="checkMate"){
-                view.informationGame.addinformation("Xeque-Mate nas Peças " + this.colors[color])
-            }
-            else if(statusCheck==="check"){
-                view.informationGame.addinformation("Xeque nas Peças " + this.colors[color])
+        updateCheck:function(msgCheck){
+            if(msgCheck){
+                view.informationGame.addinformation(msgCheck)
             }
             else{
                 view.informationGame.clearInformation()
@@ -148,14 +141,9 @@ export default function viewController(startBoard){
         restartGame(){
             notifyFunctions (functionToCallBack.restartGame)
         },
-        updateConnection(connection,complementMsg=""){
-            const msgs={
-                place:"Jogo Local",
-                wait:"Aguardando adversário",
-                connected:"conectado com "
-            }
-            const img = connection.type
-            const msgConnection = msgs[connection.msg] + complementMsg
+        updateConnection(connection){
+            const img = connection.typeGame
+            const msgConnection = connection.msg
             view.informationGame.updateInformation(img,msgConnection)
         }
     }
@@ -165,23 +153,8 @@ export default function viewController(startBoard){
             White:"Brancas",
             Black:"Pretas"
         },
-        addModal(typeInformation,complementColor="",complementoName=null){
-            if(complementColor==="Black"||complementColor==="White"){
-                complementColor= this.colors[complementColor]
-            }
-            const informations={
-                winPiece:"Vitória das Peças ",
-                player:" Jogador ",
-                draw:"Jogo empatado",
-                noConnection:"Sem conexão",
-                noAdv:"Sem adversario",
-                giveUp:"Desistência das Peças "
-            }
-            let msg = informations[typeInformation]+complementColor
-            if(complementoName){
-                msg = msg + informations.player + complementoName
-            }
-            view.modalOnBoard.renderModal(msg)
+        addModal(msgsEndGame){
+            view.modalOnBoard.renderModal(msgsEndGame)
         },
         clearModal(){   
             view.modalOnBoard.clearModal()
@@ -189,22 +162,9 @@ export default function viewController(startBoard){
     }
 
     const statusLog={
-        updateLog(arrayInfLog){
-            // fazer um forEach para andar no array
-            const typeMsgLog={
-                start:"Jogo iniciado",
-                win:"Vitória das Peças ",
-                returnMovement:"Retorno das Peças ",
-                movement:"Movimento das Peças",
-                nextPlayer:"Vez das Peças",
-                checkMate:"CheckMate nas Peças",
-                check:"Check nas Peças",
-                draw:"Jogo empatado",
-                waitAdv:"Aguardando próximo",
-                room:"Conectado a sala ",
-                colorPlayer:"A cor da sua Peça é "
-            }
-            view.statusLog.updateLog(text)
+        updateMsgsLog(arrayMsgsLog){
+            view.statusLog.clearMsgsLog()
+            arrayMsgsLog.forEach((msgsLog)=>view.statusLog.addMsgsLog(msgsLog))
         }
     }
 
@@ -405,6 +365,7 @@ export default function viewController(startBoard){
     this.hideBackMovement=function(){
         history.clearButtonBackMovement()
     }
+
     this.updateBoard=function(chessBoard,currentPlayer,isPlayable){
         board.update(chessBoard,currentPlayer,isPlayable)
     }
@@ -421,8 +382,8 @@ export default function viewController(startBoard){
         statusGame.updateCheck(status,color)
     }
 
-    this.updateStatusConection=function(connection,complementMsg){
-        statusGame.updateConnection(connection,complementMsg)
+    this.updateStatusConection=function(connection){
+        statusGame.updateConnection(connection)
     }
 
     this.endGame=function(status){
@@ -446,7 +407,7 @@ export default function viewController(startBoard){
     }
 
     this.displayInfLog=function(infGameLog){
-        statusLog.updateLog(text)
+        statusLog.updateMsgsLog(text)
     }
 
     const utilities ={

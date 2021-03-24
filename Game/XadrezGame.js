@@ -987,7 +987,7 @@ export default class createGame {
             check: this.statusGame.checkKing.check,
             checkMate: this.statusGame.checkKing.checkMate,
             draw: this.statusGame.statusDrawn.draw,
-            playerWin:this.statusGame.winColor
+            winColor:this.statusGame.winColor
         }
     }
     getCurrentBoard(){

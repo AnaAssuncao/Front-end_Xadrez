@@ -1,5 +1,5 @@
 import msgsAndAlerts from "../MsgsAndAlerts.js"
-import networkFlows from "./NetworkFlows.js"
+import networkFlows from "./NetworkUtils.js"
 import methodsHTTP from "./MethodsHTTP.js"
 const httpMethods = new methodsHTTP()
 
@@ -16,7 +16,7 @@ export default function interfaceNetwork(){
         url:"http://localhost:3030/api/v1"
     }
 
-    this.sendSever={
+    this.sendServer={
         startNewRoom: async(nickAndCode) =>{
             const url = networkConf.url+"/startGame/startNewRoom"
             // nickAndCode = {name:value, roomCode:value}
@@ -25,12 +25,13 @@ export default function interfaceNetwork(){
                 roomCode:nickAndCode.roomCode
             }
             const msgRes = await httpMethods.post(infMultiplayer,url)
-            if(msgsAndAlerts.network.connectedServer.connection===msgRes){
+            if(networkFlows.server.errServer.err===msgRes){
                 const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err
             }
             else{
+                //retornar= callFunctionByStatus(msgRes.statusRoom,{paramentro das funções}))
                 const status= networkFlows.room[msgRes.statusRoom](msgRes.status,networkConf.updateCodes)
                 return status
             }
@@ -44,7 +45,7 @@ export default function interfaceNetwork(){
                 roomCode:nickAndCode.roomCode
             }
             const msgRes = await httpMethods.post(infMultiplayer,url)
-            if(msgsAndAlerts.network.connectedServer.connection===msgRes){
+            if(networkFlows.server.errServer.err===msgRes){
                 const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err
@@ -63,7 +64,7 @@ export default function interfaceNetwork(){
                 movement:move
             }
             const msgRes = await httpMethods.post(objSend,url)
-            if(msgsAndAlerts.network.connectedServer.connection===msgRes){
+            if(networkFlows.server.errServer.err===msgRes){
                 const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err
@@ -74,15 +75,15 @@ export default function interfaceNetwork(){
             }
         },
 
-        confirmMovement:function(isCorretMove){
-            const url = networkConf.url+"/movementGame/confirmMovement"
+        movementIncorret:function(){
+            const url = networkConf.url+"/movementGame/movementIncorret"
             const objSend={
                 roomCode:networkConf.codes.room,
                 playerCode:networkConf.codes.player,
-                isCorretMove:isCorretMove
+                movementIncorret:true
             }
             const msgRes = httpMethods.post(objSend,url)
-            if(msgsAndAlerts.network.connectedServer.connection===msgRes){
+            if(networkFlows.server.errServer.err===msgRes){
                 const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err
@@ -97,7 +98,7 @@ export default function interfaceNetwork(){
                 giveUp:true
             } 
             const msgRes = await httpMethods.post(objSend,url)
-            if(msgsAndAlerts.network.connectedServer.connection===msgRes){
+            if(networkFlows.server.errServer.err===msgRes){
                 const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err
@@ -112,7 +113,7 @@ export default function interfaceNetwork(){
             } 
             const url = networkConf.url+"/endGame"
             const msgRes = await httpMethods.post(objSend,url)
-            if(msgsAndAlerts.network.connectedServer.connection===msgRes){
+            if(networkFlows.server.errServer.err===msgRes){
                 const err=networkFlows.server.errServer
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err
@@ -162,7 +163,7 @@ export default function interfaceNetwork(){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
-                if(msgsAndAlerts.network.connectedServer.connection===msgRes){
+                if(networkFlows.server.errServer.err===msgRes){
                     const err=networkFlows.server.errServer
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
@@ -189,7 +190,7 @@ export default function interfaceNetwork(){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
-                if(msgsAndAlerts.network.connectedServer.connection===msgRes){
+                if(networkFlows.server.errServer.err===msgRes){
                     const err=networkFlows.server.errServer
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
@@ -212,7 +213,7 @@ export default function interfaceNetwork(){
         setInterval(
             async()=>{
                 const statusGame = await httpMethods.get(url)
-                if(msgsAndAlerts.network.connectedServer.connection===statusGame){
+                if(networkFlows.server.errServer.err===statusGame){
                     clearInterval(waitInf) 
                     const err=networkFlows.server.errServer  
                     notifyFunctions(functionToCallBack.errConnection,err)
