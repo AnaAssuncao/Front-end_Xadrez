@@ -142,17 +142,17 @@ export default function viewController(startBoard){
             notifyFunctions (functionToCallBack.restartGame)
         },
         updateConnection(connection){
-            const img = connection.typeGame
+            const imgs={
+                offline:"img/Offline_logo.svg",
+                online:"img/Online_logo.svg"
+            }
+            const img = imgs[connection.typeGame]
             const msgConnection = connection.msg
             view.informationGame.updateInformation(img,msgConnection)
         }
     }
 
     const endGameinformation={
-        colors:{
-            White:"Brancas",
-            Black:"Pretas"
-        },
         addModal(msgsEndGame){
             view.modalOnBoard.renderModal(msgsEndGame)
         },

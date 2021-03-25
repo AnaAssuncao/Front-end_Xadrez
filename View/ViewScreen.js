@@ -194,13 +194,9 @@ export default function viewScreen(chessBoard){
     }
 
     this.informationGame={
-        imgs:{
-            offline:"img/Offline_logo.svg",
-            online:"img/Online_logo.svg"
-        },
         updateInformation(typeImg,text){       
             const img=document.querySelector("#connection__img")
-            img.src=this.imgs[typeImg]
+            img.src=typeImg
             document.querySelector("#information__connection").innerText = text
         },
         addinformation(text){
