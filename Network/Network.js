@@ -211,7 +211,7 @@ export default function interfaceNetwork(){
                     const status = networkFlows.callFunctionByStatusGame(typeStatus.endTimeMove)
                     notifyFunctions(functionToCallBack.playerConnection,status)
                 }
-                else if(msgRes.statusGame.giveUp===false || msgRes.statusGame.endGame===false){
+                else if(msgRes.statusGame.endGame===false){
                     timeCounter++
                     setTimeMoveAdv(url,timeCounter)
                 }
@@ -254,7 +254,7 @@ export default function interfaceNetwork(){
                     const err=networkFlows.callFunctionByStatusServer(msgRes)
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
-                else if(status.statusGame.giveUp===true || status.statusGame.endGame===true){
+                else if(status.statusGame.giveUp===true ||  status.statusGame.endGame===true){
                     clearInterval(waitInf)
                     if(status.statusPlayerAdv.giveUp===true){
                         const statusGiveUp=networkFlows.callFunctionByStatusGame(typeStatus.giveUp)

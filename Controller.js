@@ -17,12 +17,17 @@ class setup{
             advName:null
         }
         this.gameLogs=[]
+        this.endGame=false
     }
     updateCurrentPlayerColor(color){
         this.currentPlayerColor=color
     }
     addGame(game){
         this.game=game
+        this.endGame=false
+    }
+    updateEndGame(){
+        this.endGame=true
     }
     addInformationPlayerOnline(playerName,playerColor){
         this.onlineConf.playerColor=playerColor
@@ -335,7 +340,8 @@ class onlineGame extends genericGame{
     getMoveAdv(moveAdv){
         if(moveAdv.move===null){
             viewController.informationProminent(moveAdv.msg)
-            network.sendServer.EndGame()
+            gameSetup.updateEndGame()
+            network.sendServer.endGame()
         }
         else{
             const isMove = this.movePiece(moveAdv.move)
@@ -350,6 +356,7 @@ class onlineGame extends genericGame{
                 gameSetup.addLogGame(incorrectMovement)
                 viewController.displayEndGameInformation(incorrectMovement)
                 network.sendServer.incorrectMovement()
+                gameSetup.updateEndGame()
                 network.sendServer.endGame()
             }
             this.updateDisplayGame(gameSetup.colorsGame.top,gameSetup.currentPlayerColor)
@@ -357,7 +364,9 @@ class onlineGame extends genericGame{
     }
 
     restartGame(){
-        network.sendServer.giveUp()
+        if(gameSetup.endGame===false){
+            network.sendServer.giveUp()
+        }
         gameSetup.clearGame()
         viewController.hideEndGameInformation()
         viewController.hideBackMovement()
@@ -365,25 +374,32 @@ class onlineGame extends genericGame{
     }
 
     advGiveUp(){
-        const displayGiveUp = msgsAndAlerts.giveUp.giveUpPlayer(gameSetup.onlineConf.advName)
-        viewController.displayEndGameInformation(displayGiveUp)
-        network.sendServer.endGame()
+        if(gameSetup.endGame===false){
+            const displayGiveUp = msgsAndAlerts.giveUp.giveUpPlayer(gameSetup.onlineConf.advName)
+            viewController.displayEndGameInformation(displayGiveUp)
+            gameSetup.updateEndGame()
+            network.sendServer.endGame()
+        }
     }
 
     updateDisplayDrawAndEndGame(){
         const statusGame = game.getStatusGame() 
         if(statusGame.draw===true){
+            gameSetup.updateEndGame()
             const displayDraw=msgsAndAlerts.drawGame.draw()
             viewController.displayEndGameInformation(displayDraw)
             gameSetup.addLogGame(displayDraw)
             this.updateDisplayLog()
+            network.sendServer.endGame()
         }
         else if(statusGame.endGame===true ||statusGame.checkMate===true){
+            gameSetup.updateEndGame()
             const nameWin = (statusGame.winColor===gameSetup.onlineConf.color)?gameSetup.onlineConf.playerName:gameSetup.onlineConf.advName
             const displayEndGame=msgsAndAlerts.endGame.winPlayer(nameWin)
             viewController.displayEndGameInformation(displayEndGame)
             gameSetup.addLogGame(displayEndGame)
             this.updateDisplayLog()
+            network.sendServer.endGame()
         }
     }
 

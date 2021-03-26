@@ -24,7 +24,7 @@ export default function httpMethods(){
             return msgRes
         }
         catch{
-            const err = "errServe"
+            const err = "errServer"
             return err
         }
     }
@@ -43,7 +43,7 @@ export default function httpMethods(){
             return msgRes  
         }
         catch{
-            const err = "errServe"
+            const err = "errServer"
             return err
         }
     }   
