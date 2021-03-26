@@ -27,12 +27,12 @@ const functionsStatusRoom={
         const sendController=  {
             serverConnection:true,
             statusPlayerAdv:{
-                namePlayer:param.statusGame.statusPlayerAdv.namePlayer,
-                color:param.statusGame.statusPlayerAdv.color
+                namePlayer:param.statusPlayerAdv.namePlayer,
+                color:param.statusPlayerAdv.color
             },
-            msg:msgsAndAlerts.roomAndCode.connectedRoom(param.statusGame.statusCodes.roomCode)
+            msg:msgsAndAlerts.roomAndCode.connectedRoom(param.statusCodes.roomCode)
         }
-        notifyUpdates(functionToCallBack.updateCode,param.statusGame.statusCodes)
+        notifyUpdates(functionToCallBack.updateCode,param.statusCodes)
         return sendController
     },
     noExistRoom:function(){
@@ -73,7 +73,7 @@ const functionsStatusMovement={
     movementAvailable:function(param){
         const sendController={
             serverConnection:true,
-            move:param.moveGame,
+            move:param.move,
         }
         return sendController
     },
@@ -84,7 +84,7 @@ const functionsStatusMovement={
             msg:msgsAndAlerts.movement.endTime(),
         }
         return sendController
-    },
+    }
 }
 
 const functionsStatusGame={
@@ -96,9 +96,10 @@ const functionsStatusGame={
         }
         return sendController
     },
-    endtimeAdv:function(){
+    endTimeAdv:function(){
         const sendController={
             connection:false,
+            msg:msgsAndAlerts.startGame.noAdv(),
         }
         return sendController
     },

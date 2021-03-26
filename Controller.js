@@ -289,9 +289,8 @@ class onlineGame extends genericGame{
     
     connectionPlayerTwo(statusPlayerAdv){
         if(statusPlayerAdv.connection===false){
-            const noAdv=msgsAndAlerts.start.noAdv()
-            viewController.displayEndGameInformation(noAdv)
-            gameSetup.addLogGame(noAdv)
+            viewController.displayEndGameInformation(statusPlayerAdv.msg)
+            gameSetup.addLogGame(statusPlayerAdv.msg)
             this.updateDisplayLog()
         }
         else{

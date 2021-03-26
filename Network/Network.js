@@ -13,30 +13,36 @@ class router{
         this.movementIncorret= this.pref +"/movementGame/movementIncorret"
         this.giveUpGame= this.pref +"/giveUpGame"
         this.endGame= this.pref +"/endGame"
-        this.getMovement= this.pref +"/movementGame/getMovement?"
-        this.statusGame= this.pref +"/statusGame?"
+        this.prefGetmovement= this.pref +"/movementGame/getMovement?"
+        this.prefStatusGame= this.pref +"/statusGame?"
+        this.getMovement = null
+        this.statusGame = null
     }
 
     updateQuery(params){this.query=Object.keys(params)
         .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
         .join("&")
-        this.getMovement = this.getMovement+this.query
-        this.statusGame = this.statusGame+this.query
+        this.getMovement = this.prefGetmovement+this.query
+        this.statusGame = this.prefStatusGame+this.query
+    }
+}
+
+class setup{
+    constructor(){
+        this.codes={
+            room:null,
+            player:null
+        }
+        this.routerUrl= new router()
+    }
+    updateCodes(statusCodes){
+        this.codes.room=statusCodes.roomCode
+        this.codes.player=statusCodes.playerCode
     }
 }
 
 export default function interfaceNetwork(){
-    const networkConf={
-        codes:{
-            room:null,
-            player:null
-        },
-        routerUrl: new router(),
-        updateCodes(statusCodes){
-            this.codes.room=statusCodes.roomCode
-            this.codes.player=statusCodes.playerCode
-        }
-    }
+    let networkConf = {}
 
     const time={
         endConnection:false,
@@ -56,6 +62,7 @@ export default function interfaceNetwork(){
 
     this.sendServer={
         startNewRoom: async(nickAndCode) =>{
+            networkConf = new setup()
             const url = networkConf.routerUrl.startNewRoom
             // nickAndCode = {name:value, roomCode:value}
             const infMultiplayer = {
@@ -63,20 +70,23 @@ export default function interfaceNetwork(){
                 roomCode:nickAndCode.roomCode
             }
             const msgRes = await httpMethods.post(infMultiplayer,url)
+            console.log(msgRes)
             if(typeStatus.errServer===msgRes){
                 const err=networkFlows.callFunctionByStatusServer(msgRes)
                 return err
             }
             else{
                 const paramFunstionStatus={
-                    statusGame:msgRes.status,
+                    statusPlayerAdv:msgRes.statusPlayerAdv,
+                    statusCodes:msgRes.statusCodes
                 }
-                const status=networkFlows.callFunctionByStatusRoom(msgRes.statusRoom,paramFunstionStatus)
+                const status=networkFlows.callFunctionByStatusRoom(msgRes.typeStatus,paramFunstionStatus)
                 return status
             }
         },
 
         async connectInARoom(nickAndCode){
+            networkConf = new setup()
             const url = networkConf.routerUrl.connectInARoom
             // nickAndCode = {name:value, roomCode:value}
             const infMultiplayer = {
@@ -90,9 +100,10 @@ export default function interfaceNetwork(){
             }
             else{
                 const paramFunstionStatus={
-                    statusGame:msgRes.status,
+                    statusPlayerAdv:msgRes.statusPlayerAdv,
+                    statusCodes:msgRes.statusCodes
                 }
-                const status= networkFlows.callFunctionByStatusRoom(msgRes.statusRoom,paramFunstionStatus)
+                const status= networkFlows.callFunctionByStatusRoom(msgRes.typeStatus,paramFunstionStatus)
                 return status
             }
         },
@@ -110,7 +121,7 @@ export default function interfaceNetwork(){
                 return status
             }
             else{
-                const status=networkFlows.callFunctionByStatusMovement(msgRes.statusMovement)
+                const status=networkFlows.callFunctionByStatusMovement(msgRes.typeStatus)
                 return status
             } 
         },
@@ -177,7 +188,7 @@ export default function interfaceNetwork(){
         }
     }
 
-    function setTimeMoveAdv(url,timeCounter=0,timeLimite=1000){
+    function setTimeMoveAdv(url,timeCounter=0,timeLimit=6){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
@@ -185,29 +196,25 @@ export default function interfaceNetwork(){
                     const err=networkFlows.callFunctionByStatusServer(msgRes)
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
-                else if(msgRes.statusMovement===typeStatus.movementAvailable){
+                else if(msgRes.typeStatus===typeStatus.movementAvailable){
                     const paramFunstionStatus={
-                        moveGame:msgRes.move
+                        move:msgRes.move
                     }
-                    const status = networkFlows.callFunctionByStatusMovement(msgRes.statusMovement,paramFunstionStatus)
+                    const status = networkFlows.callFunctionByStatusMovement(msgRes.typeStatus,paramFunstionStatus)
                     notifyFunctions(functionToCallBack.moveAdversary,status)
                 }
-                else if(msgRes.statusMovement===typeStatus.waitAgain){
-                    timeCounter++
-                    setTimeMoveAdv(url,timeCounter)
-                }
-                else if(timeCounter===timeLimite){
+                else if(timeCounter===timeLimit){
                     const status = networkFlows.callFunctionByStatusGame(typeStatus.endTimeMove)
                     notifyFunctions(functionToCallBack.playerConnection,status)
                 }
-                else{
+                else if(msgRes.statusGame.giveUp===false || msgRes.statusGame.endGame===false){
                     timeCounter++
                     setTimeMoveAdv(url,timeCounter)
                 }
             },time.timeLimit)
     }
 
-    function setTimePlayer(url,timeCounter=0,timeLimite=1000){
+    function setTimePlayer(url,timeCounter=0,timeLimite=2){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
@@ -223,7 +230,7 @@ export default function interfaceNetwork(){
                     notifyFunctions(functionToCallBack.playerConnection,statusPlayerAdv)
                 }
                 else if(timeCounter===timeLimite){
-                    const status = networkFlows.callFunctionByStatusGame(typeStatus.endTime)
+                    const status = networkFlows.callFunctionByStatusGame(typeStatus.endTimeAdv)
                     notifyFunctions(functionToCallBack.playerConnection,status)
                 }
                 else{
@@ -237,16 +244,18 @@ export default function interfaceNetwork(){
         const waitInf = 
         setInterval(
             async()=>{
-                const statusGame = await httpMethods.get(url)
-                if(typeStatus.errServer===statusGame){
+                const status = await httpMethods.get(url)
+                if(typeStatus.errServer===status){
                     clearInterval(waitInf) 
                     const err=networkFlows.callFunctionByStatusServer(msgRes)
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
-                else if(statusGame.statusPlayerAdv.giveUp===true){
+                else if(status.statusGame.giveUp===true || status.statusGame.endGame===true){
                     clearInterval(waitInf)
-                    const statusGiveUp=networkFlows.callFunctionByStatusGame(typeStatus.giveUp)
-                    notifyFunctions(functionToCallBack.giveUp,statusGiveUp)
+                    if(status.statusPlayerAdv.giveUp===true){
+                        const statusGiveUp=networkFlows.callFunctionByStatusGame(typeStatus.giveUp)
+                        notifyFunctions(functionToCallBack.giveUp,statusGiveUp)
+                    }
                 }
         },time.timeLimit)
     }
