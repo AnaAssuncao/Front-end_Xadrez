@@ -10,7 +10,7 @@ class router{
         this.startNewRoom= this.pref +"/startGame/startNewRoom"
         this.connectInARoom= this.pref + "/startGame/connectInARoom"
         this.updateMovement= this.pref + "/movementGame/updateMovement"
-        this.movementIncorret= this.pref +"/movementGame/movementIncorret"
+        this.incorrectMovement= this.pref +"/movementGame/incorrectMovement"
         this.giveUpGame= this.pref +"/giveUpGame"
         this.endGame= this.pref +"/endGame"
         this.prefGetmovement= this.pref +"/movementGame/getMovement?"
@@ -56,7 +56,8 @@ export default function interfaceNetwork(){
         endTimeAdv:"endTimeAdv",
         endTimeMove:"endTimeMove",
         giveUp:"giveUpGame",
-        advPlayer: "advPlayer"
+        advPlayer: "advPlayer",
+        incorrectMovement:"incorrectMovement"
     }
 
 
@@ -70,7 +71,6 @@ export default function interfaceNetwork(){
                 roomCode:nickAndCode.roomCode
             }
             const msgRes = await httpMethods.post(infMultiplayer,url)
-            console.log(msgRes)
             if(typeStatus.errServer===msgRes){
                 const err=networkFlows.callFunctionByStatusServer(msgRes)
                 return err
@@ -126,12 +126,12 @@ export default function interfaceNetwork(){
             } 
         },
 
-        movementIncorret:function(){
-            const url = networkConf.routerUrl.movementIncorret
+        incorrectMovement:function(){
+            const url = networkConf.routerUrl.incorrectMovement
             const objSend={
                 roomCode:networkConf.codes.room,
                 playerCode:networkConf.codes.player,
-                movementIncorret:true
+                incorrectMovement:true
             }
             const msgRes = httpMethods.post(objSend,url)
             if(typeStatus.errServer===msgRes){
@@ -188,7 +188,7 @@ export default function interfaceNetwork(){
         }
     }
 
-    function setTimeMoveAdv(url,timeCounter=0,timeLimit=6){
+    function setTimeMoveAdv(url,timeCounter=0,timeLimit=600){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
@@ -203,6 +203,10 @@ export default function interfaceNetwork(){
                     const status = networkFlows.callFunctionByStatusMovement(msgRes.typeStatus,paramFunstionStatus)
                     notifyFunctions(functionToCallBack.moveAdversary,status)
                 }
+                else if(msgRes.typeStatus===typeStatus.incorrectMovement){
+                    const status = networkFlows.callFunctionByStatusMovement(msgRes.typeStatus)
+                    notifyFunctions(functionToCallBack.moveAdversary,status)
+                }
                 else if(timeCounter===timeLimit){
                     const status = networkFlows.callFunctionByStatusGame(typeStatus.endTimeMove)
                     notifyFunctions(functionToCallBack.playerConnection,status)
@@ -214,7 +218,7 @@ export default function interfaceNetwork(){
             },time.timeLimit)
     }
 
-    function setTimePlayer(url,timeCounter=0,timeLimite=2){
+    function setTimePlayer(url,timeCounter=0,timeLimite=600){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)

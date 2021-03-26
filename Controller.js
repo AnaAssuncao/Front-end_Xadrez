@@ -326,7 +326,7 @@ class onlineGame extends genericGame{
             }
         }
         else{
-            // viewController.informationProminent(infSendMove.msg) informar que a jogada estava errada
+            viewController.informationProminent(msgsAndAlerts.incorrectMovement(gameSetup.currentPlayerColor))
         }
         
         this.updateDisplayGame(nextColor,gameSetup.colorsGame.top,isPlayable)
@@ -346,8 +346,11 @@ class onlineGame extends genericGame{
                 gameSetup.addLogGame(msgsAndAlerts.movement.nextPlayer(gameSetup.onlineConf.playerColor,gameSetup.onlineConf.playerName))
             }
             else{
-                gameSetup.addLogGame(msgsAndAlerts.movement.movementIncorret(gameSetup.currentPlayerColor))
-                network.sendServer.movementIncorret()
+                const incorrectMovement = msgsAndAlerts.movement.incorrectMovement(gameSetup.currentPlayerColor)
+                gameSetup.addLogGame(incorrectMovement)
+                viewController.displayEndGameInformation(incorrectMovement)
+                network.sendServer.incorrectMovement()
+                network.sendServer.endGame()
             }
             this.updateDisplayGame(gameSetup.colorsGame.top,gameSetup.currentPlayerColor)
         }
