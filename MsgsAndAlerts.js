@@ -15,10 +15,10 @@ const roomAndCode={
 }
 
 const connection={
-    connectedServer:()=>"Erro no servidor, tente mais tarde",
+    errServer:()=>"Erro no servidor, tente mais tarde",
     place:()=>"Jogo Local",
     waitAdv:()=>"Aguardando adversário",
-    connected:()=>"Conectado com "
+    connected:(namePlayer)=>"Conectado com " + namePlayer
 }
 
 const checksPiece={
@@ -58,7 +58,8 @@ const movement={
     return:(color)=>"Retorno das Peças " + colors[color],
     nextColor:(color)=>"Vez das Peças " + colors[color],
     nextPlayer:(color,name)=>"Vez das Peças " + colors[color]+" Vez do jogador " + name,
-    movementIncorret:(color)=>"Erro na jogada das Peças " + colors[color]
+    movementIncorret:(color)=>"Erro na jogada das Peças " + colors[color],
+    endTime:()=>"Tempo esgotado para adversário"
 }
 const log={
     gamelog:(msg)=>{

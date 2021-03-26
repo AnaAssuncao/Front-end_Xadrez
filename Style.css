@@ -63,6 +63,7 @@
     border-left: 1px solid rgb(77, 77, 77);
     border-right: 1px solid rgb(77, 77, 77);
     border-bottom: 1px solid rgb(77, 77, 77);
+    z-index: 99;
     
 }
 .modal__details--display{
@@ -443,7 +444,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    z-index:9999;
+    z-index:9;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;

@@ -3,103 +3,143 @@ import networkFlows from "./NetworkUtils.js"
 import methodsHTTP from "./MethodsHTTP.js"
 const httpMethods = new methodsHTTP()
 
+class router{
+    constructor(){
+        this.pref="http://localhost:3030/api/v1"
+        this.query=null
+        this.startNewRoom= this.pref +"/startGame/startNewRoom"
+        this.connectInARoom= this.pref + "/startGame/connectInARoom"
+        this.updateMovement= this.pref + "/movementGame/updateMovement"
+        this.movementIncorret= this.pref +"/movementGame/movementIncorret"
+        this.giveUpGame= this.pref +"/giveUpGame"
+        this.endGame= this.pref +"/endGame"
+        this.getMovement= this.pref +"/movementGame/getMovement?"
+        this.statusGame= this.pref +"/statusGame?"
+    }
+
+    updateQuery(params){this.query=Object.keys(params)
+        .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
+        .join("&")
+        this.getMovement = this.getMovement+this.query
+        this.statusGame = this.statusGame+this.query
+    }
+}
+
 export default function interfaceNetwork(){
     const networkConf={
         codes:{
             room:null,
             player:null
         },
+        routerUrl: new router(),
         updateCodes(statusCodes){
-            networkConf.codes.room=statusCodes.room
-            networkConf.codes.player=statusCodes.player
-        },
-        url:"http://localhost:3030/api/v1"
+            this.codes.room=statusCodes.roomCode
+            this.codes.player=statusCodes.playerCode
+        }
     }
+
+    const time={
+        endConnection:false,
+        timeLimit:1000
+    }
+
+    const typeStatus={
+        errServer:"errServer",
+        movementAvailable:"movementAvailable",
+        waitAgain:"waitAgain",
+        endTimeAdv:"endTimeAdv",
+        endTimeMove:"endTimeMove",
+        giveUp:"giveUpGame",
+        advPlayer: "advPlayer"
+    }
+
 
     this.sendServer={
         startNewRoom: async(nickAndCode) =>{
-            const url = networkConf.url+"/startGame/startNewRoom"
+            const url = networkConf.routerUrl.startNewRoom
             // nickAndCode = {name:value, roomCode:value}
             const infMultiplayer = {
                 playerName:nickAndCode.name,
                 roomCode:nickAndCode.roomCode
             }
             const msgRes = await httpMethods.post(infMultiplayer,url)
-            if(networkFlows.server.errServer.err===msgRes){
-                const err=networkFlows.server.errServer
-                notifyFunctions(functionToCallBack.errConnection,err)
+            if(typeStatus.errServer===msgRes){
+                const err=networkFlows.callFunctionByStatusServer(msgRes)
                 return err
             }
             else{
-                //retornar= callFunctionByStatus(msgRes.statusRoom,{paramentro das funções}))
-                const status= networkFlows.room[msgRes.statusRoom](msgRes.status,networkConf.updateCodes)
+                const paramFunstionStatus={
+                    statusGame:msgRes.status,
+                }
+                const status=networkFlows.callFunctionByStatusRoom(msgRes.statusRoom,paramFunstionStatus)
                 return status
             }
         },
 
         async connectInARoom(nickAndCode){
-            const url = networkConf.url+"/startGame/connectInARoom"
+            const url = networkConf.routerUrl.connectInARoom
             // nickAndCode = {name:value, roomCode:value}
             const infMultiplayer = {
                 playerName:nickAndCode.name,
                 roomCode:nickAndCode.roomCode
             }
             const msgRes = await httpMethods.post(infMultiplayer,url)
-            if(networkFlows.server.errServer.err===msgRes){
-                const err=networkFlows.server.errServer
-                notifyFunctions(functionToCallBack.errConnection,err)
+            if(typeStatus.errServer===msgRes){
+                const err=networkFlows.callFunctionByStatusServer(msgRes)
                 return err
             }
             else{
-                const status= networkFlows.room[msgRes.statusRoom](msgRes.status,networkConf.updateCodes)
+                const paramFunstionStatus={
+                    statusGame:msgRes.status,
+                }
+                const status= networkFlows.callFunctionByStatusRoom(msgRes.statusRoom,paramFunstionStatus)
                 return status
             }
         },
 
         moveGame: async(move) =>{
-            const url = networkConf.url+"/movementGame/updateMovement"
+            const url = networkConf.routerUrl.updateMovement
             const objSend={
                 roomCode:networkConf.codes.room,
                 playerCode:networkConf.codes.player,
                 movement:move
             }
             const msgRes = await httpMethods.post(objSend,url)
-            if(networkFlows.server.errServer.err===msgRes){
-                const err=networkFlows.server.errServer
-                notifyFunctions(functionToCallBack.errConnection,err)
-                return err
-            }
-            else{
-                const status= networkFlows.movement[msgRes.statusMovement](msgRes.move)
+            if(typeStatus.errServer===msgRes){
+                const status=networkFlows.callFunctionByStatusServer(msgRes)
                 return status
             }
+            else{
+                const status=networkFlows.callFunctionByStatusMovement(msgRes.statusMovement)
+                return status
+            } 
         },
 
         movementIncorret:function(){
-            const url = networkConf.url+"/movementGame/movementIncorret"
+            const url = networkConf.routerUrl.movementIncorret
             const objSend={
                 roomCode:networkConf.codes.room,
                 playerCode:networkConf.codes.player,
                 movementIncorret:true
             }
             const msgRes = httpMethods.post(objSend,url)
-            if(networkFlows.server.errServer.err===msgRes){
-                const err=networkFlows.server.errServer
+            if(typeStatus.errServer===msgRes){
+                const err=networkFlows.callFunctionByStatusServer(msgRes)
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err
             }
         },
 
         giveUp: async() =>{
-            const url = networkConf.url+"/giveUpGame"
+            const url = networkConf.routerUrl.giveUpGame
             const objSend={
                 roomCode:networkConf.codes.room,
                 playerCode:networkConf.codes.player,
                 giveUp:true
             } 
             const msgRes = await httpMethods.post(objSend,url)
-            if(networkFlows.server.errServer.err===msgRes){
-                const err=networkFlows.server.errServer
+            if(typeStatus.errServer===msgRes){
+                const err=networkFlows.callFunctionByStatusServer(msgRes)
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err
             }
@@ -111,10 +151,10 @@ export default function interfaceNetwork(){
                 playerCode:networkConf.codes.player,
                 endGame:true
             } 
-            const url = networkConf.url+"/endGame"
+            const url = networkConf.routerUrl.endGame
             const msgRes = await httpMethods.post(objSend,url)
-            if(networkFlows.server.errServer.err===msgRes){
-                const err=networkFlows.server.errServer
+            if(typeStatus.errServer===msgRes){
+                const err=networkFlows.callFunctionByStatusServer(msgRes)
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err
             }
@@ -124,37 +164,15 @@ export default function interfaceNetwork(){
    
     this.enableCalls={
         moveAdversary: ()=>{
-            const params = {
-                roomCode: networkConf.codes.room,
-                playerCode: networkConf.codes.player
-            }
-            let query = Object.keys(params)
-                    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
-                    .join("&");
-            const url = networkConf.url+"/movementGame/getMovement?" +query
+            const url = networkConf.routerUrl.getMovement
             setTimeMoveAdv(url)
         },
         playerConnection: ()=>{
-            const params = {
-                roomCode: networkConf.codes.room,
-                playerCode: networkConf.codes.player
-              }
-            let query = Object.keys(params)
-                    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
-                    .join("&");
-            const url = networkConf.url+"/statusGame?"+query
+            const url = networkConf.routerUrl.statusGame
             setTimePlayer(url)
         },
         statusGame: ()=>{ 
-            const params = {
-                roomCode: networkConf.codes.room,  
-                playerCode: networkConf.codes.player
-              }
-            let query = Object.keys(params)
-                    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
-                    .join("&");
-                    
-            const url = networkConf.url+"/statusGame?"+query
+            const url = networkConf.routerUrl.statusGame
             setTimeStatusGame(url)
         }
     }
@@ -163,49 +181,56 @@ export default function interfaceNetwork(){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
-                if(networkFlows.server.errServer.err===msgRes){
-                    const err=networkFlows.server.errServer
+                if(typeStatus.errServer===msgRes){
+                    const err=networkFlows.callFunctionByStatusServer(msgRes)
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
-                else if(msgRes.statusMovement===networkFlows.movement.typeStatus.movementAvailable){
-                    const status = networkFlows.movement.movementAvailable(msgRes.move)
+                else if(msgRes.statusMovement===typeStatus.movementAvailable){
+                    const paramFunstionStatus={
+                        moveGame:msgRes.move
+                    }
+                    const status = networkFlows.callFunctionByStatusMovement(msgRes.statusMovement,paramFunstionStatus)
                     notifyFunctions(functionToCallBack.moveAdversary,status)
                 }
-                else if(msgRes.statusMovement===networkFlows.movement.typeStatus.waitAgain){
+                else if(msgRes.statusMovement===typeStatus.waitAgain){
                     timeCounter++
                     setTimeMoveAdv(url,timeCounter)
                 }
                 else if(timeCounter===timeLimite){
-                    const connection = false
-                    notifyFunctions(functionToCallBack.playerConnection,connection)
+                    const status = networkFlows.callFunctionByStatusGame(typeStatus.endTimeMove)
+                    notifyFunctions(functionToCallBack.playerConnection,status)
                 }
                 else{
                     timeCounter++
                     setTimeMoveAdv(url,timeCounter)
                 }
-            },1000)
+            },time.timeLimit)
     }
 
     function setTimePlayer(url,timeCounter=0,timeLimite=1000){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
-                if(networkFlows.server.errServer.err===msgRes){
-                    const err=networkFlows.server.errServer
+                if(typeStatus.errServer===msgRes){
+                    const err=networkFlows.callFunctionByStatusServer(msgRes)
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
                 else if(msgRes.statusPlayerAdv.namePlayer!==null){
-                    const statusPlayerAdv= networkFlows.statusGame.advPlayer(msgRes.statusPlayerAdv)
+                    const paramFunstionStatus={
+                        statusPlayerAdv:msgRes.statusPlayerAdv
+                    }
+                    const statusPlayerAdv= networkFlows.callFunctionByStatusGame(typeStatus.advPlayer,paramFunstionStatus)
                     notifyFunctions(functionToCallBack.playerConnection,statusPlayerAdv)
                 }
                 else if(timeCounter===timeLimite){
-                    notifyFunctions(functionToCallBack.playerConnection,networkFlows.timeLimit)
+                    const status = networkFlows.callFunctionByStatusGame(typeStatus.endTime)
+                    notifyFunctions(functionToCallBack.playerConnection,status)
                 }
                 else{
                     timeCounter++
                     setTimePlayer(url,timeCounter)
                 }
-            },1000)
+            },time.timeLimit)
     }
 
     function setTimeStatusGame(url){
@@ -213,17 +238,17 @@ export default function interfaceNetwork(){
         setInterval(
             async()=>{
                 const statusGame = await httpMethods.get(url)
-                if(networkFlows.server.errServer.err===statusGame){
+                if(typeStatus.errServer===statusGame){
                     clearInterval(waitInf) 
-                    const err=networkFlows.server.errServer  
+                    const err=networkFlows.callFunctionByStatusServer(msgRes)
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
                 else if(statusGame.statusPlayerAdv.giveUp===true){
                     clearInterval(waitInf)
-                    const statusGiveUp=networkFlows.statusGame.giveUp(statusPlayerAdv)
+                    const statusGiveUp=networkFlows.callFunctionByStatusGame(typeStatus.giveUp)
                     notifyFunctions(functionToCallBack.giveUp,statusGiveUp)
                 }
-        },1000)
+        },time.timeLimit)
     }
 
     const functionToCallBack= {
@@ -255,5 +280,12 @@ export default function interfaceNetwork(){
     }
     function notifyFunctions (objToCallBack,parameters){
         objToCallBack.forEach((fn)=>fn(parameters))
+    }
+
+    networkFlows.subscribeUpdateCode(updatesStartRoom)
+
+    function updatesStartRoom(statusCode){
+        networkConf.updateCodes(statusCode)
+        networkConf.routerUrl.updateQuery(statusCode)
     }
 }
