@@ -339,7 +339,7 @@ class onlineGame extends genericGame{
 
     getMoveAdv(moveAdv){
         if(moveAdv.move===null){
-            viewController.informationProminent(moveAdv.msg)
+            viewController.displayEndGameInformation(moveAdv.msg)
             gameSetup.updateEndGame()
             network.sendServer.endGame()
         }
@@ -352,7 +352,7 @@ class onlineGame extends genericGame{
                 gameSetup.addLogGame(msgsAndAlerts.movement.nextPlayer(gameSetup.onlineConf.playerColor,gameSetup.onlineConf.playerName))
             }
             else{
-                const incorrectMovement = msgsAndAlerts.movement.incorrectMovement(gameSetup.currentPlayerColor)
+                const incorrectMovement = msgsAndAlerts.movement.cheatMovement()
                 gameSetup.addLogGame(incorrectMovement)
                 viewController.displayEndGameInformation(incorrectMovement)
                 network.sendServer.incorrectMovement()

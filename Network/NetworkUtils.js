@@ -54,7 +54,7 @@ const functionsStatusMovement={
         }
         return sendController
     },
-    correctMove:function(){
+    correctMovement:function(){
         const sendController={
             serverConnection:true,
             isCorrectMove:true,
@@ -62,9 +62,10 @@ const functionsStatusMovement={
         }
         return sendController
     },
-    incorrectMove:function(){
+    incorrectMovement:function(){
         const sendController={
             serverConnection:true,
+            move:null,
             isCorrectMove:false,
             msg:msgsAndAlerts.movement.cheatMovement()
         }
