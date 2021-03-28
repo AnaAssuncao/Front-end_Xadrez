@@ -1,4 +1,4 @@
-module.exports = class utils{
+module.exports = class Utils{
     #times={
         connectPlayer: 300000, 
         movement:300000,

@@ -1,9 +1,9 @@
-import createGame from "./Game/XadrezGame.js"
+import CreateGame from "./Game/XadrezGame.js"
 import ViewController from "./View/ViewController.js"
-import interfaceNetwork from "./Network/Network.js"
+import InterfaceNetwork from "./Network/Network.js"
 import msgsAndAlerts from "./MsgsAndAlerts.js"
 
-class setup{
+class GameSetup{
     constructor(){
         this.game=null
         this.colorsGame={   
@@ -50,24 +50,24 @@ class setup{
     }
 }
 
-const gameSetup = new setup()
-let game = new createGame(gameSetup.colorsGame)
+const gameSetup = new GameSetup()
+let game = new CreateGame(gameSetup.colorsGame)
 const startBoard = game.getCurrentBoard()
 
 const viewController = new ViewController (startBoard)
-const network = new interfaceNetwork()
+const network = new InterfaceNetwork()
 
 const interfaceFunctions={ 
     startGameOffline:function(){
-        gameSetup.addGame(new offlineGame())
+        gameSetup.addGame(new OfflineGame())
         gameSetup.game.start()
     },  
     startNewRoomOnline:function(nickAndCode){
-        gameSetup.addGame(new onlineGame())
+        gameSetup.addGame(new OnlineGame())
         gameSetup.game.startNewRoom(nickAndCode)
     },
     connectInARoomOnline:function(nickAndCode){
-        gameSetup.addGame(new onlineGame())
+        gameSetup.addGame(new OnlineGame())
         gameSetup.game.connectInARoom(nickAndCode)
     },
     restartGame:function(){
@@ -105,7 +105,7 @@ network.subscribePlayerConnection(interfaceFunctions.playerConnection)
 network.subscribeGiveUp(interfaceFunctions.giveUp)
 network.subscribeErrConnection(interfaceFunctions.errConnection)
 
-class genericGame{
+class GenericGame{
     updateDisplayGame(colorTop,colorPlayer, isPlayable){
         const statusGame = game.getStatusGame() 
         if(statusGame.endGame){
@@ -165,7 +165,7 @@ class genericGame{
     }
 }
 
-class offlineGame extends genericGame{
+class OfflineGame extends GenericGame{
     constructor(){
         super()
     }
@@ -235,7 +235,7 @@ class offlineGame extends genericGame{
 
 }
 
-class onlineGame extends genericGame{
+class OnlineGame extends GenericGame{
     constructor(){
         super() 
     }

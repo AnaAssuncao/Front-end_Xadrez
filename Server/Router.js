@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const roomCode = require('./Controller/StartGame')
-const room= new roomCode()
+const RoomCode = require('./Controller/StartGame')
+const room= new RoomCode()
 const GameMovement = require('./Controller/GameMovement')
 const movement = new GameMovement()
-const statusGame = require('./Controller/StatusGame')
-const status = new statusGame
+const StatusGame = require('./Controller/StatusGame')
+const status = new StatusGame
 const apiPrefix = "/api/v1/"
 
 const nameRouter = {

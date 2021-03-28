@@ -1,7 +1,7 @@
-import viewScreen from "./ViewScreen.js"
+import ViewScreen from "./ViewScreen.js"
 
-export default function viewController(startBoard){
-    const view = new viewScreen(startBoard)
+export default function ViewController(startBoard){
+    const view = new ViewScreen(startBoard)
     const chess= {
         pieceSelect:{
             position:null

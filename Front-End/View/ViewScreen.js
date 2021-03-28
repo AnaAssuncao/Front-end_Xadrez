@@ -1,4 +1,4 @@
-export default function viewScreen(chessBoard){
+export default function ViewScreen(chessBoard){
 
     const functionToCallBack= {
         buttonStartGameOffline:[],

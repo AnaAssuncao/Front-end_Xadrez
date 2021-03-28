@@ -1,6 +1,6 @@
 const statusServer= require("../StatusServer.js")
 
-class infGame{
+class InfGame{
     constructor(game,playerCode,status){
         this.typeStatus = status
         this.statusCodes = game.getCodes(playerCode)
@@ -9,7 +9,7 @@ class infGame{
     }
 }           
 
-class infMovement{
+class InfMovement{
     constructor(game,playerCode,statusMovement){
         this.typeStatus = statusMovement
         this.statusCodes = game.getCodes(playerCode)
@@ -25,7 +25,7 @@ class infMovement{
     }
 } 
 
-class infPlayer{
+class InfPlayer{
     constructor(playerCode, namePlayer,playerColor,connection=true){
     this.playerCode=playerCode
     this.namePlayer=namePlayer
@@ -42,9 +42,9 @@ class infPlayer{
     }
 }
 
-class infTypeStatus{
+class InfTypeStatus{
     constructor(status){
         this.typeStatus = status
     }
 }
-module.exports = {infGame,infMovement,infPlayer,infTypeStatus}  
+module.exports = {InfGame,InfMovement,InfPlayer,InfTypeStatus}  

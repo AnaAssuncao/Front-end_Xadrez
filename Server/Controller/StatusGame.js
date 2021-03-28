@@ -1,9 +1,9 @@
-const utilities = require('./utils')
-const utils = new utilities
-const {infGame,infTypeStatus} = require('../Models/PrototypesGame')
+const Utilities = require('./utils')
+const utils = new Utilities
+const {InfGame,InfTypeStatus} = require('../Models/PrototypesGame')
 const statusServer= require("../StatusServer.js")
 
-module.exports = class statusGame{
+module.exports = class StatusGame{
 	getStatusGame(req,res){
         const roomCode = req.query.roomCode
         const playerCode = req.query.playerCode
@@ -11,11 +11,11 @@ module.exports = class statusGame{
         if(existCode){
             const game = games[roomCode]
             game.infPlayers[playerCode].updateTime()
-			const statusGame= new infGame(game,playerCode,statusServer.statusGame.chess)
+			const statusGame= new InfGame(game,playerCode,statusServer.statusGame.chess)
 			res.status(200).send(statusGame)
 		}
 		else{
-            const status = new infTypeStatus (statusServer.room.noExistRoom)
+            const status = new InfTypeStatus (statusServer.room.noExistRoom)
 			res.status(200).send(status)
 		}
     }
@@ -29,16 +29,16 @@ module.exports = class statusGame{
             if(endGame){
                 game.updateEndGamePlayer(playerCode)
                 utils.endGamePlayer(games,game)
-                const statusGame= new infGame(game,playerCode,statusServer.statusGame.endGame)
+                const statusGame= new InfGame(game,playerCode,statusServer.statusGame.endGame)
                 res.status(200).send(statusGame)
             }
             else{
-                const statusGame= new infGame(game,playerCode,statusServer.statusGame.chess)
+                const statusGame= new InfGame(game,playerCode,statusServer.statusGame.chess)
                 res.status(200).send(statusGame)
             }
         }  
         else{
-            const status = new infTypeStatus (statusServer.room.noExistRoom)
+            const status = new InfTypeStatus (statusServer.room.noExistRoom)
 			res.status(200).send(status)
 		}
     }
@@ -53,16 +53,16 @@ module.exports = class statusGame{
             if(giveUp){
                 game.updateGiveUpPlayer(playerCode)
                 utils.endGamePlayer(games,game)
-                const statusGame= new infGame(game,playerCode,statusServer.statusGame.giveUp)
+                const statusGame= new InfGame(game,playerCode,statusServer.statusGame.giveUp)
                 res.status(200).send(statusGame)
             }
             else{
-                const statusGame= new infGame(game,playerCode,statusServer.statusGame.chess)
+                const statusGame= new InfGame(game,playerCode,statusServer.statusGame.chess)
                 res.status(200).send(statusGame)
             }
         }
         else{
-			const status = new infTypeStatus (statusServer.room.noExistRoom)
+			const status = new InfTypeStatus (statusServer.room.noExistRoom)
 			res.status(200).send(status)
 		}
     }

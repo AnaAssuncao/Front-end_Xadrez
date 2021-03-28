@@ -1,9 +1,8 @@
-import msgsAndAlerts from "../MsgsAndAlerts.js"
 import networkUtils from "./NetworkUtils.js"
-import methodsHTTP from "./MethodsHTTP.js"
-const httpMethods = new methodsHTTP()
+import MethodsHTTP from "./MethodsHTTP.js"
+const httpMethods = new MethodsHTTP()
 
-class router{
+class Router{
     constructor(){
         this.pref="http://localhost:3030/api/v1"
         this.query=null
@@ -27,13 +26,13 @@ class router{
     }
 }
 
-class setup{
+class NetworkSetup{
     constructor(){
         this.codes={
             room:null,
             player:null
         }
-        this.routerUrl= new router()
+        this.routerUrl= new Router()
     }
     updateCodes(statusCodes){
         this.codes.room=statusCodes.roomCode
@@ -41,7 +40,7 @@ class setup{
     }
 }
 
-export default function interfaceNetwork(){
+export default function InterfaceNetwork(){
     let networkConf = {}
 
     const time={
@@ -63,7 +62,7 @@ export default function interfaceNetwork(){
 
     this.sendServer={
         startNewRoom: async(nickAndCode) =>{
-            networkConf = new setup()
+            networkConf = new NetworkSetup()
             const url = networkConf.routerUrl.startNewRoom
             // nickAndCode = {name:value, roomCode:value}
             const infMultiplayer = {
@@ -86,7 +85,7 @@ export default function interfaceNetwork(){
         },
 
         async connectInARoom(nickAndCode){
-            networkConf = new setup()
+            networkConf = new NetworkSetup()
             const url = networkConf.routerUrl.connectInARoom
             // nickAndCode = {name:value, roomCode:value}
             const infMultiplayer = {

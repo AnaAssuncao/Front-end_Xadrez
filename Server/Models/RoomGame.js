@@ -1,6 +1,6 @@
-const {infPlayer} = require('./PrototypesGame')
+const {InfPlayer} = require('./PrototypesGame')
 
-module.exports = class room{
+module.exports = class Room{
     #color={
         white:"White",
         black:"Black",
@@ -32,13 +32,13 @@ module.exports = class room{
     }
     
     startPlayerOne(playerCode, namePlayer,playerColor){
-        this.infPlayers[playerCode] = new infPlayer(playerCode, namePlayer,playerColor)
+        this.infPlayers[playerCode] = new InfPlayer(playerCode, namePlayer,playerColor)
     }
     addSecondPlayer(playerCode,namePlayer,playerColor){
         this.playersCode.black=playerCode
         this.lastMove.playerCode = null
         this.statusGame.connectionPlayers=true
-        this.infPlayers[playerCode] = new infPlayer(playerCode, namePlayer,playerColor)
+        this.infPlayers[playerCode] = new InfPlayer(playerCode, namePlayer,playerColor)
     }
     updateGiveUpPlayer(playerCode){
         this.statusGame.giveUp=true

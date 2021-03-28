@@ -1,9 +1,9 @@
-const { infMovement, infTypeStatus  } = require('../Models/PrototypesGame')
-const utilities = require('./Utils')
-const utils = new utilities()
+const { InfMovement, InfTypeStatus  } = require('../Models/PrototypesGame')
+const Utilities = require('./Utils')
+const utils = new Utilities()
 const statusServer= require("../StatusServer.js")
 
-module.exports= class movement {
+module.exports= class Movement {
     updateMovement= async function(req,res){
         const roomCode = req.body.roomCode
         const playerCode = req.body.playerCode
@@ -15,21 +15,21 @@ module.exports= class movement {
                 const movementTime= Date.now()
                 game.updateLastMove(moveSent, playerCode,movementTime)
                 if(game.lastMove.availableMovement === true ){
-                    const status = new infMovement(game, playerCode, statusServer.movement.correctMovement)
+                    const status = new InfMovement(game, playerCode, statusServer.movement.correctMovement)
                     res.status(200).send(status)
                 }
                 else{
-                    const status = new infMovement(game, playerCode, statusServer.movement.waitAgain)
+                    const status = new InfMovement(game, playerCode, statusServer.movement.waitAgain)
                     res.status(200).send(status)
                 }
             }
             else{
-                const status = new infMovement(game, playerCode, statusServer.movement.waitAgain)
+                const status = new InfMovement(game, playerCode, statusServer.movement.waitAgain)
                 res.status(200).send(status)
             }
         }
 		else{
-			const status = new infTypeStatus (statusServer.room.noExistRoom)
+			const status = new InfTypeStatus (statusServer.room.noExistRoom)
 			res.status(200).send(status)
 		}
     }
@@ -42,25 +42,25 @@ module.exports= class movement {
             const game = games[roomCode]
             if(game.lastMove.playerCode!==playerCode){
                 if(game.lastMove.availableMovement === true){
-                    const status = new infMovement(game, playerCode, statusServer.movement.movementAvailable)
+                    const status = new InfMovement(game, playerCode, statusServer.movement.movementAvailable)
                     res.status(200).send(status)
                 }
                 else{
-                    const status = new infMovement(game, playerCode, statusServer.movement.movementUnavailable)
+                    const status = new InfMovement(game, playerCode, statusServer.movement.movementUnavailable)
                     res.status(200).send(status)
                 }      
             }
             else if(game.lastMove.incorretMovement){
-                const status = new infMovement(game, playerCode, statusServer.movement.incorrectMovement)
+                const status = new InfMovement(game, playerCode, statusServer.movement.incorrectMovement)
                 res.status(200).send(status)
             }
             else{
-                    const status = new infMovement(game, playerCode, statusServer.movement.waitAgain)
+                    const status = new InfMovement(game, playerCode, statusServer.movement.waitAgain)
                     res.status(200).send(status)
             }
         }
 		else{
-			const status = new infTypeStatus (statusServer.room.noExistRoom)
+			const status = new InfTypeStatus (statusServer.room.noExistRoom)
 			res.status(200).send(status)
 		}
     }
@@ -83,7 +83,7 @@ module.exports= class movement {
             }
         }
 		else{
-			const status = new infTypeStatus (statusServer.room.noExistRoom)
+			const status = new InfTypeStatus (statusServer.room.noExistRoom)
 			res.status(200).send(status)
 		}
     }

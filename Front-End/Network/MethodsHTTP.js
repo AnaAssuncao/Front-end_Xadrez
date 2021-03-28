@@ -1,4 +1,4 @@
-export default function httpMethods(){
+export default function HttpMethods(){
     this.post=async function(obj,url){
        return httpPost(obj,url)
     }

@@ -1,4 +1,4 @@
-export default class createGame {
+export default class CreateGame {
     constructor(player){
         this.chessBoard= {
             ref11:null,
