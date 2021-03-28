@@ -127,36 +127,28 @@ const callFunctionByStatusRoom = function(status,paramStatus){
     if(functionsStatusRoom[status]){
         return functionsStatusRoom[status](paramStatus)
     }
-    else{
-        return functionsStatusServer.errServer()
-    }
+    return functionsStatusServer.errServer()
 }
 
 const callFunctionByStatusMovement= function(status,paramStatus){
     if(functionsStatusMovement[status]){
         return functionsStatusMovement[status](paramStatus)
     }
-    else{
-        return functionsStatusServer.errServer()
-    }
+    return functionsStatusServer.errServer()
 }
 
 const callFunctionByStatusGame = function(status,paramStatus){
     if(functionsStatusGame[status]){
         return functionsStatusGame[status](paramStatus)
     }
-    else{
-        return functionsStatusServer.errServer()
-    }
+    return functionsStatusServer.errServer()
 }
 
 const callFunctionByStatusServer = function(status,paramStatus){
     if(functionsStatusServer[status]){
         return functionsStatusServer[status](paramStatus)
     }
-    else{
-        return functionsStatusServer.errServer()
-    }
+    return functionsStatusServer.errServer()
 }
 
 function notifyUpdates(objToCallBack,parameters){
