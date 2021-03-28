@@ -8,9 +8,9 @@ module.exports= class Movement {
         const roomCode = req.body.roomCode
         const playerCode = req.body.playerCode
         const moveSent = req.body.movement
-        const existCode = utils.verifyRoomCode(games,roomCode)
+        const existCode = gameRooms.verifyRoomCode(roomCode)
         if(existCode){
-            const game = games[roomCode]
+            const game = gameRooms.createdRooms[roomCode]
            if(game.lastMove.playerCode!==playerCode){
                 const movementTime= Date.now()
                 game.updateLastMove(moveSent, playerCode,movementTime)
@@ -37,9 +37,9 @@ module.exports= class Movement {
     getMovement = function(req,res){
         const roomCode = req.query.roomCode
         const playerCode = req.query.playerCode
-        const existCode = utils.verifyRoomCode(games,roomCode)
+        const existCode = gameRooms.verifyRoomCode(roomCode)
         if(existCode){
-            const game = games[roomCode]
+            const game = gameRooms.createdRooms[roomCode]
             if(game.lastMove.playerCode!==playerCode){
                 if(game.lastMove.availableMovement === true){
                     const status = new InfMovement(game, playerCode, statusServer.movement.movementAvailable)
@@ -69,9 +69,9 @@ module.exports= class Movement {
         const roomCode = req.body.roomCode
         const playerCode = req.body.playerCode
         const incorrectMovement = req.body.incorrectMovement
-        const existCode = utils.verifyRoomCode(games,roomCode)
+        const existCode = gameRooms.verifyRoomCode(roomCode)
         if(existCode){
-            const game = games[roomCode]
+            const game = gameRooms.createdRooms[roomCode]
             if(game.lastMove.playerCode!==playerCode){
                 if(incorrectMovement===true){
                     game.reportIncorretMovement()

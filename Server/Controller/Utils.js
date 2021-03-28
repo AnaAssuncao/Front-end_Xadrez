@@ -6,12 +6,6 @@ module.exports = class Utils{
         checkMovement: 1000,
         limitEndGame:60
     }
-    verifyRoomCode= function (games,roomCode){
-        if(games[roomCode]){
-            return true
-        }
-        return false
-    }
     
     verifyPlayers= function(game){
         if(game.playersCode.white!==null && game.playersCode.black!==null){
@@ -32,9 +26,9 @@ module.exports = class Utils{
         return connectionPlayers
     }
 
-    verifyTimePlayers(games,game){
+    verifyTimePlayers(game){
         const timePlayers = setInterval(()=>{
-            const existCode = this.verifyRoomCode(games,game.roomCode)
+            const existCode = gameRooms.verifyRoomCode(game.roomCode)
             if(existCode){
                 for(let playerCode in game.infPlayers){
                     if((Date.now()-game.infPlayers[playerCode].time)>this.#times.connectPlayer){
@@ -50,9 +44,9 @@ module.exports = class Utils{
         },this.#times.checkPlayer)
     }
 
-    verifyTimeMovement(games,game){
+    verifyTimeMovement(game){
         const timeMovement=setInterval(()=>{
-            const existCode = this.verifyRoomCode(games,game.roomCode)
+            const existCode = gameRooms.verifyRoomCode(game.roomCode)
             if(existCode){
                 if(game.lastMove.movementTime){
                     if((Date.now()-game.lastMove.movementTime)>this.#times.movement){
@@ -68,13 +62,13 @@ module.exports = class Utils{
         },this.#times.checkMovement)  
     }
 
-    endGamePlayer(games,game,timeCounter=0){
+    endGamePlayer(game,timeCounter=0){
         setTimeout(()=>{  
-            const existCode = this.verifyRoomCode(games,game.roomCode)
+            const existCode = gameRooms.verifyRoomCode(game.roomCode)
             if(existCode){     
                 const arePlayersConnected = this.verifyConnectionPlayers(game) 
                 if((arePlayersConnected===false) || (timeCounter===this.#times.limitEndGame)){       
-                    this.finalizeCode(games,game.roomCode)
+                    this.finalizeCode(game.roomCode)
                 }
                 else{
                     timeCounter++
@@ -84,7 +78,7 @@ module.exports = class Utils{
         },this.#times.checkPlayer)
     }
 
-    finalizeCode(games,roomCode){
-        setTimeout(()=>delete games[roomCode],30000)
+    finalizeCode(roomCode){//ja tem no obj
+        setTimeout(()=>gameRooms.removeRoom(roomCode),30000)
     }
 }

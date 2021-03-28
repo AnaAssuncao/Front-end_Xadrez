@@ -7,9 +7,9 @@ module.exports = class StatusGame{
 	getStatusGame(req,res){
         const roomCode = req.query.roomCode
         const playerCode = req.query.playerCode
-        const existCode = utils.verifyRoomCode(games,roomCode)
+        const existCode = gameRooms.verifyRoomCode(roomCode)
         if(existCode){
-            const game = games[roomCode]
+            const game = gameRooms.createdRooms[roomCode]
             game.infPlayers[playerCode].updateTime()
 			const statusGame= new InfGame(game,playerCode,statusServer.statusGame.chess)
 			res.status(200).send(statusGame)
@@ -23,12 +23,12 @@ module.exports = class StatusGame{
         const roomCode = req.body.roomCode
         const endGame = req.body.endGame
         const playerCode = req.body.playerCode
-        const game = games[roomCode]
-        const existCode = utils.verifyRoomCode(games,roomCode)
+        const game = gameRooms.createdRooms[roomCode]
+        const existCode = gameRooms.verifyRoomCode(roomCode)
         if(existCode){
             if(endGame){
                 game.updateEndGamePlayer(playerCode)
-                utils.endGamePlayer(games,game)
+                utils.endGamePlayer(gameRooms.createdRooms,game)
                 const statusGame= new InfGame(game,playerCode,statusServer.statusGame.endGame)
                 res.status(200).send(statusGame)
             }
@@ -47,12 +47,12 @@ module.exports = class StatusGame{
         const roomCode = req.body.roomCode
         const playerCode = req.body.playerCode
         const giveUp = req.body.giveUp
-        const existCode = utils.verifyRoomCode(games,roomCode)
+        const existCode = gameRooms.verifyRoomCode(roomCode)
         if(existCode){
-            const game = games[roomCode]
+            const game = gameRooms.createdRooms[roomCode]
             if(giveUp){
                 game.updateGiveUpPlayer(playerCode)
-                utils.endGamePlayer(games,game)
+                utils.endGamePlayer(gameRooms.createdRooms,game)
                 const statusGame= new InfGame(game,playerCode,statusServer.statusGame.giveUp)
                 res.status(200).send(statusGame)
             }
