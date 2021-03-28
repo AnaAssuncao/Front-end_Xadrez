@@ -1,5 +1,5 @@
 import msgsAndAlerts from "../MsgsAndAlerts.js"
-import networkFlows from "./NetworkUtils.js"
+import networkUtils from "./NetworkUtils.js"
 import methodsHTTP from "./MethodsHTTP.js"
 const httpMethods = new methodsHTTP()
 
@@ -72,7 +72,7 @@ export default function interfaceNetwork(){
             }
             const msgRes = await httpMethods.post(infMultiplayer,url)
             if(typeStatus.errServer===msgRes){
-                const err=networkFlows.callFunctionByStatusServer(msgRes)
+                const err=networkUtils.callFunctionByStatusServer(msgRes)
                 return err
             }
             else{
@@ -80,7 +80,7 @@ export default function interfaceNetwork(){
                     statusPlayerAdv:msgRes.statusPlayerAdv,
                     statusCodes:msgRes.statusCodes
                 }
-                const status=networkFlows.callFunctionByStatusRoom(msgRes.typeStatus,paramFunstionStatus)
+                const status=networkUtils.callFunctionByStatusRoom(msgRes.typeStatus,paramFunstionStatus)
                 return status
             }
         },
@@ -95,7 +95,7 @@ export default function interfaceNetwork(){
             }
             const msgRes = await httpMethods.post(infMultiplayer,url)
             if(typeStatus.errServer===msgRes){
-                const err=networkFlows.callFunctionByStatusServer(msgRes)
+                const err=networkUtils.callFunctionByStatusServer(msgRes)
                 return err
             }
             else{
@@ -103,7 +103,7 @@ export default function interfaceNetwork(){
                     statusPlayerAdv:msgRes.statusPlayerAdv,
                     statusCodes:msgRes.statusCodes
                 }
-                const status= networkFlows.callFunctionByStatusRoom(msgRes.typeStatus,paramFunstionStatus)
+                const status= networkUtils.callFunctionByStatusRoom(msgRes.typeStatus,paramFunstionStatus)
                 return status
             }
         },
@@ -117,11 +117,11 @@ export default function interfaceNetwork(){
             }
             const msgRes = await httpMethods.post(objSend,url)
             if(typeStatus.errServer===msgRes){
-                const status=networkFlows.callFunctionByStatusServer(msgRes)
+                const status=networkUtils.callFunctionByStatusServer(msgRes)
                 return status
             }
             else{
-                const status=networkFlows.callFunctionByStatusMovement(msgRes.typeStatus)
+                const status=networkUtils.callFunctionByStatusMovement(msgRes.typeStatus)
                 return status
             } 
         },
@@ -135,7 +135,7 @@ export default function interfaceNetwork(){
             }
             const msgRes = httpMethods.post(objSend,url)
             if(typeStatus.errServer===msgRes){
-                const err=networkFlows.callFunctionByStatusServer(msgRes)
+                const err=networkUtils.callFunctionByStatusServer(msgRes)
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err
             }
@@ -150,7 +150,7 @@ export default function interfaceNetwork(){
             } 
             const msgRes = await httpMethods.post(objSend,url)
             if(typeStatus.errServer===msgRes){
-                const err=networkFlows.callFunctionByStatusServer(msgRes)
+                const err=networkUtils.callFunctionByStatusServer(msgRes)
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err
             }
@@ -165,7 +165,7 @@ export default function interfaceNetwork(){
             const url = networkConf.routerUrl.endGame
             const msgRes = await httpMethods.post(objSend,url)
             if(typeStatus.errServer===msgRes){
-                const err=networkFlows.callFunctionByStatusServer(msgRes)
+                const err=networkUtils.callFunctionByStatusServer(msgRes)
                 notifyFunctions(functionToCallBack.errConnection,err)
                 return err
             }
@@ -193,22 +193,22 @@ export default function interfaceNetwork(){
             async()=>{
                 const msgRes = await httpMethods.get(url)
                 if(typeStatus.errServer===msgRes){
-                    const err=networkFlows.callFunctionByStatusServer(msgRes)
+                    const err=networkUtils.callFunctionByStatusServer(msgRes)
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
                 else if(msgRes.typeStatus===typeStatus.movementAvailable){
                     const paramFunstionStatus={
                         move:msgRes.move
                     }
-                    const status = networkFlows.callFunctionByStatusMovement(msgRes.typeStatus,paramFunstionStatus)
+                    const status = networkUtils.callFunctionByStatusMovement(msgRes.typeStatus,paramFunstionStatus)
                     notifyFunctions(functionToCallBack.moveAdversary,status)
                 }
                 else if(msgRes.typeStatus===typeStatus.incorrectMovement){
-                    const status = networkFlows.callFunctionByStatusMovement(msgRes.typeStatus)
+                    const status = networkUtils.callFunctionByStatusMovement(msgRes.typeStatus)
                     notifyFunctions(functionToCallBack.moveAdversary,status)
                 }
                 else if(timeCounter===timeLimit){
-                    const status = networkFlows.callFunctionByStatusGame(typeStatus.endTimeMove)
+                    const status = networkUtils.callFunctionByStatusGame(typeStatus.endTimeMove)
                     notifyFunctions(functionToCallBack.playerConnection,status)
                 }
                 else if(msgRes.statusGame.endGame===false){
@@ -223,18 +223,18 @@ export default function interfaceNetwork(){
             async()=>{
                 const msgRes = await httpMethods.get(url)
                 if(typeStatus.errServer===msgRes){
-                    const err=networkFlows.callFunctionByStatusServer(msgRes)
+                    const err=networkUtils.callFunctionByStatusServer(msgRes)
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
                 else if(msgRes.statusPlayerAdv.namePlayer!==null){
                     const paramFunstionStatus={
                         statusPlayerAdv:msgRes.statusPlayerAdv
                     }
-                    const statusPlayerAdv= networkFlows.callFunctionByStatusGame(typeStatus.advPlayer,paramFunstionStatus)
+                    const statusPlayerAdv= networkUtils.callFunctionByStatusGame(typeStatus.advPlayer,paramFunstionStatus)
                     notifyFunctions(functionToCallBack.playerConnection,statusPlayerAdv)
                 }
                 else if(timeCounter===timeLimite){
-                    const status = networkFlows.callFunctionByStatusGame(typeStatus.endTimeAdv)
+                    const status = networkUtils.callFunctionByStatusGame(typeStatus.endTimeAdv)
                     notifyFunctions(functionToCallBack.playerConnection,status)
                 }
                 else{
@@ -251,13 +251,13 @@ export default function interfaceNetwork(){
                 const status = await httpMethods.get(url)
                 if(typeStatus.errServer===status){
                     clearInterval(waitInf) 
-                    const err=networkFlows.callFunctionByStatusServer(msgRes)
+                    const err=networkUtils.callFunctionByStatusServer(msgRes)
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
                 else if(status.statusGame.giveUp===true ||  status.statusGame.endGame===true){
                     clearInterval(waitInf)
                     if(status.statusPlayerAdv.giveUp===true){
-                        const statusGiveUp=networkFlows.callFunctionByStatusGame(typeStatus.giveUp)
+                        const statusGiveUp=networkUtils.callFunctionByStatusGame(typeStatus.giveUp)
                         notifyFunctions(functionToCallBack.giveUp,statusGiveUp)
                     }
                 }
@@ -295,7 +295,7 @@ export default function interfaceNetwork(){
         objToCallBack.forEach((fn)=>fn(parameters))
     }
 
-    networkFlows.subscribeUpdateCode(updatesStartRoom)
+    networkUtils.subscribeUpdateCode(updatesStartRoom)
 
     function updatesStartRoom(statusCode){
         networkConf.updateCodes(statusCode)
