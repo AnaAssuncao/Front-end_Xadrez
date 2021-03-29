@@ -242,7 +242,7 @@ export default function InterfaceNetwork(){
                 }
                 else{
                     timeCounter++
-                    setTimePlayer(url,timeCounter)
+                    setTimeToFindAdv(url,timeCounter)
                 }
             },time.setToFindAdv)
     }
