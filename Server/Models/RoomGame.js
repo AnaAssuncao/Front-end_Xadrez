@@ -117,4 +117,22 @@ module.exports = class Room{
     reportIncorretMovement(){
         this.lastMove.incorretMovement=true
     }
+    verifyPlayers(){
+        if(this.playersCode.white!==null && this.playersCode.black!==null){
+            return false
+        }
+        return true
+    }
+    verifyConnectionPlayers(){
+        let connectionPlayers = false
+        if(this.infPlayers[this.playersCode.white].connection===true){
+            connectionPlayers=true
+        }
+        if(this.playersCode.black){
+            if( this.infPlayers[this.playersCode.black].connection===true){
+                connectionPlayers=true
+            }
+        }
+        return connectionPlayers
+    }
 }

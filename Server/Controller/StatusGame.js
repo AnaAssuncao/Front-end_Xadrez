@@ -1,5 +1,5 @@
-const Utilities = require('./utils')
-const utils = new Utilities
+const GameTime = require('./GameTime')
+const gameTime = new GameTime
 const {InfGame,InfTypeStatus} = require('../Models/PrototypesGame')
 const statusServer= require("../StatusServer.js")
 
@@ -28,7 +28,7 @@ module.exports = class StatusGame{
         if(existCode){
             if(endGame){
                 game.updateEndGamePlayer(playerCode)
-                utils.endGamePlayer(gameRooms.createdRooms,game)
+                gameTime.verifyToEndGame(game)
                 const statusGame= new InfGame(game,playerCode,statusServer.statusGame.endGame)
                 res.status(200).send(statusGame)
             }
@@ -52,7 +52,7 @@ module.exports = class StatusGame{
             const game = gameRooms.createdRooms[roomCode]
             if(giveUp){
                 game.updateGiveUpPlayer(playerCode)
-                utils.endGamePlayer(gameRooms.createdRooms,game)
+                gameTime.verifyToEndGame(game)
                 const statusGame= new InfGame(game,playerCode,statusServer.statusGame.giveUp)
                 res.status(200).send(statusGame)
             }

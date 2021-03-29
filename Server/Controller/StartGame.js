@@ -1,5 +1,5 @@
-const Utilities = require('./utils')
-const utils = new Utilities
+const GameTime = require('./GameTime')
+const gameTime = new GameTime
 const {InfGame,InfTypeStatus} = require('../Models/PrototypesGame')
 const { v4: uuidv4 } = require('uuid');
 const statusServer= require("../StatusServer.js")
@@ -11,7 +11,7 @@ module.exports = class RoomCode{
 		const existCode = gameRooms.verifyRoomCode(roomCode)
 		if(existCode){
 			const game = gameRooms.createdRooms[roomCode]
-			const availabilityPlay = utils.verifyPlayers(game)
+			const availabilityPlay = game.verifyPlayers()
 			if(availabilityPlay){
 				const status = new InfTypeStatus(statusServer.room.roomWithOnePlayer)
 				res.status(200).send(status)
@@ -36,15 +36,15 @@ module.exports = class RoomCode{
 		const existCode = gameRooms.verifyRoomCode(roomCode)
 		if(existCode){
 			const game = gameRooms.createdRooms[roomCode]
-			const availabilityPlay = utils.verifyPlayers(game)
+			const availabilityPlay = game.verifyPlayers()
 			if(availabilityPlay){
 				const playerCode = uuidv4()
 				const playerColor = "Black"
 				game.addSecondPlayer(playerCode,playerName,playerColor)
 				const status = new InfGame(game,playerCode,statusServer.room.connectedRoom)
 				res.status(200).send(status)
-				utils.verifyTimeMovement(game)
-				utils.verifyTimePlayers(game)
+				gameTime.verifyDelayToMovement(game)
+				gameTime.verifyInactivity(game)
 			}
 			else{
 				const status = new InfTypeStatus (statusServer.room.roomUnavailable)

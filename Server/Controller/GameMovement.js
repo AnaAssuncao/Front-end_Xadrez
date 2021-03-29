@@ -1,6 +1,4 @@
 const { InfMovement, InfTypeStatus  } = require('../Models/PrototypesGame')
-const Utilities = require('./Utils')
-const utils = new Utilities()
 const statusServer= require("../StatusServer.js")
 
 module.exports= class Movement {
