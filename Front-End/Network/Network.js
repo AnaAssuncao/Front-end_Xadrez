@@ -45,7 +45,11 @@ export default function InterfaceNetwork(){
 
     const time={
         endConnection:false,
-        timeLimit:1000
+        setToMovement:1000,
+        setToFindAdv:1000,
+        setToStatusGame:1000,
+        limitForMovement:600,
+        limitToFindAdv:600
     }
 
     const typeStatus={
@@ -179,7 +183,7 @@ export default function InterfaceNetwork(){
         },
         playerConnection: ()=>{
             const url = networkConf.routerUrl.statusGame
-            setTimePlayer(url)
+            setTimeToFindAdv(url)
         },
         statusGame: ()=>{ 
             const url = networkConf.routerUrl.statusGame
@@ -187,7 +191,7 @@ export default function InterfaceNetwork(){
         }
     }
 
-    function setTimeMoveAdv(url,timeCounter=0,timeLimit=600){
+    function setTimeMoveAdv(url,timeCounter=0,timeLimitForMovement=time.limitForMovement){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
@@ -206,7 +210,7 @@ export default function InterfaceNetwork(){
                     const status = networkUtils.callFunctionByStatusMovement(msgRes.typeStatus)
                     notifyFunctions(functionToCallBack.moveAdversary,status)
                 }
-                else if(timeCounter===timeLimit){
+                else if(timeCounter===timeLimitForMovement){
                     const status = networkUtils.callFunctionByStatusGame(typeStatus.endTimeMove)
                     notifyFunctions(functionToCallBack.playerConnection,status)
                 }
@@ -214,10 +218,10 @@ export default function InterfaceNetwork(){
                     timeCounter++
                     setTimeMoveAdv(url,timeCounter)
                 }
-            },time.timeLimit)
+            },time.setToMovement)
     }
 
-    function setTimePlayer(url,timeCounter=0,timeLimite=600){
+    function setTimeToFindAdv(url,timeCounter=0,timeLimitToFindAdv=time.limitToFindAdv){
         setTimeout(
             async()=>{
                 const msgRes = await httpMethods.get(url)
@@ -232,7 +236,7 @@ export default function InterfaceNetwork(){
                     const statusPlayerAdv= networkUtils.callFunctionByStatusGame(typeStatus.advPlayer,paramFunstionStatus)
                     notifyFunctions(functionToCallBack.playerConnection,statusPlayerAdv)
                 }
-                else if(timeCounter===timeLimite){
+                else if(timeCounter===timeLimitToFindAdv){
                     const status = networkUtils.callFunctionByStatusGame(typeStatus.endTimeAdv)
                     notifyFunctions(functionToCallBack.playerConnection,status)
                 }
@@ -240,7 +244,7 @@ export default function InterfaceNetwork(){
                     timeCounter++
                     setTimePlayer(url,timeCounter)
                 }
-            },time.timeLimit)
+            },time.setToFindAdv)
     }
 
     function setTimeStatusGame(url){
@@ -260,7 +264,7 @@ export default function InterfaceNetwork(){
                         notifyFunctions(functionToCallBack.giveUp,statusGiveUp)
                     }
                 }
-        },time.timeLimit)
+        },time.setToStatusGame)
     }
 
     const functionToCallBack= {
