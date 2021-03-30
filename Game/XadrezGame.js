@@ -95,7 +95,7 @@ export default class CreateGame {
             name:name,
             fullName:fullName,
             color:color,
-            img:`img/${img}`,
+            imgName:img,
             position:position,
             isAtive:isAtive,
             functionPiece:functionPiece,
@@ -998,9 +998,5 @@ export default class CreateGame {
     }
     getCapturedPieces(){
         return this.capturePiece
-    }
-    getImgPiecePromotion(color){
-        return this.piecesPromotion[color].imgs
-           
     }
 }

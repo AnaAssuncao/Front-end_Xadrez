@@ -133,7 +133,7 @@ export default function ViewScreen(chessBoard){
             functionToCallBack.clickChessBoard.push(fn)
         },
             //renderizar as peças conforme a chave (referência) do objeto.
-        renderBoard(chessBoard){
+        renderBoard(chessBoard,nameImgPieceFn){
             for (let key of Object.keys(chessBoard)){
                 const divSquare= document.querySelector(`#${key}`)
                 if(!!divSquare.childElementCount){
@@ -144,7 +144,7 @@ export default function ViewScreen(chessBoard){
                     const divImg = document.createElement("div")
                     const img = document.createElement("img")
                     divImg.classList.add("board__pieces")
-                    img.src=`${chessBoard[key].img}.png`
+                    img.src=nameImgPieceFn(chessBoard[key].imgName)
                     img.classList.add("pieces__imagem")
                     img.draggable = true
                     img.addEventListener("dragstart", e=>{
@@ -228,18 +228,18 @@ export default function ViewScreen(chessBoard){
         subscribeToClick(fn){
             functionToCallBack.piecesPromotion.push(fn)
         },
-        renderPiecePromotion(arrayImg){
+        renderPiecePromotion(arrayImg,namesPiecePromotion){
             const board = document.querySelector("#board")
             const squarePieces = document.createElement("div")
             squarePieces.id= "pawnPromotion"
             squarePieces.classList.add("board__squarePieces")
             board.appendChild(squarePieces) 
 
-            arrayImg.forEach((pieceImg)=>{
+            arrayImg.forEach((pieceImg,i)=>{
                 const img = document.createElement("img")
-                img.src=`${pieceImg}.png`
+                img.src=pieceImg
                 img.classList.add("squarePieces__img")
-                starGameEvent.piecesPromotion(img,pieceImg)
+                starGameEvent.piecesPromotion(img,namesPiecePromotion[i])
                 squarePieces.appendChild(img) 
             })
         },
@@ -279,7 +279,7 @@ export default function ViewScreen(chessBoard){
         addImgPiece(img,number){
             const play = document.querySelector("#history__play-" + number)
             const imgPiece = document.createElement("img")
-            imgPiece.src=`${img}.png`
+            imgPiece.src=img
             imgPiece.classList.add("play__img")
             play.appendChild(imgPiece) 
 
@@ -288,7 +288,7 @@ export default function ViewScreen(chessBoard){
             const play = document.querySelector("#history__play-" + number)
             const imgPiece = document.createElement("img")
             if(img){
-                imgPiece.src=`${img}.png`
+                imgPiece.src=img
                 imgPiece.classList.add("play__img")
             }
             else{
@@ -320,7 +320,7 @@ export default function ViewScreen(chessBoard){
     function addImagem(capturedPieceImg,player){
         const divSquare= document.querySelector(player)
         const img = document.createElement("img")
-        img.src=`${capturedPieceImg}.png`
+        img.src=capturedPieceImg
         img.classList.add("pieceDead__img")
         divSquare.appendChild(img) 
     }

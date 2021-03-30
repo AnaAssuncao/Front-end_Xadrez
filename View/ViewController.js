@@ -12,6 +12,7 @@ export default function ViewController(startBoard){
             currentPlayer:null,
         }
     }
+    const imgPiece = (img)=>`Img/${img}.png`
     const updateInput ={
         allInput:(chessBoard,currentPlayer)=>{
             updateInput.inputColor(currentPlayer)
@@ -55,7 +56,7 @@ export default function ViewController(startBoard){
             if(chess.pieceSelect.position){
                 view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             }
-            view.chessBoard.renderBoard(chessBoard)
+            view.chessBoard.renderBoard(chessBoard,imgPiece)
             updateInput.allInput(chessBoard,currentPlayer)
             chess.informationBoard.chessBoard = chessBoard
             chess.informationBoard.currentPlayer = currentPlayer
@@ -78,10 +79,10 @@ export default function ViewController(startBoard){
                 const number = Number(indPlay)+1
                 view.playHitory.addPlay(number) 
                 history[indPlay].piecesPlayed.forEach((piece,ind)=>{
-                    view.playHitory.addImgPiece(piece.img,number)
+                    view.playHitory.addImgPiece(imgPiece(piece.imgName),number)
                     view.playHitory.addRefId(utilities.refIdToCoordinate(piece.position),number,"last")
                     view.playHitory.addRefId(utilities.refIdToCoordinate(history[indPlay].newRefId[ind]),number,"new")
-                    const imgPieceCaptured = (history[indPlay].pieceCaptured && ind!==1)?history[indPlay].pieceCaptured.img:null
+                    const imgPieceCaptured = (history[indPlay].pieceCaptured && ind!==1)?imgPiece(history[indPlay].pieceCaptured.imgName):null
                     view.playHitory.addPieceCaptured(imgPieceCaptured,number)
                 })
             }
@@ -106,10 +107,10 @@ export default function ViewController(startBoard){
             const bottom=[]
             for(let capturedPiece in capturedPieces){ 
                 if(color==capturedPieces[capturedPiece].color){
-                    top.push(capturedPieces[capturedPiece].img)
+                    top.push(imgPiece(capturedPieces[capturedPiece].imgName))
                 }
                 else{
-                    bottom.push(capturedPieces[capturedPiece].img)
+                    bottom.push(imgPiece(capturedPieces[capturedPiece].imgName))
                 }
             }
             view.capturedPiece.colorTop(top) //renderColorTop nome
@@ -218,9 +219,6 @@ export default function ViewController(startBoard){
             }
         },
         movePiece: function(idSquare,informationMove,piece=null){
-            if(piece){
-                piece= piece.replace("Img/","")
-            }
             const informationPieceSelect={
                 fullName:  informationMove.namePiece,
                 typeMovement: informationMove.type,
@@ -451,14 +449,15 @@ export default function ViewController(startBoard){
         },
         piecePromotion: function(idSquare,typeMovement){
             let piecePromotion = false
-            const imgPiecePromotion={
-                Black:["Img/towerBlack","Img/knightBlack","Img/bishopBlack","Img/queenBlack"],
-                White:["Img/towerWhite","Img/knightWhite","Img/bishopWhite","Img/queenWhite"]
+            const namesPiecePromotion={
+                Black:["towerBlack","knightBlack","bishopBlack","queenBlack"],
+                White:["towerWhite","knightWhite","bishopWhite","queenWhite"]
             }
             if(typeMovement==="piecePromotion"){
                 chess.pieceSelect.newMovements=idSquare
-                const imgPromotion=imgPiecePromotion[chess.pieceSelect.color]
-                view.piecesPromotion.renderPiecePromotion(imgPromotion)
+                const namesPromotion=namesPiecePromotion[chess.pieceSelect.color]
+                const imgsPiecesPromotion = namesPromotion.map((img)=>imgPiece(img))
+                view.piecesPromotion.renderPiecePromotion(imgsPiecesPromotion,namesPromotion)
                 piecePromotion = true
             }
             return piecePromotion 
