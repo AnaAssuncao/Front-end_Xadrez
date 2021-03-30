@@ -143,8 +143,8 @@ export default function ViewController(startBoard){
         },
         updateConnection(connection){
             const imgs={
-                offline:"img/Offline_logo.svg",
-                online:"img/Online_logo.svg"
+                offline:"Img/Offline_logo.svg",
+                online:"Img/Online_logo.svg"
             }
             const img = imgs[connection.typeGame]
             const msgConnection = connection.msg
@@ -219,7 +219,7 @@ export default function ViewController(startBoard){
         },
         movePiece: function(idSquare,informationMove,piece=null){
             if(piece){
-                piece= piece.replace("img/","")
+                piece= piece.replace("Img/","")
             }
             const informationPieceSelect={
                 fullName:  informationMove.namePiece,
@@ -452,8 +452,8 @@ export default function ViewController(startBoard){
         piecePromotion: function(idSquare,typeMovement){
             let piecePromotion = false
             const imgPiecePromotion={
-                Black:["img/towerBlack","img/knightBlack","img/bishopBlack","img/queenBlack"],
-                White:["img/towerWhite","img/knightWhite","img/bishopWhite","img/queenWhite"]
+                Black:["Img/towerBlack","Img/knightBlack","Img/bishopBlack","Img/queenBlack"],
+                White:["Img/towerWhite","Img/knightWhite","Img/bishopWhite","Img/queenWhite"]
             }
             if(typeMovement==="piecePromotion"){
                 chess.pieceSelect.newMovements=idSquare

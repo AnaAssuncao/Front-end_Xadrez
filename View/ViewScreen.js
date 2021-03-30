@@ -371,7 +371,7 @@ export default function ViewScreen(chessBoard){
             const modal= document.querySelector(".modal__details")
             const icon = document.querySelector(".icon_micro")
             buttonStar.addEventListener("click", ()=>{
-                const srcImg = icon.getAttribute("src")!=="img/down-chevron.svg"?"img/down-chevron.svg":"img/up-chevron.svg"
+                const srcImg = icon.getAttribute("src")!=="Img/down-chevron.svg"?"Img/down-chevron.svg":"Img/up-chevron.svg"
                 icon.setAttribute("src",srcImg)
                 modal.classList.toggle("modal__details--display")
             })
