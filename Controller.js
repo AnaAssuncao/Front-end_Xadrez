@@ -334,7 +334,7 @@ class OnlineGame extends GenericGame{
             viewController.informationProminent(msgsAndAlerts.incorrectMovement(gameSetup.currentPlayerColor))
         }
         
-        this.updateDisplayGame(nextColor,gameSetup.colorsGame.top,isPlayable)
+        this.updateDisplayGame(gameSetup.colorsGame.top,nextColor,isPlayable)
     }
 
     getMoveAdv(moveAdv){
