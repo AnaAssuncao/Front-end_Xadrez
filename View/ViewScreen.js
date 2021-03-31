@@ -526,16 +526,16 @@ export default function ViewScreen(chessBoard){
     function renderButtonStartOnline(selectModal){
         const buttons = document.createElement("div")
         const buttonStartCode = document.createElement("button")
-        const buttonStartRoom = document.createElement("button")
+        const buttonConnectRoom = document.createElement("button")
         buttons.classList.add("start_buttonOnlineGame")
         buttonStartCode.classList.add("button__gameOnline--code")
         starGameEvent.buttonStartNewRoom(buttonStartCode)
-        buttonStartRoom.classList.add("button__gameOnline--code")
-        starGameEvent.buttonConnectInARoom(buttonStartRoom)
-        buttonStartCode.innerHTML = "Iniciar Código"
-        buttonStartRoom.innerHTML = "Iniciar em uma Sala"
+        buttonConnectRoom.classList.add("button__gameOnline--code")
+        starGameEvent.buttonConnectInARoom(buttonConnectRoom)
+        buttonStartCode.innerHTML = "Criar uma sala"
+        buttonConnectRoom.innerHTML = "Conectar com um amigo"
         buttons.appendChild(buttonStartCode)
-        buttons.appendChild(buttonStartRoom)
+        buttons.appendChild(buttonConnectRoom)
         selectModal.appendChild(buttons)
     }
 }
