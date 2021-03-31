@@ -298,14 +298,14 @@
 }
 .move__piece--possibilities-l{
     border: solid 2px black;
-    background-image: url("img/posible-moviment.svg");
+    background-image: url("Img/possible-movement.svg");
     background-size: 15px 15px;
     background-position: top left;
     background-repeat:no-repeat;
 }   
 .move__piece--possibilities-d{
     border: solid 2px black;
-    background-image: url("img/posible-moviment.svg");
+    background-image: url("Img/possible-movement.svg");
     background-size: 15px 15px;
     background-position: top left;
     background-repeat:no-repeat;
