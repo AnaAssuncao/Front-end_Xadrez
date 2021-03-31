@@ -4,7 +4,7 @@ const httpMethods = new MethodsHTTP()
 
 class Router{
     constructor(){
-        this.pref="http://localhost:3030/api/v1"
+        this.pref=(window.location.hostname==="127.0.0.1")?"http://localhost:3030/api/v1":"https://xadrez-server.herokuapp.com/api/v1"
         this.query=null
         this.startNewRoom= this.pref +"/startGame/startNewRoom"
         this.connectInARoom= this.pref + "/startGame/connectInARoom"
