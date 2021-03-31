@@ -4,7 +4,7 @@ const httpMethods = new MethodsHTTP()
 
 class Router{
     constructor(){
-        this.pref="https://xadrez-server.herokuapp.com/api/v1"
+        this.pref="http://localhost:3030/api/v1"
         this.query=null
         this.startNewRoom= this.pref +"/startGame/startNewRoom"
         this.connectInARoom= this.pref + "/startGame/connectInARoom"
@@ -240,7 +240,7 @@ export default function InterfaceNetwork(){
                     const status = networkUtils.callFunctionByStatusGame(typeStatus.endTimeAdv)
                     notifyFunctions(functionToCallBack.playerConnection,status)
                 }
-                else{
+                else if(msgRes.statusGame.endGame===false){
                     timeCounter++
                     setTimeToFindAdv(url,timeCounter)
                 }
