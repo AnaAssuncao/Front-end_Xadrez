@@ -258,7 +258,6 @@ class OnlineGame extends GenericGame{
             const isPlayable = false
             this.updateDisplayGame(gameSetup.colorsGame.top,gameSetup.currentPlayerColor, isPlayable)
             network.enableCalls.playerConnection()
-            network.enableCalls.statusGame()
         }
         else{
             viewController.informationProminent(informationConnectionRoom.msg)
@@ -293,7 +292,7 @@ class OnlineGame extends GenericGame{
     }
     
     connectionPlayerTwo(statusPlayerAdv){
-        if(statusPlayerAdv.connection===false){
+        if(statusPlayerAdv.isAdvConnected===false){
             viewController.displayEndGameInformation(statusPlayerAdv.msg)
             gameSetup.addLogGame(statusPlayerAdv.msg)
             this.updateDisplayLog()
@@ -309,6 +308,7 @@ class OnlineGame extends GenericGame{
             gameSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(gameSetup.currentPlayerColor))
             gameSetup.addLogGame(msgsAndAlerts.startGame.startGame())
             this.updateDisplayGame(gameSetup.colorsGame.top,gameSetup.currentPlayerColor)
+            network.enableCalls.statusGame()
         }
     }
 

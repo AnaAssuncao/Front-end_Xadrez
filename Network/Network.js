@@ -254,7 +254,7 @@ export default function InterfaceNetwork(){
                 const status = await httpMethods.get(url)
                 if(typeStatus.errServer===status){
                     clearInterval(waitInf) 
-                    const err=networkUtils.callFunctionByStatusServer(msgRes)
+                    const err=networkUtils.callFunctionByStatusServer(status)
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
                 else if(status.statusGame.giveUp===true ||  status.statusGame.endGame===true){

@@ -91,7 +91,7 @@ const functionsStatusMovement={
 const functionsStatusGame={
     advPlayer:function(param){
         const sendController={
-            connection:param.statusPlayerAdv.connection,
+            isAdvConnected:true,
             namePlayer:param.statusPlayerAdv.namePlayer,
             colorWin: param.statusPlayerAdv.color
         }
@@ -99,7 +99,7 @@ const functionsStatusGame={
     },
     endTimeAdv:function(){
         const sendController={
-            connection:false,
+            isAdvConnected:false,
             msg:msgsAndAlerts.startGame.noAdv(),
         }
         return sendController
