@@ -199,6 +199,7 @@ export default class OnlineGame extends GenericGame{
         this.gameSetup.addInformationPlayerOnline(playerInformation.statusPlayers.playerName,playerInformation.statusPlayers.playerColor,playerInformation.statusCode)
         this.gameSetup.addNamePlayerAdv(playerInformation.statusPlayers.advName)
         this.gameSetup.updateCurrentPlayerColor(this.gameSetup.colorsGame.bottom)
+        this.gameSetup.updateTimeConnection()
         this.game.starObjGame(this.gameSetup.currentPlayerColor)
         this.gameSetup.addLogGame(msgsAndAlerts.roomAndCode.connectedRoom(playerInformation.statusCode.roomCode))
         this.gameSetup.addLogGame(msgsAndAlerts.connection.connected(room.statusPlayerAdv.namePlayer))
