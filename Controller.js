@@ -48,7 +48,7 @@ const interfaceFunctions={
     }
 }
 
-viewController.displayHomeMenu()
+recoveryGame()
 viewController.subscribeStartGameOffline(interfaceFunctions.startGameOffline)
 viewController.subscribeStartNewRoomOnline(interfaceFunctions.startNewRoomOnline)
 viewController.subscribeConnectInARoomOnline(interfaceFunctions.connectInARoomOnline)
@@ -59,3 +59,27 @@ network.subscribeMoveAdversary(interfaceFunctions.moveAdv)
 network.subscribePlayerConnection(interfaceFunctions.playerConnection)
 network.subscribeGiveUp(interfaceFunctions.giveUp)
 network.subscribeErrConnection(interfaceFunctions.errConnection)
+
+async function recoveryGame(){
+    const playerInformationJSON = localStorage.getItem("playerInformation")
+    if(playerInformationJSON){
+        const playerInformation = JSON.parse(playerInformationJSON)
+        if((Date.now()-playerInformation.timeConnection)>gameSetup.time.connection){
+            const room = await network.sendServer.checkGameReconnection(playerInformation.statusCode)
+            if(room.isConnected && room.statusPlayerAdv.namePlayer===playerInformation.statusPlayers.advName){
+                gameSetup.addGame(new OnlineGame(game,gameSetup,viewController,network))
+                gameSetup.game.startReconnection(room,playerInformation)
+            }
+            else{
+                gameSetup.clearLocalStorage()
+                viewController.displayHomeMenu()
+            }    
+        }
+        else{
+            viewController.displayHomeMenu()
+        }  
+    }
+    else{
+        viewController.displayHomeMenu()
+    }
+}

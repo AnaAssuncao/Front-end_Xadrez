@@ -11,7 +11,9 @@ const roomAndCode={
     roomUnavailable:()=>"Nesta sala já está acontecendo um jogo, tente outro código",
     connectedRoom:(code)=>"Conectado a sala " + code,
     noExistRoom:()=>"Está sala não existe, cria esta sala.",
-    waitAgain:()=>"Não é sua vez de jogar, aguarde." 
+    waitAgain:()=>"Não é sua vez de jogar, aguarde." ,
+    reconnectRoom:()=>"Sala reconectada",
+    roomNotReconnected:()=>"Sala não reconectada",
 }
 
 const connection={

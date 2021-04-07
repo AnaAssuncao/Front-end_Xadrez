@@ -30,6 +30,7 @@ const functionsStatusRoom={
                 namePlayer:param.statusPlayerAdv.namePlayer,
                 color:param.statusPlayerAdv.color
             },
+            statusCodes:param.statusCodes,
             msg:msgsAndAlerts.roomAndCode.connectedRoom(param.statusCodes.roomCode)
         }
         notifyUpdates(functionToCallBack.updateCode,param.statusCodes)
@@ -40,6 +41,22 @@ const functionsStatusRoom={
             serverConnection:false,
             msg:msgsAndAlerts.roomAndCode.noExistRoom()
         }
+        return sendController
+    },
+    roomNotReconnected:function(){
+        const sendController=  {
+            isConnected:false,
+            msg:msgsAndAlerts.roomAndCode.roomNotReconnected()
+        }
+        return sendController
+    },
+    reconnectRoom:function(param){
+        const sendController=  {
+            isConnected:true,
+            statusPlayerAdv:param.statusPlayerAdv,
+            msg:msgsAndAlerts.roomAndCode.reconnectRoom()
+        }
+        notifyUpdates(functionToCallBack.updateCode,param.statusCode)
         return sendController
     }
 }

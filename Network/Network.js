@@ -12,6 +12,7 @@ class Router{
         this.incorrectMovement= this.pref +"/movementGame/incorrectMovement"
         this.giveUpGame= this.pref +"/giveUpGame"
         this.endGame= this.pref +"/endGame"
+        this.reconnectRoom= this.pref + "/reconnectRoom"
         this.prefGetmovement= this.pref +"/movementGame/getMovement?"
         this.prefStatusGame= this.pref +"/statusGame?"
         this.getMovement = null
@@ -110,6 +111,24 @@ export default function InterfaceNetwork(){
                 return status
             }
         },
+
+        async checkGameReconnection(statusCode){
+            networkConf = new NetworkSetup()
+            const url = networkConf.routerUrl.reconnectRoom
+            const msgRes = await httpMethods.post(statusCode,url)
+            if(typeStatus.errServer===msgRes){
+                const status=networkUtils.callFunctionByStatusServer(msgRes)
+                return status
+            }
+            else{
+                const paramFunstionStatus ={
+                    statusPlayerAdv:msgRes.statusPlayerAdv,
+                    statusCode:statusCode
+                }
+                const status=networkUtils.callFunctionByStatusRoom(msgRes.connection,paramFunstionStatus)
+                return status
+            } 
+         },
 
         moveGame: async(move) =>{
             const url = networkConf.routerUrl.updateMovement

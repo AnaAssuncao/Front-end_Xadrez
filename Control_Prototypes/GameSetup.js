@@ -8,12 +8,20 @@ export default class GameSetup{
         }
         this.currentPlayerColor=null
         this.onlineConf={
-            playerColor:null,
-            playerName:null,
-            advName:null
+            timeConnection:null,
+            statusPlayers:{
+                playerColor:null,
+                playerName:null,
+                advName:null
+            },
+            statusCode:null,
         }
+        this.historyMovements=[]
         this.gameLogs=[]
         this.endGame=false
+        this.time={
+            connection:5000
+        }
     }
     updateCurrentPlayerColor(color){
         this.currentPlayerColor=color
@@ -25,12 +33,25 @@ export default class GameSetup{
     updateEndGame(){
         this.endGame=true
     }
-    addInformationPlayerOnline(playerName,playerColor){
-        this.onlineConf.playerColor=playerColor
-        this.onlineConf.playerName=playerName
+    addInformationPlayerOnline(playerName,playerColor,statusCode){
+        this.onlineConf.statusPlayers.playerColor=playerColor
+        this.onlineConf.statusPlayers.playerName=playerName
+        this.onlineConf.statusCode=statusCode
+        this.onlineConf.timeConnection=Date.now()
+    }
+    updateTimeConnection(){
+        setTimeout(()=>{
+            if(this.endGame===false){
+                this.onlineConf.timeConnection=Date.now()
+                this.addPlayerLocalStorage()
+                if(this.endGame===false){
+                    this.updateTimeConnection()
+                }
+            }
+        },1000)
     }
     addNamePlayerAdv(advName){
-        this.onlineConf.advName=advName
+        this.onlineConf.statusPlayers.advName=advName
     }
     addLogGame(information){
         const displayLog = msgsAndAlerts.log.gamelog(information)
@@ -39,10 +60,21 @@ export default class GameSetup{
     clearGame(){
         this.game=null
         this.currentPlayerColor=null
-        this.onlineConf.playerColor=null
-        this.onlineConf.playerName=null
-        this.onlineConf.advName=null
+        this.onlineConf.statusPlayers.playerColor=null
+        this.onlineConf.statusPlayers.playerName=null
+        this.onlineConf.statusPlayers.advName=null
         this.gameLogs=[]
+    }
+    addPlayerLocalStorage(){
+        localStorage.setItem("playerInformation", JSON.stringify(this.onlineConf))
+    }
+    addHistoryLocalStorage(movement){
+        this.historyMovements.push(movement)
+        localStorage.setItem("historyPlayer", JSON.stringify(this.historyMovements))
+    }
+    clearLocalStorage(){
+        this.historyMovements=[]
+        localStorage.clear()
     }
 }
 
