@@ -14,6 +14,7 @@ const roomAndCode={
     waitAgain:()=>"Não é sua vez de jogar, aguarde." ,
     reconnectRoom:()=>"Sala reconectada",
     roomNotReconnected:()=>"Sala não reconectada",
+    runningGame:()=>"Possivelmente existe uma aba de jogo aberta, feche e recarregue esta. Caso não estiver, recarregue a página após 5 segundos."
 }
 
 const connection={

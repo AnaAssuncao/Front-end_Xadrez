@@ -11,6 +11,7 @@ export default function ViewScreen(chessBoard){
         buttonBackMovement:[],
         piecesPromotion:[]
     }
+
     this.homeMenu={
         clear(){
             const selectModal = document.querySelector("#startGame")
@@ -29,6 +30,19 @@ export default function ViewScreen(chessBoard){
     this.alerts={
         alertInformation(text){
             alert(text)
+        }
+    }
+
+    this.banner={
+        addBannerGame(text){
+            const chess = document.querySelector("#chess")
+            const banner = document.createElement("div")
+            banner.classList.add("chess__banner")
+            const textBanner = document.createElement("p")
+            textBanner.classList.add("banner__text")
+            textBanner.innerText=text
+            banner.appendChild(textBanner)
+            chess.appendChild(banner)
         }
     }
 

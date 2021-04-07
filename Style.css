@@ -4,7 +4,7 @@
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif,'Times New Roman', Times, serif;
 }
-.chess{
+#chess{
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
@@ -417,7 +417,6 @@
     height: 100vh;
     z-index:9999;
     display: none;
-
 }
 .start__infOnlineGame{
     display: flex;
@@ -461,4 +460,20 @@
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+}
+.chess__banner{
+    background-color: rgb(117, 155, 112);
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index:9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.banner__text{
+    color:#fff;
+    font-size: 2em;
+    width: 50%;
+    text-align: center;
 }

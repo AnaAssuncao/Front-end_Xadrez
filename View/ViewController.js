@@ -153,7 +153,7 @@ export default function ViewController(startBoard){
         }
     }
 
-    const endGameinformation={
+    const endGameInformation={
         addModal(msgsEndGame){
             view.modalOnBoard.renderModal(msgsEndGame)
         },
@@ -299,8 +299,14 @@ export default function ViewController(startBoard){
     const gameAlerts={
         informationAlert(text){
             view.alerts.alertInformation(text)
-        }
+        } 
     }      
+
+    const banner ={
+        addBannerGame(text){
+            view.banner.addBannerGame(text)
+        } 
+    }
 
     const functionToCallBack= {
         movePiece:[],
@@ -389,11 +395,11 @@ export default function ViewController(startBoard){
     }
 
     this.displayEndGameInformation=function(information,complementColor,complementoName){
-        endGameinformation.addModal(information,complementColor,complementoName)
+        endGameInformation.addModal(information,complementColor,complementoName)
     }
 
     this.hideEndGameInformation=function(information){
-        endGameinformation.clearModal(information)
+        endGameInformation.clearModal(information)
     }
 
     this.informationProminent=function(text){
@@ -406,6 +412,10 @@ export default function ViewController(startBoard){
 
     this.displayGameLog=function(text){
         statusLog.updateMsgsLog(text)
+    }
+
+    this.displayBannerGame=function(text){
+        banner.addBannerGame(text)
     }
 
     const utilities ={
