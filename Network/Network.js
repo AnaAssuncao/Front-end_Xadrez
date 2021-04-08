@@ -6,6 +6,7 @@ class Router{
     constructor(){
         this.pref=(window.location.hostname==="127.0.0.1")?"http://localhost:3030/api/v1":"https://xadrez-server.herokuapp.com/api/v1"
         this.query=null
+        this.wakeUp=this.pref +"/wakeUp"
         this.startNewRoom= this.pref +"/startGame/startNewRoom"
         this.connectInARoom= this.pref + "/startGame/connectInARoom"
         this.updateMovement= this.pref + "/movementGame/updateMovement"
@@ -66,8 +67,12 @@ export default function InterfaceNetwork(){
 
 
     this.sendServer={
-        startNewRoom: async(nickAndCode) =>{
+        wakeUp: ()=>{
             networkConf = new NetworkSetup()
+            const url = networkConf.routerUrl.wakeUp
+            const msgRes = httpMethods.get(url)
+        },
+        startNewRoom: async(nickAndCode) =>{    
             const url = networkConf.routerUrl.startNewRoom
             // nickAndCode = {name:value, roomCode:value}
             const infMultiplayer = {
@@ -90,7 +95,6 @@ export default function InterfaceNetwork(){
         },
 
         async connectInARoom(nickAndCode){
-            networkConf = new NetworkSetup()
             const url = networkConf.routerUrl.connectInARoom
             // nickAndCode = {name:value, roomCode:value}
             const infMultiplayer = {
@@ -113,7 +117,6 @@ export default function InterfaceNetwork(){
         },
 
         async checkGameReconnection(statusCode){
-            networkConf = new NetworkSetup()
             const url = networkConf.routerUrl.reconnectRoom
             const msgRes = await httpMethods.post(statusCode,url)
             if(typeStatus.errServer===msgRes){

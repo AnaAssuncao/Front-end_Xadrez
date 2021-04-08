@@ -50,6 +50,7 @@ const interfaceFunctions={
 }
 
 recoveryGame()
+wakeUpServer()
 viewController.subscribeStartGameOffline(interfaceFunctions.startGameOffline)
 viewController.subscribeStartNewRoomOnline(interfaceFunctions.startNewRoomOnline)
 viewController.subscribeConnectInARoomOnline(interfaceFunctions.connectInARoomOnline)
@@ -60,6 +61,10 @@ network.subscribeMoveAdversary(interfaceFunctions.moveAdv)
 network.subscribePlayerConnection(interfaceFunctions.playerConnection)
 network.subscribeGiveUp(interfaceFunctions.giveUp)
 network.subscribeErrConnection(interfaceFunctions.errConnection)
+
+function wakeUpServer(){
+    network.sendServer.wakeUp()
+}
 
 async function recoveryGame(){
     const playerInformationJSON = localStorage.getItem("playerInformation")
