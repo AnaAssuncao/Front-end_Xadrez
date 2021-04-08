@@ -190,7 +190,7 @@ export default class OnlineGame extends GenericGame{
         }
     }
 
-    startReconnection(room,playerInformation){
+    startReconnection(room,playerInformation,plays){
         const connection={
             msg:msgsAndAlerts.connection.connected(room.statusPlayerAdv.namePlayer),
             typeGame:"online",
@@ -205,7 +205,7 @@ export default class OnlineGame extends GenericGame{
         this.gameSetup.addLogGame(msgsAndAlerts.connection.connected(room.statusPlayerAdv.namePlayer))
         this.gameSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.gameSetup.currentPlayerColor))
         this.gameSetup.addLogGame(msgsAndAlerts.startGame.startGame())
-        const isCurrentPlayer=this.redoMovements()
+        const isCurrentPlayer=this.redoMovements(plays)
         this.gameSetup.addLogGame(msgsAndAlerts.roomAndCode.reconnectRoom())
         this.network.enableCalls.statusGame()
         if(isCurrentPlayer===false){
@@ -213,22 +213,17 @@ export default class OnlineGame extends GenericGame{
         }
     }
 
-    redoMovements(){
-        const savedPlaysJSON = localStorage.getItem("historyPlayer")
-        if(savedPlaysJSON){
-            const plays = JSON.parse(savedPlaysJSON)
-            plays.forEach((informationPieceSelect)=>{  
-                const isMove =this.movePiece(informationPieceSelect)
-                if(isMove){
-                    const nextColor=(this.gameSetup.colorsGame.top===this.gameSetup.currentPlayerColor)?this.gameSetup.colorsGame.bottom:this.gameSetup.colorsGame.top
-                    this.gameSetup.addLogGame(msgsAndAlerts.movement.movementPiece(this.gameSetup.currentPlayerColor))
-                    this.gameSetup.updateCurrentPlayerColor(nextColor)
-                    this.gameSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.gameSetup.currentPlayerColor))
-                    this.gameSetup.addHistoryLocalStorage(informationPieceSelect)
-                }
-            })
-        }   
-
+    redoMovements(plays){
+        plays.forEach((informationPieceSelect)=>{  
+            const isMove =this.movePiece(informationPieceSelect)
+            if(isMove){
+                const nextColor=(this.gameSetup.colorsGame.top===this.gameSetup.currentPlayerColor)?this.gameSetup.colorsGame.bottom:this.gameSetup.colorsGame.top
+                this.gameSetup.addLogGame(msgsAndAlerts.movement.movementPiece(this.gameSetup.currentPlayerColor))
+                this.gameSetup.updateCurrentPlayerColor(nextColor)
+                this.gameSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.gameSetup.currentPlayerColor))
+                this.gameSetup.addHistoryLocalStorage(informationPieceSelect)
+            }
+        })
         const isPlayable = (this.gameSetup.onlineConf.statusPlayers.playerColor===this.gameSetup.currentPlayerColor)?true:false
         this.updateDisplayGame(this.gameSetup.colorsGame.top,this.gameSetup.currentPlayerColor,isPlayable)
         return isPlayable

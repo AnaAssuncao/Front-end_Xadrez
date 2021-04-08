@@ -67,9 +67,24 @@ async function recoveryGame(){
         const playerInformation = JSON.parse(playerInformationJSON)
         if((Date.now()-playerInformation.timeConnection)>gameSetup.time.connection){
             const room = await network.sendServer.checkGameReconnection(playerInformation.statusCode)
+            const savedPlaysJSON = localStorage.getItem("historyPlayer")
+            const plays = (savedPlaysJSON)?JSON.parse(savedPlaysJSON):null
             if(room.isConnected && room.statusPlayerAdv.namePlayer===playerInformation.statusPlayers.advName){
                 gameSetup.addGame(new OnlineGame(game,gameSetup,viewController,network))
-                gameSetup.game.startReconnection(room,playerInformation)
+                if(plays){
+                    if(room.qtMovements===plays.length || (room.qtMovements-1)===plays.length){
+                        gameSetup.game.startReconnection(room,playerInformation,plays)
+                    }
+                    else{
+                        gameSetup.game.restartGame()
+                    }
+                }
+                else if(room.qtMovements===0){
+                    gameSetup.game.startReconnection(room,playerInformation,plays)
+                }
+                else{
+                    gameSetup.game.restartGame()
+                }
             }
             else{
                 gameSetup.clearLocalStorage()

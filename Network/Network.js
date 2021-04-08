@@ -123,6 +123,7 @@ export default function InterfaceNetwork(){
             else{
                 const paramFunstionStatus ={
                     statusPlayerAdv:msgRes.statusPlayerAdv,
+                    qtMovements:msgRes.qtMovements,
                     statusCode:statusCode
                 }
                 const status=networkUtils.callFunctionByStatusRoom(msgRes.connection,paramFunstionStatus)

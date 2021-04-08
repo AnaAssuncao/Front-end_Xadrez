@@ -54,6 +54,7 @@ const functionsStatusRoom={
         const sendController=  {
             isConnected:true,
             statusPlayerAdv:param.statusPlayerAdv,
+            qtMovements:param.qtMovements,
             msg:msgsAndAlerts.roomAndCode.reconnectRoom()
         }
         notifyUpdates(functionToCallBack.updateCode,param.statusCode)
