@@ -37,7 +37,7 @@
 .chess__move{
     margin: 0px 1% 0px 2%;
     width: 20%; 
-    height: 40%;
+    height: 45%;
     display:flex;
     flex-flow:column nowrap;
     justify-content: space-around;
@@ -46,7 +46,7 @@
     display: flex;
     flex-flow: column nowrap;
     width:100%;
-    height: 100%;
+    height: 20%;
 }
 .move__title{
     background-color: #E8884A;
@@ -58,6 +58,10 @@
     background-color: rgb(245, 252, 244);
     margin-top:10%;
     font-weight: 500; 
+    height: 15%;
+}
+.move__input{
+    font-size:1em;
 }
 #select__color{
     border:none;
@@ -565,6 +569,7 @@
      }
     .move__column{
         width:25%;
+        height: 100%;
     }
     .move__title{
         display: flex;
@@ -740,7 +745,7 @@
     }
     .chess__banner{
         width: 100vw;
-        height: 150vh;
+        height: 160vh;
     }
     .banner__text{
         font-size: 4em;
