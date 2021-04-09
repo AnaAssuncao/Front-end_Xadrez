@@ -21,17 +21,18 @@
     height: 30%;
     margin:1% 1% 2% 2%;
 }
-.cless__title{
-    font-size:3em;
+.chess__title{
+    font-size:2.6em;
     color: rgb(60, 85, 60);
 }
 .chess__button{
     font-weight: 500;
     font-size: 1em;
     background-color: rgb(117, 155, 112);
-    width:60%;
-    height:30%;
-    margin-top:25%;
+    width:40%;
+    height:20%;
+    margin-top:3%;
+    box-shadow: 3px 3px 15px rgb(77, 77, 77);
 }
 .chess__move{
     margin: 0px 1% 0px 2%;
@@ -84,8 +85,36 @@
 .start__infOnlineGame{
     display: flex;
     flex-flow: column nowrap;
+    align-items: center;
+    width: 100%;
+    height: 22%;
+}
+.start__inputsOnlineGame{
+    display: flex;
+    flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    height: 100%;
+}
+.input__gameOnline--name,
+.input__gameOnline--code
+{
+    font-size: 1em; 
+    width:35%;
+    height: 30%;
+    margin-top:0.2%;
+}
+.start__buttonOnlineGame{
+    display: flex;
+    flex-flow:column nowrap;
+    width: 30%;
+    height: 60%;
+    font-size: 1em;
+}
+.button__gameOnline--code{
+    margin:0.4%;
+    font-size: 1em;
 }
 .button__gameOnline--inf{
     background-color: rgb(117, 155, 112);
@@ -94,6 +123,11 @@
 }
 .chess__startGame--display{
     display: block;
+}
+#button__newGame{
+    margin-top:25%;
+    width:50%;
+    height:30%;
 }
 .main__column{
     display: flex;
@@ -481,13 +515,6 @@
 .move__back--display{
     display: none;
 }
-
-.start__inputsOnlineGame{
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: center;
-}
 .chess__banner{
     background-color: rgb(117, 155, 112);
     position: absolute;
@@ -531,7 +558,7 @@
     }
     .chess__move{
         order:3;
-        margin:3% 0 3% 0;
+        margin:5% 0 5% 0;
         width:100%;
         height: 5%;
         flex-flow: row nowrap;
@@ -558,34 +585,36 @@
         height: 30%;
     }
     .chess__startGame{
-        height: 150vh;
+        height: 150%;
     }
     .chess__button__startGame{
         justify-content: start;
-        padding-top:30%;
+        padding-top:20%;
     }
     .button__startGame{
         width:60%;
-        height: 10%;
-    }
-    .start__infOnlineGame{
-        width: 100%;
+        height:10%;
     }
     .button__gameOnline--inf{
         width:50%;
         height: 5%;
     }
+    .start__infOnlineGame{
+        height: 15%; 
+    }
+    .start__inputsOnlineGame{
+        height: 30%;
+    }
     .input__gameOnline--name,
     .input__gameOnline--code
     {
         font-size: 2em; 
-        width: 30%;
-        height: 30%;
+        width: 50%;
+        height: 50%;
     }
     .start__buttonOnlineGame{
-        display: flex;
-        flex-flow:column nowrap;
-        width: 30%;
+        margin-top:2%;
+        width: 40%;
         height: 10%;
         font-size: 2em;
     }
@@ -593,11 +622,17 @@
         margin-bottom: 3%;
         font-size: 1.2em;
     }
+    #button__newGame{
+        margin-top:5%;
+        width:40%;
+        height:30%;
+    }
     .main__column{
         order:2;
         align-items: center;
         width: 100%;
         height: 40%;
+        margin-bottom:5%;
     }
     .status__game__row{
         width: 98%;
@@ -702,10 +737,6 @@
     }
     .move__back--display{
         display: none;
-    }
-    .start__inputsOnlineGame{
-        width: 100%;
-        height: 100%;
     }
     .chess__banner{
         width: 100vw;
