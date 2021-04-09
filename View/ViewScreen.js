@@ -16,9 +16,10 @@ export default function ViewScreen(chessBoard){
         clear(){
             const selectModal = document.querySelector("#startGame")
             selectModal.classList.toggle("chess__startGame--display")
+            const buttonModal = document.querySelector("#button__startGame")
             const infToStartGame= document.querySelector(".start__infOnlineGame")
             if(infToStartGame){
-                selectModal.removeChild(infToStartGame)
+                buttonModal.removeChild(infToStartGame)
             }
         },
         render(){
@@ -512,7 +513,7 @@ export default function ViewScreen(chessBoard){
     }
 
     function renderInputOnlineGame(){
-        const selectModal = document.querySelector("#startGame")
+        const selectModal = document.querySelector("#button__startGame")
         const selectInfOnlineGame= document.querySelector(".start__infOnlineGame")
         if(selectInfOnlineGame===null){      
             const nickAndCode = document.createElement("div") 

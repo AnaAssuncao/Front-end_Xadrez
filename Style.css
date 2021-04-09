@@ -13,21 +13,48 @@
 }
 .chess__header{
     display: flex;
+    height: 80%;
     flex-flow: column nowrap;
     align-items: center;
-    justify-content: space-around;
-    height: 60%;
-    align-self: start;
-    margin-top:3%;
+    justify-content: space-between;
+    margin:1%;
 }
-.cless__titte{
+.cless__title{
     color: rgb(60, 85, 60);
 }
 .chess__button{
+    font-weight: 500;
+    font-size: 1em;
     background-color: rgb(117, 155, 112);
-    width:40%;
-    height:10%;
+    width:60%;
+    height:15%;
     margin:2%;
+}
+.chess__move{
+    width: 100%; 
+    display:flex;
+    flex-flow:column nowrap;
+    justify-content: space-around;
+ }
+ .move__column{
+    display: flex;
+    flex-flow: column nowrap;
+    width:100%;
+    height: 100%;
+ }
+.move__title{
+    background-color: #E8884A;
+    text-align:center;
+    margin-top:10%;
+    border: 2px solid rgb(77, 77, 77);
+}
+.move__button{
+    margin-top:10%;
+    font-weight: 500; 
+}
+#select__color{
+    border:none;
+    text-align: center;
 }
 .icon_micro{
     width: 0.8em;
@@ -63,8 +90,7 @@
     border-left: 1px solid rgb(77, 77, 77);
     border-right: 1px solid rgb(77, 77, 77);
     border-bottom: 1px solid rgb(77, 77, 77);
-    z-index: 99;
-    
+    z-index: 99;   
 }
 .modal__details--display{
     display: none;
@@ -83,7 +109,6 @@
 .status__game{
     color:black;
     font-size: 0.8em;
-    color:black;
     font-weight: 500;
     border-right: 1px solid rgb(77, 77, 77);
     height: 100%;
@@ -234,8 +259,6 @@
     box-shadow: 3px 3px 8px rgb(77, 77, 77);
     position: relative;
     top:0px
-
-
 }
 .capturePieceColor__banner{
     display: flex;
@@ -413,10 +436,18 @@
 .chess__startGame{
     background-color:#fff;
     position: absolute;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     z-index:9999;
     display: none;
+}
+.chess__button__startGame{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
 }
 .start__infOnlineGame{
     display: flex;
@@ -430,10 +461,7 @@
     height: 5%;
 }
 .chess__startGame--display{
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: center;
+    display: block;
 }
 .move__back--display{
     display: none;
@@ -476,4 +504,194 @@
     font-size: 2em;
     width: 50%;
     text-align: center;
+}
+
+@media(max-width: 1000px){
+    #chess{
+        flex-flow:column nowrap;
+        justify-content: start;
+        align-items: center;
+        width: 100vw;
+        height: 150vh;
+    }
+    .chess__header{
+        width: 100vw;
+        height: 15vh;
+        margin-top:2%;
+    }
+    .chess__title{
+        font-size: 3em;
+    }
+    .chess__button{
+        font-size:1.6em;
+        background-color: rgb(117, 155, 112);
+        width:35%;
+        height:35%;
+    }
+    .chess__move{
+        display: none;
+    }
+    /* .chess__move{
+        height: 35%;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+     }
+    .move__column{
+        width:25%;
+        height:100%;
+    }
+    .move__title{
+        font-size:1.6em;
+        margin-top:1%;
+        height:70%;
+    }
+    .move__button{
+        font-size:1.6em;
+        margin: 0;
+        width:15%;
+        height:90%;
+    }
+    .move__input{
+        font-size:1.4em;
+        height: 30%;
+    } */
+    .icon_micro{
+        width: 2em;
+        margin: 0px 15px 0px 20px;
+    }
+    .icon_min{
+        width: 2em;
+        margin: 0px 4px 10px 0px;
+    }
+    .icon_med{
+        width: 2em;
+        margin: 0px 15px 0px 0px;
+    }
+    .main__column{
+        align-items: center;
+        width: 100%;
+        height: 60vh;
+    }
+    .status__game__row{
+        width: 98vw;
+        margin: 1vh 0 1vh 0 
+    }
+    .status__game{
+        font-size: 1.6em;
+    }   
+    #history__header{
+        font-size: 1.4em;
+    }
+    .history__title{
+        font-size: 1.4em;
+    }
+    .chess__game{
+        width:min(100vw,85vh);
+        height:min(100vw,85vh);
+        margin:5%;
+    }
+    .line{
+        font-size: 1.6em;
+    }
+    .column{  
+        font-size: 1.6em;
+    }
+    .modal__details{
+        height: 85%;
+        width: min(100vw,85vh);
+    }
+    .modal__details__msg{
+        width:90%;
+        height:10%;
+    } 
+    .modal__log{
+        margin-top:1%;
+        width:100%;
+        height:90%;
+    }
+    .log__msgs{
+        font-size: 1.6em;
+    }
+    .chess__capturePieceColor{
+        width:20vw;
+        height:60vh;
+    }
+    .capturePieceColor__text{
+        font-size: 1.8em;
+    }  
+    .squarePieces__img{
+        width:10%;
+        height:10%;
+    }
+    .aux__column{
+        width: 98%;
+        height: 30%;
+    }
+    .move__back{
+        width:10vw; 
+    }
+    .history__play{
+        height: 6vh;
+    }
+    .play__number,
+    .play__refIdPiece{
+        font-size:1.6em;
+    }
+    .chess__startGame{
+        height: 150vh;
+    }
+    .chess__button__startGame{
+        justify-content: start;
+        padding-top:30%;
+    }
+    .button__startGame{
+        height: 10%;
+    }
+    .start__infOnlineGame
+    {
+        width: 100%;
+        /* height: 10%; */
+    }
+    .start__inputsOnlineGame{
+        width: 100%;
+        height: 100%;
+    }
+    .input__gameOnline--name,
+    .input__gameOnline--code
+    {
+        font-size: 2em; 
+        width: 30%;
+        height: 30%;
+    }
+    .start_buttonOnlineGame{
+        display: flex;
+        flex-flow:column nowrap;
+        width: 30%;
+        height: 10%;
+        font-size: 2em;
+    }
+    .button__gameOnline--code{
+        margin-bottom: 3%;
+        font-size: 1.2em;
+    }
+    .button__gameOnline--inf{
+        background-color: rgb(117, 155, 112);
+        width:50%;
+        height: 5%;
+    }
+    #chess__inf{
+        font-size:5em;
+    }
+    #information__history{
+        height: 100%;
+    }
+    .chess__banner{
+        font-size: 5em;
+    }
+    .banner__text{
+        color:#fff;
+        font-size: 4em;
+        width: 50%;
+        text-align: center;
+    }
 }
