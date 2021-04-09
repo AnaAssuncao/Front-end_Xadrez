@@ -11,29 +11,30 @@
 <body id="chess">
     <header class="chess__header">
         <h1 class="chess__title">Jogo Xadrez</h1>
-        <button class="chess__button" id="button__newGame">Novo Jogo</button>
-        <div class="chess__move">
-            <div class="move__column">
-                <p class="move__title" >Vez das Peças:</p>
-                <select class="move__color move__input" id="select__color">
-                </select>
-            </div>
-            <div class="move__column">
-                <p class="move__title" >Escolha a peça para jogar:</p>
-                <select class="move__piece move__input" id="select__name">
-                    <!-- Peças de cada cor ativa no tabuleiro-->
-                </select>
-            </div>
-            <div class="move__column">
-                <p class="move__title" >Escolha a coordenada para jogar:</p>
-                <select class="move__coordinate move__input" id="select__coordinate">
-                    <!-- Coluna que a peça pode andar tabuleiro-->
-                </select>
-            </div>
-
-            <button class="move__button" id="button__movement">Mover</button>
-        </div>    
+        <button class="chess__button" id="button__newGame">Novo Jogo</button>  
     </header> 
+
+    <div class="chess__move">
+        <div class="move__column">
+            <p class="move__title" >Vez das Peças:</p>
+            <select class="move__color move__input" id="select__color">
+            </select>
+        </div>
+        <div class="move__column">
+            <p class="move__title" >Escolha a peça para jogar:</p>
+            <select class="move__piece move__input" id="select__name">
+                <!-- Peças de cada cor ativa no tabuleiro-->
+            </select>
+        </div>
+        <div class="move__column">
+            <p class="move__title" >Escolha a coordenada para mover:</p>
+            <select class="move__coordinate move__input" id="select__coordinate">
+                <!-- Coluna que a peça pode andar tabuleiro-->
+            </select>
+        </div>
+
+        <button class="move__button" id="button__movement">Mover</button>
+    </div>  
     
     <div class="chess__startGame" id="startGame">
         <div class="chess__button__startGame" id="button__startGame">

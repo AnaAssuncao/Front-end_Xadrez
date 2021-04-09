@@ -6,20 +6,23 @@
 }
 #chess{
     display: flex;
-    justify-content: space-around;
+    flex-flow: column wrap;
+    /* justify-content: space-around; */
     align-items: flex-start;
     width: 100vw;
     height: 100vh;
 }
 .chess__header{
     display: flex;
-    height: 80%;
     flex-flow: column nowrap;
     align-items: center;
-    justify-content: space-between;
-    margin:1%;
+    justify-content: start;
+    width: 20%;
+    height: 30%;
+    margin:1% 1% 2% 2%;
 }
 .cless__title{
+    font-size:3em;
     color: rgb(60, 85, 60);
 }
 .chess__button{
@@ -27,21 +30,23 @@
     font-size: 1em;
     background-color: rgb(117, 155, 112);
     width:60%;
-    height:15%;
-    margin:2%;
+    height:30%;
+    margin-top:25%;
 }
 .chess__move{
-    width: 100%; 
+    margin: 0px 1% 0px 2%;
+    width: 20%; 
+    height: 40%;
     display:flex;
     flex-flow:column nowrap;
     justify-content: space-around;
- }
- .move__column{
+}
+.move__column{
     display: flex;
     flex-flow: column nowrap;
     width:100%;
     height: 100%;
- }
+}
 .move__title{
     background-color: #E8884A;
     text-align:center;
@@ -49,24 +54,46 @@
     border: 2px solid rgb(77, 77, 77);
 }
 .move__button{
+    background-color: rgb(245, 252, 244);
     margin-top:10%;
     font-weight: 500; 
 }
 #select__color{
     border:none;
-    text-align: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
 }
-.icon_micro{
-    width: 0.8em;
-    margin: 0px 5px 0px 10px;
+.chess__startGame{
+    background-color:#fff;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index:9999;
+    display: none;
 }
-.icon_min{
-    width: 1.5em;
-    margin: 0px 2px 5px 0px;
+.chess__button__startGame{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
 }
-.icon_med{
-    width: 2em;
-    margin: 0px 5px 0px 0px;
+.start__infOnlineGame{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+.button__gameOnline--inf{
+    background-color: rgb(117, 155, 112);
+    width:10%;
+    height: 5%;
+}
+.chess__startGame--display{
+    display: block;
 }
 .main__column{
     display: flex;
@@ -75,25 +102,6 @@
     justify-content:flex-start;
     position: relative;
     height: 100%;
-}
-.modal__details{
-    display: flex;
-    position: absolute;
-    flex-flow: column nowrap;
-    justify-content: flex-start;
-    height: 89vh;
-    width: min(50vw,85vh);
-    background-color: #8379E8;
-    opacity:0.97;
-    left: 0px;
-    top:8vh;
-    border-left: 1px solid rgb(77, 77, 77);
-    border-right: 1px solid rgb(77, 77, 77);
-    border-bottom: 1px solid rgb(77, 77, 77);
-    z-index: 99;   
-}
-.modal__details--display{
-    display: none;
 }
 .status__game__row{
     display:flex;
@@ -118,7 +126,6 @@
     align-items: center;
     align-content: center;
     justify-content: center;
-
 }
 .status__game--player{
     width: 40%;
@@ -138,32 +145,25 @@
     0% { background-color: #E8884A; }
     50% { background-color: #DE314E;}
     100% { background-color: #E8884A; }
-  }
-  
+}
 .check-alert-effect {
     -webkit-animation: glowing 3500ms infinite;
     -moz-animation: glowing 3500ms infinite;
     -o-animation: glowing 3500ms infinite;
     animation: glowing 3500ms infinite;
-  }
-
-  #history__header{
-      background-color: #8379E8;
-      font-weight: 500;
-      font-size: 0.8em;
-      display:flex;
-      flex-flow: row nowrap;
-      height: 6vh;
-      color:black;
-      align-items: center;
-      justify-content: center;
-      border-radius: 2px;
-      box-shadow: 3px 3px 8px rgb(77, 77, 77);
-      margin: 2vh 0 0 0;
-      position: relative;
-      z-index: 99;
-
-  }
+}
+.icon_micro{
+    width: 0.8em;
+    margin: 0px 5px 0px 10px;
+}
+.icon_min{
+    width: 1.5em;
+    margin: 0px 2px 5px 0px;
+}
+.icon_med{
+    width: 2em;
+    margin: 0px 5px 0px 0px;
+}
 .chess__game{
     width:min(50vw,85vh);
     height:min(50vw,85vh);
@@ -249,69 +249,6 @@
 .pieces__imagem{
     height:90%;
 }
-.chess__capturePieceColor{
-    width:20vw;
-    height:89vh;
-    display: flex;
-    flex-flow:column nowrap;
-    justify-content: flex-start;
-    background-color: #6A62B5;
-    box-shadow: 3px 3px 8px rgb(77, 77, 77);
-    position: relative;
-    top:0px
-}
-.capturePieceColor__banner{
-    display: flex;
-    flex-flow:row wrap;
-    align-items: center;
-    justify-content: start;
-    background-color: #6A62B5;
-    width:90%;
-    height:30%;
-    margin: 5% 5% 0 5%;
-    padding: 2%;
-    border-radius: 3px;
-}
-
-.modal__details__msg{
-    display: flex;
-    flex-flow:row wrap;
-    align-items: center;
-    justify-content: start;
-    background-color: #6A62B5;
-    width:90%;
-    height:10%;
-    margin: 5% 5% 0 5%;
-    padding: 2%;
-    border-radius: 3px;
-    overflow: auto;
-}
-
-.modal__log{
-    display: flex;
-    flex-flow:row wrap;
-    align-items: center;
-    justify-content: start;
-    margin:2% 0% 2% 0%;
-    width:100%;
-    height:70%;
-    background-color: #7169b8;
-    box-shadow: 2px 2px 4px rgb(77 77 77);
-}
-
-.capturePieceColor__text{
-    text-align: center;
-    font-size: 1.2em;
-    font-weight: 500;
-    color:  black;
-}
-.capturePieceColor__pieceDead{
-    width:100%;
-    height:90%;
-}
-.pieceDead__img{
-    width: 10%;
-}
 .move__piece--possibilities{
     /* background-color:rgba(117, 155, 112, 0.4); */
     border: dashed 2px  rgb(41, 41, 41);
@@ -357,22 +294,133 @@
     width:10%;
     height:10%;
 }
-
+.chess__modal{
+    background-color: rgba(117, 155, 112, .8);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index:9;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+.chess__modal--display{
+    display:none
+}
+#chess__inf{
+    font-size:2em;
+}
+.modal__details{
+    display: flex;
+    position: absolute;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    height: 89vh;
+    width: min(50vw,85vh);
+    background-color: #8379E8;
+    opacity:0.97;
+    left: 0px;
+    top:8vh;
+    border-left: 1px solid rgb(77, 77, 77);
+    border-right: 1px solid rgb(77, 77, 77);
+    border-bottom: 1px solid rgb(77, 77, 77);
+    z-index: 99;   
+}
+.modal__details--display{
+    display: none;
+}
+.modal__details__msg{
+    display: flex;
+    flex-flow:row wrap;
+    align-items: center;
+    justify-content: start;
+    background-color: #6A62B5;
+    width:90%;
+    height:10%;
+    margin: 5% 5% 0 5%;
+    padding: 2%;
+    border-radius: 3px;
+    overflow: auto;
+}
+.modal__log{
+    display: flex;
+    flex-flow:row wrap;
+    align-items: center;
+    justify-content: start;
+    margin:2% 0% 2% 0%;
+    width:100%;
+    height:70%;
+    background-color: #7169b8;
+    box-shadow: 2px 2px 4px rgb(77 77 77);
+}
+.capturePieceColor__text{
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 500;
+    color:  black;
+}
+.capturePieceColor__pieceDead{
+    width:100%;
+    height:90%;
+}
+.pieceDead__img{
+    width: 10%;
+}
+.chess__capturePieceColor{
+    width:20vw;
+    height:89vh;
+    display: flex;
+    flex-flow:column nowrap;
+    justify-content: flex-start;
+    background-color: #6A62B5;
+    box-shadow: 3px 3px 8px rgb(77, 77, 77);
+    position: relative;
+    top:0px
+}
+.capturePieceColor__banner{
+    display: flex;
+    flex-flow:row wrap;
+    align-items: center;
+    justify-content: start;
+    background-color: #6A62B5;
+    width:90%;
+    height:30%;
+    margin: 5% 5% 0 5%;
+    padding: 2%;
+    border-radius: 3px;
+}
+.aux__column{
+    width: 25%;
+}
+#history__header{
+    background-color: #8379E8;
+    font-weight: 500;
+    font-size: 0.8em;
+    display:flex;
+    flex-flow: row nowrap;
+    height: 6vh;
+    color:black;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    box-shadow: 3px 3px 8px rgb(77, 77, 77);
+    margin: 2vh 0 0 0;
+    position: relative;
+    z-index: 99;
+}
 #information__history::-webkit-scrollbar {
     width: 10px;
-  }
-  
+}
 #information__history::-webkit-scrollbar-track {
     background: #7169b8; 
-  }
-   
+} 
 #information__history::-webkit-scrollbar-thumb {
     background: #514b85; 
-  }
-  
+}
 #information__history::-webkit-scrollbar-thumb:hover {
     background: #555; 
-  }
+}
 #information__history{
     width:100%;
     height:89vh;
@@ -409,9 +457,6 @@
     border-radius: 8px;
     cursor: pointer;
 }
-.aux__column{
-    width: 25%;
-}
 .history__play{
     display: flex;
     flex-flow: row nowrap;
@@ -433,56 +478,10 @@
 .play__img{
     width: 5%;
 }
-.chess__startGame{
-    background-color:#fff;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index:9999;
-    display: none;
-}
-.chess__button__startGame{
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-}
-.start__infOnlineGame{
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: center;
-}
-.button__gameOnline--inf{
-    background-color: rgb(117, 155, 112);
-    width:10%;
-    height: 5%;
-}
-.chess__startGame--display{
-    display: block;
-}
 .move__back--display{
     display: none;
 }
-.chess__modal{
-    background-color: rgba(117, 155, 112, .8);
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index:9;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: center;
-}
-.chess__modal--display{
-    display:none
-}
-#chess__inf{
-    font-size:2em;
-}
+
 .start__inputsOnlineGame{
     display: flex;
     flex-flow: column nowrap;
@@ -515,35 +514,38 @@
         height: 150vh;
     }
     .chess__header{
-        width: 100vw;
-        height: 15vh;
+        order:1;
+        width: 100%;
+        height: 10%;
         margin-top:2%;
     }
     .chess__title{
-        font-size: 3em;
+        margin:1%;
+        font-size: 4em;
     }
     .chess__button{
+        margin:3%;
         font-size:1.6em;
-        background-color: rgb(117, 155, 112);
         width:35%;
-        height:35%;
+        height:35%; 
     }
     .chess__move{
-        display: none;
-    }
-    /* .chess__move{
-        height: 35%;
+        order:3;
+        margin:3% 0 3% 0;
+        width:100%;
+        height: 5%;
         flex-flow: row nowrap;
-        justify-content: space-around;
      }
     .move__column{
         width:25%;
-        height:100%;
     }
     .move__title{
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-size:1.6em;
         margin-top:1%;
-        height:70%;
+        height:75%;
     }
     .move__button{
         font-size:1.6em;
@@ -554,7 +556,56 @@
     .move__input{
         font-size:1.4em;
         height: 30%;
-    } */
+    }
+    .chess__startGame{
+        height: 150vh;
+    }
+    .chess__button__startGame{
+        justify-content: start;
+        padding-top:30%;
+    }
+    .button__startGame{
+        width:60%;
+        height: 10%;
+    }
+    .start__infOnlineGame{
+        width: 100%;
+    }
+    .button__gameOnline--inf{
+        width:50%;
+        height: 5%;
+    }
+    .input__gameOnline--name,
+    .input__gameOnline--code
+    {
+        font-size: 2em; 
+        width: 30%;
+        height: 30%;
+    }
+    .start__buttonOnlineGame{
+        display: flex;
+        flex-flow:column nowrap;
+        width: 30%;
+        height: 10%;
+        font-size: 2em;
+    }
+    .button__gameOnline--code{
+        margin-bottom: 3%;
+        font-size: 1.2em;
+    }
+    .main__column{
+        order:2;
+        align-items: center;
+        width: 100%;
+        height: 40%;
+    }
+    .status__game__row{
+        width: 98%;
+        margin: 1vh 0 1vh 0 
+    }
+    .status__game{
+        font-size: 1.6em;
+    }   
     .icon_micro{
         width: 2em;
         margin: 0px 15px 0px 20px;
@@ -567,24 +618,6 @@
         width: 2em;
         margin: 0px 15px 0px 0px;
     }
-    .main__column{
-        align-items: center;
-        width: 100%;
-        height: 60vh;
-    }
-    .status__game__row{
-        width: 98vw;
-        margin: 1vh 0 1vh 0 
-    }
-    .status__game{
-        font-size: 1.6em;
-    }   
-    #history__header{
-        font-size: 1.4em;
-    }
-    .history__title{
-        font-size: 1.4em;
-    }
     .chess__game{
         width:min(100vw,85vh);
         height:min(100vw,85vh);
@@ -596,14 +629,32 @@
     .column{  
         font-size: 1.6em;
     }
+    .move__piece--possibilities{
+        border: dashed 2px  rgb(41, 41, 41);
+    }
+    .move__piece--possibilities-l{
+        border: solid 4px black;
+    }   
+    .move__piece--possibilities-d{
+        border: solid 4px black;
+    }
+    .move__piece--selected-l{
+        border: solid 4px red;
+    }
+    .move__piece--selected-d{
+        border: solid 4px red;
+    }             
+    .move__piece--selected{
+        border: dashed 4px  rgb(41, 41, 41);
+    }       
     .modal__details{
-        height: 85%;
-        width: min(100vw,85vh);
+        height: 90%;
+        width: min(100vw,85vh);  
     }
     .modal__details__msg{
         width:90%;
         height:10%;
-    } 
+    }
     .modal__log{
         margin-top:1%;
         width:100%;
@@ -612,20 +663,32 @@
     .log__msgs{
         font-size: 1.6em;
     }
+    .capturePieceColor__text{
+        font-size: 1.8em;
+    }
+    .capturePieceColor__pieceDead{
+        width:100%;
+        height:90%;
+    }
     .chess__capturePieceColor{
         width:20vw;
         height:60vh;
     }
-    .capturePieceColor__text{
-        font-size: 1.8em;
-    }  
-    .squarePieces__img{
-        width:10%;
-        height:10%;
-    }
     .aux__column{
+        order:4;
+        flex-grow: 10;
+        margin-top:5%;
         width: 98%;
         height: 30%;
+    }
+    #history__header{
+        font-size: 1.4em;
+    }
+    .history__title{
+        font-size: 1.4em;
+    }
+    #information__history{
+        height: 100%;
     }
     .move__back{
         width:10vw; 
@@ -633,65 +696,26 @@
     .history__play{
         height: 6vh;
     }
-    .play__number,
+    .play__number
     .play__refIdPiece{
         font-size:1.6em;
     }
-    .chess__startGame{
-        height: 150vh;
-    }
-    .chess__button__startGame{
-        justify-content: start;
-        padding-top:30%;
-    }
-    .button__startGame{
-        height: 10%;
-    }
-    .start__infOnlineGame
-    {
-        width: 100%;
-        /* height: 10%; */
+    .move__back--display{
+        display: none;
     }
     .start__inputsOnlineGame{
         width: 100%;
         height: 100%;
     }
-    .input__gameOnline--name,
-    .input__gameOnline--code
-    {
-        font-size: 2em; 
-        width: 30%;
-        height: 30%;
+    .chess__banner{
+        width: 100vw;
+        height: 150vh;
     }
-    .start_buttonOnlineGame{
-        display: flex;
-        flex-flow:column nowrap;
-        width: 30%;
-        height: 10%;
-        font-size: 2em;
-    }
-    .button__gameOnline--code{
-        margin-bottom: 3%;
-        font-size: 1.2em;
-    }
-    .button__gameOnline--inf{
-        background-color: rgb(117, 155, 112);
-        width:50%;
-        height: 5%;
+    .banner__text{
+        font-size: 4em;
+        width: 50%;
     }
     #chess__inf{
         font-size:5em;
-    }
-    #information__history{
-        height: 100%;
-    }
-    .chess__banner{
-        font-size: 5em;
-    }
-    .banner__text{
-        color:#fff;
-        font-size: 4em;
-        width: 50%;
-        text-align: center;
     }
 }

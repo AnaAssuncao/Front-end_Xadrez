@@ -542,7 +542,7 @@ export default function ViewScreen(chessBoard){
         const buttons = document.createElement("div")
         const buttonStartCode = document.createElement("button")
         const buttonConnectRoom = document.createElement("button")
-        buttons.classList.add("start_buttonOnlineGame")
+        buttons.classList.add("start__buttonOnlineGame")
         buttonStartCode.classList.add("button__gameOnline--code")
         starGameEvent.buttonStartNewRoom(buttonStartCode)
         buttonConnectRoom.classList.add("button__gameOnline--code")
