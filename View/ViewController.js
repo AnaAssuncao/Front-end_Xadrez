@@ -460,8 +460,8 @@ export default function ViewController(startBoard){
         piecePromotion: function(idSquare,typeMovement){
             let piecePromotion = false
             const namesPiecePromotion={
-                Black:["towerBlack","knightBlack","bishopBlack","queenBlack"],
-                White:["towerWhite","knightWhite","bishopWhite","queenWhite"]
+                black:["towerBlack","knightBlack","bishopBlack","queenBlack"],
+                white:["towerWhite","knightWhite","bishopWhite","queenWhite"]
             }
             if(typeMovement==="piecePromotion"){
                 chess.pieceSelect.newMovements=idSquare

@@ -177,9 +177,9 @@ export default class CreateGame {
             chancePiece:false,
             promotedPawn:null,
             color:null,
-            Black:{
+            black:{
                 qtPiece:[1,1,1,1]},
-            White:{
+            white:{
                 qtPiece:[1,1,1,1]},
             newPiece:null,
         }
@@ -834,10 +834,10 @@ export default class CreateGame {
         const chancePiece={
             names:["Tower","Knight","Bishop","Queen"],
             functionPieces:[this.possibleMovementTower,this.possibleMovementKnight,this.possibleMovementBishop,this.possibleMovementQueen],
-            Black:{
+            black:{
                 fullName:["towerBlack","knightBlack","bishopBlack","queenBlack"],
             },
-            White:{
+            white:{
                 fullName:["towerWhite","knightWhite","bishopWhite","queenWhite"],
             }
         }

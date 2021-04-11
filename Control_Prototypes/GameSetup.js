@@ -3,8 +3,8 @@ export default class GameSetup{
     constructor(){
         this.game=null
         this.colorsGame={   
-            top:"Black", 
-            bottom:"White", 
+            top:"black", 
+            bottom:"white", 
         }
         this.currentPlayerColor=null
         this.onlineConf={
