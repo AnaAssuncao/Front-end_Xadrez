@@ -13,6 +13,7 @@ class Router{
         this.incorrectMovement= this.pref +"/movementGame/incorrectMovement"
         this.giveUpGame= this.pref +"/giveUpGame"
         this.endGame= this.pref +"/endGame"
+        this.playerWin= this.pref +"/playerWin"
         this.reconnectRoom= this.pref + "/reconnectRoom"
         this.prefGetmovement= this.pref +"/movementGame/getMovement?"
         this.prefStatusGame= this.pref +"/statusGame?"
@@ -196,6 +197,21 @@ export default function InterfaceNetwork(){
                 return err
             }
             return msgRes
+        },
+        playerWin: async() =>{
+            const objSend={
+                roomCode:networkConf.codes.room,
+                playerCode:networkConf.codes.player,
+                playerWin:true
+            } 
+            const url = networkConf.routerUrl.playerWin
+            const msgRes = await httpMethods.post(objSend,url)
+            if(typeStatus.errServer===msgRes){
+                const err=networkUtils.callFunctionByStatusServer(msgRes)
+                notifyFunctions(functionToCallBack.errConnection,err)
+                return err
+            }
+            return msgRes
         }
     }
    
@@ -237,7 +253,7 @@ export default function InterfaceNetwork(){
                     const status = networkUtils.callFunctionByStatusGame(typeStatus.endTimeMove)
                     notifyFunctions(functionToCallBack.playerConnection,status)
                 }
-                else if(msgRes.statusGame.endGame===false){
+                else if(msgRes.statusGame.endGame.isEndGame===false){
                     timeCounter++
                     setTimeMoveAdv(url,timeCounter)
                 }
@@ -263,7 +279,7 @@ export default function InterfaceNetwork(){
                     const status = networkUtils.callFunctionByStatusGame(typeStatus.endTimeAdv)
                     notifyFunctions(functionToCallBack.playerConnection,status)
                 }
-                else if(msgRes.statusGame.endGame===false){
+                else if(msgRes.statusGame.endGame.isEndGame===false){
                     timeCounter++
                     setTimeToFindAdv(url,timeCounter)
                 }
@@ -280,12 +296,13 @@ export default function InterfaceNetwork(){
                     const err=networkUtils.callFunctionByStatusServer(status)
                     notifyFunctions(functionToCallBack.errConnection,err)
                 }
-                else if(status.statusGame.giveUp===true ||  status.statusGame.endGame===true){
+                else if( status.statusGame.endGame.isEndGame===true){ 
                     clearInterval(waitInf)
-                    if(status.statusPlayerAdv.giveUp===true){
-                        const statusGiveUp=networkUtils.callFunctionByStatusGame(typeStatus.giveUp)
-                        notifyFunctions(functionToCallBack.giveUp,statusGiveUp)
+                    const paramFunstionStatus={
+                        endGame: status.statusGame.endGame
                     }
+                    const statusGame =networkUtils.callFunctionByStatusGame(status.statusGame.endGame.type,paramFunstionStatus)
+                    
                 }
         },time.setToStatusGame)
     }
@@ -296,7 +313,8 @@ export default function InterfaceNetwork(){
         giveUp:[],
         endGame:[],
         playerConnection:[], 
-        errConnection:[]
+        errConnection:[],
+        timeOutToMove:[]
     }
 
     this.subscribeMoveAdversary=function(fn){
@@ -317,14 +335,29 @@ export default function InterfaceNetwork(){
     this.subscribeErrConnection=function(fn){
         functionToCallBack.errConnection.push(fn)
     }
+    this.subscribeTimeOutToMove=function(fn){
+        functionToCallBack.timeOutToMove.push(fn)
+    }
     function notifyFunctions (objToCallBack,parameters){
         objToCallBack.forEach((fn)=>fn(parameters))
     }
+    
 
     networkUtils.subscribeUpdateCode(updatesStartRoom)
+    networkUtils.subscribeGiveUp(giveUpGame)
+    networkUtils.subscribeTimeOutToMove(timeOutToMove)
 
     function updatesStartRoom(statusCode){
         networkConf.updateCodes(statusCode)
         networkConf.routerUrl.updateQuery(statusCode)
     }
+
+    function giveUpGame(){
+        notifyFunctions(functionToCallBack.giveUp)
+    }
+
+    function timeOutToMove(playerName){
+        notifyFunctions(functionToCallBack.timeOutToMove,playerName)
+    }
+
 }

@@ -106,7 +106,7 @@ export default class OnlineGame extends GenericGame{
         else{
             this.viewController.informationProminent(msgsAndAlerts.incorrectMovement(this.gameSetup.currentPlayerColor))
         }
-        
+        this.checkEndGame()
         this.updateDisplayGame(this.gameSetup.colorsGame.top,nextColor,isPlayable)
     }
 
@@ -131,10 +131,10 @@ export default class OnlineGame extends GenericGame{
                 this.gameSetup.addLogGame(incorrectMovement)
                 this.viewController.displayEndGameInformation(incorrectMovement)
                 this.network.sendServer.incorrectMovement()
-                this.gameSetup.updateEndGame()
                 this.gameSetup.clearLocalStorage()
                 this.network.sendServer.endGame()
             }
+            this.checkEndGame()
             this.updateDisplayGame(this.gameSetup.colorsGame.top,this.gameSetup.currentPlayerColor)
         }
     }
@@ -153,7 +153,17 @@ export default class OnlineGame extends GenericGame{
 
     advGiveUp(){
         if(this.gameSetup.endGame===false){
-            const displayGiveUp = msgsAndAlerts.giveUp.giveUpPlayer(this.gameSetup.onlineConf.statusPlayers.advName)
+            const displayGiveUp = msgsAndAlerts.endGame.giveUpPlayer(this.gameSetup.onlineConf.statusPlayers.advName)
+            this.viewController.displayEndGameInformation(displayGiveUp)
+            this.gameSetup.updateEndGame()
+            this.gameSetup.clearLocalStorage()
+            this.network.sendServer.endGame()
+        }
+    }
+
+    timeOutToMove(playerName){
+        if(this.gameSetup.endGame===false){
+            const displayGiveUp = msgsAndAlerts.endGame.timeOutToMove(playerName)
             this.viewController.displayEndGameInformation(displayGiveUp)
             this.gameSetup.updateEndGame()
             this.gameSetup.clearLocalStorage()
@@ -164,22 +174,30 @@ export default class OnlineGame extends GenericGame{
     updateDisplayDrawAndEndGame(){
         const statusGame = this.game.getStatusGame() 
         if(statusGame.draw===true){
-            this.gameSetup.updateEndGame()
-            this.gameSetup.clearLocalStorage()
-            const displayDraw=msgsAndAlerts.drawGame.draw()
+            const displayDraw=msgsAndAlerts.endGame.draw()
             this.viewController.displayEndGameInformation(displayDraw)
             this.gameSetup.addLogGame(displayDraw)
             this.updateDisplayLog()
-            this.network.sendServer.endGame()
         }
         else if(statusGame.endGame===true ||statusGame.checkMate===true){
-            this.gameSetup.updateEndGame()
-            this.gameSetup.clearLocalStorage()
             const nameWin = (statusGame.winColor===this.gameSetup.onlineConf.color)?this.gameSetup.onlineConf.statusPlayers.playerName:this.gameSetup.onlineConf.statusPlayers.advName
             const displayEndGame=msgsAndAlerts.endGame.winPlayer(nameWin)
             this.viewController.displayEndGameInformation(displayEndGame)
             this.gameSetup.addLogGame(displayEndGame)
             this.updateDisplayLog()
+        }
+    }
+
+    checkEndGame(){
+        const statusGame = this.game.getStatusGame() 
+        if(statusGame.winColor===true){
+            this.gameSetup.updateEndGame()
+            this.gameSetup.clearLocalStorage()
+            this.network.sendServer.playerWin()
+        }
+        else if(statusGame.endGame===true){
+            this.gameSetup.updateEndGame()
+            this.gameSetup.clearLocalStorage()
             this.network.sendServer.endGame()
         }
     }
@@ -214,18 +232,21 @@ export default class OnlineGame extends GenericGame{
     }
 
     redoMovements(plays){
-        plays.forEach((informationPieceSelect)=>{  
-            const isMove =this.movePiece(informationPieceSelect)
-            if(isMove){
-                const nextColor=(this.gameSetup.colorsGame.top===this.gameSetup.currentPlayerColor)?this.gameSetup.colorsGame.bottom:this.gameSetup.colorsGame.top
-                this.gameSetup.addLogGame(msgsAndAlerts.movement.movementPiece(this.gameSetup.currentPlayerColor))
-                this.gameSetup.updateCurrentPlayerColor(nextColor)
-                this.gameSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.gameSetup.currentPlayerColor))
-                this.gameSetup.addHistoryLocalStorage(informationPieceSelect)
-            }
-        })
+        if(plays){
+            plays.forEach((informationPieceSelect)=>{  
+                const isMove =this.movePiece(informationPieceSelect)
+                if(isMove){
+                    const nextColor=(this.gameSetup.colorsGame.top===this.gameSetup.currentPlayerColor)?this.gameSetup.colorsGame.bottom:this.gameSetup.colorsGame.top
+                    this.gameSetup.addLogGame(msgsAndAlerts.movement.movementPiece(this.gameSetup.currentPlayerColor))
+                    this.gameSetup.updateCurrentPlayerColor(nextColor)
+                    this.gameSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.gameSetup.currentPlayerColor))
+                    this.gameSetup.addHistoryLocalStorage(informationPieceSelect)
+                }
+            })
+        }
         const isPlayable = (this.gameSetup.onlineConf.statusPlayers.playerColor===this.gameSetup.currentPlayerColor)?true:false
         this.updateDisplayGame(this.gameSetup.colorsGame.top,this.gameSetup.currentPlayerColor,isPlayable)
         return isPlayable
+
     }
 }

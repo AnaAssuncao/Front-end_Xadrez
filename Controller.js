@@ -41,16 +41,19 @@ const interfaceFunctions={
     playerConnection:function(infPlayerAdv){
         gameSetup.game.connectionPlayerTwo(infPlayerAdv)
     },
-    giveUp:function(infPlayerAdv){
-        gameSetup.game.advGiveUp(infPlayerAdv)
+    giveUp:function(){
+        gameSetup.game.advGiveUp()
     },
     errConnection(msgErr){
         gameSetup.game.informationProminentErr(msgErr)
+    },
+    timeOutToMove(playerName){
+        gameSetup.game.timeOutToMove(playerName)
     }
 }
 
-recoveryGame()
 wakeUpServer()
+recoveryGame()
 viewController.subscribeStartGameOffline(interfaceFunctions.startGameOffline)
 viewController.subscribeStartNewRoomOnline(interfaceFunctions.startNewRoomOnline)
 viewController.subscribeConnectInARoomOnline(interfaceFunctions.connectInARoomOnline)
@@ -61,6 +64,7 @@ network.subscribeMoveAdversary(interfaceFunctions.moveAdv)
 network.subscribePlayerConnection(interfaceFunctions.playerConnection)
 network.subscribeGiveUp(interfaceFunctions.giveUp)
 network.subscribeErrConnection(interfaceFunctions.errConnection)
+network.subscribeTimeOutToMove(interfaceFunctions.timeOutToMove)
 
 function wakeUpServer(){
     network.sendServer.wakeUp()

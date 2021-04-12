@@ -2,10 +2,20 @@ import msgsAndAlerts from "../MsgsAndAlerts.js"
 
 const functionToCallBack= {
     updateCode:[],
+    giveUp:[],
+    timeOutToMove:[]
 }
 
 const subscribeUpdateCode=function(fn){
     functionToCallBack.updateCode.push(fn)
+}
+
+const subscribeGiveUp=function(fn){
+    functionToCallBack.giveUp.push(fn)
+}
+
+const subscribeTimeOutToMove=function(fn){
+    functionToCallBack.timeOutToMove.push(fn)
 }
 
 const functionsStatusRoom={
@@ -122,9 +132,22 @@ const functionsStatusGame={
         }
         return sendController
     },
-    giveUpGame:function(){
+    giveUp:function(){
+        notifyUpdates(functionToCallBack.giveUp)
+    },
+    playerWin:function(){
         const sendController={
-            connection:true
+            serverConnection:true,
+        }
+        return sendController
+    },
+    timeOutToMove:function(param){
+        const playerName = param.endGame.playerName
+        notifyUpdates(functionToCallBack.timeOutToMove,playerName)
+    },
+    endGame:function(){
+        const sendController={
+            serverConnection:true,
         }
         return sendController
     }
@@ -175,6 +198,8 @@ function notifyUpdates(objToCallBack,parameters){
 
 export default {
     subscribeUpdateCode,
+    subscribeGiveUp,
+    subscribeTimeOutToMove,
     callFunctionByStatusRoom,
     callFunctionByStatusMovement,
     callFunctionByStatusGame,

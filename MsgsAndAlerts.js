@@ -21,7 +21,7 @@ const connection={
     errServer:()=>"Erro no servidor, tente mais tarde",
     place:()=>"Jogo Local",
     waitAdv:()=>"Aguardando adversário",
-    connected:(namePlayer)=>"Conectado com " + namePlayer
+    connected:(playerName)=>"Conectado com " + playerName
 }
 
 const checksPiece={
@@ -31,22 +31,17 @@ const checksPiece={
 }
 
 const checksPlayers={
-    checkMate:(namePlayer)=>"Xeque-Mate no jogador " + namePlayer,
-    check:(namePlayer)=>"Xeque no jogador " + namePlayer,
+    checkMate:(playerName)=>"Xeque-Mate no jogador " + playerName,
+    check:(playerName)=>"Xeque no jogador " + playerName,
     noCheck:()=>""
-}
-
-const drawGame={
-    draw:()=>"Jogo empatado"
-}
-
-const giveUp={
-    giveUpPlayer:(namePlayer)=>"Desistência do Jogador " + namePlayer
 }
     
 const endGame={
     winPiece:(color)=>"Vitória das Peças " + colors[color],
-    winPlayer:(namePlayer)=>"Vitória do jogador " + namePlayer
+    winPlayer:(playerName)=>"Vitória do jogador " + playerName,
+    giveUpPlayer:(playerName)=>"Desistência do Jogador " + playerName,
+    draw:()=>"Jogo empatado",
+    timeOutToMove:(playerName)=>"Tempo esgotado para mover Jogador " + playerName
 }
 
 const startGame={
@@ -78,9 +73,7 @@ export default {
     connection,
     checksPiece,
     checksPlayers,
-    drawGame,
     endGame,
-    giveUp,
     startGame,
     movement,
     log
