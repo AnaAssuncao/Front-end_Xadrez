@@ -1,7 +1,7 @@
 
 const colors={
-    White:"Brancas",
-    Black:"Pretas"
+    white:"Brancas",
+    black:"Pretas"
 }
 
 const time = new Date()
