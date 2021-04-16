@@ -1,0 +1,296 @@
+@media(max-width: 1000px){
+
+    :root{
+        --black:#000000;
+        --background:#eeeefc;
+        --light-cream:#FFFAF0;
+        --cream:#FFF2D7;
+        --mustard:#FFBE4E;
+        --orange: #FF8D4E;
+        --dark-orange: #CC713F;
+        --text:#1B2732;
+        --text-button:#D4DCE6;
+        --button: #5973FC;
+        --dark-blue:#475CC9;
+        --blue:blue;
+        --ligth-blue:#A4B3FD;
+        --shadow:#2c397d;
+        --spotlight: #DE314E;
+    }
+    
+    
+    #chess{
+        flex-flow:column nowrap;
+        justify-content: start;
+        align-items: center;
+        width: 100vw;
+        height: 150vh;
+    }
+    
+    .menu__home{
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+        width: 100vw;
+        height: 150vh;
+    }
+    .menu__home--display{
+        display:flex;
+    }
+    .menu__home__banner{
+        width: 96%;
+        height: 22%;
+        border-radius: 500px;
+    }
+    .menu__home__logo{
+        width: 40%;
+        height: 50%;
+    }
+    .menu__home__title{
+        font-size: 5em;
+    }
+    .menu__home__module{
+        width: 100%;
+        height: 40%;
+    }
+    .module__offline{
+        width: 100%;
+        height: 20%;
+    }
+    .module__online{
+        margin:0px;
+        width: 100%;
+        height: 55%;
+    }
+    .menu__home__inputs{
+        width:80%;
+        height:40%;
+    }
+    .module__title{
+        font-size: 4em;
+    }
+    .module__subtitle{
+        font-size: 3em;
+    }
+    .menu__button{
+        font-size: 2.4em;
+    }
+    .menu__input{
+        font-size:2.4em;
+    }
+    textarea:focus, input:focus, select:focus {
+        outline: 0;
+    }
+    
+    /* left panel*/
+    .left__panel{
+        width: 100%;
+        height: 9%;
+        flex-flow:row wrap;
+        justify-content: space-between;
+    }
+    .left__panel__buttons{
+        width: 100%;
+        height: 20%; 
+    }
+    .micro__button__img{
+        width: 15%;
+        height: 75%;
+    }
+    .left__panel__header{
+        width:30%;
+        height:70%;
+    }
+    .header__logo{
+        margin:0px;
+        width:60%;
+        height:85%;
+    }
+    .header__title{
+        font-size:1.8em;
+    }
+    .left__panel__player{
+        width:30%;
+        height:10%;
+        justify-content: center;
+    }
+    .player__text{
+        font-size:1.8em;
+        margin-left:0%;
+    }
+    .player__color{
+        font-size:1.8em;
+    }
+    .left__panel__move{
+        display: none;
+    }
+    .left__panel__time{
+        margin-right: 5%;
+        width:30%;
+        height:70%;
+    }
+    .time__section{
+        width:100%;
+        height:50%;
+        margin:1% 0px 4% 0px;
+    }
+    .time__game,
+    .time__movement{
+        font-size: 1.8em;
+    }
+    .time__img{
+        margin:0px 20% 0px 0px; 
+        width: 20%;
+        height:100%;
+    }
+    .time__text{
+        font-size:1.6em;
+    }
+    
+    
+    /* main panel */
+    .chess__main{
+        align-items: center;
+        width: 100%;
+        height: 50%;
+        margin:2% 0px 5% 0px;
+    }
+    /* top line with status game  */
+    .status__game__row{
+        width: 98%;
+        height: 10%;
+        margin: 1vh 0 1vh 0 
+    }
+    .status__game{
+        font-size: 1.6em;
+    }
+    .icon_micro{
+        width: 2em;
+        margin: 0px 15px 0px 20px;
+    }
+    .icon_min{
+        width: 2em;
+        margin: 0px 4px 10px 0px;
+    }
+    .icon_med{
+        width: 2em;
+        margin: 0px 15px 0px 0px;
+    }
+    /* chess board */
+    .chess__board{
+        width:min(98vw,85vh);
+        height:min(98vw,85vh);
+        margin:2%;
+    }
+    .line{
+        font-size: 1.6em;
+    }
+    .column{  
+        font-size: 1.6em;
+    }
+    .move__piece--possibilities{
+        border: dashed 4px  var(--text);
+    }
+    .move__piece--possibilities-l{
+        border: solid 4px var(--black);
+ 
+    }   
+    .move__piece--possibilities-d{
+        border: solid 4px  var(--black);
+    }
+    .move__piece--selected-l{
+        border: solid 4px var(--spotlight);
+    }
+    .move__piece--selected-d{
+        border: solid 4px var(--spotlight);
+    }             
+    .move__piece--selected{
+        border: dashed 4px  var(--text);
+    } 
+    /* banner with promotion pieces */
+    .board__banner__promotion{
+        width:100%;
+        height: 100%;
+    }   
+    .board__banner__img{
+        width:30%;
+        height:30%;
+    }
+    /* modal board with information */
+    .chess__modal{
+        width: 100%;
+        height: 100%;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+    }
+    #chess__inf{
+        color:var(--text);
+        font-size:3.4em;
+    }
+    /* details */
+    .modal__details{
+        margin-top: 0;
+        width:min(98vw,85vh);
+        height:min(98vw,85vh);
+        left:1vw;
+        top:6.6vh;
+    }
+    .modal__details__msg{
+        height:15%;
+    }
+    .modal__log{
+        margin-top:1%;
+        width:100%;
+        height:90%;
+    }
+    .modal__details__text{
+        font-size: 1.8em;
+    }
+    #details__log::-webkit-scrollbar {
+        width: 30px;
+    }
+    #details__log::-webkit-scrollbar-thumb {
+        border: 2px solid var(--text);
+    }
+    .pieceDead__img{
+        width: 10%;
+        height: 45%;
+    }
+    .log__msgs{
+        font-size:1.6em;
+    }
+    /* right__panel */
+    .right__panel{
+        width: 100%;
+        height: 50%;;
+        margin: 2%;
+    }
+    .right__panel__header{
+        font-size:1.8em;
+        height: 8%;
+    }
+    #information__history::-webkit-scrollbar {
+        width: 30px;
+    }
+    #information__history{
+        width:100%;
+    }
+    .move__back{
+        width:9vw; 
+        height: 5vh; 
+    }
+    .history__play{
+        min-height: 5%;
+        width: 95%;
+    }
+    .play__number,
+    .play__refIdPiece{
+        font-size:1.4em;
+        width: 15%;
+    }
+    .play__img{
+        width: 5%;
+    }  
+    
+}

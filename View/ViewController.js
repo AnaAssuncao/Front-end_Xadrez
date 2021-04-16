@@ -144,8 +144,8 @@ export default function ViewController(startBoard){
         },
         updateConnection(connection){
             const imgs={
-                offline:"Img/Offline_logo.svg",
-                online:"Img/Online_logo.svg"
+                offline:"Img/offline_logo.svg",
+                online:"Img/online_logo.svg"
             }
             const img = imgs[connection.typeGame]
             const msgConnection = connection.msg
@@ -205,7 +205,7 @@ export default function ViewController(startBoard){
         movePieceByButtom: function(coordinate){
             // Modificando o nome da ref ID pela função coordinateToRefId
             if(chess.informationBoard.currentPlayer===chess.pieceSelect.color){
-                if(coordinate!=="Sem Movimento" && coordinate!=="" && chess.pieceSelect.position){
+                if(coordinate!=="-" && coordinate!=="" && chess.pieceSelect.position){
                     view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
                     const refId = utilities.coordinateToRefId(coordinate)
                     const informationMove=piece.verifyMove(refId)
@@ -435,7 +435,7 @@ export default function ViewController(startBoard){
         coordinateSelection (positions){
             const arrayCoordinates = []
             if(positions.length==0){
-                arrayCoordinates.push("Sem Movimento")
+                arrayCoordinates.push("-")
             }
             else{
                 positions.forEach((possibleCoordinate)=>{ 

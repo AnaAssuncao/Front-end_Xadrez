@@ -14,17 +14,12 @@ export default function ViewScreen(chessBoard){
 
     this.homeMenu={
         clear(){
-            const selectModal = document.querySelector("#startGame")
-            selectModal.classList.toggle("chess__startGame--display")
-            const buttonModal = document.querySelector("#button__startGame")
-            const infToStartGame= document.querySelector(".start__infOnlineGame")
-            if(infToStartGame){
-                buttonModal.removeChild(infToStartGame)
-            }
+            const selectModal = document.querySelector("#menu__home")
+            selectModal.classList.toggle("menu__home--display")
         },
         render(){
-            const selectModal = document.querySelector("#startGame")
-            selectModal.classList.toggle("chess__startGame--display")
+            const selectModal = document.querySelector("#menu__home")
+            selectModal.classList.toggle("menu__home--display")
         }
     }
 
@@ -219,7 +214,7 @@ export default function ViewScreen(chessBoard){
             document.querySelector(".status__game--board").classList.add("check-alert-effect")
         },      
         clearInformation(){
-            document.querySelector("#information__game").innerText = "Nenhum Xeque Identificado"
+            document.querySelector("#information__game").innerText = "Sem xeque"
             document.querySelector(".status__game--board").classList.remove("check-alert-effect")
         }
     }
@@ -247,13 +242,14 @@ export default function ViewScreen(chessBoard){
             const board = document.querySelector("#board")
             const squarePieces = document.createElement("div")
             squarePieces.id= "pawnPromotion"
-            squarePieces.classList.add("board__squarePieces")
+            squarePieces.classList.add("board__banner__promotion")
+            squarePieces.classList.add("chess__row__center")
             board.appendChild(squarePieces) 
 
             arrayImg.forEach((pieceImg,i)=>{
                 const img = document.createElement("img")
                 img.src=pieceImg
-                img.classList.add("squarePieces__img")
+                img.classList.add("board__banner__img")
                 starGameEvent.piecesPromotion(img,namesPiecePromotion[i])
                 squarePieces.appendChild(img) 
             })
@@ -297,7 +293,6 @@ export default function ViewScreen(chessBoard){
             imgPiece.src=img
             imgPiece.classList.add("play__img")
             play.appendChild(imgPiece) 
-
         },
         addPieceCaptured(img,number){
             const play = document.querySelector("#history__play-" + number)
@@ -305,8 +300,10 @@ export default function ViewScreen(chessBoard){
             if(img){
                 imgPiece.src=img
                 imgPiece.classList.add("play__img")
+                imgPiece.classList.add("play__img--rotate")
             }
             else{
+                imgPiece.classList.add("play__img")
                 imgPiece.innerHTML=" "
             }  
             play.appendChild(imgPiece)     
@@ -318,7 +315,7 @@ export default function ViewScreen(chessBoard){
 
     this.statusLog={
         addMsgsLog(text){
-            const detailsLog = document.querySelector("#details_log")
+            const detailsLog = document.querySelector("#details__log")
             const log = document.createElement("div")
             const msgsLog = document.createElement("p")
             log.classList.add("modal__log")
@@ -328,7 +325,7 @@ export default function ViewScreen(chessBoard){
             detailsLog.appendChild(log)
         },
         clearMsgsLog(){
-            clearOptionsInput("#details_log")
+            clearOptionsInput("#details__log")
         }
     }
 
@@ -346,37 +343,33 @@ export default function ViewScreen(chessBoard){
 
     const starGameEvent={
         buttonStartGameOffline(){
-            const buttonStar= document.querySelector("#button__startGameOffline")
+            const buttonStar= document.querySelector("#button__menu__offline")
             buttonStar.addEventListener("click", ()=>{
                  notifyFunctions(functionToCallBack.buttonStartGameOffline)
             })
         },
-        buttonStartOnlineGame(){
-            const buttonStar= document.querySelector("#button__startGameOnline")
-            buttonStar.addEventListener("click", ()=>{
-                renderInputOnlineGame()
-            })
-        },
-        buttonStartNewRoom(buttonStart){
+        buttonStartNewRoom(){
+            const buttonStart = document.querySelector("#button__menu__newRoom")
             buttonStart.addEventListener("click", ()=>{
-                const inputName = document.querySelector(".input__gameOnline--name")
-                const inputRoomCode= document.querySelector(".input__gameOnline--code")
+                const inputName = document.querySelector("#input__gameOnline--name")
+                const inputRoomCode= document.querySelector("#input__gameOnline--code")
                 if(inputName.value!=="" && inputRoomCode.value!==""){
                     notifyFunctions(functionToCallBack.buttonStartNewRoom,{name:inputName.value, roomCode:inputRoomCode.value})
                 }
             })
         },
-        buttonConnectInARoom(buttonStart){
+        buttonConnectInARoom(){
+            const buttonStart = document.querySelector("#button__menu__connectRoom")
             buttonStart.addEventListener("click", ()=>{
-                const inputName = document.querySelector(".input__gameOnline--name")
-                const inputRoomCode= document.querySelector(".input__gameOnline--code")
+                const inputName = document.querySelector("#input__gameOnline--name")
+                const inputRoomCode= document.querySelector("#input__gameOnline--code")
                 if(inputName.value!=="" && inputRoomCode.value!==""){
                     notifyFunctions(functionToCallBack.buttonConnectInARoom,{name:inputName.value, roomCode:inputRoomCode.value})
                 }
             })
         }, 
         buttonNewGame(){
-            const buttonStar= document.querySelector("#button__newGame")
+            const buttonStar= document.querySelector("#button__exit")
             buttonStar.addEventListener("click", ()=>{
                 notifyFunctions(functionToCallBack.buttonNewGame)
             })
@@ -384,7 +377,7 @@ export default function ViewScreen(chessBoard){
         buttonModal(){
             const buttonStar= document.querySelector("#button__details__modal")
             const modal= document.querySelector(".modal__details")
-            const icon = document.querySelector(".icon_micro")
+            const icon = document.querySelector(".icon__micro")
             buttonStar.addEventListener("click", ()=>{
                 const srcImg = icon.getAttribute("src")!=="Img/down-chevron.svg"?"Img/down-chevron.svg":"Img/up-chevron.svg"
                 icon.setAttribute("src",srcImg)
@@ -440,7 +433,8 @@ export default function ViewScreen(chessBoard){
         }
     }
     starGameEvent.buttonStartGameOffline()
-    starGameEvent.buttonStartOnlineGame()
+    starGameEvent.buttonStartNewRoom()
+    starGameEvent.buttonConnectInARoom()
     starGameEvent.pieceInput()
     starGameEvent.buttonMove()
     starGameEvent.buttonBackMovement()
@@ -483,6 +477,7 @@ export default function ViewScreen(chessBoard){
         for(let i=0; i<8;i++){
             const tagPosition = document.createElement("div")
             tagPosition.classList.add(classDiv)
+            tagPosition.classList.add("chess__row__center")
             if(classDiv ==="column"){
                 tagPosition.innerHTML=String.fromCharCode(65+i)
             }
@@ -510,47 +505,5 @@ export default function ViewScreen(chessBoard){
             optionPiece.innerHTML= value
             selectPiece.appendChild(optionPiece)
         })
-    }
-
-    function renderInputOnlineGame(){
-        const selectModal = document.querySelector("#button__startGame")
-        const selectInfOnlineGame= document.querySelector(".start__infOnlineGame")
-        if(selectInfOnlineGame===null){      
-            const nickAndCode = document.createElement("div") 
-            nickAndCode.classList.add("start__infOnlineGame")
-            renderInputNickAndCode(nickAndCode)
-            renderButtonStartOnline(nickAndCode)
-            selectModal.appendChild(nickAndCode)
-        }
-    }
-
-    function renderInputNickAndCode(selectModal){
-        const inputs = document.createElement("div")
-        const inputName = document.createElement("input")
-        const inputCode = document.createElement("input")
-        inputs.classList.add("start__inputsOnlineGame")
-        inputName.classList.add("input__gameOnline--name")
-        inputCode.classList.add("input__gameOnline--code")
-        inputName.placeholder="Nome do jogador"
-        inputCode.placeholder="Código da sala"
-        inputs.appendChild(inputName)
-        inputs.appendChild(inputCode)
-        selectModal.appendChild(inputs)
-    }
-
-    function renderButtonStartOnline(selectModal){
-        const buttons = document.createElement("div")
-        const buttonStartCode = document.createElement("button")
-        const buttonConnectRoom = document.createElement("button")
-        buttons.classList.add("start__buttonOnlineGame")
-        buttonStartCode.classList.add("button__gameOnline--code")
-        starGameEvent.buttonStartNewRoom(buttonStartCode)
-        buttonConnectRoom.classList.add("button__gameOnline--code")
-        starGameEvent.buttonConnectInARoom(buttonConnectRoom)
-        buttonStartCode.innerHTML = "Criar uma sala"
-        buttonConnectRoom.innerHTML = "Conectar com um amigo"
-        buttons.appendChild(buttonStartCode)
-        buttons.appendChild(buttonConnectRoom)
-        selectModal.appendChild(buttons)
     }
 }
