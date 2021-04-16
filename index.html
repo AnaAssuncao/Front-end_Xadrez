@@ -1,114 +1,165 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Xadrez</title>
-    <link rel="stylesheet" href="Style.css">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-</head>
+<html>
+    <head>
+        <meta>
+        <title>
+            Vanilla Chess
+        </title>
+        <link rel="icon" href="Img/chess.svg">
+        <link rel="stylesheet" href="Style.css">
+        <link rel="stylesheet" href="StyleMobile.css">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    </head>
 
-<body id="chess">
-    <header class="chess__header">
-        <h1 class="chess__title">Jogo Xadrez</h1>
-        <button class="chess__button" id="button__newGame">Novo Jogo</button>  
-    </header> 
-
-    <div class="chess__move">
-        <div class="move__column">
-            <p class="move__title" >Vez das Peças:</p>
-            <select class="move__color move__input" id="select__color">
-            </select>
-        </div>
-        <div class="move__column">
-            <p class="move__title" >Escolha a peça para jogar:</p>
-            <select class="move__piece move__input" id="select__name">
-                <!-- Peças de cada cor ativa no tabuleiro-->
-            </select>
-        </div>
-        <div class="move__column">
-            <p class="move__title" >Escolha a coordenada para mover:</p>
-            <select class="move__coordinate move__input" id="select__coordinate">
-                <!-- Coluna que a peça pode andar tabuleiro-->
-            </select>
-        </div>
-
-        <button class="move__button" id="button__movement">Mover</button>
-    </div>  
-    
-    <div class="chess__startGame" id="startGame">
-        <div class="chess__button__startGame" id="button__startGame">
-            <h1 class="chess__title">Jogo Xadrez</h1>
-            <button class="chess__button button__startGame" id="button__startGameOffline">Iniciar Jogo Local</button>
-            <button class="chess__button button__startGame" id="button__startGameOnline">Iniciar Jogo Online</button>
-        </div>
-    </div>
-    <div class="main__column">
-     <div class="status__game__row">
-         <div class="status__game status__game--player" id="status__connection">
-             <img src="Img/Offline_logo.svg" class="icon_min" id="connection__img"> 
-             <p id="information__connection"></p>          
-         </div>
-         <div class="status__game status__game--board">
-            <img src="Img/check.svg" class="icon_med">
-            <span id="information__game">Nenhum Xeque Identificado</span>
-        </div>
-        <div class="status__game status__game--details" id="button__details__modal">
-            Detalhes
-            <img src="Img/down-chevron.svg" class="icon_micro">
-        </div>
-
-     </div>
-    
-    <section class="chess__game">
-        <div class="chess__board"> 
-            <div class="chess__line" id="line">
-                <!-- numero-->
+    <body id="chess">
+        <div class="menu__home chess__row__between" id="menu__home">
+            <div class="menu__home__banner chess__column__center">
+                <img src="Img/logoChess.png" class="menu__home__logo">
+                <h1 class="menu__home__title">Vanilla Chess</h1>
             </div>
-            <div class="chess__squares" id="board">     
-                <!-- casa-->
-            </div>
-            <div class="chess__column" id="column">      
-                <!-- letra-->
-            </div>   
-            <div class="chess__modal chess__modal--display" id="modal__information"> 
-                <p id="chess__inf"></p>
-            </div>
-        </div>
-
-        <div class="modal__details modal__details--display" > 
-            <div class="modal__details__msg" id="details_log">
-                
-            </div>
-            <div class="capturePieceColor__banner">
-                <p class="capturePieceColor__text">Peças Pretas Capturadas:</p>
-                <div class="capturePieceColor__pieceDead" id="colorTop">
-                    
+            <div class="menu__home__module chess__column__around" id="menu__module">
+                <h1 class="module__title">Modos de Jogo</h1>
+                <div class="module__offline chess__column__around">
+                    <div class="chess__row__start">
+                        <img src="Img/offline_logo.svg" class="icon__med" id="connection__img">
+                        <h2 class="module__subtitle">Jogo Offline</h2>
+                    </div>
+                    <button class="menu__button menu__button__offline" id="button__menu__offline">Iniciar Jogo Local</button>
                 </div>
-            </div>
-            <div class="capturePieceColor__banner">
-                <p class="capturePieceColor__text">Peças Brancas Capturadas:</p>
-                <div class="capturePieceColor__pieceDead" id="colorBottom">
-                    
+                <div class="module__online chess__column__around">
+                    <div class="chess__row__start">
+                        <img src="Img/online_logo.svg" class="icon__med" id="connection__img">
+                        <h2 class="module__subtitle">Jogo Online</h2>
+                    </div>
+                    <div class="menu__home__inputs chess__column__center">
+                        <div class="menu__home__input">
+                            <input class="menu__input" id="input__gameOnline--name" placeholder="Nome do jogador"></input>
+                        </div>
+                        <div class="menu__home__input">
+                            <input class="menu__input" id="input__gameOnline--code" placeholder="Código da sala"></input>
+                        </div>                      
+                    </div>
+                    <div class="menu__buttons__online chess__row__between">
+                        <button class="menu__button menu__button__online" id="button__menu__newRoom">Criar uma sala</button>
+                        <button class="menu__button menu__button__online" id="button__menu__connectRoom">Conectar com um amigo</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
+        <aside class="left__panel chess__column__start">
+            <div class="left__panel__buttons chess__row__between">
+                <img src="Img/exit.svg" class="button__exit micro__button__img" id="button__exit">
+                <img src="Img/dark.svg" class="img__button__dark micro__button__img" id="button__dark">
+            </div>
+            
+            <header class="left__panel__header chess__column__start">
+                <img src="Img/logoChess.png" class="header__logo">
+                <h1 class="header__title">Vanilla Chess</h1>
+            </header>
+            
+            <div class="left__panel__player chess__row__start">
+                <p class="player__text">Jogador: </p>
+                <select class="player__color" id="select__color">
+                </select>
+            </div>
 
-    </section>
-    <div class="aux__column">
-        <div id="history__header">
-            <img src="Img/history.svg" class="icon_med"> 
-            <h3 class="history__title">Histórico de Jogadas </h3>
-            <button class="move__back move__back--display" id="button__back__movement"><img src="Img/undo-arrow.svg" class="icon_micro"> </button>  
-        </div>
-        <div id="information__history"></div>
-        
-    </div>
-    
-</body>
-<!-- <script src="XadrezGame.js"></script> -->
-<!-- <script src="RenderScreen.js"></script> -->
-<script type="module" src="Controller.js"></script>
+            <div class="left__panel__move chess__column__center">
+                <div class="move__column chess__row__start">
+                    <p class="move__text">Peças: </p>
+                    <select class="move__piece move__input" id="select__name" placeholder="Peça:">
+                        <!-- Peças de cada cor ativa no tabuleiro-->
+                    </select>
+                </div>
+                <div class="move__column chess__row__start">
+                    <p class="move__text">Coordenadas: </p>
+                    <select class="move__coordinate move__input" id="select__coordinate" placeholder="Coordenada:"> 
+                        <!-- Coluna que a peça pode andar tabuleiro-->
+                    </select>
+                </div>
+                <button class="move__button chess__row__center" id="button__movement">Mover</button>
+            </div>
+            
+            <div class="left__panel__time chess__column__start">
+                <div class="time__section chess__column__start">
+                    <p class="time__text">Tempo para movimento</p>
+                    <div class="time__section chess__row__start">
+                        <img src="Img/timeMovement.svg" class="time__img">
+                        <time class="time__movement" id="time__movement">00:00</time>
+                    </div>
+                </div>
+                <div class="time__section chess__column__start">
+                    <p class="time__text">Tempo do Jogo</p>
+                    <div class="time__section chess__row__start">
+                        <img src="Img/timeGame.svg" class="time__img">
+                        <time class="time__game" id="time__game">00:00</time>
+                    </div>
+                </div>
+            </div>
+        </aside> 
+
+        <main class="chess__main chess__column__start">
+            <div class="status__game__row chess__row__between">
+                <div class="status__game status__game--player" id="status__connection">
+                    <img src="Img/offline_logo.svg" class="icon__min" id="connection__img"> 
+                    <p id="information__connection"></p>          
+                </div>
+                <div class="status__game status__game--board">
+                    <img src="Img/check.svg" class="icon__med">
+                    <span id="information__game">Sem Xeque</span>
+                </div>
+                <div class="status__game status__game--details" id="button__details__modal">
+                    Detalhes
+                    <img src="Img/down-chevron.svg" class="icon__micro">
+                </div>
+            </div>
+
+            <div class="modal__details modal__details--display" > 
+                <div class="modal__details__msg" id="details__log">
+                    
+                </div>
+                <div class="modal__details__capturePieceColor">
+                    <p class="modal__details__text">Peças Pretas Capturadas:</p>
+                    <div class="modal__details__pieceDead" id="colorTop">
+                        
+                    </div>
+                </div>
+                <div class="modal__details__capturePieceColor">
+                    <p class="modal__details__text">Peças Brancas Capturadas:</p>
+                    <div class="modal__details___pieceDead" id="colorBottom">
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="chess__board chess__row__center"> 
+                <div class="chess__line chess__row__center" id="line">
+                    <!-- numero-->
+                </div>
+                <div class="chess__squares" id="board">     
+                    <!-- casa-->
+                </div>
+                <div class="chess__column chess__row__between" id="column">      
+                    <!-- letra-->
+                </div>   
+                <div class="chess__modal chess__modal--display" id="modal__information"> 
+                    <p id="chess__inf"></p>
+                </div>
+            </div>
+
+        </main>
+
+        <aside class="right__panel">
+            <div class="right__panel__header" id="history__header">
+                <img src="Img/history.svg" class="icon__med"> 
+                <h3 class="right__panel__title">Histórico de Jogadas </h3>
+                <button class="move__back move__back--display" id="button__back__movement"><img src="Img/undo-arrow.svg" class="icon__micro"> </button>  
+            </div>
+            <div class="right__panel__information" id="information__history"></div>
+        </aside>
+    </body>
+
+    <script type="module" src="Controller.js"></script>
+
 </html>
