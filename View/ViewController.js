@@ -352,7 +352,7 @@ export default function ViewController(startBoard){
     view.chessBoard.subscribeToClick(piece.updatePieceSelect)
     view.buttonBackMovement.subscribeToClick(history.previoushistory)
     view.piecesPromotion.subscribeToClick(piece.changePiecePromotion)
-    view.buttonNewGame.subscribeToClick(statusGame.restartGame)
+    view.buttonExitGame.subscribeToClick(statusGame.restartGame)
 
     this.hideHomeMenu=function(){
         homeMenu.clearModal()

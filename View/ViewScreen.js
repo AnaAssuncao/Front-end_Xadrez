@@ -4,7 +4,7 @@ export default function ViewScreen(chessBoard){
         buttonStartGameOffline:[],
         buttonStartNewRoom:[],
         buttonConnectInARoom:[],
-        buttonNewGame:[],
+        buttonExitGame:[],
         pieceInput:[],
         buttonMove:[],
         clickChessBoard:[],
@@ -60,9 +60,9 @@ export default function ViewScreen(chessBoard){
         }
     }
 
-    this.buttonNewGame={
+    this.buttonExitGame={
         subscribeToClick(fn){
-            functionToCallBack.buttonNewGame.push(fn)
+            functionToCallBack.buttonExitGame.push(fn)
         }
     }
 
@@ -368,10 +368,32 @@ export default function ViewScreen(chessBoard){
                 }
             })
         }, 
-        buttonNewGame(){
-            const buttonStar= document.querySelector("#button__exit")
-            buttonStar.addEventListener("click", ()=>{
-                notifyFunctions(functionToCallBack.buttonNewGame)
+        buttonExitGame(){
+            const buttonExit= document.querySelector("#button__exit")
+            buttonExit.addEventListener("click", ()=>{
+                notifyFunctions(functionToCallBack.buttonExitGame)
+            })
+            buttonExit.addEventListener("mouseover", ()=>{
+                const textExit = document.querySelector("#text__exit")
+                textExit.classList.toggle("left__panel__exit--display")
+            })
+            buttonExit.addEventListener("mouseout", ()=>{
+                const textExit = document.querySelector("#text__exit")
+                textExit.classList.toggle("left__panel__exit--display")
+            })
+        },
+        buttonDarkGame(){
+            const buttonDark= document.querySelector("#button__dark")
+            buttonDark.addEventListener("click", ()=>{
+            //   implement colors dark
+            })
+            buttonDark.addEventListener("mouseover", ()=>{
+                const textDark = document.querySelector("#text__dark")
+                textDark.classList.toggle("left__panel__dark--display")
+            })
+            buttonDark.addEventListener("mouseout", ()=>{
+                const textDark = document.querySelector("#text__dark")
+                textDark.classList.toggle("left__panel__dark--display")
             })
         },
         buttonModal(){
@@ -439,7 +461,8 @@ export default function ViewScreen(chessBoard){
     starGameEvent.buttonMove()
     starGameEvent.buttonBackMovement()
     starGameEvent.buttonModal()
-    starGameEvent.buttonNewGame()
+    starGameEvent.buttonExitGame()
+    starGameEvent.buttonDarkGame()
     boardCreation(chessBoard)
     
     function boardCreation(chessBoard){

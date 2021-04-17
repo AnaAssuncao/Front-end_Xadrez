@@ -17,7 +17,7 @@
     --button: #5973FC;
     --dark-blue:#6D7BC8;
     --blue:blue;
-    --ligth-blue:#A4B3FD;
+    --light-blue:#A4B3FD;
     --shadow:#2c397d;
     --spotlight: #DE314E;
 }
@@ -78,15 +78,18 @@
     display:flex;
 }
 .menu__home__banner{
-    margin: 2%;
+    /* margin: 2%; */
+    display: flex;
+    justify-content:center;
+    align-items: center;
     background-color:var(--cream);
-    width: 50%;
-    height: 96%;
-    border-radius:500px;
-    box-shadow: 1px 1px 5px var(--shadow);
+    width: 60%;
+    height: 100%;
+    border-radius:0px 10% 10% 0px;
+    box-shadow: 5px 5px 10px var(--shadow);
 }
 .menu__home__logo{
-    width: 75%;
+    margin-right: 10%;
     height: 60%;
 }
 .menu__home__title{
@@ -94,7 +97,7 @@
     font-size: 3.6em;
 }
 .menu__home__module{
-    width: 35%;
+    width: 40%;
     height: 100%;
 }
 .module__offline{
@@ -151,7 +154,7 @@
     width:100%;
     color:var(--text);
     margin-left: 1.2%;
-    background-color:var(--light-blue);
+    background-color:var(--background);
     font-size:1em;
     border:none;
     -webkit-appearance: none;
@@ -170,12 +173,43 @@ textarea:focus, input:focus, select:focus {
     box-shadow: 1px 1px 5px var(--shadow);
 }
 .left__panel__buttons{
+    position:relative;
     width: 100%;
     height: 5%; 
 }
-.micro__button__img{
+.left__panel__img{
     width: 15%;
-    height: 75%;
+    height: 100%; 
+}
+.left__panel__exit{
+    position:absolute;
+    left:12%;
+    width:40%;
+    height: 100%;
+    background-color:var(--light-cream);
+    font-size:0.8em;
+    box-shadow: 1px 1px 5px var(--shadow);
+    color:var(--text)
+}
+.left__panel__exit--display{
+    display:none;
+}
+.left__panel__dark{
+    position:absolute;
+    right:17%;
+    width:40%;
+    height: 100%;
+    background-color:var(--light-cream);
+    font-size:0.8em;
+    box-shadow: 1px 1px 5px var(--shadow);
+    color:var(--text)
+}
+.left__panel__dark--display{
+    display:none;
+}
+.micro__button__img{
+    width: 70%;
+    height: 100%;
 }
 .left__panel__header{
     width:100%;
@@ -184,7 +218,6 @@ textarea:focus, input:focus, select:focus {
 .header__logo{
     margin-top:5%;
     width:75%;
-    height:75%;
 }
 .header__title{
     font-size:1.6em;
@@ -319,7 +352,7 @@ textarea:focus, input:focus, select:focus {
 }
 .status__game--details{
     width: 20%;
-    background-color: var(--orange);
+    background-color: var(--dark-blue);
     cursor: pointer;
 }
 @keyframes glowing {
@@ -493,11 +526,14 @@ textarea:focus, input:focus, select:focus {
     flex-flow: column nowrap;
     justify-content: flex-start;
     width:min(50vw,85vh);
-    height:min(50vw,85vh);
-    background-color: var(--orange);
+    height:calc(min(50vw,85vh) + 4vh);
+    background-color: var(--dark-blue);
+    /* box-shadow: 0px 2px 10px var(--shadow); */
+    box-sizing: content-box;
+    border-right: solid 1px var(--shadow);
     opacity:0.97;
     left: 0;
-    top:12.5vh;
+    top:calc(2.5vh + 6%);
     z-index: 99;   
 }
 .modal__details--display{
@@ -508,7 +544,7 @@ textarea:focus, input:focus, select:focus {
     flex-flow:row wrap;
     align-items: center;
     justify-content: start;
-    background-color: var(--dark-orange);
+    background-color: var(--light-blue);
     width:90%;
     height:10%;
     margin: 5% 5% 0 5%;
@@ -524,15 +560,13 @@ textarea:focus, input:focus, select:focus {
     margin:2% 0% 2% 0%;
     width:100%;
     height:70%;
-    background-color: var(--orange);
-    box-shadow: 1px 1px 5px var(--shadow);
 }
 .modal__details__capturePieceColor{
     display: flex;
     flex-flow:row wrap;
     align-items: start;
     justify-content: start;
-    background-color: var(--dark-orange);
+    background-color: var(--light-blue);
     width:90%;
     height:30%;
     margin: 5% 5% 0 5%;
@@ -549,10 +583,10 @@ textarea:focus, input:focus, select:focus {
     width: 10px;
 }
 #details__log::-webkit-scrollbar-track {
-    background: var(--dark-orange); 
+    background: var(--dark-blue); 
 } 
 #details__log::-webkit-scrollbar-thumb {
-    background: var(--orange); 
+    background: var(--light-blue); 
     border: 1px solid var(--text);
 }
 #details__log::-webkit-scrollbar-thumb:hover {
@@ -595,7 +629,7 @@ textarea:focus, input:focus, select:focus {
     width: 10px;
 }
 #information__history::-webkit-scrollbar-track {
-    background: var(--ligth-blue); 
+    background: var(--light-blue); 
 } 
 #information__history::-webkit-scrollbar-thumb {
     background: var(--dark-blue); 
@@ -610,7 +644,7 @@ textarea:focus, input:focus, select:focus {
     flex-flow:column nowrap;
     justify-content: flex-start;
     align-items: center;
-    background-color: var(--ligth-blue);
+    background-color: var(--light-blue);
     box-shadow: 1px 1px 5px var(--shadow);
     position: relative;
     top:0px;

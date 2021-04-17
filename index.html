@@ -50,8 +50,14 @@
 
         <aside class="left__panel chess__column__start">
             <div class="left__panel__buttons chess__row__between">
-                <img src="Img/exit.svg" class="button__exit micro__button__img" id="button__exit">
-                <img src="Img/dark.svg" class="img__button__dark micro__button__img" id="button__dark">
+                <div class="left__panel__img">
+                    <img src="Img/exit.svg" class="button__exit micro__button__img" id="button__exit">
+                </div>
+                <div class="left__panel__exit left__panel__exit--display chess__row__center"  id="text__exit">Sair do Jogo</div>
+                <div class="left__panel__img">
+                    <img src="Img/dark.svg" class="img__button__dark micro__button__img" id="button__dark">
+                </div>
+                <div class="left__panel__dark left__panel__dark--display chess__row__center"  id="text__dark">Modo escuro</div>
             </div>
             
             <header class="left__panel__header chess__column__start">
@@ -90,7 +96,7 @@
                     </div>
                 </div>
                 <div class="time__section chess__column__start">
-                    <p class="time__text">Tempo do Jogo</p>
+                    <p class="time__text">Tempo total deste jogo</p>
                     <div class="time__section chess__row__start">
                         <img src="Img/timeGame.svg" class="time__img">
                         <time class="time__game" id="time__game">00:00</time>
