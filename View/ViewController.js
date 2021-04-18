@@ -15,15 +15,8 @@ export default function ViewController(startBoard){
     const imgPiece = (img)=>`Img/${img}.png`
     const updateInput ={
         allInput:(chessBoard,currentPlayer)=>{
-            updateInput.inputColor(currentPlayer)
             updateInput.inputPieces(chessBoard,currentPlayer)
             updateInput.inputCoordinate()
-        },
-        inputColor: (color) => {
-            // limpar tabuleiro e input
-            view.colorInput.clearAll()
-            // iniciar ou reiniciar tabuleiro e input
-            view.colorInput.addPiecesColor([color])  
         },
         inputPieces: (chessBoard,currentPlayer) =>{
             view.pieceInput.clearAll()
@@ -51,12 +44,17 @@ export default function ViewController(startBoard){
         }
     }
 
+    const informationColor= (color) => {
+        view.colorInformation.updateInformation(color)  
+    }
+
     const board={
-        update:function(chessBoard,currentPlayer,isPlayable){
+        update:function(chessBoard,currentPlayer,isPlayable,msgColor){
             if(chess.pieceSelect.position){
                 view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             }
             view.chessBoard.renderBoard(chessBoard,imgPiece)
+            informationColor(msgColor)
             updateInput.allInput(chessBoard,currentPlayer)
             chess.informationBoard.chessBoard = chessBoard
             chess.informationBoard.currentPlayer = currentPlayer
@@ -144,8 +142,8 @@ export default function ViewController(startBoard){
         },
         updateConnection(connection){
             const imgs={
-                offline:"Img/offline_logo.svg",
-                online:"Img/online_logo.svg"
+                offline:"Img/offlineLogo.svg",
+                online:"Img/onlineLogo.svg"
             }
             const img = imgs[connection.typeGame]
             const msgConnection = connection.msg
@@ -197,8 +195,8 @@ export default function ViewController(startBoard){
                     }
                 } 
         },
-        selectPieceInput:function({namePiece,color}){
-            const refPiece=`${namePiece}${color}`
+        selectPieceInput:function(namePiece){
+            const refPiece=`${namePiece}${chess.informationBoard.currentPlayer}`
             const refId=utilities.discoverRefId(refPiece)
             piece.updatePieceSelect(refId)
         },
@@ -370,8 +368,8 @@ export default function ViewController(startBoard){
         history.clearButtonBackMovement()
     }
 
-    this.updateBoard=function(chessBoard,currentPlayer,isPlayable){
-        board.update(chessBoard,currentPlayer,isPlayable)
+    this.updateBoard=function(chessBoard,currentPlayer,isPlayable,informationColor){
+        board.update(chessBoard,currentPlayer,isPlayable,informationColor)
     }
 
     this.updateHistory=function(historys){

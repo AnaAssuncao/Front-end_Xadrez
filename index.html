@@ -22,14 +22,14 @@
                 <h1 class="module__title">Modos de Jogo</h1>
                 <div class="module__offline chess__column__around">
                     <div class="chess__row__start">
-                        <img src="Img/offline_logo.svg" class="icon__med" id="connection__img">
+                        <img src="Img/offlineLogo.svg" class="icon__med" id="connection__img">
                         <h2 class="module__subtitle">Jogo Offline</h2>
                     </div>
                     <button class="menu__button menu__button__offline" id="button__menu__offline">Iniciar Jogo Local</button>
                 </div>
                 <div class="module__online chess__column__around">
                     <div class="chess__row__start">
-                        <img src="Img/online_logo.svg" class="icon__med" id="connection__img">
+                        <img src="Img/onlineLogo.svg" class="icon__med" id="connection__img">
                         <h2 class="module__subtitle">Jogo Online</h2>
                     </div>
                     <div class="menu__home__inputs chess__column__center">
@@ -50,12 +50,12 @@
 
         <aside class="left__panel chess__column__start">
             <div class="left__panel__buttons chess__row__between">
-                <div class="left__panel__img">
-                    <img src="Img/exit.svg" class="button__exit micro__button__img" id="button__exit">
+                <div class="left__panel__img" id="button__exit" >
+                    <img src="Img/exit.svg" class="button__exit micro__button__img">
                 </div>
                 <div class="left__panel__exit left__panel__exit--display chess__row__center"  id="text__exit">Sair do Jogo</div>
-                <div class="left__panel__img">
-                    <img src="Img/dark.svg" class="img__button__dark micro__button__img" id="button__dark">
+                <div class="left__panel__img" id="button__dark">
+                    <img src="Img/dark.svg" class="img__button__dark micro__button__img" >
                 </div>
                 <div class="left__panel__dark left__panel__dark--display chess__row__center"  id="text__dark">Modo escuro</div>
             </div>
@@ -66,9 +66,7 @@
             </header>
             
             <div class="left__panel__player chess__row__start">
-                <p class="player__text">Jogador: </p>
-                <select class="player__color" id="select__color">
-                </select>
+                <p class="player__text" id="select__color"></p>
             </div>
 
             <div class="left__panel__move chess__column__center">
@@ -90,14 +88,14 @@
             <div class="left__panel__time chess__column__start">
                 <div class="time__section chess__column__start">
                     <p class="time__text">Tempo para movimento</p>
-                    <div class="time__section chess__row__start">
+                    <div class="time__part chess__row__start">
                         <img src="Img/timeMovement.svg" class="time__img">
                         <time class="time__movement" id="time__movement">00:00</time>
                     </div>
                 </div>
                 <div class="time__section chess__column__start">
                     <p class="time__text">Tempo total deste jogo</p>
-                    <div class="time__section chess__row__start">
+                    <div class="time__part chess__row__start">
                         <img src="Img/timeGame.svg" class="time__img">
                         <time class="time__game" id="time__game">00:00</time>
                     </div>
@@ -108,7 +106,7 @@
         <main class="chess__main chess__column__start">
             <div class="status__game__row chess__row__between">
                 <div class="status__game status__game--player" id="status__connection">
-                    <img src="Img/offline_logo.svg" class="icon__min" id="connection__img"> 
+                    <img src="Img/offlineLogo.svg" class="icon__min" id="connection__img"> 
                     <p id="information__connection"></p>          
                 </div>
                 <div class="status__game status__game--board">
@@ -116,7 +114,7 @@
                     <span id="information__game">Sem Xeque</span>
                 </div>
                 <div class="status__game status__game--details" id="button__details__modal">
-                    Detalhes
+                    <span id="information__details">Detalhes</span>
                     <img src="Img/down-chevron.svg" class="icon__micro">
                 </div>
             </div>

@@ -32,7 +32,8 @@ export default class GenericGame{
     
     updateDisplayBoard(colorPlayer,isPlayable=true){
         const chessBoard=this.game.getCurrentBoard()
-        this.viewController.updateBoard(chessBoard,colorPlayer,isPlayable) 
+        const informationColor = msgsAndAlerts.movement.nextColor(colorPlayer)
+        this.viewController.updateBoard(chessBoard,colorPlayer,isPlayable,informationColor) 
     }
     
     updateDisplayStatusCheck(colorPlayer){  

@@ -82,16 +82,14 @@ export default function ViewScreen(chessBoard){
         }
     }
 
-    this.colorInput={
+    this.colorInformation={
         colorIdClass:{
             idInput:"#select__color",
             classOption:"board__option"
         },
-        clearAll(){
-            clearOptionsInput(this.colorIdClass.idInput)
-        },
-        addPiecesColor(value){
-            addOptionsInput(value,this.colorIdClass)
+        updateInformation(value){
+            const text= document.querySelector(this.colorIdClass.idInput)
+            text.innerHTML=value
         }
     }
 
@@ -407,10 +405,9 @@ export default function ViewScreen(chessBoard){
             })
         },
         pieceInput(){          
-            const inputColor=document.querySelector("#select__color")
             const inputPiece= document.querySelector("#select__name")
             inputPiece.addEventListener("change", () =>{
-                notifyFunctions(functionToCallBack.pieceInput,{namePiece:inputPiece.value,color:inputColor.value})
+                notifyFunctions(functionToCallBack.pieceInput,inputPiece.value)
             })
         },
         buttonMove(){
