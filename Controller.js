@@ -4,7 +4,7 @@ import InterfaceNetwork from "./Network/Network.js"
 import GameSetup from "./Control_Prototypes/GameSetup.js"
 import OfflineGame from "./Control_Prototypes/OfflineGame.js"
 import OnlineGame from "./Control_Prototypes/OnlineGame.js"
-import MsgsAndAlerts from "./MsgsAndAlerts.js"
+import msgsAndAlerts from "./MsgsAndAlerts.js"
 
 const gameSetup = new GameSetup()
 let game = new CreateGame(gameSetup.colorsGame)
@@ -101,7 +101,7 @@ async function recoveryGame(){
             }    
         }
         else{
-            viewController.displayBannerGame(MsgsAndAlerts.roomAndCode.runningGame())
+            viewController.displayBannerGame(msgsAndAlerts.roomAndCode.runningGame())
         }  
     }
     else{
