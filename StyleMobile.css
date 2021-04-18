@@ -37,20 +37,21 @@
         display:flex;
     }
     .menu__home__banner{
-        width: 96%;
-        height: 22%;
-        border-radius: 500px;
+        width:100%;
+        height: 20%;
+        border-radius:0px 0px 10% 10%;
     }
     .menu__home__logo{
-        width: 40%;
-        height: 50%;
+        margin:0px;
+        height: 80%;
     }
     .menu__home__title{
-        font-size: 5em;
+        margin:0px;
+        font-size: 4em;
     }
     .menu__home__module{
         width: 100%;
-        height: 40%;
+        height: 42%;
     }
     .module__offline{
         width: 100%;
@@ -74,6 +75,12 @@
     .menu__button{
         font-size: 2.4em;
     }
+    .menu__buttons__online{
+        height: 25%;
+    }
+    .menu__button__online{
+        margin-top:0px;
+    }
     .menu__input{
         font-size:2.4em;
     }
@@ -83,39 +90,47 @@
     
     /* left panel*/
     .left__panel{
-        width: 100%;
-        height: 9%;
-        flex-flow:row wrap;
-        justify-content: space-between;
+        width: 100vw;
+        height: 6%;
+        flex-flow: column wrap;
     }
     .left__panel__buttons{
-        width: 100%;
-        height: 20%; 
+        flex-flow: column nowrap;
+        justify-content: space-between;
+        order: 5;
+        width: 10%;
+        height: 100%; 
+    }
+    .left__panel__img{
+        width: 10vw;
+        height: 40%; 
     }
     .micro__button__img{
-        width: 15%;
-        height: 75%;
+        width: 100%;
+        height: 100%;
     }
     .left__panel__header{
-        width:30%;
-        height:70%;
-    }
-    .header__logo{
-        margin:0px;
-        width:60%;
-        height:85%;
-    }
-    .header__title{
-        font-size:1.8em;
-    }
-    .left__panel__player{
-        width:30%;
-        height:10%;
+        order:2;
+        width:40%;
+        height:90%;
         justify-content: center;
     }
+    .header__logo{
+        display: none;
+    }
+    .header__title{
+        text-align: center;
+        width: 100%;
+        font-size:3em;
+    }
+    .left__panel__player{
+        order:4;
+        width:40%;
+        height:45%;
+    }
     .player__text{
-        font-size:1.8em;
-        margin-left:0%;
+        font-size:2em;
+        margin-left:0px;
     }
     .player__color{
         font-size:1.8em;
@@ -124,9 +139,11 @@
         display: none;
     }
     .left__panel__time{
+        order:3;
+        flex-flow:row nowrap;
         margin-right: 5%;
-        width:30%;
-        height:70%;
+        width:40%;
+        height:50%;
     }
     .time__section{
         width:100%;
@@ -138,42 +155,54 @@
         font-size: 1.8em;
     }
     .time__img{
-        margin:0px 20% 0px 0px; 
-        width: 20%;
+        width: 100%;
         height:100%;
     }
     .time__text{
-        font-size:1.6em;
+        display:none
     }
-    
+    .time__part{
+        width: 70%;
+        margin:0px;
+    }
     
     /* main panel */
     .chess__main{
         align-items: center;
         width: 100%;
         height: 50%;
-        margin:2% 0px 5% 0px;
+        margin:2vh 0px 2vh 0px;
     }
     /* top line with status game  */
     .status__game__row{
         width: 98%;
-        height: 10%;
+        height: 6%;
         margin: 1vh 0 1vh 0 
     }
     .status__game{
         font-size: 1.6em;
     }
-    .icon_micro{
-        width: 2em;
-        margin: 0px 15px 0px 20px;
+    #information__details{
+        display: none;
     }
-    .icon_min{
-        width: 2em;
+    .icon__micro{
+        margin:0px;
+        width: 1.4em;
+    }
+    .icon__min{
+        width: 1.4em;
         margin: 0px 4px 10px 0px;
     }
-    .icon_med{
+    .icon__med{
         width: 2em;
         margin: 0px 15px 0px 0px;
+    }
+    .icon__micro--width{
+        width: 2.4em;
+    }
+    #information__connection,
+    #information__game{
+        font-size:1.2em;
     }
     /* chess board */
     .chess__board{
@@ -232,9 +261,9 @@
     .modal__details{
         margin-top: 0;
         width:min(98vw,85vh);
-        height:min(98vw,85vh);
+        height:calc(min(98vw,85vh) + 2vh);
+        top:calc(1.1vh + 6%);
         left:1vw;
-        top:6.6vh;
     }
     .modal__details__msg{
         height:15%;
@@ -262,13 +291,15 @@
     }
     /* right__panel */
     .right__panel{
-        width: 100%;
+        width: 98%;
         height: 50%;;
-        margin: 2%;
+        margin: 1vh;
     }
     .right__panel__header{
-        font-size:1.8em;
         height: 8%;
+    }
+    .right__panel__title{
+        font-size:2em;
     }
     #information__history::-webkit-scrollbar {
         width: 30px;
