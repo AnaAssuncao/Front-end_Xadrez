@@ -180,7 +180,7 @@ export default class OnlineGame extends GenericGame{
             this.updateDisplayLog()
         }
         else if(statusGame.endGame===true ||statusGame.checkMate===true){
-            const nameWin = (statusGame.winColor===this.gameSetup.onlineConf.color)?this.gameSetup.onlineConf.statusPlayers.playerName:this.gameSetup.onlineConf.statusPlayers.advName
+            const nameWin = (statusGame.winColor===this.gameSetup.onlineConf.statusPlayers.playerColor)?this.gameSetup.onlineConf.statusPlayers.playerName:this.gameSetup.onlineConf.statusPlayers.advName
             const displayEndGame=msgsAndAlerts.endGame.winPlayer(nameWin)
             this.viewController.displayEndGameInformation(displayEndGame)
             this.gameSetup.addLogGame(displayEndGame)

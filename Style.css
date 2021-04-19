@@ -369,7 +369,7 @@ textarea:focus, input:focus, select:focus {
 #information__details,
 #information__connection{
     margin:1%;
-    font-size:1.2em;
+    font-size:1em;
 }
 .status__game--player{
     width: 40%;
