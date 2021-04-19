@@ -17,12 +17,32 @@
     --text-button:#D4DCE6;
     --button: #5973FC;
     --dark-blue:#6D7BC8;
-    --blue:blue;
     --light-blue:#A4B3FD;
     --shadow:#2c397d;
     --spotlight: #DE314E;
+    --invertColor:invert(0%);
+    --brightness:brightness(100%);
+    --urlInput: url("Img/input.svg")
 }
-
+[data-theme="dark"] {
+    --black:#000000;
+    --background:#1B2732;
+    --light-cream:#818892;
+    --cream:#6D7989;
+    --mustard:#2F3642;
+    --orange: #4D0C0C;
+    --dark-orange: #330808;
+    --text:#eeeefc;
+    --text-button:#D4DCE6;
+    --button: #2c397d;
+    --dark-blue:#203C62;
+    --light-blue:#6B7B92;
+    --shadow:#A4B3FD;
+    --spotlight: #4D0C0C;
+    --invertColor:invert(100%);
+    --brightness:brightness(20%);
+    --urlInput: url("Img/input-dark.svg")
+}
 .chess__column__start{
     display: flex;
     flex-flow: column nowrap;
@@ -96,7 +116,7 @@
 .menu__home__title{
     margin-right: 10%;
     color: var(--orange);
-    font-size: 4.4em;
+    font-size: 5em;
 }
 .menu__home__module{
     width: 40%;
@@ -168,6 +188,7 @@ textarea:focus, input:focus, select:focus {
 .module__icon{
     width:2em;
     margin:0px 5px 5px 0px;
+    filter: var(--invertColor);
 }
 
 /* left panel*/
@@ -189,9 +210,9 @@ textarea:focus, input:focus, select:focus {
 }
 .left__panel__exit{
     position:absolute;
-    left:12%;
+    right:17%;
     width:40%;
-    height: 100%;
+    height: 3vh;
     background-color:var(--light-cream);
     font-size:0.8em;
     box-shadow: 1px 1px 5px var(--shadow);
@@ -200,9 +221,13 @@ textarea:focus, input:focus, select:focus {
 .left__panel__exit--display{
     display:none;
 }
+#button__dark{
+    z-index:99999;
+}
 .left__panel__dark{
+    z-index:99999;
     position:absolute;
-    right:17%;
+    left:12%;
     width:40%;
     height: 100%;
     background-color:var(--light-cream);
@@ -210,12 +235,13 @@ textarea:focus, input:focus, select:focus {
     box-shadow: 1px 1px 5px var(--shadow);
     color:var(--text)
 }
-.left__panel__dark--display{
+.module__dark--display{
     display:none;
 }
 .micro__button__img{
     width: 70%;
     height: 100%;
+    filter:var(--brightness)
 }
 .left__panel__header{
     width:100%;
@@ -226,7 +252,7 @@ textarea:focus, input:focus, select:focus {
 }
 .header__title{
     color: var(--orange);
-    font-size:1.7em;
+    font-size:1.9em;
 }
 .left__panel__player{
     width:100%;
@@ -261,7 +287,7 @@ textarea:focus, input:focus, select:focus {
     border:none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url("Img/input.svg");
+    background-image: var(--urlInput);
     background-repeat: no-repeat;
     background-position-x: 100%;
     background-position-y: 2px;
@@ -299,6 +325,7 @@ textarea:focus, input:focus, select:focus {
     margin-right:20%; 
     width: 10%;
     height:70%;
+    filter: var(--invertColor);
 }
 .time__text{
     color:var(--text);
@@ -372,14 +399,17 @@ textarea:focus, input:focus, select:focus {
 .icon__micro{
     width: 1.2em;
     margin: 0px 5px 0px 10px;
+    filter: var(--invertColor);
 }
 .icon__min{
     width: 1.4em;
     margin: 0px 2px 5px 0px;
+    filter: var(--invertColor);
 }
 .icon__med{
     width: 2em;
     margin: 0px 5px 0px 0px;
+    filter: var(--invertColor);
 }
 /* chess board */
 .chess__board{
@@ -691,6 +721,7 @@ textarea:focus, input:focus, select:focus {
     font-weight: 500;
 }
 .history__number{
+    color:var(--text);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -707,6 +738,7 @@ textarea:focus, input:focus, select:focus {
     height: 45%;
 }
 .history__refIdPiece{
+    color:var(--text);
     text-align: center;
     font-size:0.8em;
     width: 15%;
@@ -722,6 +754,7 @@ textarea:focus, input:focus, select:focus {
 .history__icon{
     width: 1.4em;
     margin-right: 10px;
+    filter: var(--invertColor);
 }
 .move__back--display{
     display: none;

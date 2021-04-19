@@ -15,7 +15,7 @@
     <body id="chess">
         <div class="menu__home chess__row__between" id="menu__home">
             <div class="menu__home__banner chess__column__center">
-                <img src="Img/logoChess.png" class="menu__home__logo">
+                <img src="Img/logoChess.png" class="menu__home__logo" id="menu__logo">
                 <h1 class="menu__home__title">Vanilla Chess</h1>
             </div>
             <div class="menu__home__module chess__column__around" id="menu__module">
@@ -50,18 +50,18 @@
 
         <aside class="left__panel chess__column__start">
             <div class="left__panel__buttons chess__row__between">
-                <div class="left__panel__img" id="button__exit" >
-                    <img src="Img/exit.svg" class="button__exit micro__button__img">
-                </div>
-                <div class="left__panel__exit left__panel__exit--display chess__row__center"  id="text__exit">Sair do Jogo</div>
-                <div class="left__panel__img" id="button__dark">
+                <div class="left__panel__img" id="button__dark" data-theme="light">
                     <img src="Img/dark.svg" class="img__button__dark micro__button__img" >
                 </div>
-                <div class="left__panel__dark left__panel__dark--display chess__row__center"  id="text__dark">Modo escuro</div>
+                <div class="left__panel__dark module__dark--display chess__row__center"  id="text__dark">Modo escuro</div>
+                <div class="left__panel__img" id="button__exit" >
+                    <img src="Img/exit.svg" class="button__exit micro__button__img" id="aa">
+                </div>
+                <div class="left__panel__exit left__panel__exit--display chess__row__center"  id="text__exit">Sair do Jogo</div>
             </div>
             
             <header class="left__panel__header chess__column__start">
-                <img src="Img/logoChess.png" class="header__logo">
+                <img src="Img/logoChess.png" class="header__logo" id="header__logo">
                 <h1 class="header__title">Vanilla Chess</h1>
             </header>
             

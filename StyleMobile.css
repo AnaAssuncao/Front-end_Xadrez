@@ -1,24 +1,4 @@
 @media(max-width: 1000px){
-
-    :root{
-        --black:#000000;
-        --background:#eeeefc;
-        --light-cream:#FFFAF0;
-        --cream:#FFF2D7;
-        --mustard:#FFBE4E;
-        --orange: #FF8D4E;
-        --dark-orange: #CC713F;
-        --text:#1B2732;
-        --text-button:#D4DCE6;
-        --button: #5973FC;
-        --dark-blue:#475CC9;
-        --blue:blue;
-        --ligth-blue:#A4B3FD;
-        --shadow:#2c397d;
-        --spotlight: #DE314E;
-    }
-    
-    
     #chess{
         flex-flow:column nowrap;
         justify-content: start;
@@ -180,7 +160,7 @@
         align-items: center;
         width: 100%;
         height: 50%;
-        margin:2vh 0px 2vh 0px;
+        margin:3vh 0px 2vh 0px;
     }
     /* top line with status game  */
     .status__game__row{

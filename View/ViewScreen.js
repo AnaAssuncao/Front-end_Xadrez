@@ -387,15 +387,25 @@ export default function ViewScreen(chessBoard){
         buttonDarkGame(){
             const buttonDark= document.querySelector("#button__dark")
             buttonDark.addEventListener("click", ()=>{
-            //   implement colors dark
+                const currentTheme = document.documentElement.getAttribute("data-theme")
+                if(currentTheme === "dark"){
+                    document.documentElement.setAttribute("data-theme", "light")
+                    document.querySelector("#menu__logo").src = "Img/logoChess.png" 
+                    document.querySelector("#header__logo").src = "Img/logoChess.png"
+                }
+                else{
+                    document.documentElement.setAttribute("data-theme", "dark")
+                    document.querySelector("#menu__logo").src = "Img/logoChess-dark.png" 
+                    document.querySelector("#header__logo").src = "Img/logoChess-dark.png"
+                }
             })
             buttonDark.addEventListener("mouseover", ()=>{
                 const textDark = document.querySelector("#text__dark")
-                textDark.classList.toggle("left__panel__dark--display")
+                textDark.classList.toggle("module__dark--display")
             })
             buttonDark.addEventListener("mouseout", ()=>{
                 const textDark = document.querySelector("#text__dark")
-                textDark.classList.toggle("left__panel__dark--display")
+                textDark.classList.toggle("module__dark--display")
             })
         },
         buttonModal(){
