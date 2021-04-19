@@ -165,6 +165,10 @@
 textarea:focus, input:focus, select:focus {
     outline: 0;
 }
+.module__icon{
+    width:2em;
+    margin:0px 5px 5px 0px;
+}
 
 /* left panel*/
 .left__panel{
@@ -227,11 +231,14 @@ textarea:focus, input:focus, select:focus {
 .left__panel__player{
     width:100%;
     height:10%;
+    margin-top:5%;
 }
 .player__text{
     color:var(--text);
     font-size:1em;
-    margin-left:12%;
+}
+#player__img{
+    height: 50%;
 }
 .left__panel__move{
     width:100%;
@@ -711,6 +718,10 @@ textarea:focus, input:focus, select:focus {
 }
 .history__img--rotate{
     transform: rotate(90deg)
+}
+.history__icon{
+    width: 1.4em;
+    margin-right: 10px;
 }
 .move__back--display{
     display: none;

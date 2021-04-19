@@ -83,13 +83,11 @@ export default function ViewScreen(chessBoard){
     }
 
     this.colorInformation={
-        colorIdClass:{
-            idInput:"#select__color",
-            classOption:"board__option"
-        },
-        updateInformation(value){
-            const text= document.querySelector(this.colorIdClass.idInput)
+        updateInformation(value,imgPiece){
+            const text= document.querySelector("#select__color")
             text.innerHTML=value
+            const img=document.querySelector("#player__img")
+            img.src = imgPiece
         }
     }
 

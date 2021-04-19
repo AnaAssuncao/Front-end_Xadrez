@@ -44,8 +44,10 @@ export default function ViewController(startBoard){
         }
     }
 
-    const informationColor= (color) => {
-        view.colorInformation.updateInformation(color)  
+    const informationColor= (msgColor, currentPlayer) => {
+        const color = (currentPlayer==="white")? "White":"Black"
+        const imgPiece = `Img/king${color}.png`
+        view.colorInformation.updateInformation(msgColor,imgPiece)  
     }
 
     const board={
@@ -54,7 +56,7 @@ export default function ViewController(startBoard){
                 view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             }
             view.chessBoard.renderBoard(chessBoard,imgPiece)
-            informationColor(msgColor)
+            informationColor(msgColor,currentPlayer)
             updateInput.allInput(chessBoard,currentPlayer)
             chess.informationBoard.chessBoard = chessBoard
             chess.informationBoard.currentPlayer = currentPlayer
