@@ -96,7 +96,7 @@
 .menu__home__title{
     margin-right: 10%;
     color: var(--orange);
-    font-size: 3.6em;
+    font-size: 4.4em;
 }
 .menu__home__module{
     width: 40%;
@@ -222,7 +222,7 @@ textarea:focus, input:focus, select:focus {
 }
 .header__title{
     color: var(--orange);
-    font-size:1.6em;
+    font-size:1.7em;
 }
 .left__panel__player{
     width:100%;
@@ -367,7 +367,7 @@ textarea:focus, input:focus, select:focus {
     margin: 0px 5px 0px 10px;
 }
 .icon__min{
-    width: 1.5em;
+    width: 1.4em;
     margin: 0px 2px 5px 0px;
 }
 .icon__med{
@@ -607,7 +607,6 @@ textarea:focus, input:focus, select:focus {
 .right__panel__header{
     background-color: var(--dark-blue);
     font-weight: 500;
-    font-size: 0.8em;
     display:flex;
     flex-flow: row nowrap;
     height: 6%;
@@ -619,6 +618,9 @@ textarea:focus, input:focus, select:focus {
     position: relative;
     z-index: 99;
     border-radius: 4px;
+}
+.right__panel__title{
+    font-size: 1em;
 }
 #information__history::-webkit-scrollbar {
     width: 10px;
@@ -670,7 +672,7 @@ textarea:focus, input:focus, select:focus {
 }
 .history__play{
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column wrap;
     justify-content: center;
     align-items: center;
     min-height: 10%;
@@ -681,21 +683,51 @@ textarea:focus, input:focus, select:focus {
     margin: 10px 5px 0 5px; 
     font-weight: 500;
 }
-.play__number,
-.play__refIdPiece{
+.history__number{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size:1em;
+    width: 15%;
+    height: 100%;
+}
+.history__movement{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+    width:80%;
+    height: 45%;
+}
+.history__refIdPiece{
     text-align: center;
     font-size:0.8em;
     width: 15%;
     margin:0px 2% 0px 2%;
 }
-.play__img{
+.history__img{
     margin:0px 5% 0px 5%;
-    width: 7%;
+    width: 8%;
 }
-.play__img--rotate{
+.history__img--rotate{
     transform: rotate(90deg)
 }
 .move__back--display{
     display: none;
 }
-
+.chess__banner{
+    background-color: var(--light-blue);
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index:9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.banner__text{
+    color:var(--text);
+    font-size: 2em;
+    width: 50%;
+    text-align: center;
+}

@@ -267,7 +267,7 @@ export default function ViewScreen(chessBoard){
             play.classList.add("history__play")
             play.id = "history__play-" + number
             const numberPlay= document.createElement("div")
-            numberPlay.classList.add("play__number")
+            numberPlay.classList.add("history__number")
             numberPlay.innerHTML=number + "."
             play.appendChild(numberPlay)
             history.appendChild(play)
@@ -277,31 +277,37 @@ export default function ViewScreen(chessBoard){
             const line = document.querySelector("#"+id)
             line.remove()
         },
-        addRefId(refId,number,position){
+        addMovement(number,numberMovement){
             const play = document.querySelector("#history__play-" + number)
+            const movements = document.createElement("div")
+            movements.classList.add("history__movement")
+            movements.id = "history__movement-" + numberMovement
+            play.appendChild(movements)
+        },
+        addRefId(refId,number,position){
+            const play = document.querySelector("#history__movement-" + number)
             const refIdPiece = document.createElement("div")
-            refIdPiece.classList.add("play__refIdPiece")
+            refIdPiece.classList.add("history__refIdPiece")
             refIdPiece.innerHTML =(position==="last")? refId + " ->":refId
             play.appendChild(refIdPiece)
-            
         },
         addImgPiece(img,number){
-            const play = document.querySelector("#history__play-" + number)
+            const play = document.querySelector("#history__movement-" + number)
             const imgPiece = document.createElement("img")
             imgPiece.src=img
-            imgPiece.classList.add("play__img")
+            imgPiece.classList.add("history__img")
             play.appendChild(imgPiece) 
         },
         addPieceCaptured(img,number){
-            const play = document.querySelector("#history__play-" + number)
+            const play = document.querySelector("#history__movement-" + number)
             const imgPiece = document.createElement("img")
             if(img){
                 imgPiece.src=img
-                imgPiece.classList.add("play__img")
-                imgPiece.classList.add("play__img--rotate")
+                imgPiece.classList.add("history__img")
+                imgPiece.classList.add("history__img--rotate")
             }
             else{
-                imgPiece.classList.add("play__img")
+                imgPiece.classList.add("history__img")
                 imgPiece.innerHTML=" "
             }  
             play.appendChild(imgPiece)     

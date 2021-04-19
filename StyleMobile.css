@@ -315,12 +315,12 @@
         min-height: 5%;
         width: 95%;
     }
-    .play__number,
-    .play__refIdPiece{
+    .history__number,
+    .history__refIdPiece{
         font-size:1.4em;
         width: 15%;
     }
-    .play__img{
+    .history__img{
         width: 5%;
     }  
     

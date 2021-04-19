@@ -77,11 +77,13 @@ export default function ViewController(startBoard){
                 const number = Number(indPlay)+1
                 view.playHitory.addPlay(number) 
                 history[indPlay].piecesPlayed.forEach((piece,ind)=>{
-                    view.playHitory.addImgPiece(imgPiece(piece.imgName),number)
-                    view.playHitory.addRefId(utilities.refIdToCoordinate(piece.position),number,"last")
-                    view.playHitory.addRefId(utilities.refIdToCoordinate(history[indPlay].newRefId[ind]),number,"new")
+                    const numberMovement = number + "-" + (ind+1)
+                    view.playHitory.addMovement(number,numberMovement)
+                    view.playHitory.addImgPiece(imgPiece(piece.imgName),numberMovement)
+                    view.playHitory.addRefId(utilities.refIdToCoordinate(piece.position),numberMovement,"last")
+                    view.playHitory.addRefId(utilities.refIdToCoordinate(history[indPlay].newRefId[ind]),numberMovement,"new")
                     const imgPieceCaptured = (history[indPlay].pieceCaptured && ind!==1)?imgPiece(history[indPlay].pieceCaptured.imgName):null
-                    view.playHitory.addPieceCaptured(imgPieceCaptured,number)
+                    view.playHitory.addPieceCaptured(imgPieceCaptured,numberMovement)
                 })
             }
         },
