@@ -64,4 +64,10 @@ export default class GenericGame{
     updateDisplayLog(){
         this.viewController.displayGameLog(this.applicationSetup.gameLogs)
     }
+
+    changeNextColor(){
+        const nextColor=(this.applicationSetup.colorsGame.top===this.applicationSetup.currentPlayerColor)?
+                            this.applicationSetup.colorsGame.bottom:this.applicationSetup.colorsGame.top
+        return nextColor
+    }
 }

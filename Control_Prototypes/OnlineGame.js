@@ -87,7 +87,7 @@ export default class OnlineGame extends GenericGame{
     async move(informationPieceSelect){
         // {informationPieceSelect: fullName,color,typeMovement,specialMovement,refId e piecePromotion}
         const isMove = this.movePiece(informationPieceSelect)
-        const nextColor=(this.applicationSetup.colorsGame.top===this.applicationSetup.currentPlayerColor)?this.applicationSetup.colorsGame.bottom:this.applicationSetup.colorsGame.top
+        const nextColor=this.changeNextColor()
         const isPlayable=false
         this.applicationSetup.addLogGame(msgsAndAlerts.movement.movementPlayer(this.applicationSetup.onlineConf.statusPlayers.playerColor,this.applicationSetup.onlineConf.statusPlayers.playerName))
     
@@ -238,7 +238,7 @@ export default class OnlineGame extends GenericGame{
             plays.forEach((informationPieceSelect)=>{  
                 const isMove =this.movePiece(informationPieceSelect)
                 if(isMove){
-                    const nextColor=(this.applicationSetup.colorsGame.top===this.applicationSetup.currentPlayerColor)?this.applicationSetup.colorsGame.bottom:this.applicationSetup.colorsGame.top
+                    const nextColor=this.changeNextColor()
                     this.applicationSetup.addLogGame(msgsAndAlerts.movement.movementPiece(this.applicationSetup.currentPlayerColor))
                     this.applicationSetup.updateCurrentPlayerColor(nextColor)
                     this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor))

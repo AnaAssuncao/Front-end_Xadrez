@@ -25,7 +25,7 @@ export default class OfflineGame extends GenericGame{
     move(informationPieceSelect){
         const isMove =this.movePiece(informationPieceSelect)
         if(isMove){
-            const nextColor=(this.applicationSetup.colorsGame.top===this.applicationSetup.currentPlayerColor)?this.applicationSetup.colorsGame.bottom:this.applicationSetup.colorsGame.top
+            const nextColor=this.changeNextColor()
             this.applicationSetup.addLogGame(msgsAndAlerts.movement.movementPiece(this.applicationSetup.currentPlayerColor))
             this.applicationSetup.updateCurrentPlayerColor(nextColor)
             this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor))
@@ -38,7 +38,7 @@ export default class OfflineGame extends GenericGame{
         const playHistory = this.gameLogic.getHistoryMoves()
         if(playHistory.length>0){
             this.gameLogic.returnMovement()
-            const pastColor=(this.applicationSetup.colorsGame.top===this.applicationSetup.currentPlayerColor)?this.applicationSetup.colorsGame.bottom:this.applicationSetup.colorsGame.top
+            const pastColor=this.changeNextColor()
             const statusGame = this.gameLogic.getStatusGame() 
             if(statusGame.endGame===false){
                 this.applicationSetup.addLogGame(msgsAndAlerts.movement.return(this.applicationSetup.currentPlayerColor))
