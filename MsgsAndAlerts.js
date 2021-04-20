@@ -4,8 +4,6 @@ const colors={
     black:"Pretas"
 }
 
-const time = new Date()
-
 const roomAndCode={
     roomWithOnePlayer:()=> "Esta sala já foi criada, conecta ao jogador",
     roomUnavailable:()=>"Nesta sala já está acontecendo um jogo, tente outro código",
@@ -62,12 +60,22 @@ const movement={
 }
 const log={
     gamelog:(msg)=>{
-        const hours = time.getHours()
-        const minutes = time.getMinutes()
-        const seconds = time.getSeconds()
+        const time = new Date()
+        const hours = formatTime(time.getHours())
+        const minutes = formatTime(time.getMinutes())
+        const seconds = formatTime(time.getSeconds())
         return `${hours}:${minutes}:${seconds} - ${msg}`
     }
 }
+
+const formatTime=(number)=>{
+    let stringNumber = number.toString()
+    if(stringNumber.length===1){
+        stringNumber = "0" + stringNumber
+    }
+    return stringNumber
+}
+
 export default {
     roomAndCode,
     connection,
