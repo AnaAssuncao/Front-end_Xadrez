@@ -2,10 +2,10 @@ import msgsAndAlerts from "../MsgsAndAlerts.js"
 import GenericGame from "./GenericGame.js"
 
 export default class OfflineGame extends GenericGame{
-    constructor(game,gameSetup,viewController){
-        super(game,gameSetup,viewController)
-        this.game=game
-        this.gameSetup=gameSetup
+    constructor(gameLogic,applicationSetup,viewController){
+        super(gameLogic,applicationSetup,viewController)
+        this.gameLogic=gameLogic
+        this.applicationSetup=applicationSetup
         this.viewController=viewController
     }
     start(){
@@ -16,52 +16,52 @@ export default class OfflineGame extends GenericGame{
         }
         this.viewController.updateStatusConection(connection)
         this.viewController.displayBackMovement()
-        this.gameSetup.updateCurrentPlayerColor(this.gameSetup.colorsGame.bottom)
-        this.game.starObjGame(this.gameSetup.currentPlayerColor)
-        this.gameSetup.addLogGame(msgsAndAlerts.startGame.startGame())
-        this.updateDisplayGame(this.gameSetup.colorsGame.top,this.gameSetup.currentPlayerColor)
+        this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.bottom)
+        this.gameLogic.starObjGame(this.applicationSetup.currentPlayerColor)
+        this.applicationSetup.addLogGame(msgsAndAlerts.startGame.startGame())
+        this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor)
     }
 
     move(informationPieceSelect){
         const isMove =this.movePiece(informationPieceSelect)
         if(isMove){
-            const nextColor=(this.gameSetup.colorsGame.top===this.gameSetup.currentPlayerColor)?this.gameSetup.colorsGame.bottom:this.gameSetup.colorsGame.top
-            this.gameSetup.addLogGame(msgsAndAlerts.movement.movementPiece(this.gameSetup.currentPlayerColor))
-            this.gameSetup.updateCurrentPlayerColor(nextColor)
-            this.gameSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.gameSetup.currentPlayerColor))
+            const nextColor=(this.applicationSetup.colorsGame.top===this.applicationSetup.currentPlayerColor)?this.applicationSetup.colorsGame.bottom:this.applicationSetup.colorsGame.top
+            this.applicationSetup.addLogGame(msgsAndAlerts.movement.movementPiece(this.applicationSetup.currentPlayerColor))
+            this.applicationSetup.updateCurrentPlayerColor(nextColor)
+            this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor))
         }
-        this.updateDisplayGame(this.gameSetup.colorsGame.top,this.gameSetup.currentPlayerColor)
+        this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor)
     }
 
     backPreviousMove(){
         this.viewController.hideEndGameInformation()
-        const playHistory = this.game.getHistoryMoves()
+        const playHistory = this.gameLogic.getHistoryMoves()
         if(playHistory.length>0){
-            this.game.returnMovement()
-            const pastColor=(this.gameSetup.colorsGame.top===this.gameSetup.currentPlayerColor)?this.gameSetup.colorsGame.bottom:this.gameSetup.colorsGame.top
-            const statusGame = this.game.getStatusGame() 
+            this.gameLogic.returnMovement()
+            const pastColor=(this.applicationSetup.colorsGame.top===this.applicationSetup.currentPlayerColor)?this.applicationSetup.colorsGame.bottom:this.applicationSetup.colorsGame.top
+            const statusGame = this.gameLogic.getStatusGame() 
             if(statusGame.endGame===false){
-                this.gameSetup.addLogGame(msgsAndAlerts.movement.return(this.gameSetup.currentPlayerColor))
-                this.gameSetup.updateCurrentPlayerColor(pastColor)
-                this.gameSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.gameSetup.currentPlayerColor))
-                this.updateDisplayGame(this.gameSetup.colorsGame.top,pastColor)
+                this.applicationSetup.addLogGame(msgsAndAlerts.movement.return(this.applicationSetup.currentPlayerColor))
+                this.applicationSetup.updateCurrentPlayerColor(pastColor)
+                this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor))
+                this.updateDisplayGame(this.applicationSetup.colorsGame.top,pastColor)
             }
         }
     }
 
     restartGame(){
-        this.gameSetup.clearGame()
+        this.applicationSetup.clearGame()
         this.viewController.hideEndGameInformation()
         this.viewController.hideBackMovement()
         this.viewController.displayHomeMenu()
     }
 
     updateDisplayDrawAndEndGame(){
-        const statusGame = this.game.getStatusGame() 
+        const statusGame = this.gameLogic.getStatusGame() 
         if(statusGame.draw===true){
             const displayDraw=msgsAndAlerts.drawGame.draw()
             this.viewController.displayEndGameInformation(displayDraw)
-            this.gameSetup.addLogGame(displayDraw)
+            this.applicationSetup.addLogGame(displayDraw)
             this.updateDisplayLog()
         }
         else if(statusGame.endGame===true ||statusGame.checkMate===true){

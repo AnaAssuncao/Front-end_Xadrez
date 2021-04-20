@@ -1,54 +1,57 @@
 import CreateGame from "./Game/XadrezGame.js"
 import ViewController from "./View/ViewController.js"
 import InterfaceNetwork from "./Network/Network.js"
-import GameSetup from "./Control_Prototypes/GameSetup.js"
+import ApplicationSetup from "./Control_Prototypes/ApplicationSetup.js"
 import OfflineGame from "./Control_Prototypes/OfflineGame.js"
 import OnlineGame from "./Control_Prototypes/OnlineGame.js"
 import msgsAndAlerts from "./MsgsAndAlerts.js"
 
-const gameSetup = new GameSetup()
-let game = new CreateGame(gameSetup.colorsGame)
-const startBoard = game.getCurrentBoard()
+const applicationSetup = new ApplicationSetup()
+let gameLogic = new CreateGame(applicationSetup.colorsGame)
+const startBoard = gameLogic.getCurrentBoard()
 
 const viewController = new ViewController (startBoard)
 const network = new InterfaceNetwork()
 
 const interfaceFunctions={ 
     startGameOffline:function(){
-        gameSetup.addGame(new OfflineGame(game,gameSetup,viewController))
-        gameSetup.game.start()
+        const gameModeFunctions= new OfflineGame(gameLogic,applicationSetup,viewController)
+        applicationSetup.addGame(gameModeFunctions)
+        applicationSetup.gameMode.start()
     },  
     startNewRoomOnline:function(nickAndCode){
-        gameSetup.addGame(new OnlineGame(game,gameSetup,viewController,network))
-        gameSetup.game.startNewRoom(nickAndCode)
+        const gameModeFunctions= new OnlineGame(gameLogic,applicationSetup,viewController,network)
+        applicationSetup.addGame(gameModeFunctions)
+        applicationSetup.gameMode.startNewRoom(nickAndCode)
     },
     connectInARoomOnline:function(nickAndCode){
-        gameSetup.addGame(new OnlineGame(game,gameSetup,viewController,network))
-        gameSetup.game.connectInARoom(nickAndCode)
+        const gameModeFunctions= new OnlineGame(gameLogic,applicationSetup,viewController,network)
+        applicationSetup.addGame(gameModeFunctions)
+        applicationSetup.gameMode.connectInARoom(nickAndCode)
     },
     restartGame:function(){
-        gameSetup.game.restartGame()
+        applicationSetup.gameMode.restartGame()
     },
     move:function(informationPieceSelect){
-        gameSetup.game.move(informationPieceSelect)
+        applicationSetup.gameMode.move(informationPieceSelect)
     },
     backPreviousMove:function(){
-        gameSetup.game.backPreviousMove()
+        applicationSetup.gameMode.backPreviousMove()
     },
     moveAdv:function(infMoveAdv){
-        gameSetup.game.getMoveAdv(infMoveAdv)
+        applicationSetup.gameMode.getMoveAdv(infMoveAdv)
     },
     playerConnection:function(infPlayerAdv){
-        gameSetup.game.connectionPlayerTwo(infPlayerAdv)
+        applicationSetup.gameMode.connectionPlayerTwo(infPlayerAdv)
     },
     giveUp:function(){
-        gameSetup.game.advGiveUp()
+        applicationSetup.gameMode.advGiveUp()
     },
     errConnection(msgErr){
-        gameSetup.game.informationProminentErr(msgErr)
+        applicationSetup.gameMode.informationProminentErr(msgErr)
     },
     timeOutToMove(playerName){
-        gameSetup.game.timeOutToMove(playerName)
+        applicationSetup.gameMode.timeOutToMove(playerName)
     }
 }
 
@@ -74,29 +77,29 @@ async function recoveryGame(){
     const playerInformationJSON = localStorage.getItem("playerInformation")
     if(playerInformationJSON){
         const playerInformation = JSON.parse(playerInformationJSON)
-        if((Date.now()-playerInformation.timeConnection)>gameSetup.time.connection){
+        if((Date.now()-playerInformation.timeConnection)>applicationSetup.time.connection){
             const room = await network.sendServer.checkGameReconnection(playerInformation.statusCode)
             const savedPlaysJSON = localStorage.getItem("historyPlayer")
             const plays = (savedPlaysJSON)?JSON.parse(savedPlaysJSON):null
             if(room.isConnected && room.statusPlayerAdv.namePlayer===playerInformation.statusPlayers.advName){
-                gameSetup.addGame(new OnlineGame(game,gameSetup,viewController,network))
+                applicationSetup.addGame(new OnlineGame(game,applicationSetup,viewController,network))
                 if(plays){
                     if(room.qtMovements===plays.length || (room.qtMovements-1)===plays.length){
-                        gameSetup.game.startReconnection(room,playerInformation,plays)
+                        applicationSetup.gameMode.startReconnection(room,playerInformation,plays)
                     }
                     else{
-                        gameSetup.game.restartGame()
+                        applicationSetup.gameMode.restartGame()
                     }
                 }
                 else if(room.qtMovements===0){
-                    gameSetup.game.startReconnection(room,playerInformation,plays)
+                    applicationSetup.gameMode.startReconnection(room,playerInformation,plays)
                 }
                 else{
-                    gameSetup.game.restartGame()
+                    applicationSetup.gameMode.restartGame()
                 }
             }
             else{
-                gameSetup.clearLocalStorage()
+                applicationSetup.clearLocalStorage()
                 viewController.displayHomeMenu()
             }    
         }

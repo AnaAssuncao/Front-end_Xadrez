@@ -1,7 +1,7 @@
 import msgsAndAlerts from "../MsgsAndAlerts.js"
-export default class GameSetup{
+export default class ApplicationSetup{
     constructor(){
-        this.game=null
+        this.gameMode=null
         this.colorsGame={   
             top:"black", 
             bottom:"white", 
@@ -27,7 +27,7 @@ export default class GameSetup{
         this.currentPlayerColor=color
     }
     addGame(game){
-        this.game=game
+        this.gameMode=game
         this.endGame=false
     }
     updateEndGame(){
@@ -44,9 +44,7 @@ export default class GameSetup{
             if(this.endGame===false){
                 this.onlineConf.timeConnection=Date.now()
                 this.addPlayerLocalStorage()
-                if(this.endGame===false){
-                    this.updateTimeConnection()
-                }
+                this.updateTimeConnection()
             }
         },1000)
     }
@@ -58,7 +56,7 @@ export default class GameSetup{
         this.gameLogs.push(displayLog)
     }
     clearGame(){
-        this.game=null
+        this.gameMode=null
         this.currentPlayerColor=null
         this.onlineConf.statusPlayers.playerColor=null
         this.onlineConf.statusPlayers.playerName=null
