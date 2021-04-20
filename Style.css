@@ -18,7 +18,7 @@
     --button: #5973FC;
     --dark-blue:#6D7BC8;
     --light-blue:#A4B3FD;
-    --shadow:#2c397d;
+    --shadow:#4458b8;
     --spotlight: #DE314E;
     --invertColor:invert(0%);
     --brightness:brightness(100%);
@@ -77,6 +77,10 @@
     align-items: center;
 }
 
+.defalt__config{
+    font-size:16px;
+}
+
 #chess{
     position: relative;
     display: flex;
@@ -107,7 +111,7 @@
     width: 60%;
     height: 100%;
     border-radius:0px 10% 10% 0px;
-    box-shadow: 5px 5px 10px var(--shadow);
+    box-shadow: 3px 3px 8px var(--shadow);
 }
 .menu__home__logo{
     margin-right: 10%;
@@ -116,7 +120,7 @@
 .menu__home__title{
     margin-right: 10%;
     color: var(--orange);
-    font-size: 5em;
+    font-size: 5rem;
 }
 .menu__home__module{
     width: 40%;
@@ -137,15 +141,15 @@
 }
 .module__title{
     color:var(--text);
-    font-size: 3em;
+    font-size: 3rem;
 }
 .module__subtitle{
     color:var(--text);
-    font-size: 2em;
+    font-size: 2rem;
 }
 .menu__button{
     padding: 3%;
-    font-size: 1.2em;
+    font-size: 1.2rem;
     border:none;
     border-radius: 4px;
     margin-top:5%;
@@ -177,7 +181,7 @@
     color:var(--text);
     margin-left: 1.2%;
     background-color:var(--background);
-    font-size:1em;
+    font-size:1rem;
     border:none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -186,7 +190,7 @@ textarea:focus, input:focus, select:focus {
     outline: 0;
 }
 .module__icon{
-    width:2em;
+    width:2rem;
     margin:0px 5px 5px 0px;
     filter: var(--invertColor);
 }
@@ -214,7 +218,7 @@ textarea:focus, input:focus, select:focus {
     width:40%;
     height: 3vh;
     background-color:var(--light-cream);
-    font-size:0.8em;
+    font-size:0.8rem;
     box-shadow: 1px 1px 5px var(--shadow);
     color:var(--text)
 }
@@ -231,7 +235,7 @@ textarea:focus, input:focus, select:focus {
     width:40%;
     height: 100%;
     background-color:var(--light-cream);
-    font-size:0.8em;
+    font-size:0.8rem;
     box-shadow: 1px 1px 5px var(--shadow);
     color:var(--text)
 }
@@ -239,8 +243,7 @@ textarea:focus, input:focus, select:focus {
     display:none;
 }
 .micro__button__img{
-    width: 70%;
-    height: 100%;
+    width: 1.8vw;
     filter:var(--brightness)
 }
 .left__panel__header{
@@ -252,7 +255,7 @@ textarea:focus, input:focus, select:focus {
 }
 .header__title{
     color: var(--orange);
-    font-size:1.9em;
+    font-size:1.9rem;
 }
 .left__panel__player{
     width:100%;
@@ -261,9 +264,10 @@ textarea:focus, input:focus, select:focus {
 }
 .player__text{
     color:var(--text);
-    font-size:1em;
+    font-size:1rem;
 }
 #player__img{
+    margin-top:5%;
     height: 50%;
 }
 .left__panel__move{
@@ -283,7 +287,7 @@ textarea:focus, input:focus, select:focus {
     color:var(--text);
     margin-left: 1.2%;
     background-color:var(--cream);
-    font-size:1em;
+    font-size:1rem;
     border:none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -300,7 +304,7 @@ textarea:focus, input:focus, select:focus {
     width:40%;
 }
 .move__button{
-    font-size: 1.1em;
+    font-size: 1.1rem;
     background-color:var(--button);
     color:var(--text-button);
     width:75%;
@@ -319,7 +323,7 @@ textarea:focus, input:focus, select:focus {
 .time__game,
 .time__movement{
     color: var(--text);
-    font-size: 1.2em;
+    font-size: 1.2rem;
 }
 .time__img{
     margin-right:20%; 
@@ -336,6 +340,19 @@ textarea:focus, input:focus, select:focus {
     height: 100%;
 }
 
+/* @keyframes turn {
+    0% { background-color: var(--cream); }
+    50% { background-color:var(--background);}
+    100% { background-color: var(--cream); }
+}
+#player__img,
+#select__color {
+    border-radius: 10px;
+    -webkit-animation: turn 3500ms infinite;
+    -moz-animation: turn 3500ms infinite;
+    -o-animation: turn 3500ms infinite;
+    animation: turn 3500ms infinite;
+} */
 
 /* main panel */
 .chess__main{
@@ -354,7 +371,7 @@ textarea:focus, input:focus, select:focus {
 }
 .status__game{
     color: var(--text);
-    font-size: 0.8em;
+    font-size: 0.8rem;
     font-weight: 500;
     border-right: 1px solid var(--shadow);
     height: 100%;
@@ -369,15 +386,15 @@ textarea:focus, input:focus, select:focus {
 #information__details,
 #information__connection{
     margin:1%;
-    font-size:1em;
+    font-size:0.8rem;
 }
 .status__game--player{
-    width: 40%;
+    width: 35%;
     background-color: var(--cream);
     border-radius:  2px 0px 0px 2px ;
 }
 .status__game--board{
-    width: 40%;
+    width: 45%;
     background-color: var(--mustard);
 }
 .status__game--details{
@@ -397,17 +414,17 @@ textarea:focus, input:focus, select:focus {
     animation: glowing 3500ms infinite;
 }
 .icon__micro{
-    width: 1.2em;
+    width: 1.2rem;
     margin: 0px 5px 0px 10px;
     filter: var(--invertColor);
 }
 .icon__min{
-    width: 1.4em;
+    width: 1.4rem;
     margin: 0px 2px 5px 0px;
     filter: var(--invertColor);
 }
 .icon__med{
-    width: 2em;
+    width: 2rem;
     margin: 0px 5px 0px 0px;
     filter: var(--invertColor);
 }
@@ -415,9 +432,7 @@ textarea:focus, input:focus, select:focus {
 .chess__board{
     width:min(45vw,85vh);
     height:min(45vw,85vh);
-    border-radius: 2px;
     display: flex;
-    flex-flow: column nowrap;
     justify-content: space-between;  
     align-items: space-between;
     box-shadow: 1px 1px 5px var(--shadow);
@@ -550,7 +565,7 @@ textarea:focus, input:focus, select:focus {
 }
 #chess__inf{
     color:var(--text);
-    font-size:2.4em;
+    font-size:2.4rem;
 }
 /* details */
 .modal__details{
@@ -607,7 +622,7 @@ textarea:focus, input:focus, select:focus {
 }
 .modal__details__text{
     text-align: center;
-    font-size: 1.2em;
+    font-size: 1.2rem;
     font-weight: 500;
     color: var(--text);
 }
@@ -657,7 +672,7 @@ textarea:focus, input:focus, select:focus {
     border-radius: 4px;
 }
 .right__panel__title{
-    font-size: 1em;
+    font-size: 1rem;
 }
 #information__history::-webkit-scrollbar {
     width: 10px;
@@ -697,7 +712,7 @@ textarea:focus, input:focus, select:focus {
     width:3vw; 
     height: 5vh; 
     background: var(--dark-blue);
-    font-size: 0.8em;
+    font-size: 0.8rem;
     font-weight: 500;
     border-radius: 1px;
     position: absolute;
@@ -725,7 +740,7 @@ textarea:focus, input:focus, select:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size:1em;
+    font-size:1rem;
     width: 15%;
     height: 100%;
 }
@@ -740,19 +755,19 @@ textarea:focus, input:focus, select:focus {
 .history__refIdPiece{
     color:var(--text);
     text-align: center;
-    font-size:0.8em;
+    font-size:0.8rem;
     width: 15%;
     margin:0px 2% 0px 2%;
 }
 .history__img{
     margin:0px 5% 0px 5%;
-    width: 8%;
+    width: 10%;
 }
 .history__img--rotate{
     transform: rotate(90deg)
 }
 .history__icon{
-    width: 1.4em;
+    width: 1.4rem;
     margin-right: 10px;
     filter: var(--invertColor);
 }
@@ -771,7 +786,13 @@ textarea:focus, input:focus, select:focus {
 }
 .banner__text{
     color:var(--text);
-    font-size: 2em;
+    font-size: 2rem;
     width: 50%;
     text-align: center;
+}
+
+@media(min-width: 1600px){
+    .defalt__config{
+        font-size:25px;
+    }
 }

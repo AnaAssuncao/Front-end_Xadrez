@@ -1,4 +1,8 @@
 @media(max-width: 1000px){
+    .defalt__config{
+        font-size:30px;
+    }
+
     #chess{
         flex-flow:column nowrap;
         justify-content: start;
@@ -27,7 +31,7 @@
     }
     .menu__home__title{
         margin:0px;
-        font-size: 4em;
+        font-size: 3rem;    
     }
     .menu__home__module{
         width: 100%;
@@ -46,29 +50,16 @@
         width:80%;
         height:40%;
     }
-    .module__title{
-        font-size: 4em;
-    }
-    .module__subtitle{
-        font-size: 3em;
-    }
-    .menu__button{
-        font-size: 2.4em;
-    }
     .menu__buttons__online{
         height: 25%;
     }
     .menu__button__online{
         margin-top:0px;
     }
-    .menu__input{
-        font-size:2.4em;
-    }
     textarea:focus, input:focus, select:focus {
         outline: 0;
     }
     .module__icon{
-        width:4.2em;
         margin:0px 10px 10px 0px;
     }
     
@@ -105,7 +96,6 @@
     .header__title{
         text-align: center;
         width: 100%;
-        font-size:3em;
     }
     .left__panel__player{
         margin:0px;
@@ -115,15 +105,11 @@
         height:45%;
     }
     #player__img{
-        margin-left:3%;
+        margin:0px 0px 0px 3%;
         height: 100%;
     }
     .player__text{
-        font-size:2em;
         margin-left:0px;
-    }
-    .player__color{
-        font-size:1.8em;
     }
     .left__panel__move{
         display: none;
@@ -139,10 +125,6 @@
         height:100%;
         align-items: flex-start;
     }
-    .time__game,
-    .time__movement{
-        font-size: 1.8em;
-    }
     .time__img{
         width: 100%;
         height:70%;
@@ -153,6 +135,9 @@
     .time__part{
         width: 70%;
         margin:0px;
+    }
+    #text__dark{
+        display:none;
     }
     
     /* main panel */
@@ -168,42 +153,24 @@
         height: 6%;
         margin: 1vh 0 1vh 0 
     }
-    .status__game{
-        font-size: 1.6em;
-    }
     #information__details{
         display: none;
     }
     .icon__micro{
         margin:0px;
-        width: 1.4em;
     }
     .icon__min{
-        width: 1.4em;
         margin: 0px 4px 10px 0px;
     }
     .icon__med{
-        width: 2.2em;
         margin: 0px 15px 0px 0px;
     }
-    .icon__micro--width{
-        width: 2.4em;
-    }
-    #information__connection,
-    #information__game{
-        font-size:1.2em;
-    }
+
     /* chess board */
     .chess__board{
         width:min(98vw,85vh);
         height:min(98vw,85vh);
         margin:2%;
-    }
-    .line{
-        font-size: 1.6em;
-    }
-    .column{  
-        font-size: 1.6em;
     }
     .move__piece--possibilities{
         border: dashed 4px  var(--text);
@@ -244,7 +211,6 @@
     }
     #chess__inf{
         color:var(--text);
-        font-size:3.4em;
     }
     /* details */
     .modal__details{
@@ -262,9 +228,6 @@
         width:100%;
         height:90%;
     }
-    .modal__details__text{
-        font-size: 1.8em;
-    }
     #details__log::-webkit-scrollbar {
         width: 30px;
     }
@@ -275,9 +238,6 @@
         width: 10%;
         height: 45%;
     }
-    .log__msgs{
-        font-size:1.6em;
-    }
     /* right__panel */
     .right__panel{
         width: 98%;
@@ -286,9 +246,6 @@
     }
     .right__panel__header{
         height: 8%;
-    }
-    .right__panel__title{
-        font-size:2em;
     }
     #information__history::-webkit-scrollbar {
         width: 30px;
@@ -306,14 +263,12 @@
     }
     .history__number,
     .history__refIdPiece{
-        font-size:1.4em;
         width: 15%;
     }
     .history__img{
         width: 5%;
     }  
     .history__icon{
-        width: 2.4em;
         margin-right: 10px;
     }       
 }
