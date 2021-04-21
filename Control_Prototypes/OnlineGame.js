@@ -124,7 +124,7 @@ export default class OnlineGame extends GenericGame{
             }
         }
         else{
-            // mandar refazer os movimentos      
+            this.viewController.informationProminent(msgsAndAlerts.movement.moveAgain())      
         }
         this.checkEndGame()
         this.updateDisplayGame(this.applicationSetup.colorsGame.top,nextColor,isPlayable)
@@ -132,11 +132,14 @@ export default class OnlineGame extends GenericGame{
     }
 
     getMoveAdv(moveAdv){
-        if(moveAdv.move===null){
+        if(moveAdv.serverConnection===false){
             this.viewController.displayEndGameInformation(moveAdv.msg)
             this.applicationSetup.updateEndGame()
             this.applicationSetup.clearLocalStorage()
             this.network.sendServer.endGame()
+        }
+        else if(moveAdv.move===null){ // when it is not once
+            this.viewController.informationProminent(moveAdv.msg)
         }
         else{
             const isMove = this.movePiece(moveAdv.move)

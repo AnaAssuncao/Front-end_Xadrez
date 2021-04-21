@@ -58,7 +58,9 @@ const movement={
     nextPlayer:(color,name)=>"Vez das Peças " + colors[color]+" Vez do jogador " + name,
     incorrectMovement:(color)=>"Erro na jogada das Peças " + colors[color],
     cheatMovement:()=>"Movimento de trapaça",
-    endTime:()=>"Tempo esgotado para adversário"
+    endTime:()=>"Tempo esgotado para adversário",
+    moveAgain:()=>"Movimenta novamente",
+    corretMovement:()=>"Movimento correto"
 }
 const log={
     connected:(playerName)=>"Conectado com " + playerName,

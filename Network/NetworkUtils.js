@@ -78,7 +78,7 @@ const functionsStatusMovement={
             serverConnection:true,
             isCorrectMove:false,
             move:null,
-            msg:msgsAndAlerts.roomAndCode.noExistRoom()
+            msg:msgsAndAlerts.roomAndCode.waitAgain()
         }
         return sendController
     },
@@ -86,7 +86,7 @@ const functionsStatusMovement={
         const sendController={
             serverConnection:true,
             isCorrectMove:true,
-            msg:msgsAndAlerts.roomAndCode.waitAgain()
+            msg:msgsAndAlerts.roomAndCode.corretMovement()
         }
         return sendController
     },
