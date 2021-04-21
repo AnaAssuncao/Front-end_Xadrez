@@ -157,7 +157,7 @@ const functionsStatusGame={
 const functionsStatusServer={
     errServer(){
         const sendController={
-            msg:msgsAndAlerts.connection.errServer(),
+            msg:msgsAndAlerts.connection.noConnection(),
             serverConnection:false,
         }
         return sendController

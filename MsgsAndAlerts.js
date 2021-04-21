@@ -16,10 +16,11 @@ const roomAndCode={
 }
 
 const connection={
-    errServer:()=>"Erro no servidor, tente mais tarde",
+    noConnection:()=>"Sem conexão com o servidor, aguarde ou jogue local.",
+    errServer:()=>"Ocorreu um erro no servidor, por favor recarregue a página.",
     place:()=>"Jogo Local",
     waitAdv:()=>"Aguardando adversário",
-    connected:(playerName)=>"Conectado com " + playerName
+    connected:(playerName)=>"Adversário "+ playerName
 }
 
 const checksPiece={
@@ -59,6 +60,7 @@ const movement={
     endTime:()=>"Tempo esgotado para adversário"
 }
 const log={
+    connected:(playerName)=>"Conectado com " + playerName,
     gamelog:(msg)=>{
         const time = new Date()
         const hours = formatTime(time.getHours())

@@ -36,6 +36,8 @@ class NetworkSetup{
             player:null
         }
         this.routerUrl= new Router()
+
+        this.isSeverConection= false
     }
     updateCodes(statusCodes){
         this.codes.room=statusCodes.roomCode
@@ -163,7 +165,6 @@ export default function InterfaceNetwork(){
             const msgRes = httpMethods.post(objSend,url)
             if(typeStatus.errServer===msgRes){
                 const err=networkUtils.callFunctionByStatusServer(msgRes)
-                notifyFunctions(functionToCallBack.errConnection,err)
                 return err
             }
         },
@@ -178,7 +179,6 @@ export default function InterfaceNetwork(){
             const msgRes = await httpMethods.post(objSend,url)
             if(typeStatus.errServer===msgRes){
                 const err=networkUtils.callFunctionByStatusServer(msgRes)
-                notifyFunctions(functionToCallBack.errConnection,err)
                 return err
             }
             return msgRes
@@ -193,7 +193,6 @@ export default function InterfaceNetwork(){
             const msgRes = await httpMethods.post(objSend,url)
             if(typeStatus.errServer===msgRes){
                 const err=networkUtils.callFunctionByStatusServer(msgRes)
-                notifyFunctions(functionToCallBack.errConnection,err)
                 return err
             }
             return msgRes
@@ -208,7 +207,6 @@ export default function InterfaceNetwork(){
             const msgRes = await httpMethods.post(objSend,url)
             if(typeStatus.errServer===msgRes){
                 const err=networkUtils.callFunctionByStatusServer(msgRes)
-                notifyFunctions(functionToCallBack.errConnection,err)
                 return err
             }
             return msgRes
@@ -236,7 +234,6 @@ export default function InterfaceNetwork(){
                 const msgRes = await httpMethods.get(url)
                 if(typeStatus.errServer===msgRes){
                     const err=networkUtils.callFunctionByStatusServer(msgRes)
-                    notifyFunctions(functionToCallBack.errConnection,err)
                 }
                 else if(msgRes.typeStatus===typeStatus.movementAvailable){
                     const paramFunstionStatus={
@@ -266,7 +263,6 @@ export default function InterfaceNetwork(){
                 const msgRes = await httpMethods.get(url)
                 if(typeStatus.errServer===msgRes){
                     const err=networkUtils.callFunctionByStatusServer(msgRes)
-                    notifyFunctions(functionToCallBack.errConnection,err)
                 }
                 else if(msgRes.statusPlayerAdv.namePlayer!==null){
                     const paramFunstionStatus={

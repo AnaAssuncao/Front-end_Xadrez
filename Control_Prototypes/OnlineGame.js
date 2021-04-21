@@ -12,53 +12,63 @@ export default class OnlineGame extends GenericGame{
     
     async startNewRoom(nickAndCode){
         // nickAndCode = {name:value, roomCode:value}
-        const informationConnectionRoom= await this.network.sendServer.startNewRoom(nickAndCode)
-        if(informationConnectionRoom.serverConnection){
-            this.viewController.hideHomeMenu()
-            const connection={
-                msg:msgsAndAlerts.connection.waitAdv(),
-                typeGame:"online",
+        try{
+            const informationConnectionRoom= await this.network.sendServer.startNewRoom(nickAndCode)
+            if(informationConnectionRoom.serverConnection){
+                this.viewController.hideHomeMenu()
+                const connection={
+                    msg:msgsAndAlerts.connection.waitAdv(),
+                    typeGame:"online",
+                }
+                this.viewController.updateStatusConection(connection)
+                this.applicationSetup.addInformationPlayerOnline(nickAndCode.name,this.applicationSetup.colorsGame.bottom,informationConnectionRoom.statusCodes)
+                this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.bottom)
+                this.gameLogic.starObjGame(this.applicationSetup.currentPlayerColor)
+                this.applicationSetup.addLogGame(msgsAndAlerts.roomAndCode.connectedRoom(nickAndCode.roomCode))
+                this.applicationSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.applicationSetup.currentPlayerColor))
+                const isPlayable = false
+                this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor, isPlayable)
+                this.network.enableCalls.playerConnection()
             }
-            this.viewController.updateStatusConection(connection)
-            this.applicationSetup.addInformationPlayerOnline(nickAndCode.name,this.applicationSetup.colorsGame.bottom,informationConnectionRoom.statusCodes)
-            this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.bottom)
-            this.gameLogic.starObjGame(this.applicationSetup.currentPlayerColor)
-            this.applicationSetup.addLogGame(msgsAndAlerts.roomAndCode.connectedRoom(nickAndCode.roomCode))
-            this.applicationSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.applicationSetup.currentPlayerColor))
-            const isPlayable = false
-            this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor, isPlayable)
-            this.network.enableCalls.playerConnection()
+            else{
+                this.viewController.informationProminent(informationConnectionRoom.msg)
+            }
         }
-        else{
-            this.viewController.informationProminent(informationConnectionRoom.msg)
+        catch{
+            this.viewController.informationProminent("catch")
         }
     }
 
     async connectInARoom(nickAndCode){
-        const informationConnectionRoom= await this.network.sendServer.connectInARoom(nickAndCode)
-        if(informationConnectionRoom.serverConnection){
-            this.viewController.hideHomeMenu()
-            const connection={
-                msg:msgsAndAlerts.connection.connected(informationConnectionRoom.statusPlayerAdv.namePlayer),
-                typeGame:"online",
+        try{
+            const informationConnectionRoom= await this.network.sendServer.connectInARoom(nickAndCode)
+            if(informationConnectionRoom.serverConnection){
+                this.viewController.hideHomeMenu()
+                const connection={
+                    msg:msgsAndAlerts.connection.connected(informationConnectionRoom.statusPlayerAdv.namePlayer),
+                    typeGame:"online",
+                }
+                this.viewController.updateStatusConection(connection)
+                this.applicationSetup.addInformationPlayerOnline(nickAndCode.name,this.applicationSetup.colorsGame.top,informationConnectionRoom.statusCodes)
+                this.applicationSetup.addNamePlayerAdv(informationConnectionRoom.statusPlayerAdv.namePlayer)
+                this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.top)
+                this.applicationSetup.updateTimeConnection()
+                this.gameLogic.starObjGame(this.applicationSetup.currentPlayerColor)
+                this.applicationSetup.addLogGame(msgsAndAlerts.roomAndCode.connectedRoom(nickAndCode.roomCode))
+                this.applicationSetup.addLogGame(msgsAndAlerts.log.connected(informationConnectionRoom.statusPlayerAdv.namePlayer))
+                this.applicationSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.applicationSetup.currentPlayerColor))
+                this.applicationSetup.addLogGame(msgsAndAlerts.startGame.startGame())
+                const isPlayable = false
+                this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor, isPlayable)
+                this.network.enableCalls.moveAdversary()
+                this.network.enableCalls.statusGame()
             }
-            this.viewController.updateStatusConection(connection)
-            this.applicationSetup.addInformationPlayerOnline(nickAndCode.name,this.applicationSetup.colorsGame.top,informationConnectionRoom.statusCodes)
-            this.applicationSetup.addNamePlayerAdv(informationConnectionRoom.statusPlayerAdv.namePlayer)
-            this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.top)
-            this.applicationSetup.updateTimeConnection()
-            this.gameLogic.starObjGame(this.applicationSetup.currentPlayerColor)
-            this.applicationSetup.addLogGame(msgsAndAlerts.roomAndCode.connectedRoom(nickAndCode.roomCode))
-            this.applicationSetup.addLogGame(msgsAndAlerts.connection.connected(informationConnectionRoom.statusPlayerAdv.namePlayer))
-            this.applicationSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.applicationSetup.currentPlayerColor))
-            this.applicationSetup.addLogGame(msgsAndAlerts.startGame.startGame())
-            const isPlayable = false
-            this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor, isPlayable)
-            this.network.enableCalls.moveAdversary()
-            this.network.enableCalls.statusGame()
+            else{
+                this.viewController.informationProminent(informationConnectionRoom.msg)
+            }
         }
-        else{
-            this.viewController.informationProminent(informationConnectionRoom.msg)
+        catch{
+            this.viewController.informationProminent("catch")
         }
     }
     
@@ -76,7 +86,7 @@ export default class OnlineGame extends GenericGame{
                 typeGame:"online",
             }
             this.viewController.updateStatusConection(connection)
-            this.applicationSetup.addLogGame(msgsAndAlerts.connection.connected(statusPlayerAdv.namePlayer))
+            this.applicationSetup.addLogGame(msgsAndAlerts.log.connected(statusPlayerAdv.namePlayer))
             this.applicationSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.applicationSetup.currentPlayerColor))
             this.applicationSetup.addLogGame(msgsAndAlerts.startGame.startGame())
             this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor)
@@ -92,23 +102,25 @@ export default class OnlineGame extends GenericGame{
         this.applicationSetup.addLogGame(msgsAndAlerts.movement.movementPlayer(this.applicationSetup.onlineConf.statusPlayers.playerColor,this.applicationSetup.onlineConf.statusPlayers.playerName))
     
         if(isMove){
-            const infSendMove = await this.network.sendServer.moveGame(informationPieceSelect)
-            if(infSendMove.serverConnection){
-                this.network.enableCalls.moveAdversary()
-                this.applicationSetup.updateCurrentPlayerColor(nextColor)
-                this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextPlayer(this.applicationSetup.currentPlayerColor,this.applicationSetup.onlineConf.statusPlayers.advName))
-                this.applicationSetup.addHistoryLocalStorage(informationPieceSelect)
+            try{
+                const infSendMove = await this.network.sendServer.moveGame(informationPieceSelect)
+                if(infSendMove.serverConnection){
+                    this.network.enableCalls.moveAdversary()
+                    this.applicationSetup.updateCurrentPlayerColor(nextColor)
+                    this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextPlayer(this.applicationSetup.currentPlayerColor,this.applicationSetup.onlineConf.statusPlayers.advName))
+                    this.applicationSetup.addHistoryLocalStorage(informationPieceSelect)
+                }
             }
-            else{
-                this.viewController.informationProminent(informationConnectionRoom.msg)
+            catch{
+                this.viewController.informationProminent("catch")
             }
         }
         else{
-            // mandar refazer os movimentos
-            this.viewController.informationProminent(msgsAndAlerts.incorrectMovement(this.applicationSetup.currentPlayerColor))
+            // mandar refazer os movimentos      
         }
         this.checkEndGame()
         this.updateDisplayGame(this.applicationSetup.colorsGame.top,nextColor,isPlayable)
+
     }
 
     getMoveAdv(moveAdv){
@@ -206,7 +218,7 @@ export default class OnlineGame extends GenericGame{
 
     informationProminentErr(infConnetion){
         if(infConnetion.serverConnection === false){
-            this.viewController.informationProminent(infConnetion.msg)
+            this.viewController.displayBannerGame(msgsAndAlerts.connection.errServer())
         }
     }
 
@@ -249,6 +261,5 @@ export default class OnlineGame extends GenericGame{
         const isPlayable = (this.applicationSetup.onlineConf.statusPlayers.playerColor===this.applicationSetup.currentPlayerColor)?true:false
         this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor,isPlayable)
         return isPlayable
-
     }
 }
