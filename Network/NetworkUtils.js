@@ -86,7 +86,7 @@ const functionsStatusMovement={
         const sendController={
             serverConnection:true,
             isCorrectMove:true,
-            msg:msgsAndAlerts.roomAndCode.corretMovement()
+            msg:msgsAndAlerts.roomAndCode.correctMovement()
         }
         return sendController
     },
