@@ -60,7 +60,7 @@ const movement={
     cheatMovement:()=>"Movimento de trapaça",
     endTime:()=>"Tempo esgotado para adversário",
     moveAgain:()=>"Movimenta novamente",
-    corretMovement:()=>"Movimento correto"
+    correctMovement:()=>"Movimento correto"
 }
 const log={
     connected:(playerName)=>"Conectado com " + playerName,
