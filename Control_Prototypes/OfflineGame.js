@@ -19,6 +19,9 @@ export default class OfflineGame extends GenericGame{
         this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.bottom)
         this.gameLogic.starObjGame(this.applicationSetup.currentPlayerColor)
         this.applicationSetup.addLogGame(msgsAndAlerts.startGame.startGame())
+        this.applicationSetup.startGameTimer()
+        this.countGameTime()
+        this.countMovementTime()
         this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor)
     }
 
@@ -28,6 +31,7 @@ export default class OfflineGame extends GenericGame{
             const nextColor=this.changeNextColor()
             this.applicationSetup.addLogGame(msgsAndAlerts.movement.movementPiece(this.applicationSetup.currentPlayerColor))
             this.applicationSetup.updateCurrentPlayerColor(nextColor)
+            this.applicationSetup.updateMovement()
             this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor))
         }
         this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor)
@@ -50,7 +54,9 @@ export default class OfflineGame extends GenericGame{
     }
 
     restartGame(){
+        this.applicationSetup.updateEndGame()
         this.applicationSetup.clearGame()
+        this.viewController.clearTimes()
         this.viewController.hideEndGameInformation()
         this.viewController.hideBackMovement()
         this.viewController.displayHomeMenu()
@@ -68,6 +74,14 @@ export default class OfflineGame extends GenericGame{
             const displayEndGame=msgsAndAlerts.endGame.winPiece(statusGame.winColor)
             this.viewController.displayEndGameInformation(displayEndGame)
             this.updateDisplayLog()
+        }
+    }
+
+    timeOutToMove(){
+        if(this.applicationSetup.endGame===false){
+            const displayGiveUp = msgsAndAlerts.endGame.timeOutToMovePiece(this.applicationSetup.currentPlayerColor)
+            this.viewController.displayEndGameInformation(displayGiveUp)
+            this.applicationSetup.updateEndGame()
         }
     }
 }

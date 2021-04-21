@@ -134,6 +134,14 @@ export default function ViewScreen(chessBoard){
         }
     }
 
+    this.times={
+        updateGameTime(time){
+            document.querySelector("#time__game").innerHTML=time
+        },
+        updateMovementTime(time){
+            document.querySelector("#time__movement").innerHTML=time
+        }
+    }
     this.chessBoard={
         subscribeToClick(fn){
             functionToCallBack.clickChessBoard.push(fn)

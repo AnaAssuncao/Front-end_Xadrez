@@ -310,6 +310,21 @@ export default function ViewController(startBoard){
         } 
     }
 
+    const times={
+        updateGameTime(time){
+            view.times.updateGameTime(time)
+        },
+        updateMovementTime(time){
+            view.times.updateMovementTime(time)
+        },
+        clearTimes(){
+            const gameTime = "00:00:00"
+            view.times.updateGameTime(gameTime)
+            const movementTime = "00:05:00"
+            view.times.updateMovementTime(movementTime)
+        }
+        
+    }
     const functionToCallBack= {
         movePiece:[],
         startGameOffline:[],
@@ -418,6 +433,18 @@ export default function ViewController(startBoard){
 
     this.displayBannerGame=function(text){
         banner.addBannerGame(text)
+    }
+
+    this.displayUpdateGameTime=function(time){
+        times.updateGameTime(time)
+    }
+
+    this.displayUpdateMovementTime=function(time){
+        times.updateMovementTime(time)
+    }
+
+    this.clearTimes=function(){
+        times.clearTimes()
     }
 
     const utilities ={

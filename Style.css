@@ -564,6 +564,7 @@ textarea:focus, input:focus, select:focus {
     display:none
 }
 #chess__inf{
+    text-align: center;
     color:var(--text);
     font-size:2.4rem;
 }

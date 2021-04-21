@@ -1,5 +1,10 @@
 import msgsAndAlerts from "../MsgsAndAlerts.js"
 export default class GenericGame{
+    #timeLimit={
+        movement:300000, //5 min,
+        timeoutMovement:0,
+        timeWarning:10,
+    }
     constructor(gameLogic,applicationSetup,viewController){
         this.gameLogic=gameLogic
         this.applicationSetup=applicationSetup
@@ -69,5 +74,45 @@ export default class GenericGame{
         const nextColor=(this.applicationSetup.colorsGame.top===this.applicationSetup.currentPlayerColor)?
                             this.applicationSetup.colorsGame.bottom:this.applicationSetup.colorsGame.top
         return nextColor
+    }
+
+    countGameTime(){
+        setTimeout(()=>{
+            if(this.applicationSetup.endGame===false){
+                const timeNow =Date.now()
+                const timeDifference = timeNow - this.applicationSetup.referenceTimes.gameTime
+                const date = new Date(0, 0, 0, 0, 0, 0, timeDifference)
+                const options = {
+                    hour: 'numeric', minute: 'numeric', second: 'numeric',
+                    hour12: false,
+                }
+                const newTime = new Intl.DateTimeFormat('pt-BR', options).format(date)
+                this.viewController.displayUpdateGameTime(newTime)
+                this.countGameTime()
+            }
+        },1000)
+    }
+
+    countMovementTime(){
+        setTimeout(()=>{
+            if(this.applicationSetup.endGame===false){
+                const timeLimit = this.applicationSetup.referenceTimes.movementTime + this.#timeLimit.movement //5 min
+                const timeNow =Date.now()
+                const timeDifference = timeLimit - timeNow
+                if(timeDifference>this.#timeLimit.timeoutMovement){
+                    const date = new Date(0, 0, 0, 0, 0, 0, timeDifference)
+                    const options = {
+                        hour: 'numeric', minute: 'numeric', second: 'numeric',
+                        hour12: false,
+                    }
+                    const newTime=new Intl.DateTimeFormat('pt-BR', options).format(date)
+                    this.viewController.displayUpdateMovementTime(newTime)
+                    this.countMovementTime()
+                }
+                else{
+                    setTimeout(()=>{this.timeOutToMove(true)},1000)
+                }
+            }
+        },1000)
     }
 }

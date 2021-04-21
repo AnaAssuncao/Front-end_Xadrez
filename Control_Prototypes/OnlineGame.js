@@ -53,6 +53,9 @@ export default class OnlineGame extends GenericGame{
                 this.applicationSetup.addNamePlayerAdv(informationConnectionRoom.statusPlayerAdv.namePlayer)
                 this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.top)
                 this.applicationSetup.updateTimeConnection()
+                this.applicationSetup.startGameTimer()
+                this.countGameTime()
+                this.countMovementTime()
                 this.gameLogic.starObjGame(this.applicationSetup.currentPlayerColor)
                 this.applicationSetup.addLogGame(msgsAndAlerts.roomAndCode.connectedRoom(nickAndCode.roomCode))
                 this.applicationSetup.addLogGame(msgsAndAlerts.log.connected(informationConnectionRoom.statusPlayerAdv.namePlayer))
@@ -86,6 +89,10 @@ export default class OnlineGame extends GenericGame{
                 typeGame:"online",
             }
             this.viewController.updateStatusConection(connection)
+            const delayTime = 1000
+            this.applicationSetup.startGameTimer(delayTime)
+            this.countGameTime()
+            this.countMovementTime()
             this.applicationSetup.addLogGame(msgsAndAlerts.log.connected(statusPlayerAdv.namePlayer))
             this.applicationSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.applicationSetup.currentPlayerColor))
             this.applicationSetup.addLogGame(msgsAndAlerts.startGame.startGame())
@@ -107,6 +114,7 @@ export default class OnlineGame extends GenericGame{
                 if(infSendMove.serverConnection){
                     this.network.enableCalls.moveAdversary()
                     this.applicationSetup.updateCurrentPlayerColor(nextColor)
+                    this.applicationSetup.updateMovement()
                     this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextPlayer(this.applicationSetup.currentPlayerColor,this.applicationSetup.onlineConf.statusPlayers.advName))
                     this.applicationSetup.addHistoryLocalStorage(informationPieceSelect)
                 }
@@ -136,6 +144,7 @@ export default class OnlineGame extends GenericGame{
                 const nextColor=this.applicationSetup.onlineConf.statusPlayers.playerColor
                 this.applicationSetup.addLogGame(msgsAndAlerts.movement.movementPlayer(this.applicationSetup.currentPlayerColor,this.applicationSetup.onlineConf.statusPlayers.advName))
                 this.applicationSetup.updateCurrentPlayerColor(nextColor)
+                this.applicationSetup.updateMovement()
                 this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextPlayer(this.applicationSetup.onlineConf.statusPlayers.playerColor,this.applicationSetup.onlineConf.statusPlayers.playerName))
                 this.applicationSetup.addHistoryLocalStorage(moveAdv.move)
             }
@@ -160,6 +169,7 @@ export default class OnlineGame extends GenericGame{
             this.applicationSetup.clearLocalStorage()
         }
         this.applicationSetup.clearGame()
+        this.viewController.clearTimes()
         this.viewController.hideEndGameInformation()
         this.viewController.hideBackMovement()
         this.viewController.displayHomeMenu()
@@ -176,8 +186,12 @@ export default class OnlineGame extends GenericGame{
     }
 
     timeOutToMove(playerName){
+        if(playerName){
+            playerName = (this.applicationSetup.currentPlayerColor===this.applicationSetup.onlineConf.statusPlayers.playerColor)?
+                            this.applicationSetup.onlineConf.statusPlayers.playerName:this.applicationSetup.onlineConf.statusPlayers.advName
+        }
         if(this.applicationSetup.endGame===false){
-            const displayGiveUp = msgsAndAlerts.endGame.timeOutToMove(playerName)
+            const displayGiveUp = msgsAndAlerts.endGame.timeOutToMovePlayer(playerName)
             this.viewController.displayEndGameInformation(displayGiveUp)
             this.applicationSetup.updateEndGame()
             this.applicationSetup.clearLocalStorage()
@@ -222,7 +236,7 @@ export default class OnlineGame extends GenericGame{
         }
     }
 
-    startReconnection(room,playerInformation,plays){
+    startReconnection(room,playerInformation,plays,referencetimes){
         const connection={
             msg:msgsAndAlerts.connection.connected(room.statusPlayerAdv.namePlayer),
             typeGame:"online",
@@ -232,6 +246,9 @@ export default class OnlineGame extends GenericGame{
         this.applicationSetup.addNamePlayerAdv(playerInformation.statusPlayers.advName)
         this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.bottom)
         this.applicationSetup.updateTimeConnection()
+        this.applicationSetup.updateReferenceTime(referencetimes)
+        this.countGameTime()
+        this.countMovementTime()
         this.gameLogic.starObjGame(this.applicationSetup.currentPlayerColor)
         this.applicationSetup.addLogGame(msgsAndAlerts.roomAndCode.connectedRoom(playerInformation.statusCode.roomCode))
         this.applicationSetup.addLogGame(msgsAndAlerts.connection.connected(room.statusPlayerAdv.namePlayer))

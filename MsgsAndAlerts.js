@@ -40,7 +40,8 @@ const endGame={
     winPlayer:(playerName)=>"Vitória do jogador " + playerName,
     giveUpPlayer:(playerName)=>"Desistência do Jogador " + playerName,
     draw:()=>"Jogo empatado",
-    timeOutToMove:(playerName)=>"Tempo esgotado para mover Jogador " + playerName
+    timeOutToMovePiece:(color)=>"Tempo esgotado para mover Peças " + colors[color],
+    timeOutToMovePlayer:(playerName)=>"Tempo esgotado para mover Jogador " + playerName
 }
 
 const startGame={

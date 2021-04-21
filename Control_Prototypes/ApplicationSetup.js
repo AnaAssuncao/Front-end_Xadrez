@@ -19,8 +19,12 @@ export default class ApplicationSetup{
         this.historyMovements=[]
         this.gameLogs=[]
         this.endGame=false
-        this.time={
+        this.limitTime={
             connection:5000
+        }
+        this.referenceTimes={
+            gameTime:0,
+            movementTime:0
         }
     }
     updateCurrentPlayerColor(color){
@@ -62,6 +66,23 @@ export default class ApplicationSetup{
         this.onlineConf.statusPlayers.playerName=null
         this.onlineConf.statusPlayers.advName=null
         this.gameLogs=[]
+    }
+    startGameTimer(delayTime=0){
+        this.referenceTimes.gameTime=Date.now()-delayTime   
+        this.referenceTimes.movementTime=Date.now()-delayTime
+        this.addTimesLocalStorage()
+    }
+    updateMovement(){
+        this.referenceTimes.movementTime=Date.now()
+        this.addTimesLocalStorage()
+    }
+    updateReferenceTime(referencetimes){
+        const delayTime = 1000
+        this.referenceTimes.gameTime=referencetimes.gameTime - delayTime
+        this.referenceTimes.movementTime=referencetimes.movementTime - delayTime
+    }
+    addTimesLocalStorage(){
+        localStorage.setItem("timesGame", JSON.stringify(this.referenceTimes))
     }
     addPlayerLocalStorage(){
         localStorage.setItem("playerInformation", JSON.stringify(this.onlineConf))
