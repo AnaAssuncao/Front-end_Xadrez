@@ -53,7 +53,8 @@ export default class OnlineGame extends GenericGame{
                 this.applicationSetup.addNamePlayerAdv(informationConnectionRoom.statusPlayerAdv.namePlayer)
                 this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.top)
                 this.applicationSetup.updateTimeConnection()
-                this.applicationSetup.startGameTimer()
+                const delayTime = 1000
+                this.applicationSetup.startGameTimer(delayTime)
                 this.countGameTime()
                 this.countMovementTime()
                 this.gameLogic.starObjGame(this.applicationSetup.currentPlayerColor)
@@ -89,7 +90,6 @@ export default class OnlineGame extends GenericGame{
                 typeGame:"online",
             }
             this.viewController.updateStatusConection(connection)
-            const delayTime = 1000
             this.applicationSetup.startGameTimer(delayTime)
             this.countGameTime()
             this.countMovementTime()

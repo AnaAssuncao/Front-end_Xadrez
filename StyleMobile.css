@@ -199,8 +199,9 @@
         height: 100%;
     }   
     .board__banner__img{
-        width:30%;
-        height:30%;
+        margin:0 1.2% 0 1.2%;
+        width:15%;
+        height:15%;
     }
     /* modal board with information */
     .chess__modal{
@@ -260,7 +261,7 @@
         height: 5vh; 
     }
     .history__play{
-        min-height: 5%;
+        min-height: 10%;
         width: 95%;
     }
     .history__number,
