@@ -5,7 +5,7 @@ const colors={
 }
 
 const roomAndCode={
-    roomWithOnePlayer:()=> "Esta sala já foi criada, conecta ao jogador",
+    roomWithOnePlayer:()=> "Esta sala já foi criada, conecta ao adversário",
     roomUnavailable:()=>"Nesta sala já está acontecendo um jogo, tente outro código",
     connectedRoom:(code)=>"Conectado a sala " + code,
     noExistRoom:()=>"Está sala não existe, cria esta sala.",
@@ -20,7 +20,7 @@ const connection={
     errServer:()=>"Ocorreu um erro no servidor, por favor recarregue a página.",
     place:()=>"Jogo Local",
     waitAdv:()=>"Aguardando adversário",
-    connected:(playerName)=>"Adversário "+ playerName
+    connected:(playerName)=>"Adversário(a) "+ playerName
 }
 
 const checksPiece={
@@ -30,18 +30,18 @@ const checksPiece={
 }
 
 const checksPlayers={
-    checkMate:(playerName)=>"Xeque-Mate no jogador " + playerName,
-    check:(playerName)=>"Xeque no jogador " + playerName,
+    checkMate:(playerName)=>"Xeque-Mate no(a) Jogador(a) " + playerName,
+    check:(playerName)=>"Xeque no(a) Jogador(a) " + playerName,
     noCheck:()=>""
 }
     
 const endGame={
     winPiece:(color)=>"Vitória das Peças " + colors[color],
-    winPlayer:(playerName)=>"Vitória do jogador " + playerName,
-    giveUpPlayer:(playerName)=>"Desistência do Jogador " + playerName,
+    winPlayer:(playerName)=>"Vitória do(a) Jogador(a) " + playerName,
+    giveUpPlayer:(playerName)=>"Desistência do(a) Jogador(a) " + playerName,
     draw:()=>"Jogo empatado",
     timeOutToMovePiece:(color)=>"Tempo esgotado para mover Peças " + colors[color],
-    timeOutToMovePlayer:(playerName)=>"Tempo esgotado para mover Jogador " + playerName
+    timeOutToMovePlayer:(playerName)=>"Tempo esgotado para mover Jogador(a) " + playerName
 }
 
 const startGame={
@@ -52,10 +52,10 @@ const startGame={
 
 const movement={
     movementPiece:(color)=>"Movimento das Peças " + colors[color],
-    movementPlayer:(color,name)=>"Movimento das Peças " + colors[color] + " Jodador " + name,
+    movementPlayer:(color,name)=>"Movimento das Peças " + colors[color] + " Jodador(a) " + name,
     return:(color)=>"Retorno das Peças " + colors[color],
     nextColor:(color)=>"Vez das Peças " + colors[color],
-    nextPlayer:(color,name)=>"Vez das Peças " + colors[color]+" Vez do jogador " + name,
+    nextPlayer:(color,name)=>"Vez das Peças " + colors[color]+" Vez do Jogador(a) " + name,
     incorrectMovement:(color)=>"Erro na jogada das Peças " + colors[color],
     cheatMovement:()=>"Movimento de trapaça",
     endTime:()=>"Tempo esgotado para adversário",
