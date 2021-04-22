@@ -36,12 +36,15 @@ class NetworkSetup{
             player:null
         }
         this.routerUrl= new Router()
-
+        this.endGame = false
         this.isSeverConection= false
     }
     updateCodes(statusCodes){
         this.codes.room=statusCodes.roomCode
         this.codes.player=statusCodes.playerCode
+    }
+    updateEndGame(){
+        this.endGame = !this.endGame
     }
 }
 
@@ -170,6 +173,7 @@ export default function InterfaceNetwork(){
         },
 
         giveUp: async() =>{
+            networkConf.updateEndGame()
             const url = networkConf.routerUrl.giveUpGame
             const objSend={
                 roomCode:networkConf.codes.room,
@@ -184,6 +188,7 @@ export default function InterfaceNetwork(){
             return msgRes
         },
         endGame: async() =>{
+            networkConf.updateEndGame()
             const objSend={
                 roomCode:networkConf.codes.room,
                 playerCode:networkConf.codes.player,
@@ -198,6 +203,7 @@ export default function InterfaceNetwork(){
             return msgRes
         },
         playerWin: async() =>{
+            networkConf.updateEndGame()
             const objSend={
                 roomCode:networkConf.codes.room,
                 playerCode:networkConf.codes.player,
@@ -291,6 +297,9 @@ export default function InterfaceNetwork(){
                     clearInterval(waitInf) 
                     const err=networkUtils.callFunctionByStatusServer(status)
                     notifyFunctions(functionToCallBack.errConnection,err)
+                }
+                else if(networkConf.endGame===true){
+                    clearInterval(waitInf) 
                 }
                 else if( status.statusGame.endGame.isEndGame===true){ 
                     clearInterval(waitInf)

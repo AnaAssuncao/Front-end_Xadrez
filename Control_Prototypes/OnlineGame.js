@@ -23,7 +23,7 @@ export default class OnlineGame extends GenericGame{
                 this.viewController.updateStatusConection(connection)
                 this.applicationSetup.addInformationPlayerOnline(nickAndCode.name,this.applicationSetup.colorsGame.bottom,informationConnectionRoom.statusCodes)
                 this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.bottom)
-                this.gameLogic.starObjGame(this.applicationSetup.currentPlayerColor)
+                this.gameLogic.starObjGame(this.applicationSetup.colorsGame.bottom)
                 this.applicationSetup.addLogGame(msgsAndAlerts.roomAndCode.connectedRoom(nickAndCode.roomCode))
                 this.applicationSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.applicationSetup.currentPlayerColor))
                 const isPlayable = false
@@ -51,13 +51,12 @@ export default class OnlineGame extends GenericGame{
                 this.viewController.updateStatusConection(connection)
                 this.applicationSetup.addInformationPlayerOnline(nickAndCode.name,this.applicationSetup.colorsGame.top,informationConnectionRoom.statusCodes)
                 this.applicationSetup.addNamePlayerAdv(informationConnectionRoom.statusPlayerAdv.namePlayer)
-                this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.top)
+                this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.bottom)
                 this.applicationSetup.updateTimeConnection()
-                const delayTime = 1000
-                this.applicationSetup.startGameTimer(delayTime)
+                this.applicationSetup.startGameTimer()
                 this.countGameTime()
                 this.countMovementTime()
-                this.gameLogic.starObjGame(this.applicationSetup.currentPlayerColor)
+                this.gameLogic.starObjGame(this.applicationSetup.colorsGame.top)
                 this.applicationSetup.addLogGame(msgsAndAlerts.roomAndCode.connectedRoom(nickAndCode.roomCode))
                 this.applicationSetup.addLogGame(msgsAndAlerts.log.connected(informationConnectionRoom.statusPlayerAdv.namePlayer))
                 this.applicationSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.applicationSetup.currentPlayerColor))
@@ -90,6 +89,7 @@ export default class OnlineGame extends GenericGame{
                 typeGame:"online",
             }
             this.viewController.updateStatusConection(connection)
+            const delayTime = 900
             this.applicationSetup.startGameTimer(delayTime)
             this.countGameTime()
             this.countMovementTime()
@@ -252,7 +252,7 @@ export default class OnlineGame extends GenericGame{
         this.applicationSetup.updateReferenceTime(referencetimes)
         this.countGameTime()
         this.countMovementTime()
-        this.gameLogic.starObjGame(this.applicationSetup.currentPlayerColor)
+        this.gameLogic.starObjGame(playerInformation.statusPlayers.playerColor)
         this.applicationSetup.addLogGame(msgsAndAlerts.roomAndCode.connectedRoom(playerInformation.statusCode.roomCode))
         this.applicationSetup.addLogGame(msgsAndAlerts.connection.connected(room.statusPlayerAdv.namePlayer))
         this.applicationSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.applicationSetup.currentPlayerColor))
