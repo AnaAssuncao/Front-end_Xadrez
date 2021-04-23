@@ -19,7 +19,8 @@ export default class OfflineGame extends GenericGame{
         this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.bottom)
         this.gameLogic.starObjGame(this.applicationSetup.currentPlayerColor)
         this.applicationSetup.addLogGame(msgsAndAlerts.startGame.startGame())
-        this.applicationSetup.startGameTimer()
+        const startTime =Date.now()
+        this.applicationSetup.startGameTimer(startTime)
         this.countGameTime()
         this.countMovementTime()
         const msgCurrentColor = msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor)
@@ -32,7 +33,8 @@ export default class OfflineGame extends GenericGame{
             const nextColor=this.changeNextColor()
             this.applicationSetup.addLogGame(msgsAndAlerts.movement.movementPiece(this.applicationSetup.currentPlayerColor))
             this.applicationSetup.updateCurrentPlayerColor(nextColor)
-            this.applicationSetup.updateMovement()
+            const movementTime =Date.now()
+            this.applicationSetup.updateMovement(movementTime)
             this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor))
         }
         const msgCurrentColor = msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor)
@@ -49,6 +51,8 @@ export default class OfflineGame extends GenericGame{
             if(statusGame.endGame===false){
                 this.applicationSetup.addLogGame(msgsAndAlerts.movement.return(this.applicationSetup.currentPlayerColor))
                 this.applicationSetup.updateCurrentPlayerColor(pastColor)
+                const movementTime =Date.now()
+                this.applicationSetup.updateMovement(movementTime)
                 const msgCurrentColor = msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor)
                 this.applicationSetup.addLogGame(msgCurrentColor)
                 this.updateDisplayGame(this.applicationSetup.colorsGame.top,pastColor,msgCurrentColor)
