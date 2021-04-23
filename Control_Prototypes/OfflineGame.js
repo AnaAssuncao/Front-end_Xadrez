@@ -37,6 +37,7 @@ export default class OfflineGame extends GenericGame{
             this.applicationSetup.updateMovement(movementTime)
             this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor))
         }
+        this.checkEndGame()
         const msgCurrentColor = msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor)
         this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor,msgCurrentColor)
     }
@@ -55,8 +56,16 @@ export default class OfflineGame extends GenericGame{
                 this.applicationSetup.updateMovement(movementTime)
                 const msgCurrentColor = msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor)
                 this.applicationSetup.addLogGame(msgCurrentColor)
+                this.checkEndGame()
                 this.updateDisplayGame(this.applicationSetup.colorsGame.top,pastColor,msgCurrentColor)
             }
+        }
+    }
+
+    checkEndGame(){
+        const statusGame = this.gameLogic.getStatusGame() 
+        if(statusGame.endGame){
+            this.applicationSetup.updateEndGame()
         }
     }
 
