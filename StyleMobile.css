@@ -152,7 +152,7 @@
     /* top line with status game  */
     .status__game__row{
         width: 98%;
-        height: 6%;
+        height: 8%;
         margin: 1vh 0 1vh 0 
     }
     #information__details{
@@ -220,7 +220,7 @@
         margin-top: 0;
         width:min(98vw,85vh);
         height:calc(min(98vw,85vh) + 2vh);
-        top:calc(1.1vh + 6%);
+        top:calc(1.1vh + 8%);
         left:1vw;
     }
     .modal__details__msg{

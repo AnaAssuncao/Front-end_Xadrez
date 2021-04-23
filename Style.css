@@ -121,6 +121,7 @@
     margin-right: 10%;
     color: var(--orange);
     font-size: 5rem;
+    font-family: 'Yeseva One', 'Roboto', cursive;
 }
 .menu__home__module{
     width: 40%;
@@ -254,6 +255,7 @@ textarea:focus, input:focus, select:focus {
     width:85%;
 }
 .header__title{
+    font-family: 'Yeseva One', 'Roboto', cursive;
     color: var(--orange);
     font-size:1.9rem;
 }
@@ -263,6 +265,7 @@ textarea:focus, input:focus, select:focus {
     margin-top:5%;
 }
 .player__text{
+    text-align: center;
     color:var(--text);
     font-size:1rem;
 }
