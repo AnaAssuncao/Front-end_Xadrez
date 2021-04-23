@@ -41,7 +41,8 @@ export default class OnlineGame extends GenericGame{
 
     async connectInARoom(nickAndCode){
         try{
-            const informationConnectionRoom= await this.network.sendServer.connectInARoom(nickAndCode)
+            const startTime = Date.now()
+            const informationConnectionRoom= await this.network.sendServer.connectInARoom(nickAndCode,startTime)
             if(informationConnectionRoom.serverConnection){
                 this.viewController.hideHomeMenu()
                 const connection={
@@ -53,7 +54,7 @@ export default class OnlineGame extends GenericGame{
                 this.applicationSetup.addNamePlayerAdv(informationConnectionRoom.statusPlayerAdv.namePlayer)
                 this.applicationSetup.updateCurrentPlayerColor(this.applicationSetup.colorsGame.bottom)
                 this.applicationSetup.updateTimeConnection()
-                this.applicationSetup.startGameTimer()
+                this.applicationSetup.startGameTimer(startTime)
                 this.countGameTime()
                 this.countMovementTime()
                 this.gameLogic.starObjGame(this.applicationSetup.colorsGame.top)
@@ -90,8 +91,7 @@ export default class OnlineGame extends GenericGame{
                 typeGame:"online",
             }
             this.viewController.updateStatusConection(connection)
-            const delayTime = 900
-            this.applicationSetup.startGameTimer(delayTime)
+            this.applicationSetup.startGameTimer(statusPlayerAdv.startTime)
             this.countGameTime()
             this.countMovementTime()
             this.applicationSetup.addLogGame(msgsAndAlerts.log.connected(statusPlayerAdv.namePlayer))
@@ -113,11 +113,12 @@ export default class OnlineGame extends GenericGame{
     
         if(isMove){
             try{
-                const infSendMove = await this.network.sendServer.moveGame(informationPieceSelect)
+                const movementTime = Date.now()
+                const infSendMove = await this.network.sendServer.moveGame(informationPieceSelect,movementTime)
                 if(infSendMove.serverConnection){
                     this.network.enableCalls.moveAdversary()
                     this.applicationSetup.updateCurrentPlayerColor(nextColor)
-                    this.applicationSetup.updateMovement()
+                    this.applicationSetup.updateMovement(movementTime)
                     this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextColorAndPlayer(this.applicationSetup.currentPlayerColor,this.applicationSetup.onlineConf.statusPlayers.advName))
                     this.applicationSetup.addHistoryLocalStorage(informationPieceSelect)
                 }
@@ -152,7 +153,7 @@ export default class OnlineGame extends GenericGame{
                 const nextColor=this.applicationSetup.onlineConf.statusPlayers.playerColor
                 this.applicationSetup.addLogGame(msgsAndAlerts.movement.movementPlayer(this.applicationSetup.currentPlayerColor,this.applicationSetup.onlineConf.statusPlayers.advName))
                 this.applicationSetup.updateCurrentPlayerColor(nextColor)
-                this.applicationSetup.updateMovement()
+                this.applicationSetup.updateMovement(moveAdv.movementTime)
                 this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextColorAndPlayer(this.applicationSetup.onlineConf.statusPlayers.playerColor,this.applicationSetup.onlineConf.statusPlayers.playerName))
                 this.applicationSetup.addHistoryLocalStorage(moveAdv.move)
             }

@@ -100,12 +100,13 @@ export default function InterfaceNetwork(){
             }
         },
 
-        async connectInARoom(nickAndCode){
+        async connectInARoom(nickAndCode,startTime){
             const url = networkConf.routerUrl.connectInARoom
             // nickAndCode = {name:value, roomCode:value}
             const infMultiplayer = {
                 playerName:nickAndCode.name,
-                roomCode:nickAndCode.roomCode
+                roomCode:nickAndCode.roomCode,
+                startTime:startTime
             }
             const msgRes = await httpMethods.post(infMultiplayer,url)
             if(typeStatus.errServer===msgRes){
@@ -133,6 +134,7 @@ export default function InterfaceNetwork(){
                 const paramFunstionStatus ={
                     statusPlayerAdv:msgRes.statusPlayerAdv,
                     qtMovements:msgRes.qtMovements,
+                    startTime:msgRes.startTime,
                     statusCode:statusCode
                 }
                 const status=networkUtils.callFunctionByStatusRoom(msgRes.connection,paramFunstionStatus)
@@ -140,11 +142,12 @@ export default function InterfaceNetwork(){
             } 
          },
 
-        moveGame: async(move) =>{
+        moveGame: async(move,movementTime) =>{
             const url = networkConf.routerUrl.updateMovement
             const objSend={
                 roomCode:networkConf.codes.room,
                 playerCode:networkConf.codes.player,
+                movementTime:movementTime,
                 movement:move
             }
             const msgRes = await httpMethods.post(objSend,url)
@@ -243,6 +246,7 @@ export default function InterfaceNetwork(){
                 }
                 else if(msgRes.typeStatus===typeStatus.movementAvailable){
                     const paramFunstionStatus={
+                        movementTime:msgRes.movementTime,
                         move:msgRes.move
                     }
                     const status = networkUtils.callFunctionByStatusMovement(msgRes.typeStatus,paramFunstionStatus)
@@ -272,6 +276,7 @@ export default function InterfaceNetwork(){
                 }
                 else if(msgRes.statusPlayerAdv.namePlayer!==null){
                     const paramFunstionStatus={
+                        startTime:msgRes.statusGame.startTime,
                         statusPlayerAdv:msgRes.statusPlayerAdv
                     }
                     const statusPlayerAdv= networkUtils.callFunctionByStatusGame(typeStatus.advPlayer,paramFunstionStatus)
@@ -301,7 +306,7 @@ export default function InterfaceNetwork(){
                 else if(networkConf.endGame===true){
                     clearInterval(waitInf) 
                 }
-                else if( status.statusGame.endGame.isEndGame===true){ 
+                else if(status.statusGame.endGame.isEndGame===true){ 
                     clearInterval(waitInf)
                     const paramFunstionStatus={
                         endGame: status.statusGame.endGame

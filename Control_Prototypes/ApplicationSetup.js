@@ -67,19 +67,18 @@ export default class ApplicationSetup{
         this.onlineConf.statusPlayers.advName=null
         this.gameLogs=[]
     }
-    startGameTimer(delayTime=0){
-        this.referenceTimes.gameTime=Date.now()-delayTime   
-        this.referenceTimes.movementTime=Date.now()-delayTime
+    startGameTimer(startTime){
+        this.referenceTimes.gameTime=startTime  
+        this.referenceTimes.movementTime=startTime
         this.addTimesLocalStorage()
     }
-    updateMovement(){
-        this.referenceTimes.movementTime=Date.now()
+    updateMovement(movementTime){
+        this.referenceTimes.movementTime=movementTime
         this.addTimesLocalStorage()
     }
     updateReferenceTime(referencetimes){
-        const delayTime = 1000
-        this.referenceTimes.gameTime=referencetimes.gameTime - delayTime
-        this.referenceTimes.movementTime=referencetimes.movementTime - delayTime
+        this.referenceTimes.gameTime=referencetimes.gameTime
+        this.referenceTimes.movementTime=referencetimes.movementTime
     }
     addTimesLocalStorage(){
         localStorage.setItem("timesGame", JSON.stringify(this.referenceTimes))

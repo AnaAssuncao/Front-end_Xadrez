@@ -40,6 +40,7 @@ const functionsStatusRoom={
                 namePlayer:param.statusPlayerAdv.namePlayer,
                 color:param.statusPlayerAdv.color
             },
+            startTime:param.startTime,
             statusCodes:param.statusCodes,
             msg:msgsAndAlerts.roomAndCode.connectedRoom(param.statusCodes.roomCode)
         }
@@ -65,6 +66,7 @@ const functionsStatusRoom={
             isConnected:true,
             statusPlayerAdv:param.statusPlayerAdv,
             qtMovements:param.qtMovements,
+            startTime:param.startTime,
             msg:msgsAndAlerts.roomAndCode.reconnectRoom()
         }
         notifyUpdates(functionToCallBack.updateCode,param.statusCode)
@@ -102,6 +104,7 @@ const functionsStatusMovement={
     movementAvailable:function(param){
         const sendController={
             serverConnection:true,
+            movementTime:param.movementTime,
             move:param.move,
         }
         return sendController
@@ -121,7 +124,8 @@ const functionsStatusGame={
         const sendController={
             isAdvConnected:true,
             namePlayer:param.statusPlayerAdv.namePlayer,
-            colorWin: param.statusPlayerAdv.color
+            colorWin: param.statusPlayerAdv.color,
+            startTime:param.startTime
         }
         return sendController
     },
