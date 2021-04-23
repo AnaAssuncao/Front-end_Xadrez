@@ -11,13 +11,14 @@ export default class GenericGame{
         this.viewController=viewController
     }
 
-    updateDisplayGame(colorTop,colorPlayer, isPlayable){
+    updateDisplayGame(colorTop,currentPlayer, msgTurnPlayer, isPlayable){
         const statusGame = this.gameLogic.getStatusGame() 
         if(statusGame.endGame){
             isPlayable=false
         }
-        this.updateDisplayBoard(colorPlayer,isPlayable) 
-        this.updateDisplayStatusCheck(colorPlayer)
+        this.updateDisplayBoard(currentPlayer,isPlayable) 
+        this.updateDisplayNextPlayer(msgTurnPlayer,currentPlayer)
+        this.updateDisplayStatusCheck(currentPlayer)
         this.updateDisplayCapturedPieces(colorTop)
         this.updateDisplayHistory() 
         this.updateDisplayDrawAndEndGame()
@@ -68,6 +69,10 @@ export default class GenericGame{
 
     updateDisplayLog(){
         this.viewController.displayGameLog(this.applicationSetup.gameLogs)
+    }
+
+    updateDisplayNextPlayer(informationColor,currentPlayer){
+        this.viewController.displayInformationNextPlayer(informationColor,currentPlayer)
     }
 
     changeNextColor(){

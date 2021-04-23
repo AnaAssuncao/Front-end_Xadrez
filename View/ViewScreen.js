@@ -88,6 +88,17 @@ export default function ViewScreen(chessBoard){
             text.innerHTML=value
             const img=document.querySelector("#player__img")
             img.src = imgPiece
+        },
+        addAnimation(){
+            this.clearAnimation()
+            const animation = document.querySelector("#player__animation")
+            animation.classList.add("player__animation")
+        },      
+        clearAnimation(){
+            const animation = document.querySelector("#player__animation")
+            if(animation.classList.contains("player__animation")){ 
+                animation.classList.remove("player__animation")
+            }
         }
     }
 

@@ -22,7 +22,8 @@ export default class OfflineGame extends GenericGame{
         this.applicationSetup.startGameTimer()
         this.countGameTime()
         this.countMovementTime()
-        this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor)
+        const msgCurrentColor = msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor)
+        this.updateDisplayGame(this.applicationSetup.colorsGame.top, this.applicationSetup.currentPlayerColor,msgCurrentColor)
     }
 
     move(informationPieceSelect){
@@ -34,7 +35,8 @@ export default class OfflineGame extends GenericGame{
             this.applicationSetup.updateMovement()
             this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor))
         }
-        this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor)
+        const msgCurrentColor = msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor)
+        this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor,msgCurrentColor)
     }
 
     backPreviousMove(){
@@ -47,8 +49,9 @@ export default class OfflineGame extends GenericGame{
             if(statusGame.endGame===false){
                 this.applicationSetup.addLogGame(msgsAndAlerts.movement.return(this.applicationSetup.currentPlayerColor))
                 this.applicationSetup.updateCurrentPlayerColor(pastColor)
-                this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor))
-                this.updateDisplayGame(this.applicationSetup.colorsGame.top,pastColor)
+                const msgCurrentColor = msgsAndAlerts.movement.nextColor(this.applicationSetup.currentPlayerColor)
+                this.applicationSetup.addLogGame(msgCurrentColor)
+                this.updateDisplayGame(this.applicationSetup.colorsGame.top,pastColor,msgCurrentColor)
             }
         }
     }

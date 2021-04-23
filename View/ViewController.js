@@ -8,7 +8,7 @@ export default function ViewController(startBoard){
         },
         informationBoard:{
             chessBoard:null,
-            isPlayable:null,
+            isYourTurn:null,
             currentPlayer:null,
         }
     }
@@ -44,23 +44,32 @@ export default function ViewController(startBoard){
         }
     }
 
-    const informationColor= (msgColor, currentPlayer) => {
-        const color = (currentPlayer==="white")? "White":"Black"
-        const imgPiece = `Img/king${color}.png`
-        view.colorInformation.updateInformation(msgColor,imgPiece)  
+    const playTurnInformation ={
+        informationNextPlayer:function (msgColor, currentPlayer){
+            const color = (currentPlayer==="white")? "White":"Black"
+            const imgPiece = `Img/king${color}.png`
+            view.colorInformation.updateInformation(msgColor,imgPiece) 
+        },
+        updateAlertYourTurn:function(isYourTurn){
+            if(isYourTurn){
+                view.colorInformation.addAnimation() 
+            } 
+            else{
+                view.colorInformation.clearAnimation() 
+            }
+        }
     }
 
     const board={
-        update:function(chessBoard,currentPlayer,isPlayable,msgColor){
+        update:function(chessBoard,currentPlayer,isYourTurn){
             if(chess.pieceSelect.position){
                 view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             }
             view.chessBoard.renderBoard(chessBoard,imgPiece)
-            informationColor(msgColor,currentPlayer)
             updateInput.allInput(chessBoard,currentPlayer)
             chess.informationBoard.chessBoard = chessBoard
             chess.informationBoard.currentPlayer = currentPlayer
-            chess.informationBoard.isPlayable=isPlayable
+            chess.informationBoard.isYourTurn=isYourTurn
         },
         clearAllBoard: function(){
             if(chess.pieceSelect.position){
@@ -177,7 +186,7 @@ export default function ViewController(startBoard){
                 view.chessBoard.highlighSquare.clearHighlightSquares(chess.pieceSelect)
             } 
             if((chess.pieceSelect.position!==idSquare) && (chess.informationBoard.chessBoard[idSquare]!==null) 
-            && (chess.informationBoard.isPlayable===true) && (chess.informationBoard.currentPlayer===chess.informationBoard.chessBoard[idSquare].color)) 
+            && (chess.informationBoard.isYourTurn===true) && (chess.informationBoard.currentPlayer===chess.informationBoard.chessBoard[idSquare].color)) 
             {
                 chess.pieceSelect=chess.informationBoard.chessBoard[idSquare]
                 view.chessBoard.highlighSquare.addHighlightSquares(chess.pieceSelect)
@@ -387,8 +396,8 @@ export default function ViewController(startBoard){
         history.clearButtonBackMovement()
     }
 
-    this.updateBoard=function(chessBoard,currentPlayer,isPlayable,informationColor){
-        board.update(chessBoard,currentPlayer,isPlayable,informationColor)
+    this.updateBoard=function(chessBoard,currentPlayer,isYourTurn,informationColor){
+        board.update(chessBoard,currentPlayer,isYourTurn,informationColor)
     }
 
     this.updateHistory=function(historys){
@@ -445,6 +454,14 @@ export default function ViewController(startBoard){
 
     this.clearTimes=function(){
         times.clearTimes()
+    }
+
+    this.displayInformationNextPlayer=function(msgColor, currentPlayer){
+        playTurnInformation.informationNextPlayer(msgColor, currentPlayer)
+    }
+
+    this.updateDisplayYourTurn=function(isYourTurn){
+        playTurnInformation.updateAlertYourTurn(isYourTurn)
     }
 
     const utilities ={

@@ -797,3 +797,17 @@ textarea:focus, input:focus, select:focus {
         font-size:25px;
     }
 }
+
+@keyframes spotlight {
+    0% { background-color: var(--cream); }
+    50% { background-color:var(--mustard);}
+    100% { background-color: var(--cream); }
+}
+
+.player__animation {
+    border-radius: 15px;
+    -webkit-animation: spotlight 2000ms 10;
+    -moz-animation: spotlight 2000ms 10;
+    -o-animation: spotlight 2000ms 10;
+    animation: spotlight 2000ms 10;
+}

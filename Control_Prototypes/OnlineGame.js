@@ -26,8 +26,8 @@ export default class OnlineGame extends GenericGame{
                 this.gameLogic.starObjGame(this.applicationSetup.colorsGame.bottom)
                 this.applicationSetup.addLogGame(msgsAndAlerts.roomAndCode.connectedRoom(nickAndCode.roomCode))
                 this.applicationSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.applicationSetup.currentPlayerColor))
-                const isPlayable = false
-                this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor, isPlayable)
+                const isYourTurn = false
+                this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor,connection.msg, isYourTurn)
                 this.network.enableCalls.playerConnection()
             }
             else{
@@ -61,8 +61,9 @@ export default class OnlineGame extends GenericGame{
                 this.applicationSetup.addLogGame(msgsAndAlerts.log.connected(informationConnectionRoom.statusPlayerAdv.namePlayer))
                 this.applicationSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.applicationSetup.currentPlayerColor))
                 this.applicationSetup.addLogGame(msgsAndAlerts.startGame.startGame())
-                const isPlayable = false
-                this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor, isPlayable)
+                const isYourTurn = false
+                const msgCurrentPlayer = msgsAndAlerts.movement.nextPlayer(this.currentPlayerName())
+                this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor,msgCurrentPlayer, isYourTurn)
                 this.network.enableCalls.moveAdversary()
                 this.network.enableCalls.statusGame()
             }
@@ -96,8 +97,11 @@ export default class OnlineGame extends GenericGame{
             this.applicationSetup.addLogGame(msgsAndAlerts.log.connected(statusPlayerAdv.namePlayer))
             this.applicationSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.applicationSetup.currentPlayerColor))
             this.applicationSetup.addLogGame(msgsAndAlerts.startGame.startGame())
-            this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor)
+            const msgCurrentPlayer = msgsAndAlerts.movement.nextPlayer(this.currentPlayerName())
+            this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor,msgCurrentPlayer)
             this.network.enableCalls.statusGame()
+            const isYourTurn = true
+            this.viewController.updateDisplayYourTurn(isYourTurn)
         }
     }
 
@@ -105,7 +109,6 @@ export default class OnlineGame extends GenericGame{
         // {informationPieceSelect: fullName,color,typeMovement,specialMovement,refId e piecePromotion}
         const isMove = this.movePiece(informationPieceSelect)
         const nextColor=this.changeNextColor()
-        const isPlayable=false
         this.applicationSetup.addLogGame(msgsAndAlerts.movement.movementPlayer(this.applicationSetup.onlineConf.statusPlayers.playerColor,this.applicationSetup.onlineConf.statusPlayers.playerName))
     
         if(isMove){
@@ -115,7 +118,7 @@ export default class OnlineGame extends GenericGame{
                     this.network.enableCalls.moveAdversary()
                     this.applicationSetup.updateCurrentPlayerColor(nextColor)
                     this.applicationSetup.updateMovement()
-                    this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextPlayer(this.applicationSetup.currentPlayerColor,this.applicationSetup.onlineConf.statusPlayers.advName))
+                    this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextColorAndPlayer(this.applicationSetup.currentPlayerColor,this.applicationSetup.onlineConf.statusPlayers.advName))
                     this.applicationSetup.addHistoryLocalStorage(informationPieceSelect)
                 }
             }
@@ -127,8 +130,10 @@ export default class OnlineGame extends GenericGame{
             this.viewController.informationProminent(msgsAndAlerts.movement.moveAgain())      
         }
         this.checkEndGame()
-        this.updateDisplayGame(this.applicationSetup.colorsGame.top,nextColor,isPlayable)
-
+        const msgCurrentPlayer = msgsAndAlerts.movement.nextPlayer(this.currentPlayerName())
+        const isYourTurn=false
+        this.updateDisplayGame(this.applicationSetup.colorsGame.top,nextColor,msgCurrentPlayer,isYourTurn)
+        this.viewController.updateDisplayYourTurn(isYourTurn)
     }
 
     getMoveAdv(moveAdv){
@@ -148,7 +153,7 @@ export default class OnlineGame extends GenericGame{
                 this.applicationSetup.addLogGame(msgsAndAlerts.movement.movementPlayer(this.applicationSetup.currentPlayerColor,this.applicationSetup.onlineConf.statusPlayers.advName))
                 this.applicationSetup.updateCurrentPlayerColor(nextColor)
                 this.applicationSetup.updateMovement()
-                this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextPlayer(this.applicationSetup.onlineConf.statusPlayers.playerColor,this.applicationSetup.onlineConf.statusPlayers.playerName))
+                this.applicationSetup.addLogGame(msgsAndAlerts.movement.nextColorAndPlayer(this.applicationSetup.onlineConf.statusPlayers.playerColor,this.applicationSetup.onlineConf.statusPlayers.playerName))
                 this.applicationSetup.addHistoryLocalStorage(moveAdv.move)
             }
             else{
@@ -161,7 +166,10 @@ export default class OnlineGame extends GenericGame{
                 this.network.sendServer.endGame()
             }
             this.checkEndGame()
-            this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor)
+            const msgCurrentPlayer = msgsAndAlerts.movement.nextPlayer(this.currentPlayerName())
+            this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor,msgCurrentPlayer)
+            const isYourTurn = true
+            this.viewController.updateDisplayYourTurn(isYourTurn)
         }
     }
 
@@ -172,10 +180,12 @@ export default class OnlineGame extends GenericGame{
             this.applicationSetup.clearLocalStorage()
         }
         this.applicationSetup.clearGame()
+        const isYourTurn = false
+        this.viewController.updateDisplayYourTurn(isYourTurn)
         this.viewController.clearTimes()
         this.viewController.hideEndGameInformation()
         this.viewController.hideBackMovement()
-        this.viewController.displayHomeMenu()
+        this.viewController.displayHomeMenu()   
     }
 
     advGiveUp(){
@@ -190,8 +200,7 @@ export default class OnlineGame extends GenericGame{
 
     timeOutToMove(playerName){
         if(playerName){
-            playerName = (this.applicationSetup.currentPlayerColor===this.applicationSetup.onlineConf.statusPlayers.playerColor)?
-                            this.applicationSetup.onlineConf.statusPlayers.playerName:this.applicationSetup.onlineConf.statusPlayers.advName
+            playerName = this.currentPlayerName()
         }
         if(this.applicationSetup.endGame===false){
             const displayGiveUp = msgsAndAlerts.endGame.timeOutToMovePlayer(playerName)
@@ -278,8 +287,15 @@ export default class OnlineGame extends GenericGame{
                 }
             })
         }
-        const isPlayable = (this.applicationSetup.onlineConf.statusPlayers.playerColor===this.applicationSetup.currentPlayerColor)?true:false
-        this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor,isPlayable)
-        return isPlayable
+        const isYourTurn = (this.applicationSetup.onlineConf.statusPlayers.playerColor===this.applicationSetup.currentPlayerColor)?true:false
+        const msgCurrentPlayer = msgsAndAlerts.movement.nextPlayer(this.currentPlayerName())
+        this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor,msgCurrentPlayer,isYourTurn)
+        return isYourTurn
+    }
+
+    currentPlayerName(){
+        const playerName = (this.applicationSetup.currentPlayerColor===this.applicationSetup.onlineConf.statusPlayers.playerColor)?
+                        this.applicationSetup.onlineConf.statusPlayers.playerName:this.applicationSetup.onlineConf.statusPlayers.advName
+        return playerName
     }
 }
