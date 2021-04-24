@@ -97,7 +97,7 @@ export default class OnlineGame extends GenericGame{
             this.applicationSetup.addLogGame(msgsAndAlerts.log.connected(statusPlayerAdv.namePlayer))
             this.applicationSetup.addLogGame(msgsAndAlerts.startGame.colorPlayer(this.applicationSetup.currentPlayerColor))
             this.applicationSetup.addLogGame(msgsAndAlerts.startGame.startGame())
-            const msgCurrentPlayer = msgsAndAlerts.movement.nextPlayer(this.currentPlayerName())
+            const msgCurrentPlayer = msgsAndAlerts.movement.yourTurn(this.currentPlayerName())
             this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor,msgCurrentPlayer)
             this.network.enableCalls.statusGame()
             const isYourTurn = true
@@ -167,7 +167,7 @@ export default class OnlineGame extends GenericGame{
                 this.network.sendServer.endGame()
             }
             this.checkEndGame()
-            const msgCurrentPlayer = msgsAndAlerts.movement.nextPlayer(this.currentPlayerName())
+            const msgCurrentPlayer = msgsAndAlerts.movement.yourTurn(this.currentPlayerName())
             this.updateDisplayGame(this.applicationSetup.colorsGame.top,this.applicationSetup.currentPlayerColor,msgCurrentPlayer)
             const isYourTurn = true
             this.viewController.updateDisplayYourTurn(isYourTurn)

@@ -56,6 +56,7 @@ const movement={
     return:(color)=>"Retorno das Peças " + colors[color],
     nextColor:(color)=>"Vez das Peças " + colors[color],
     nextPlayer:(name)=>"Vez do Jogador(a) " + name,
+    yourTurn:(name)=>name + " sua vez de jogar",
     nextColorAndPlayer:(color,name)=>"Vez das Peças " + colors[color]+" Vez do Jogador(a) " + name,
     incorrectMovement:(color)=>"Erro na jogada das Peças " + colors[color],
     cheatMovement:()=>"Movimento de trapaça",
