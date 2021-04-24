@@ -46,10 +46,18 @@ export default class OfflineGame extends GenericGame{
         this.viewController.hideEndGameInformation()
         const playHistory = this.gameLogic.getHistoryMoves()
         if(playHistory.length>0){
+                this.countGameTime()
+                this.countMovementTime()
+
             this.gameLogic.returnMovement()
             const pastColor=this.changeNextColor()
             const statusGame = this.gameLogic.getStatusGame() 
             if(statusGame.endGame===false){
+                if(this.applicationSetup.endGame){
+                    this.applicationSetup.updateEndGame(false)
+                    this.countGameTime()
+                    this.countMovementTime()
+                }
                 this.applicationSetup.addLogGame(msgsAndAlerts.movement.return(this.applicationSetup.currentPlayerColor))
                 this.applicationSetup.updateCurrentPlayerColor(pastColor)
                 const movementTime =Date.now()

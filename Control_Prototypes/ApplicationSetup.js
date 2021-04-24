@@ -34,8 +34,8 @@ export default class ApplicationSetup{
         this.gameMode=game
         this.endGame=false
     }
-    updateEndGame(){
-        this.endGame=true
+    updateEndGame(isEndGame=true){
+        this.endGame=isEndGame
     }
     addInformationPlayerOnline(playerName,playerColor,statusCode){
         this.onlineConf.statusPlayers.playerColor=playerColor
