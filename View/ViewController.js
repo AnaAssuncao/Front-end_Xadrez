@@ -144,10 +144,14 @@ export default function ViewController(startBoard){
         },
         startNewRoom:function(nickAndCode){
             board.clearAllBoard()
+            const nick = nickAndCode.name.slice(0,12)
+            nickAndCode.name=nick
             notifyFunctions (functionToCallBack.startNewRoom,nickAndCode)
         },
         connectInARoom:function(nickAndCode){
             board.clearAllBoard()
+            const nick = nickAndCode.name.slice(0,15)
+            nickAndCode.name=nick
             notifyFunctions (functionToCallBack.connectInARoom,nickAndCode)
         },
         restartGame(){
