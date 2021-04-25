@@ -64,8 +64,9 @@
         conectar. 
     Nestes modos possuem:
         *Informação de quem é o turno, conectividade e cheque.
-        *Mover as peças através de escolhas por input da peça e da coordenada, depois clicando no botão para mover
-        . Clique sobre a peça e clique no local onde quer mover. E também, arrastar a peça para o local escolhido.
+        *Mover as peças através de escolhas por input da peça e da coordenada, depois clicando no botão para 
+        mover. Clique sobre a peça e clique no local onde quer mover. E também, arrastar a peça para o local
+        escolhido.
         *Cronômetro do total de jogo corrido e o tempo do turno para poder mover (sendo apenas 5 minutos).
         *Em detalhes, há o log com todas informações referente ao jogo. E também, as peças capturadas.
         *Histótico com as jogadas realizadas.
@@ -80,7 +81,7 @@
     <https://github.com/jpsamarino>
 
 ## Autor
- <img style="border-radius: 50%;" src="https://media-exp1.licdn.com/dms/image/C4E03AQGYUal9ZyvRtA/profile-displayphoto-shrink_800_800/0/1594406991642?e=1625097600&v=beta&t=T9H1zgdKQ4H1Ecrgm0AKNCkoxkE8xKL5zCo3_1GN0QM" width="100px;" alt=""/>
+ <img style="border-radius: 50%;" src="https://media-exp1.licdn.com/dms/image/C4E03AQGYUal9ZyvRtA/profile-displayphoto-shrink_800_800/0/1594406991642?e=1625097600&v=beta&t=T9H1zgdKQ4H1Ecrgm0AKNCkoxkE8xKL5zCo3_1GN0QM" width="150px;" alt=""/>
  <br />
  <sub><b>Ana Paula Assunção</b></sub>
 
