@@ -64,19 +64,19 @@
     }
     
     /* left panel*/
-    .left__panel{
+    .section__panel{
         width: 100vw;
         height: 6%;
         flex-flow: column wrap;
     }
-    .left__panel__buttons{
+    .section__panel__buttons{
         flex-flow: column nowrap;
         justify-content: space-between;
         order: 5;
         width: 10%;
         height: 100%; 
     }
-    .left__panel__img{
+    .section__panel__img{
         width: 10vw;
         height: 40%; 
     }
@@ -84,7 +84,7 @@
         width: 100%;
         height: 100%;
     }
-    .left__panel__header{
+    .section__panel__header{
         order:2;
         width:40%;
         height:90%;
@@ -97,7 +97,7 @@
         text-align: center;
         width: 100%;
     }
-    .left__panel__player{
+    .section__panel__player{
         margin:0px;
         flex-flow: row nowrap;
         order:4;
@@ -111,10 +111,10 @@
     .player__text{
         margin-left:0px;
     }
-    .left__panel__move{
+    .section__panel__move{
         display: none;
     }
-    .left__panel__time{
+    .section__panel__time{
         order:3;
         flex-flow:row nowrap;
         width:45%;
@@ -241,13 +241,13 @@
         width: 10%;
         height: 45%;
     }
-    /* right__panel */
-    .right__panel{
+    /* section__history */
+    .section__history{
         width: 98%;
         height: 50%;;
         margin: 1vh;
     }
-    .right__panel__header{
+    .section__history__header{
         height: 8%;
     }
     #information__history::-webkit-scrollbar {

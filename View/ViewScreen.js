@@ -396,11 +396,11 @@ export default function ViewScreen(chessBoard){
             })
             buttonExit.addEventListener("mouseover", ()=>{
                 const textExit = document.querySelector("#text__exit")
-                textExit.classList.toggle("left__panel__exit--display")
+                textExit.classList.toggle("section__panel__exit--display")
             })
             buttonExit.addEventListener("mouseout", ()=>{
                 const textExit = document.querySelector("#text__exit")
-                textExit.classList.toggle("left__panel__exit--display")
+                textExit.classList.toggle("section__panel__exit--display")
             })
         },
         buttonDarkGame(){
