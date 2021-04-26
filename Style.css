@@ -11,8 +11,7 @@
     --light-cream:#FFFAF0;
     --cream:#FFF2D7;
     --mustard:#FFBE4E;
-    --orange: #FF8D4E;
-    --dark-orange: #CC713F;
+    --title-logo: #FF8D4E;
     --text:#1B2732;
     --text-button:#D4DCE6;
     --button: #5973FC;
@@ -29,9 +28,8 @@
     --background:#1B2732;
     --light-cream:#818892;
     --cream:#6D7989;
-    --mustard:#2F3642;
-    --orange: #4D0C0C;
-    --dark-orange: #330808;
+    --mustard:#230e31;
+    --title-logo: #4D0C0C;
     --text:#eeeefc;
     --text-button:#D4DCE6;
     --button: #2c397d;
@@ -119,7 +117,7 @@
 }
 .menu__home__title{
     margin-right: 10%;
-    color: var(--orange);
+    color: var(--title-logo);
     font-size: 5rem;
     font-family: 'Yeseva One', 'Roboto', cursive;
 }
@@ -256,7 +254,7 @@ textarea:focus, input:focus, select:focus {
 }
 .header__title{
     font-family: 'Yeseva One', 'Roboto', cursive;
-    color: var(--orange);
+    color: var(--title-logo);
     font-size:1.9rem;
 }
 .section__panel__player{
