@@ -820,13 +820,13 @@ textarea:focus, input:focus, select:focus {
     }
 }
 
-@media(max-width: 900px){
+@media(max-width: 900px) and (orientation: landscape){
     .defalt__config{
         font-size:10px;
     }
 }
 
-@media(max-width: 600px){
+@media(max-width: 600px) and (orientation: landscape){
     .defalt__config{
         font-size:8px;
     }
