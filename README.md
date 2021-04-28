@@ -31,9 +31,9 @@ Nesta aplicação além de se utilizar JavaScript, fez uso de recursos comuns pa
 <img  src="./Img_Github/chessDark.png" width="800px">
 
 ### 📱 Mobile
-<img  src="./Img_Github/homeMenuMobile.png" width="200px" style="display:inline">
-<img  src="./Img_Github/chessMobile.png" width="200px" style="display:inline">
-<img  src="./Img_Github/chessDarkMobile.png" width="200px" style="display:inline">
+<img  src="./Img_Github/homeMenuMobile.png" width="200px"><img  src="./Img_Github/chessMobile.png" width="200px"><img  src="./Img_Github/chessDarkMobile.png" width="200px">
+
+
 
 ## ✅ Pré-requisitos
 Entrar na página abaixo para poder jogar:
@@ -62,23 +62,23 @@ Durante o desenvolvimento do jogo apareceram diversos problemas, a cada um deste
 Segue a lista dos design Patterns usados:
 
 Design de Criação
-    - Builder
-    - Factory Method
-    - Singleton
+- Builder
+- Factory Method
+- Singleton
 
 Design Estruturais
-    - Composite
-    - Composite
-    - Flyweight
-    - Proxy
+- Composite
+- Composite
+- Flyweight
+- Proxy
 
 Design de Comportamentais
-    - Iterator
-    - Memento
-    - Observer
-    - State
-    - Strategy
-    - Visitor
+- Iterator
+- Memento
+- Observer
+- State
+- Strategy
+- Visitor
 
 ## 💻 Arquitetura 
 ### MVVM
