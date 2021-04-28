@@ -222,7 +222,7 @@
         margin-top: 0;
         width:min(98vw,85vh);
         height:calc(min(98vw,85vh) + 3vh);
-        top:calc(1.5vh + 8%);
+        top:calc(2.2% + 8%);
         left:1vw;
     }
     .modal__details__msg{

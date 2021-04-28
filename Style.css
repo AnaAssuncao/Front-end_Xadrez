@@ -586,7 +586,6 @@ textarea:focus, input:focus, select:focus {
     width: min(45vw,85vh);
     height:calc(min(50vw,85vh) + 4vh);
     background-color: var(--dark-blue);
-    box-sizing: content-box;
     border-right: solid 1px var(--shadow);
     opacity:0.97;
     left: 0;
