@@ -6,7 +6,7 @@
     font-weight: 500;
 }
 :root{
-    --black:#000000;
+    --dark:#000000;
     --background:#eeeefc;
     --light-cream:#FFFAF0;
     --cream:#FFF2D7;
@@ -24,7 +24,7 @@
     --urlInput: url("Img/input.svg")
 }
 [data-theme="dark"] {
-    --black:#000000;
+    --dark:#4D0C0C;
     --background:#1B2732;
     --light-cream:#818892;
     --cream:#6D7989;
@@ -168,6 +168,10 @@
 }
 #button__menu__newRoom{
     margin-right:1%;
+    width: 40%;
+}
+#button__menu__connectRoom{
+    width: 60%;
 }
 .menu__home__input{
     width:80%;
@@ -255,7 +259,7 @@ textarea:focus, input:focus, select:focus {
 .header__title{
     font-family: 'Yeseva One', 'Roboto', cursive;
     color: var(--title-logo);
-    font-size:1.9rem;
+    font-size:1.8rem;
 }
 .section__panel__player{
     width:100%;
@@ -358,12 +362,12 @@ textarea:focus, input:focus, select:focus {
 /* main panel */
 .chess__main{
     position: relative;
-    width: 41%;
+    width: min(45vw,85vh);
     height: 100%;
 }
 /* top line with status game  */
 .status__game__row{
-    width:100%;
+    width:min(45vw,85vh);
     height: 6%;
     color:var(--cream);
     margin: 2.5vh 0 4vh 0;
@@ -513,14 +517,14 @@ textarea:focus, input:focus, select:focus {
     /* background-size: cover; */
 }
 .move__piece--possibilities-l{
-    border: solid 2px var(--black);
+    border: solid 2px var(--dark);
     background-image: url("Img/possible-movement.svg");
     background-size: 15px 15px;
     background-position: top left;
     background-repeat:no-repeat;
 }   
 .move__piece--possibilities-d{
-    border: solid 2px  var(--black);
+    border: solid 2px  var(--dark);
     background-image: url("Img/possible-movement.svg");
     background-size: 15px 15px;
     background-position: top left;
@@ -579,7 +583,7 @@ textarea:focus, input:focus, select:focus {
     position: absolute;
     flex-flow: column nowrap;
     justify-content: flex-start;
-    width:min(50vw,85vh);
+    width: min(45vw,85vh);
     height:calc(min(50vw,85vh) + 4vh);
     background-color: var(--dark-blue);
     box-sizing: content-box;
@@ -797,12 +801,6 @@ textarea:focus, input:focus, select:focus {
     text-align: center;
 }
 
-@media(min-width: 1600px){
-    .defalt__config{
-        font-size:25px;
-    }
-}
-
 @keyframes spotlight {
     0% { background-color: var(--cream); }
     50% { background-color:var(--mustard);}
@@ -815,4 +813,10 @@ textarea:focus, input:focus, select:focus {
     -moz-animation: spotlight 2000ms 10;
     -o-animation: spotlight 2000ms 10;
     animation: spotlight 2000ms 10;
+}
+
+@media(min-width: 1900px){
+    .defalt__config{
+        font-size:22px;
+    }
 }

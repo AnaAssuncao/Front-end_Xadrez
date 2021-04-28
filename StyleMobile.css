@@ -1,4 +1,4 @@
-@media(max-width: 1000px){
+@media (orientation: portrait){
     .defalt__config{
         font-size:30px;
     }
@@ -144,16 +144,17 @@
     
     /* main panel */
     .chess__main{
+        justify-content: center;
         align-items: center;
         width: 100%;
         height: 50%;
-        margin:3vh 0px 2vh 0px;
+        margin:70px 0px 70px 0px;
     }
     /* top line with status game  */
     .status__game__row{
-        width: 98%;
+        width:min(98vw,85vh);
         height: 8%;
-        margin: 1vh 0 1vh 0 
+        margin:0px 0px 3vh 0px;
     }
     #information__details{
         display: none;
@@ -172,17 +173,18 @@
     .chess__board{
         width:min(98vw,85vh);
         height:min(98vw,85vh);
-        margin:2%;
+        margin:0px;
     }
     .move__piece--possibilities{
         border: dashed 4px  var(--text);
     }
     .move__piece--possibilities-l{
-        border: solid 4px var(--black);
- 
+        border: solid 4px var(--dark);
+        background-size: 25px 25px;
     }   
     .move__piece--possibilities-d{
-        border: solid 4px  var(--black);
+        border: solid 4px  var(--dark);
+        background-size: 25px 25px;
     }
     .move__piece--selected-l{
         border: solid 4px var(--spotlight);
@@ -219,8 +221,8 @@
     .modal__details{
         margin-top: 0;
         width:min(98vw,85vh);
-        height:calc(min(98vw,85vh) + 2vh);
-        top:calc(1.1vh + 8%);
+        height:calc(min(98vw,85vh) + 3vh);
+        top:calc(1.5vh + 8%);
         left:1vw;
     }
     .modal__details__msg{
@@ -244,11 +246,12 @@
     /* section__history */
     .section__history{
         width: 98%;
-        height: 50%;;
-        margin: 1vh;
+        height: 50%;
+        margin:0px;
     }
     .section__history__header{
-        height: 8%;
+        margin:0px;
+        height: 10%;
     }
     #information__history::-webkit-scrollbar {
         width: 30px;
