@@ -3,7 +3,7 @@
 </h2>
 <h1 align= "center">Vanilla Chess </h1>
 <h3 align= "center">Jogo de Xadrez para se divertir com um amigo</h3>
-<h4 align= "center">Clique [aqui](<https://anaassuncao.github.io/Front-end_Xadrez/>) para jogar</h4>
+<a align= "center" href="https://anaassuncao.github.io/Front-end_Xadrez/" >Clique aqui para jogar</a>
 <h4 align="center"> 
 🚧  Vanilla Chess 🚀 Em construção...  🚧
 </h4>
