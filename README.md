@@ -25,13 +25,15 @@ Vanilla Chess é uma versão tradicional do jogo Xadrez. Este projeto possui com
 Nesta aplicação além de se utilizar JavaScript, fez uso de recursos comuns para desenvolver front-end, CSS3 e HTML5. Estas abordagens foram escolhidas para não ser necessário o uso de transpiladores, como SASS e Babel.
 
 ## 🎨 Layout
+Este projeto possui tema claro e tema escuro. Basta clicar no botão para alterar o tema.
+
 ### 🖥️ Web
 <img  src="./Img_Github/homeMenu.png" width="800px" >
 <img  src="./Img_Github/chess.png" width="800px">
 <img  src="./Img_Github/chessDark.png" width="800px">
 
 ### 📱 Mobile
-<img  src="./Img_Github/homeMenuMobile.png" height="400px"><img  src="./Img_Github/chessMobile.png" height="400px"><img  src="./Img_Github/chessDarkMobile.png" height="400px">
+<img  src="./Img_Github/homeMenuMobile.png" height="400px"> <img  src="./Img_Github/chessMobile.png" height="400px"> <img  src="./Img_Github/chessDarkMobile.png" height="400px">
 
 ## ✅ Pré-requisitos
 Entrar na página abaixo para poder jogar:
@@ -46,7 +48,8 @@ git clone <https://github.com/AnaAssuncao/Front-end_Xadrez>
 # Acesse a pasta do projeto no terminal/cmd
 cd Front-end
 
-# Utilize o servidor de conteúdo de sua preferência sobre a pasta do projeto, no navegador abre a seguinte rota
+# Utilize o servidor de conteúdo de sua preferência sobre a pasta do projeto
+# no navegador abre a seguinte rota
 ./index.html
 ```
 
