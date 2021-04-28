@@ -31,9 +31,7 @@ Nesta aplicação além de se utilizar JavaScript, fez uso de recursos comuns pa
 <img  src="./Img_Github/chessDark.png" width="800px">
 
 ### 📱 Mobile
-<img  src="./Img_Github/homeMenuMobile.png" width="200px"><img  src="./Img_Github/chessMobile.png" width="200px"><img  src="./Img_Github/chessDarkMobile.png" width="200px">
-
-
+<img  src="./Img_Github/homeMenuMobile.png" height="400px"><img  src="./Img_Github/chessMobile.png" height="400px"><img  src="./Img_Github/chessDarkMobile.png" height="400px">
 
 ## ✅ Pré-requisitos
 Entrar na página abaixo para poder jogar:
