@@ -819,3 +819,15 @@ textarea:focus, input:focus, select:focus {
         font-size:22px;
     }
 }
+
+@media(max-width: 900px){
+    .defalt__config{
+        font-size:10px;
+    }
+}
+
+@media(max-width: 600px){
+    .defalt__config{
+        font-size:8px;
+    }
+}
