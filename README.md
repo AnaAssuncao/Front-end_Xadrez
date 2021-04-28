@@ -3,6 +3,7 @@
 </h2>
 <h1 align= "center">Vanilla Chess </h1>
 <h3 align= "center">Jogo de Xadrez para se divertir com um amigo</h3>
+<h4 align= "center">Clique [aqui](<https://anaassuncao.github.io/Front-end_Xadrez/>) para jogar</h4>
 <h4 align="center"> 
 🚧  Vanilla Chess 🚀 Em construção...  🚧
 </h4>
@@ -20,12 +21,12 @@
 - [Autor](#autor)
 
 ## ♟️ Sobre
-Vanilla Chess é uma versão tradicional do jogo Xadrez. Este projeto possui como objetivo criar um jogo de Xadrez, com dois modo de jogo local e online, empregando JavaScript ES5 puro (<http://vanilla-js.com/>). A elaboração do projeto utilizou-se dos princípios SOLID, juntamente com boas práticas de engenharia de software.
+Vanilla Chess é uma versão tradicional do jogo Xadrez. Este projeto possui como objetivo criar um jogo de Xadrez, com dois modo de jogo, local e online, empregando JavaScript ES5 puro (vanilla-js). A elaboração do projeto utilizou-se dos princípios SOLID, juntamente com boas práticas de engenharia de software.
 
 Nesta aplicação além de se utilizar JavaScript, fez uso de recursos comuns para desenvolver front-end, CSS3 e HTML5. Estas abordagens foram escolhidas para não ser necessário o uso de transpiladores, como SASS e Babel.
 
 ## 🎨 Layout
-Este projeto possui tema claro e tema escuro. Basta clicar no botão para alterar o tema.
+Este projeto possui tema claro e tema escuro. Basta clicar no botão para alterá-lo.
 
 ### 🖥️ Web
 <img  src="./Img_Github/homeMenu.png" width="800px" >
@@ -69,11 +70,11 @@ Design de Criação
 
 Design Estruturais
 - Composite
-- Composite
+- Decorator
 - Flyweight
 - Proxy
 
-Design de Comportamentais
+Design Comportamentais
 - Iterator
 - Memento
 - Observer
@@ -83,35 +84,35 @@ Design de Comportamentais
 
 ## 💻 Arquitetura 
 ### MVVM
-Para elaboração do xadrez utilizou-se da arquitetura Model-View-ViewModel ( MVVM ), para separação mais clara da camada de apresentação da lógica do jogo. Separando em:
-- ViewScreen (View): esta camada comunica com a DOM (Document Object Model)X' para modificar a parte renderizável do jogo.
-- ViewController (ViewModel): esta camada disponibiliza para a View uma lógica de apresentação. E ela que coordena as iterações entre a View com o Controle, visto que ambos não têm conhecimento um do outro.
-- Controller: esta camada realiza a iteração entre View Controller, o Game e a Network. Sendo o controle do jogo.
-- Game(Model): esta camada encontra-se a lógica do xadrez, como ele funciona. Os movimentos das peças, quando uma pode ser capturada, os cheques, o empate, as jogadas especiais, a assistência, estão nesta camada.
+Para elaboração do xadrez utilizou-se da arquitetura Model-View-ViewModel ( MVVM ), para separação mais clara da camada de apresentação com a lógica do jogo. Separando em:
+- ViewScreen (View): nesta camada comunica com a DOM (Document Object Model) para modificar a parte renderizável do jogo.
+- ViewController (ViewModel): nesta camada disponibiliza para a View uma lógica de apresentação. E ela que coordena as iterações entre a View com o Controle, visto que ambos não têm conhecimento um do outro.
+- Controller: nesta camada realiza a iteração entre View Controller, o Game e a Network. Sendo o controle do jogo.
+- Game(Model): nesta camada encontra-se a lógica do xadrez, e o funcionamento da mesma. Contendo, portanto, os movimentos das peças, quando uma delas pode ser capturada, os cheques, o empate, as jogadas especiais, a assistência.
 
-Comunicação Back-End:  Existe uma camada específica que realiza a comunicação com o servidor, Network.
+Comunicação com o servidor de aplicação:  Existe uma camada específica que realiza a comunicação com o servidor, sendo ela a Network.
 A comunicação com servidor é realizada pelo protocolo HTTP.
 
 ## 🔧 Features
 O jogo é dividido em dois modos:
 
-- Jogo Local: para jogar junto com amigo próximo usando um tabuleiro virtual.
+- Jogo Local: para jogar junto com amigo próximo usando o tabuleiro virtual.
 - Jogo Online: para jogar com um amigo distante, em que deve informar o nome e o código da sala que quer conectar. 
 
-Nestes modos possuem:
+Estes modos possuem em comum:
 
-* Informação de quem é o turno, conectividade e cheque.
-* Mover as peças através de escolhas por input da peça e da coordenada, depois clicando no botão para mover. Clique sobre a peça e clique no local onde quer mover. E também, arrastar a peça para o local escolhido.
-* Cronômetro do total de jogo corrido e o tempo do turno para poder mover (sendo apenas 5 minutos).
-* Em detalhes, há o log com todas informações referente ao jogo. E também, as peças capturadas.
-* Histótico com as jogadas realizadas.
+* Informação de quem é o turno, da conectividade e sobre o cheque.
+* Possibilidade de mover as peças através da escolha no input, referente a peça e a coordenada, depois clicando no botão para mover. Há também, pelo clique sobre a peça e clique no local onde quer mover. E também, arrastar a peça para o local escolhido.
+* Cronômetro do total do jogo que já transcorreu e o tempo do turno para poder mover (5 minutos).
+* Em detalhes, há o log com todas informações referente ao jogo. E também, informa as peças capturadas.
+* Histórico com as jogadas realizadas.
 
 No modo Jogo Local:
 * Possibilidade de retornar a jogada anterior. 
 
 No modo Jogo Online:
 * Recuperar sessão.
-* Observação: precisa que o Backend esteja sendo executado para funcionar.
+* Observação: precisa da comunicação com o servidor de aplicação, e este deverá estar rodando para funcionar.
 
 ## 👥 Contribuição
 João Pedro Samarino 
