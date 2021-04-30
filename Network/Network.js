@@ -1,22 +1,23 @@
 import networkUtils from "./NetworkUtils.js"
+import acessServer from "./AcessServer.js"
 import MethodsHTTP from "./MethodsHTTP.js"
 const httpMethods = new MethodsHTTP()
 
 class Router{
     constructor(){
-        this.pref=(window.location.hostname==="127.0.0.1")?"http://localhost:3030/api/v1":"https://xadrez-server.herokuapp.com/api/v1"
+        this.addressServer=acessServer.gateway + acessServer.apiVersion
         this.query=null
-        this.wakeUp=this.pref +"/wakeUp"
-        this.startNewRoom= this.pref +"/startGame/startNewRoom"
-        this.connectInARoom= this.pref + "/startGame/connectInARoom"
-        this.updateMovement= this.pref + "/movementGame/updateMovement"
-        this.incorrectMovement= this.pref +"/movementGame/incorrectMovement"
-        this.giveUpGame= this.pref +"/giveUpGame"
-        this.endGame= this.pref +"/endGame"
-        this.playerWin= this.pref +"/playerWin"
-        this.reconnectRoom= this.pref + "/reconnectRoom"
-        this.prefGetmovement= this.pref +"/movementGame/getMovement?"
-        this.prefStatusGame= this.pref +"/statusGame?"
+        this.wakeUp=this.addressServer +"/wakeUp"
+        this.startNewRoom= this.addressServer +"/startGame/startNewRoom"
+        this.connectInARoom= this.addressServer + "/startGame/connectInARoom"
+        this.updateMovement= this.addressServer + "/movementGame/updateMovement"
+        this.incorrectMovement= this.addressServer +"/movementGame/incorrectMovement"
+        this.giveUpGame= this.addressServer +"/giveUpGame"
+        this.endGame= this.addressServer +"/endGame"
+        this.playerWin= this.addressServer +"/playerWin"
+        this.reconnectRoom= this.addressServer + "/reconnectRoom"
+        this.addressServerGetmovement= this.addressServer +"/movementGame/getMovement?"
+        this.addressServerStatusGame= this.addressServer +"/statusGame?"
         this.getMovement = null
         this.statusGame = null
     }
@@ -24,8 +25,8 @@ class Router{
     updateQuery(params){this.query=Object.keys(params)
         .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
         .join("&")
-        this.getMovement = this.prefGetmovement+this.query
-        this.statusGame = this.prefStatusGame+this.query
+        this.getMovement = this.addressServerGetmovement+this.query
+        this.statusGame = this.addressServerStatusGame+this.query
     }
 }
 
