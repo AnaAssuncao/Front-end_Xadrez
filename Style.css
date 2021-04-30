@@ -79,7 +79,7 @@
     font-size:16px;
 }
 
-#chess{
+.chess{
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -159,19 +159,18 @@
     width:70%;
     height:60%;
 }
-.menu__button__online{
-    height:100%;
-}
 .menu__buttons__online{
     width: 70%;
     height:20%;
 }
-#button__menu__newRoom{
+.menu__button__newRoom{
     margin-right:1%;
     width: 40%;
+    height:100%;
 }
-#button__menu__connectRoom{
+.menu__button__connectRoom{
     width: 60%;
+    height:100%;
 }
 .menu__home__input{
     width:80%;
@@ -228,7 +227,7 @@ textarea:focus, input:focus, select:focus {
 .section__panel__exit--display{
     display:none;
 }
-#button__dark{
+.button__dark{
     z-index:99999;
 }
 .section__panel__dark{
@@ -271,7 +270,7 @@ textarea:focus, input:focus, select:focus {
     color:var(--text);
     font-size:1rem;
 }
-#player__img{
+.player__img{
     margin-top:5%;
     height: 40%;
 }
@@ -387,13 +386,13 @@ textarea:focus, input:focus, select:focus {
     align-content: center;
     justify-content: center;
 }
-#information__game,
-#information__details,
-#information__connection{
+.information__game,
+.information__details,
+.information__connection{
     margin:1%;
     font-size:0.8rem;
 }
-#information__connection{
+.information__connection{
     width:50%;
     text-align: center;
 }
@@ -572,7 +571,7 @@ textarea:focus, input:focus, select:focus {
 .chess__modal--display{
     display:none
 }
-#chess__inf{
+.chess__inf{
     text-align: center;
     color:var(--text);
     font-size:2.4rem;
@@ -635,17 +634,17 @@ textarea:focus, input:focus, select:focus {
     font-weight: 500;
     color: var(--text);
 }
-#details__log::-webkit-scrollbar {
+.details__log::-webkit-scrollbar {
     width: 10px;
 }
-#details__log::-webkit-scrollbar-track {
+.details__log::-webkit-scrollbar-track {
     background: var(--dark-blue); 
 } 
-#details__log::-webkit-scrollbar-thumb {
+.details__log::-webkit-scrollbar-thumb {
     background: var(--light-blue); 
     border: 1px solid var(--text);
 }
-#details__log::-webkit-scrollbar-thumb:hover {
+.details__log::-webkit-scrollbar-thumb:hover {
     background: #555; 
 }
 .modal__details__pieceDead{
@@ -683,16 +682,16 @@ textarea:focus, input:focus, select:focus {
 .section__history__title{
     font-size: 1rem;
 }
-#information__history::-webkit-scrollbar {
+.section__history__information::-webkit-scrollbar {
     width: 10px;
 }
-#information__history::-webkit-scrollbar-track {
+.section__history__information::-webkit-scrollbar-track {
     background: var(--light-blue); 
 } 
-#information__history::-webkit-scrollbar-thumb {
+.section__history__information::-webkit-scrollbar-thumb {
     background: var(--dark-blue); 
 }
-#information__history::-webkit-scrollbar-thumb:hover {
+.section__history__information::-webkit-scrollbar-thumb:hover {
     background: #555; 
 }
 #information__history{

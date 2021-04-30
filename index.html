@@ -17,7 +17,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     </head>
 
-    <body id="chess">
+    <body id="chess" class="chess">
         <div class="menu__home chess__row__between" id="menu__home">
             <div class="menu__home__banner chess__column__center">
                 <img src="Img/logoChess.png" class="menu__home__logo" id="menu__logo">
@@ -46,8 +46,8 @@
                         </div>                      
                     </div>
                     <div class="menu__buttons__online chess__row__between">
-                        <button class="menu__button menu__button__online" id="button__menu__newRoom">Criar uma sala</button>
-                        <button class="menu__button menu__button__online" id="button__menu__connectRoom">Conectar com um amigo</button>
+                        <button class="menu__button menu__button__newRoom" id="button__menu__newRoom">Criar uma sala</button>
+                        <button class="menu__button menu__button__connectRoom" id="button__menu__connectRoom">Conectar com um amigo</button>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
 
         <aside class="section__panel chess__column__start">
             <div class="section__panel__buttons chess__row__between">
-                <div class="section__panel__img" id="button__dark" data-theme="light">
+                <div class="section__panel__img button__dark" id="button__dark" data-theme="light">
                     <img src="Img/dark.svg" class="img__button__dark micro__button__img" >
                 </div>
                 <div class="section__panel__dark module__dark--display chess__row__center"  id="text__dark">Modo escuro</div>
@@ -72,7 +72,7 @@
             
             <div class="section__panel__player chess__column__start" id="player__animation">
                 <p class="player__text" id="select__color" ></p>
-                <img class="" id="player__img">
+                <img class="player__img" id="player__img">
             </div>
 
             <div class="section__panel__move chess__column__center">
@@ -113,20 +113,20 @@
             <div class="status__game__row chess__row__between">
                 <div class="status__game status__game--player" id="status__connection">
                     <img src="Img/offlineLogo.svg" class="icon__min" id="connection__img"> 
-                    <p id="information__connection"></p>          
+                    <p class="information__connection" id="information__connection"></p>          
                 </div>
                 <div class="status__game status__game--board">
                     <img src="Img/check.svg" class="icon__med">
-                    <span id="information__game">Sem Xeque</span>
+                    <span class="information__game" id="information__game">Sem Xeque</span>
                 </div>
                 <div class="status__game status__game--details" id="button__details__modal">
-                    <span id="information__details">Detalhes</span>
+                    <span class="information__details" id="information__details">Detalhes</span>
                     <img src="Img/down-chevron.svg" class="icon__micro">
                 </div>
             </div>
 
             <div class="modal__details modal__details--display" > 
-                <div class="modal__details__msg" id="details__log">
+                <div class="modal__details__msg details__log" id="details__log">
                     
                 </div>
                 <div class="modal__details__capturePieceColor">
@@ -153,7 +153,7 @@
                     <!-- letra-->
                 </div>   
                 <div class="chess__modal chess__modal--display" id="modal__information"> 
-                    <p id="chess__inf"></p>
+                    <p class="chess__inf" id="chess__inf"></p>
                 </div>
             </div>
 

@@ -3,7 +3,7 @@
         font-size:12px;
     }
 
-    #chess{
+    .chess{
         flex-flow:column nowrap;
         justify-content: start;
         align-items: center;
@@ -156,7 +156,7 @@
         height: 8%;
         margin:0px 0px 3vh 0px;
     }
-    #information__details{
+    .information__details{
         display: none;
     }
     .icon__micro{
@@ -211,7 +211,7 @@
         align-items: center;
         border-radius: 4px;
     }
-    #chess__inf{
+    .chess__inf{
         color:var(--text);
     }
     /* details */
@@ -230,10 +230,10 @@
         width:100%;
         height:90%;
     }
-    #details__log::-webkit-scrollbar {
+    .details__log::-webkit-scrollbar {
         width: 30px;
     }
-    #details__log::-webkit-scrollbar-thumb {
+    .details__log::-webkit-scrollbar-thumb {
         border: 2px solid var(--text);
     }
     .pieceDead__img{
@@ -250,10 +250,10 @@
         margin:0px;
         height: 10%;
     }
-    #information__history::-webkit-scrollbar {
+    .section__history__information::-webkit-scrollbar {
         width: 30px;
     }
-    #information__history{
+    .section__history__information{
         width:100%;
     }
     .move__back{
