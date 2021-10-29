@@ -28,10 +28,10 @@ export default class GenericGame{
     movePiece(informationPieceSelect){
         let isMove = false
         if(informationPieceSelect.specialMovement){
-            isMove=this.gameLogic.informSpecialMovement(informationPieceSelect)
+            isMove=this.gameLogic.setSpecialMovement(informationPieceSelect)
         }
         else{
-            isMove=this.gameLogic.informMove(informationPieceSelect) 
+            isMove=this.gameLogic.setMove(informationPieceSelect) 
         }  
         return isMove
     }

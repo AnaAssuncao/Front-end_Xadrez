@@ -75,14 +75,11 @@ export default class CreateGame {
 
         this.capturePiece={}
 
-        this.statusGame={
-            checkKing:null,
-            statusDrawn:null,
-            endGame:false,
-            winColor:null,
-        }
+        this.statusGame={}
 
         this.statusDrawn={}
+
+        this.playHistory=[]
 
         this.specialMovement={}
 
@@ -307,8 +304,7 @@ export default class CreateGame {
         }
     }
 
-        // Movimentação peça no tabuleiro  
-    informMove(informationPieceSelect){
+    setMove(informationPieceSelect){
         const piece = this.piecesBoard[informationPieceSelect.fullName]
         const isMove = piece.refMovements.includes(informationPieceSelect.refId)
         if(isMove){
@@ -372,7 +368,7 @@ export default class CreateGame {
         }
     }
 
-    informSpecialMovement(informationPieceToMove){
+    setSpecialMovement(informationPieceToMove){
         const piece = this.piecesBoard[informationPieceToMove.fullName]
         if(this.specialMovement.roque.isPossible===true){
             if(informationPieceToMove.fullName===this.specialMovement.roque.king.fullName){
