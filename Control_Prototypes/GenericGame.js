@@ -43,13 +43,14 @@ export default class GenericGame{
     }
     
     updateDisplayStatusCheck(colorPlayer){  
-        const statusGame = this.gameLogic.getStatusGame() 
+        const statusGame = this.gameLogic.getStatusGame()
+        debugger 
         if(statusGame.checkMate===true){
-            this.viewController.updateStatusCheck(msgsAndAlerts.checksPiece.checkMate(colorPlayer))   
+            this.viewController.updateStatusCheck(msgsAndAlerts.checksPiece.checkMate(colorPlayer),statusGame.checkMate)   
             this.applicationSetup.addLogGame(msgsAndAlerts.checksPiece.checkMate(colorPlayer)) 
         }  
         else if(statusGame.check===true){
-            this.viewController.updateStatusCheck(msgsAndAlerts.checksPiece.check(colorPlayer))
+            this.viewController.updateStatusCheck(msgsAndAlerts.checksPiece.check(colorPlayer),statusGame.check)
             this.applicationSetup.addLogGame(msgsAndAlerts.checksPiece.check(colorPlayer)) 
         }
         else{

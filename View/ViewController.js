@@ -130,13 +130,13 @@ export default function ViewController(startBoard){
     }
 
     const statusGame={
-        updateCheck:function(msgCheck){
-            if(msgCheck){
+        updateCheck:function(msgCheck, check = false){
+            if(check){
+                debugger
                 view.informationGame.addinformation(msgCheck)
             }
             else{
-                const textNoCheck = "No Check"
-                view.informationGame.clearInformation(textNoCheck)
+                view.informationGame.clearInformation(msgCheck)
             }
         },
         startGameOffline:function(){
@@ -413,8 +413,8 @@ export default function ViewController(startBoard){
         capturedPieces.update(captured,color)
     }
 
-    this.updateStatusCheck=function(status,color){
-        statusGame.updateCheck(status,color)
+    this.updateStatusCheck=function(status,check){
+        statusGame.updateCheck(status,check)
     }
 
     this.updateStatusConection=function(connection){
