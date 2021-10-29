@@ -228,8 +228,8 @@ export default function ViewScreen(chessBoard){
             document.querySelector("#information__game").innerText = text
             document.querySelector(".status__game--board").classList.add("check-alert-effect")
         },      
-        clearInformation(){
-            document.querySelector("#information__game").innerText = "Sem xeque"
+        clearInformation(textNoCheck){
+            document.querySelector("#information__game").innerText = textNoCheck
             document.querySelector(".status__game--board").classList.remove("check-alert-effect")
         }
     }

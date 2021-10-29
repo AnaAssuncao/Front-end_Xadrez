@@ -135,7 +135,8 @@ export default function ViewController(startBoard){
                 view.informationGame.addinformation(msgCheck)
             }
             else{
-                view.informationGame.clearInformation()
+                const textNoCheck = "No Check"
+                view.informationGame.clearInformation(textNoCheck)
             }
         },
         startGameOffline:function(){
