@@ -44,7 +44,6 @@ export default class GenericGame{
     
     updateDisplayStatusCheck(colorPlayer){  
         const statusGame = this.gameLogic.getStatusGame()
-        debugger 
         if(statusGame.checkMate===true){
             this.viewController.updateStatusCheck(msgsAndAlerts.checksPiece.checkMate(colorPlayer),statusGame.checkMate)   
             this.applicationSetup.addLogGame(msgsAndAlerts.checksPiece.checkMate(colorPlayer)) 
