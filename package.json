@@ -1,0 +1,19 @@
+{
+  "name": "chess-front-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Controller.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnaAssuncao/Front-end_Xadrez.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://github.com/AnaAssuncao/Front-end_Xadrez#readme",
+  "devDependencies": {
+    "jest": "^27.3.1"
+  }
+}
