@@ -1,3 +1,10 @@
+import possibleMovementTower from "./PossibleMovement/PossibleMovementTower.js"
+import possibleMovementKnight from "./PossibleMovement/PossibleMovementKnight.js"
+import possibleMovementBishop from "./PossibleMovement/PossibleMovementBishop.js"
+import possibleMovementQueen from "./PossibleMovement/PossibleMovementQueen.js"
+import possibleMovementKing from "./PossibleMovement/PossibleMovementKing.js"
+import possibleMovementPawn from "./PossibleMovement/PossibleMovementPawn.js"
+
 export default class CreateGame {
     constructor(player){
         this.chessBoard= {
@@ -107,8 +114,8 @@ export default class CreateGame {
             starPiecesBlack:["towerBlack","knightBlack","bishopBlack","queenBlack","kingBlack","bishopBlack","knightBlack","towerBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack"],
             starPiecesWhite:["towerWhite","knightWhite","bishopWhite","queenWhite","kingWhite","bishopWhite","knightWhite","towerWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite"],
             namePiece:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
-             functionPieces:[this.possibleMovementTower,this.possibleMovementKnight,this.possibleMovementBishop,this.possibleMovementQueen,this.possibleMovementKing, this.possibleMovementBishop,this.possibleMovementKnight, this.possibleMovementTower,
-                this.possibleMovementPawn, this.possibleMovementPawn, this.possibleMovementPawn, this.possibleMovementPawn, this.possibleMovementPawn, this.possibleMovementPawn, this.possibleMovementPawn, this.possibleMovementPawn]
+             functionPieces:[possibleMovementTower,possibleMovementKnight,possibleMovementBishop,possibleMovementQueen,possibleMovementKing, possibleMovementBishop,possibleMovementKnight, possibleMovementTower,
+                possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn]
         }
         Object.keys(this.chessBoard).forEach((value)=>{this.chessBoard[value]=null})
 
@@ -182,117 +189,6 @@ export default class CreateGame {
         }
     }
 
-    possibleMovementTower(chessBoard=this.chessBoard){//fazer isso
-        const column=Number(this.position.charAt(3))
-        const line=Number(this.position.charAt(4))
-        const direction = [[0,1],[0,-1],[1,0],[-1,0]]
-        
-        const movement= direction.reduce((possibleMovement,direction)=>{
-            const newPossibilitiesMovement =  possibleMovement.concat(this.checkRegularMovement(direction, column, line, this.color,8,chessBoard))
-            return newPossibilitiesMovement
-        },[])
-        
-        return movement
-    }
-    possibleMovementKnight(chessBoard=this.chessBoard){
-        const column=Number(this.position.charAt(3))
-        const line=Number(this.position.charAt(4))
-        const direction = [[2,1],[2,-1],[-2,-1],[-2,1],[1,2],[-1,2],[-1,-2],[1,-2]]
-    
-        const movement= direction.reduce((possibleMovement,direction)=>{
-            const newPossibilitiesMovement =  possibleMovement.concat(this.checkRegularMovement(direction, column, line, this.color,1,chessBoard))
-            return newPossibilitiesMovement
-        },[])
-
-        return movement
-    }
-    possibleMovementBishop(chessBoard=this.chessBoard){
-        const column=Number(this.position.charAt(3))
-        const line=Number(this.position.charAt(4))
-        const direction=[[1,1],[1,-1],[-1,-1],[-1,1]]
-    
-        const movement= direction.reduce((possibleMovement,direction)=>{
-            const newPossibilitiesMovement =  possibleMovement.concat(this.checkRegularMovement(direction, column, line, this.color,8,chessBoard))
-            return newPossibilitiesMovement
-        },[])
-
-        return movement
-    }
-    possibleMovementQueen(chessBoard=this.chessBoard){
-        const column=Number(this.position.charAt(3))
-        const line=Number(this.position.charAt(4))
-        const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]]
-        const a = this.chessBoard
-        const movement= direction.reduce((possibleMovement,direction)=>{
-            const newPossibilitiesMovement =  possibleMovement.concat(this.checkRegularMovement(direction, column, line, this.color,8,chessBoard))
-            return newPossibilitiesMovement
-        },[])
-
-        return movement
-    }
-    possibleMovementKing(chessBoard=this.chessBoard){
-        const column=Number(this.position.charAt(3))
-        const line=Number(this.position.charAt(4))
-        const direction = [[1,1],[1,-1],[-1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]]
-    
-        let movement = direction.reduce((possibleMovement,direction)=>{
-            const newPossibilitiesMovement = possibleMovement.concat(this.checkRegularMovement(direction, column, line, this.color,1,chessBoard))
-            return newPossibilitiesMovement
-        },[])
-
-        return movement
-    }
-
-    checkRegularMovement([column,line], columnPosition, linePosition, color, maximumPaces,chessBoard){
-        let possibleColumn = columnPosition + column
-        let possibleLine = linePosition+ line
-        const possibleDirection = []
-        for(let limit = 1; possibleColumn>=1 && possibleColumn<=8 && possibleLine>=1 && possibleLine<=8 && limit<=maximumPaces;limit++){
-            const position = `ref${possibleColumn}${possibleLine}`
-            if(chessBoard[position]==null){
-                possibleDirection.push(position)
-            }
-            else if(chessBoard[position].color!==color){
-                possibleDirection.push(position)
-                break
-            }
-            else{
-                break
-            }
-            possibleColumn = possibleColumn+column
-            possibleLine= possibleLine+line
-        }
-        return possibleDirection
-    }
-
-    possibleMovementPawn(chessBoard=this.chessBoard){
-        const column=Number(this.position.charAt(3))
-        const line =Number(this.position.charAt(4))
-        const movementPawn = []
-        const direction=[(this.color==this.colorPieceBoard.bottom)?1:-1]
-    //Peças Pretas aumentam a linha e as Brancas diminuem.
-    if((line+Number(direction))>=1 && (line+Number(direction))<=8){
-        const possibleMovement=`ref${column}${(line+Number(direction))}`
-        if(chessBoard[possibleMovement]===null){
-            movementPawn.push(possibleMovement)
-
-            if(this.qtMovements==0){
-                const fistMovement=`ref${column}${(line+direction*2)}`
-                if(chessBoard[fistMovement]===null){
-                    movementPawn.push(fistMovement)
-                }
-            }
-        }    
-
-        const possibleEat=[`ref${column-1}${(line+Number(direction))}`,`ref${column+1}${(line+Number(direction))}`]
-        possibleEat.forEach((position)=>{
-            if((chessBoard[position]!==null) && (chessBoard[position]!==undefined) && (chessBoard[position].color!==this.color)){
-                movementPawn.push(position)
-            }
-        })   
-    }
-        return movementPawn
-    }
 
     checkMovementsAllPieces(){
         for(let piece in this.piecesBoard){
@@ -829,7 +725,7 @@ export default class CreateGame {
     createNewPiece(informationNewPiece,changePawn){
         const chancePiece={
             names:["Tower","Knight","Bishop","Queen"],
-            functionPieces:[this.possibleMovementTower,this.possibleMovementKnight,this.possibleMovementBishop,this.possibleMovementQueen],
+            functionPieces:[possibleMovementTower,possibleMovementKnight,possibleMovementBishop,possibleMovementQueen],
             black:{
                 fullName:["towerBlack","knightBlack","bishopBlack","queenBlack"],
             },
