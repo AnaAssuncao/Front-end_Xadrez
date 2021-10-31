@@ -22,7 +22,7 @@
 - [Autor](#autor)
 
 ## ♟️ Sobre
-Vanilla Chess é uma versão tradicional do jogo Xadrez. Este projeto possui como objetivo criar um jogo de Xadrez, com dois modo de jogo, local e online, empregando JavaScript ES5 puro (vanilla-js). A elaboração do projeto utilizou-se dos princípios SOLID, juntamente com boas práticas de engenharia de software.
+Vanilla Chess é uma versão tradicional do jogo Xadrez. Este projeto possui como objetivo criar um jogo de Xadrez, com dois modo de jogo, local e online, empregando JavaScript ES6 puro (vanilla-js). A elaboração do projeto utilizou-se dos princípios SOLID, juntamente com boas práticas de engenharia de software.
 
 Nesta aplicação além de se utilizar JavaScript, fez uso de recursos comuns para desenvolver front-end, CSS3 e HTML5. Estas abordagens foram escolhidas para não ser necessário o uso de transpiladores, como SASS e Babel.
 
