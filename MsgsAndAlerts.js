@@ -18,7 +18,7 @@ const roomAndCode={
 const connection={
     noConnection:()=>"No server connection, wait or play local.",
     errServer:()=>"There was an error on the server, please reload the page.",
-    place:()=>"Offline Game",
+    place:()=>"Local Game",
     waitAdv:()=>"Awaiting adversary",
     connected:(playerName)=>"Adversary "+ playerName
 }
