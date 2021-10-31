@@ -24,30 +24,30 @@
                 <h1 class="menu__home__title">Vanilla Chess</h1>
             </div>
             <div class="menu__home__module chess__column__around" id="menu__module">
-                <h1 class="module__title">Modos de Jogo</h1>
+                <h1 class="module__title">Game Modes</h1>
                 <div class="module__offline chess__column__around">
                     <div class="chess__row__start">
                         <img src="Img/offlineLogo.svg" class="module__icon">
-                        <h2 class="module__subtitle">Jogo Offline</h2>
+                        <h2 class="module__subtitle">Offline Game</h2>
                     </div>
-                    <button class="menu__button menu__button__offline" id="button__menu__offline">Iniciar Jogo Local</button>
+                    <button class="menu__button menu__button__offline" id="button__menu__offline">Start the Game Offline</button>
                 </div>
                 <div class="module__online chess__column__around">
                     <div class="chess__row__start">
                         <img src="Img/onlineLogo.svg" class="module__icon">
-                        <h2 class="module__subtitle">Jogo Online</h2>
+                        <h2 class="module__subtitle">Online Game</h2>
                     </div>
                     <div class="menu__home__inputs chess__column__center">
                         <div class="menu__home__input">
-                            <input class="menu__input" id="input__gameOnline--name" type="text" data-ls-module="charCounter" maxlength="12" placeholder="Nome do jogador"></input>
+                            <input class="menu__input" id="input__gameOnline--name" type="text" data-ls-module="charCounter" maxlength="12" placeholder="Player's Name"></input>
                         </div>
                         <div class="menu__home__input">
-                            <input class="menu__input" id="input__gameOnline--code" type="text" data-ls-module="charCounter" maxlength="15" placeholder="Código da sala"></input>
+                            <input class="menu__input" id="input__gameOnline--code" type="text" data-ls-module="charCounter" maxlength="15" placeholder="Room Code"></input>
                         </div>                      
                     </div>
                     <div class="menu__buttons__online chess__row__between">
-                        <button class="menu__button menu__button__newRoom" id="button__menu__newRoom">Criar uma sala</button>
-                        <button class="menu__button menu__button__connectRoom" id="button__menu__connectRoom">Conectar com um amigo</button>
+                        <button class="menu__button menu__button__newRoom" id="button__menu__newRoom">Create a room</button>
+                        <button class="menu__button menu__button__connectRoom" id="button__menu__connectRoom">Connect with a friend</button>
                     </div>
                 </div>
             </div>
@@ -58,11 +58,11 @@
                 <div class="section__panel__img button__dark" id="button__dark" data-theme="light">
                     <img src="Img/dark.svg" class="img__button__dark micro__button__img" >
                 </div>
-                <div class="section__panel__dark module__dark--display chess__row__center"  id="text__dark">Modo escuro</div>
+                <div class="section__panel__dark module__dark--display chess__row__center"  id="text__dark">Dark Mode</div>
                 <div class="section__panel__img" id="button__exit" >
-                    <img src="Img/exit.svg" class="button__exit micro__button__img" id="aa">
+                    <img src="Img/exit.svg" class="button__exit micro__button__img" id="icon__exit">
                 </div>
-                <div class="section__panel__exit section__panel__exit--display chess__row__center"  id="text__exit">Sair do Jogo</div>
+                <div class="section__panel__exit section__panel__exit--display chess__row__center"  id="text__exit">Leave Game</div>
             </div>
             
             <header class="section__panel__header chess__column__start">
@@ -77,30 +77,30 @@
 
             <div class="section__panel__move chess__column__center">
                 <div class="move__column chess__row__between">
-                    <p class="move__text">Peças: </p>
-                    <select class="move__piece move__input" id="select__name" placeholder="Peça:">
+                    <p class="move__text">Piece: </p>
+                    <select class="move__piece move__input" id="select__name" placeholder="Piece:">
                         <!-- Peças de cada cor ativa no tabuleiro-->
                     </select>
                 </div>
                 <div class="move__column chess__row__between">
-                    <p class="move__text">Coordenadas: </p>
-                    <select class="move__coordinate move__input" id="select__coordinate" placeholder="Coordenada:"> 
+                    <p class="move__text">Coordinate: </p>
+                    <select class="move__coordinate move__input" id="select__coordinate" placeholder="Coordinate:"> 
                         <!-- Coluna que a peça pode andar tabuleiro-->
                     </select>
                 </div>
-                <button class="move__button chess__row__center" id="button__movement">Mover</button>
+                <button class="move__button chess__row__center" id="button__movement">Move</button>
             </div>
             
             <div class="section__panel__time chess__column__start">
                 <div class="time__section chess__column__start">
-                    <p class="time__text">Tempo para movimento</p>
+                    <p class="time__text">Player's turn time</p>
                     <div class="time__part chess__row__start">
                         <img src="Img/timeMovement.svg" class="time__img">
                         <time class="time__movement" id="time__movement">00:05:00</time>
                     </div>
                 </div>
                 <div class="time__section chess__column__start">
-                    <p class="time__text">Tempo total deste jogo</p>
+                    <p class="time__text">Total time of this game</p>
                     <div class="time__part chess__row__start">
                         <img src="Img/timeGame.svg" class="time__img">
                         <time class="time__game" id="time__game">00:00:00</time>
@@ -117,10 +117,10 @@
                 </div>
                 <div class="status__game status__game--board">
                     <img src="Img/check.svg" class="icon__med">
-                    <span class="information__game" id="information__game">Sem Xeque</span>
+                    <span class="information__game" id="information__game">No Check</span>
                 </div>
                 <div class="status__game status__game--details" id="button__details__modal">
-                    <span class="information__details" id="information__details">Detalhes</span>
+                    <span class="information__details" id="information__details">Details</span>
                     <img src="Img/down-chevron.svg" class="icon__micro">
                 </div>
             </div>
@@ -130,13 +130,13 @@
                     
                 </div>
                 <div class="modal__details__capturePieceColor">
-                    <p class="modal__details__text">Peças Pretas Capturadas:</p>
+                    <p class="modal__details__text">Captured Black Pieces:</p>
                     <div class="modal__details__pieceDead" id="colorTop">
                         
                     </div>
                 </div>
                 <div class="modal__details__capturePieceColor">
-                    <p class="modal__details__text">Peças Brancas Capturadas:</p>
+                    <p class="modal__details__text">Captured White Pieces:</p>
                     <div class="modal__details__pieceDead" id="colorBottom">
                     </div>
                 </div>
@@ -162,7 +162,7 @@
         <aside class="section__history">
             <div class="section__history__header" id="history__header">
                 <img src="Img/history.svg" class="history__icon"> 
-                <h3 class="section__history__title">Histórico de Jogadas </h3>
+                <h3 class="section__history__title">Game History</h3>
                 <button class="move__back move__back--display" id="button__back__movement"><img src="Img/undo-arrow.svg" class="icon__micro icon__micro--width"> </button>  
             </div>
             <div class="section__history__information" id="information__history"></div>
