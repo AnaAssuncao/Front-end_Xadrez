@@ -18,21 +18,23 @@ describe("Possible Movement Bishop", ()=>{
     test("The bishop must not have possible moves",()=>{
         bishop.position="ref11"
         const chessBoardTest = noMove(bishop)
-        const possibleMovement = bishop.functionPiece(chessBoardTest)
-        expect(possibleMovement).toEqual([])
+        const possibleMovements = bishop.functionPiece(chessBoardTest)
+        expect(possibleMovements).toEqual([])
     })
     test("The bishop must have possible moves",()=>{
         bishop.position="ref44"
         const chessBoardTest = withMove(bishop)
-        const possibleMovement = bishop.functionPiece(chessBoardTest)
-        expect(possibleMovement).not.toEqual([])
+        const possibleMovements = bishop.functionPiece(chessBoardTest)
+        expect(possibleMovements).not.toEqual([])
+        const refPossibleMovement = "ref77"
+        expect(possibleMovements).toContain(refPossibleMovement)
     })
     test("The bishop must have possible moves",()=>{
         bishop.position="ref11"
         const refAdversaryPiece= "ref22"
         const chessBoardTest = withMoveToEat(bishop,refAdversaryPiece)
-        const possibleMovement = bishop.functionPiece(chessBoardTest)
-        expect(possibleMovement).toEqual([refAdversaryPiece])
+        const possibleMovements = bishop.functionPiece(chessBoardTest)
+        expect(possibleMovements).toContain(refAdversaryPiece)
     })
 }
 )
