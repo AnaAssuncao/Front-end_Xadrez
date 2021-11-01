@@ -4,16 +4,24 @@
   "description": "",
   "main": "Controller.js",
   "scripts": {
-    "test": "jest"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AnaAssuncao/Front-end_Xadrez.git"
+    "url": "git+https://github.com/AnaAssuncao/Xadrez-Game"
   },
   "author": "",
   "license": "ISC",
   "homepage": "https://github.com/AnaAssuncao/Front-end_Xadrez#readme",
   "devDependencies": {
     "jest": "^27.3.1"
+  },
+  "type": "module",
+  "jest" : { 
+    "verbose" : true,
+    "transform": { },
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ]
   }
 }
