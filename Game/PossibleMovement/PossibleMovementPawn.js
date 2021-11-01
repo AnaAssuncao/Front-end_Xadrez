@@ -1,8 +1,8 @@
-function possibleMovementPawn(chessBoard=this.chessBoard){
+function possibleMovementPawn(chessBoard=this.chessBoard, bottomPieceColor=this.colorPieceBoard.bottom){
     const column=Number(this.position.charAt(3))
     const line =Number(this.position.charAt(4))
     const movementPawn = []
-    const direction=[(this.color==this.colorPieceBoard.bottom)?1:-1]
+    const direction=[(this.color==bottomPieceColor)?1:-1]
 //Peças Pretas aumentam a linha e as Brancas diminuem.
 if((line+Number(direction))>=1 && (line+Number(direction))<=8){
     const possibleMovement=`ref${column}${(line+Number(direction))}`
