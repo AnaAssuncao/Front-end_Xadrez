@@ -13,7 +13,9 @@ import {
     defaultChessBoard,
     defaultStatusGame,
     defaultSpecialMovement,
-    defaultPiecesPromotion } from "./DefaultObjets.js"
+    defaultPiecesPromotion,
+    defaultCapturePiece,
+    defaultPlayHistory } from "./DefaultObjets.js"
 import { refIdToArray } from "./utils.js"
 
 export default class CreateGame {
@@ -56,14 +58,14 @@ export default class CreateGame {
 
     starObjGame(){
         const objStarBoard={
-            starPiecesBlack:["towerBlack","knightBlack","bishopBlack","queenBlack","kingBlack","bishopBlack","knightBlack","towerBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack","pawnBlack"],
-            starPiecesWhite:["towerWhite","knightWhite","bishopWhite","queenWhite","kingWhite","bishopWhite","knightWhite","towerWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite","pawnWhite"],
-            namePiece:["Tower-Left","Knight-Left","Bishop-Left","Queen","King","Bishop-Right","Knight-Right","Tower-Right","Pawn-1","Pawn-2","Pawn-3","Pawn-4","Pawn-5","Pawn-6","Pawn-7","Pawn-8"],
+            starPiecesBlack:defaultBlackPieces,
+            starPiecesWhite:defaulWhitePieces,
+            namePiece:defaultNamePieces,
             functionPieces:[possibleMovementTower,possibleMovementKnight,possibleMovementBishop,possibleMovementQueen,possibleMovementKing, possibleMovementBishop,possibleMovementKnight, possibleMovementTower,
                 possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn]
         }
         Object.keys(this.chessBoard.reference).forEach((value)=>{this.chessBoard.reference[value]=null})
-        debugger
+
         for (let i in objStarBoard.starPiecesWhite) {
             const refLine= (parseInt(i/8)+1)
             const refColumn= (i%8+1)
@@ -80,58 +82,18 @@ export default class CreateGame {
             this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.top,objStarBoard.starPiecesBlack[i],keyChess, objStarBoard.functionPieces[i])
             this.chessBoard.reference[keyChess]= this.piecesBoard[keyPieces]
         }
-        console.log(this.chessBoard)
-        this.capturePiece={}
+ 
+        this.capturePiece=defaultCapturePiece
         
         this.checkMovementsAllPieces()
 
-        this.statusGame={
-            checkKing:{
-                color:null,
-                check:false,
-                checkMate:false,
-                refIdPathsToCheck: []
-            },
-            statusDrawn:{
-                draw:false
-            },
-            endGame:false,
-            winColor:null,
-        }
+        this.statusGame=defaultStatusGame
 
-        this.playHistory=[]
+        this.playHistory=defaultPlayHistory
 
-        this.specialMovement={
-            roque:{
-                isPossible:false,
-                king:null,
-                positionKingToRoque:[],
-                tower:[],
-                newMovementTower:[],
-            },
-            enPassant:{
-                isPossible:false,
-                pawnPossibleCapture:null,
-                refIdPawn:null,
-                pawnInAtack:[]
-            },
-            pawnPromotion:{
-                isPossible:false,
-                piecesPawn:[],   
-                namesPawn:[],  
-            }        
-        }  
+        this.specialMovement=defaultSpecialMovement
 
-        this.piecesPromotion={
-            chancePiece:false,
-            promotedPawn:null,
-            color:null,
-            black:{
-                qtPiece:[1,1,1,1]},
-            white:{
-                qtPiece:[1,1,1,1]},
-            newPiece:null,
-        }
+        this.piecesPromotion=defaultPiecesPromotion
     }
 
 

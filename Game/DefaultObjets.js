@@ -142,6 +142,10 @@ const defaultPiecesPromotion={
     newPiece:null,
 }
 
+const defaultCapturePiece ={}
+
+const defaultPlayHistory= []
+
 export {
     defaultPiecesBoard,
     defaultBlackPieces,
@@ -150,5 +154,7 @@ export {
     defaultChessBoard,
     defaultStatusGame,
     defaultSpecialMovement,
-    defaultPiecesPromotion
+    defaultPiecesPromotion,
+    defaultCapturePiece,
+    defaultPlayHistory
 }
