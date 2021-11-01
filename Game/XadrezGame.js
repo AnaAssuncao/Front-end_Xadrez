@@ -57,6 +57,13 @@ export default class CreateGame {
     }  
 
     starObjGame(){
+        this.piecesBoard=defaultPiecesBoard
+        this.statusGame=defaultStatusGame
+        this.capturePiece=defaultCapturePiece
+        this.playHistory=defaultPlayHistory
+        this.specialMovement=defaultSpecialMovement
+        this.piecesPromotion=defaultPiecesPromotion
+
         const objStarBoard={
             starPiecesBlack:defaultBlackPieces,
             starPiecesWhite:defaulWhitePieces,
@@ -71,44 +78,35 @@ export default class CreateGame {
             const refColumn= (i%8+1)
             const keyChess = `ref${refColumn}${refLine}`
             const keyPieces = objStarBoard.namePiece[i] + this.colorPieceBoard.bottom 
-            this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.bottom,objStarBoard.starPiecesWhite[i],keyChess,objStarBoard.functionPieces[i])
-            this.chessBoard.reference[keyChess]= this.piecesBoard[keyPieces]
+            const newPiece= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.bottom,objStarBoard.starPiecesWhite[i],keyChess,objStarBoard.functionPieces[i])
+            this.piecesBoard.addPieceOfRef(keyPieces,newPiece)
+            this.chessBoard.reference[keyChess]= newPiece
         }
         for (let i in objStarBoard.starPiecesBlack) {
             const refColumn= (i%8+1)
             const refLine= (8 - parseInt(i/8))
             const keyChess = `ref${refColumn}${refLine}`
             const keyPieces = objStarBoard.namePiece[i]+this.colorPieceBoard.top
-            this.piecesBoard[keyPieces]= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.top,objStarBoard.starPiecesBlack[i],keyChess, objStarBoard.functionPieces[i])
-            this.chessBoard.reference[keyChess]= this.piecesBoard[keyPieces]
+            const newPiece= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.top,objStarBoard.starPiecesBlack[i],keyChess, objStarBoard.functionPieces[i])
+            this.piecesBoard.addPieceOfRef(keyPieces,newPiece)
+            this.chessBoard.reference[keyChess]= newPiece
         }
- 
-        this.capturePiece=defaultCapturePiece
-        
         this.checkMovementsAllPieces()
-
-        this.statusGame=defaultStatusGame
-
-        this.playHistory=defaultPlayHistory
-
-        this.specialMovement=defaultSpecialMovement
-
-        this.piecesPromotion=defaultPiecesPromotion
     }
 
 
     checkMovementsAllPieces(){
-        for(let piece in this.piecesBoard){
-            if(this.piecesBoard[piece].isAtive===true)
+        for(let piece in this.piecesBoard.pieces){
+            if(this.piecesBoard.pieces[piece].isAtive===true)
                 {
-                    this.piecesBoard[piece].refMovements=this.piecesBoard[piece].functionPiece(this.chessBoard.reference)
-                    this.piecesBoard[piece].possibleSpecialMovements=[]
+                    this.piecesBoard.pieces[piece].refMovements=this.piecesBoard.pieces[piece].functionPiece(this.chessBoard.reference)
+                    this.piecesBoard.pieces[piece].possibleSpecialMovements=[]
                 }
         }
     }
 
     setMove(informationPieceSelect){
-        const piece = this.piecesBoard[informationPieceSelect.fullName]
+        const piece = this.piecesBoard.pieces[informationPieceSelect.fullName]
         const isMove = piece.refMovements.includes(informationPieceSelect.refId)
         if(isMove){
             this.updateHistory([informationPieceSelect],"movementPiece")
@@ -119,7 +117,7 @@ export default class CreateGame {
     }
 
     changePiecePosition(informationPiecetoMove){
-        const movePiece =this.piecesBoard[informationPiecetoMove.fullName]
+        const movePiece =this.piecesBoard.pieces[informationPiecetoMove.fullName]
         const newRefId = informationPiecetoMove.refId
         if(this.chessBoard.reference[newRefId]!==null){
             this.eatPiece(this.chessBoard.reference[newRefId].fullName)
@@ -138,16 +136,16 @@ export default class CreateGame {
             typeMovement:null
         }
         arrayPiece.forEach(piece=> {
-            if(this.piecesBoard[piece.fullName]){
+            if( this.piecesBoard.pieces[piece.fullName]){
                 movement.piecesPlayed.push({__proto__:this,
-                    ...this.piecesBoard[piece.fullName]})   
+                    ... this.piecesBoard.pieces[piece.fullName]})   
                 if(this.chessBoard.reference[piece.refId]!==null){
                     movement.pieceCaptured={__proto__:this,
-                        ...this.piecesBoard[this.chessBoard.reference[piece.refId].fullName]}
+                        ... this.piecesBoard.pieces[this.chessBoard.reference[piece.refId].fullName]}
                 }
                 if(typeMovement==="enPassant"){
                     movement.pieceCaptured={__proto__:this,
-                        ...this.piecesBoard[this.specialMovement.enPassant.pawnPossibleCapture.fullName]}
+                        ... this.piecesBoard.pieces[this.specialMovement.enPassant.pawnPossibleCapture.fullName]}
                 }
             }
             else if(typeMovement==="piecePromotion" ){
@@ -162,9 +160,9 @@ export default class CreateGame {
     }
 
     eatPiece(nameCapturePiece){
-        this.piecesBoard[nameCapturePiece].isAtive = false
-        this.piecesBoard[nameCapturePiece].refMovements=[]
-        this.capturePiece[nameCapturePiece]=this.piecesBoard[nameCapturePiece]
+        this.piecesBoard.pieces[nameCapturePiece].isAtive = false
+        this.piecesBoard.pieces[nameCapturePiece].refMovements=[]
+        this.capturePiece[nameCapturePiece]= this.piecesBoard.pieces[nameCapturePiece]
         if(nameCapturePiece==="KingWhite"||nameCapturePiece==="KingBlack"){
             this.statusGame.endGame=true
             this.statusGame.winColor=(this.colorPieceBoard.top===this.colorPieceBoard.play)?this.colorPieceBoard.bottom:this.colorPieceBoard.top 
@@ -172,7 +170,7 @@ export default class CreateGame {
     }
 
     setSpecialMovement(informationPieceToMove){
-        const piece = this.piecesBoard[informationPieceToMove.fullName]
+        const piece = this.piecesBoard.pieces[informationPieceToMove.fullName]
         if(this.specialMovement.roque.isPossible===true){
             if(informationPieceToMove.fullName===this.specialMovement.roque.king.fullName){
                 if(this.specialMovement.roque.positionKingToRoque.includes(informationPieceToMove.refId)){
@@ -231,7 +229,7 @@ export default class CreateGame {
     updateStatusCheck(color){
         this.statusGame.checkKing.check=false
         const nameKing =`King${color}` 
-        const checks=this.verifyCheck(this.piecesBoard[nameKing].position,color,nameKing)
+        const checks=this.verifyCheck( this.piecesBoard.pieces[nameKing].position,color,nameKing)
 
         if(checks.qt!==0){
             this.statusGame.checkKing.refIdPathsToCheck = this.pathToCheck(nameKing,checks)
@@ -249,9 +247,9 @@ export default class CreateGame {
             qt:0,
             pieceCheck:null
         }
-        for(let piece in this.piecesBoard){
-            if((colorKing!==this.piecesBoard[piece].color)&&(this.piecesBoard[piece].isAtive===true)){
-                if(this.movementsPieceAdversity(this.piecesBoard[piece].refMovements,refIdKing)){
+        for(let piece in this.piecesBoard.pieces){
+            if((colorKing!== this.piecesBoard.pieces[piece].color)&&( this.piecesBoard.pieces[piece].isAtive===true)){
+                if(this.movementsPieceAdversity( this.piecesBoard.pieces[piece].refMovements,refIdKing)){
                     checks.qt++
                     checks.pieceCheck=piece
                 }
@@ -270,10 +268,10 @@ export default class CreateGame {
     }
 
     checkMate(nameKing,colorKing,checks){
-        const positionInitialKing = this.piecesBoard[nameKing].position
-        for(let i=0;i<this.piecesBoard[nameKing].refMovements.length;i++){
-            const refIdInitialKing=this.piecesBoard[nameKing].position
-            const newRefIdKing = this.piecesBoard[nameKing].refMovements[i]
+        const positionInitialKing = this.piecesBoard.pieces[nameKing].position
+        for(let i=0;i< this.piecesBoard.pieces[nameKing].refMovements.length;i++){
+            const refIdInitialKing= this.piecesBoard.pieces[nameKing].position
+            const newRefIdKing = this.piecesBoard.pieces[nameKing].refMovements[i]
             const fakeChessBoard = this.newFakeChessBoard(refIdInitialKing,newRefIdKing) //FALSO CHESSBOARD PARA CONFERÊNCIA DO REI
             if(this.verifyCheckInFakeBoard(fakeChessBoard,newRefIdKing,colorKing) === false){//se na nova refId do rei não tem check, não há checkMate
                 return false 
@@ -315,13 +313,13 @@ export default class CreateGame {
 
     pathToCheck(nameKing,checks){
         const refIdPossiblePaths=[]
-        const positionPieceAdversary = this.piecesBoard[checks.pieceCheck].position
-        const positionInitialKing = this.piecesBoard[nameKing].position
+        const positionPieceAdversary = this.piecesBoard.pieces[checks.pieceCheck].position
+        const positionInitialKing = this.piecesBoard.pieces[nameKing].position
         let direction = [0,0]
 
         // descobrir direção
-        for(let refMovementKing of this.piecesBoard[nameKing].refMovements){
-           for(let refMovementAdversary of this.piecesBoard[checks.pieceCheck].refMovements){
+        for(let refMovementKing of this.piecesBoard.pieces[nameKing].refMovements){
+           for(let refMovementAdversary of this.piecesBoard.pieces[checks.pieceCheck].refMovements){
                if(refMovementKing===refMovementAdversary){
                     refIdPossiblePaths.push(refMovementAdversary)
                     const arrayPositionKing=refIdToArray(positionInitialKing)
@@ -336,7 +334,7 @@ export default class CreateGame {
         while(currentRefid){
             const refId = refIdToArray(currentRefid)
             const possibleRefid = `ref${refId[0]+direction[0]}${refId[1]+direction[1]}`
-            for(let refMovementAdversary of this.piecesBoard[checks.pieceCheck].refMovements){
+            for(let refMovementAdversary of this.piecesBoard.pieces[checks.pieceCheck].refMovements){
                 if(possibleRefid===refMovementAdversary){
                     refIdPossiblePaths.push(possibleRefid)
                     currentRefid = possibleRefid
@@ -361,8 +359,8 @@ export default class CreateGame {
 
     assistantKing(assistantPieceColor){
         const nameKing =`King${assistantPieceColor}` 
-        const positionInitialKing = this.piecesBoard[nameKing].position
-        this.piecesBoard[nameKing].refMovements=this.piecesBoard[nameKing].refMovements.reduce((possibleMovementKing,refIdKing)=>{
+        const positionInitialKing = this.piecesBoard.pieces[nameKing].position
+        this.piecesBoard.pieces[nameKing].refMovements= this.piecesBoard.pieces[nameKing].refMovements.reduce((possibleMovementKing,refIdKing)=>{
                const fakeChessBoard = this.newFakeChessBoard(positionInitialKing,refIdKing)
                if(this.verifyCheckInFakeBoard(fakeChessBoard,refIdKing,assistantPieceColor) === false){
                     possibleMovementKing.push(refIdKing)
@@ -375,14 +373,14 @@ export default class CreateGame {
         const nameKing =`King${assistantPieceColor}`
         this.assistantKing(assistantPieceColor)
 
-        const positionInitialKing = this.piecesBoard[nameKing].position
-        const arrayNamesPieces = Object.keys(this.piecesBoard)
+        const positionInitialKing = this.piecesBoard.pieces[nameKing].position
+        const arrayNamesPieces = Object.keys(this.piecesBoard.pieces)
         arrayNamesPieces.forEach((namePiece)=>{
-            if((assistantPieceColor===this.piecesBoard[namePiece].color)&&(this.piecesBoard[namePiece].isAtive===true)&&(namePiece!==nameKing)){
-                this.piecesBoard[namePiece].refMovements=this.piecesBoard[namePiece].refMovements.reduce((possibleMovementPiece,refIdpiece)=>{
+            if((assistantPieceColor=== this.piecesBoard.pieces[namePiece].color)&&( this.piecesBoard.pieces[namePiece].isAtive===true)&&(namePiece!==nameKing)){
+                this.piecesBoard.pieces[namePiece].refMovements= this.piecesBoard.pieces[namePiece].refMovements.reduce((possibleMovementPiece,refIdpiece)=>{
                     for(let refIdPossiblePath of this.statusGame.checkKing.refIdPathsToCheck){
                         if(refIdPossiblePath===refIdpiece){
-                            const fakeChessBoard = this.newFakeChessBoard(this.piecesBoard[namePiece].position,refIdpiece)
+                            const fakeChessBoard = this.newFakeChessBoard( this.piecesBoard.pieces[namePiece].position,refIdpiece)
                             if(this.verifyCheckInFakeBoard(fakeChessBoard,positionInitialKing,assistantPieceColor) === false){//se na nova refId do rei não tem check, não há checkMate
                                 possibleMovementPiece.push(refIdpiece)
                             }                
@@ -396,15 +394,15 @@ export default class CreateGame {
 
     assistantPiece(assistantPieceColor){
         const nameKing =`King${assistantPieceColor}`
-        const positionInitialKing = this.piecesBoard[nameKing].position
-        const arrayNamesPieces = Object.keys(this.piecesBoard)
+        const positionInitialKing = this.piecesBoard.pieces[nameKing].position
+        const arrayNamesPieces = Object.keys(this.piecesBoard.pieces)
         arrayNamesPieces.forEach((namePiece)=>{
-            if((assistantPieceColor===this.piecesBoard[namePiece].color)&&(this.piecesBoard[namePiece].isAtive===true)&&(namePiece!==nameKing)){
+            if((assistantPieceColor=== this.piecesBoard.pieces[namePiece].color)&&( this.piecesBoard.pieces[namePiece].isAtive===true)&&(namePiece!==nameKing)){
                 const fakeChessBoard={...this.chessBoard.reference} 
-                const positionPiece = this.piecesBoard[namePiece].position
+                const positionPiece = this.piecesBoard.pieces[namePiece].position
                 fakeChessBoard[positionPiece]=null
                 if(this.verifyCheckInFakeBoard(fakeChessBoard,positionInitialKing,assistantPieceColor)){//se na nova refId do rei não tem check, não há checkMate
-                    this.piecesBoard[namePiece].refMovements=[]
+                    this.piecesBoard.pieces[namePiece].refMovements=[]
                 }  
             }
         }
@@ -425,14 +423,14 @@ export default class CreateGame {
             this.playHistory[lastMovement].piecesPlayed.forEach((piecesPlayed,ind)=>{
                 if(this.playHistory[lastMovement].typeMovement==="piecePromotion" && ind===1){
                     const namePiece=piecesPlayed.fullName
-                    delete this.piecesBoard[namePiece]
+                    delete this.piecesBoard.pieces[namePiece]
                 }
                 else{
                     const position = this.playHistory[lastMovement].newRefId[ind]
                     this.chessBoard.reference[position]=null
                     if(this.playHistory[lastMovement].pieceCaptured!==null){
                         const namePieceCaptured =this.playHistory[lastMovement].pieceCaptured.fullName
-                        this.piecesBoard[namePieceCaptured]=this.playHistory[lastMovement].pieceCaptured
+                        this.piecesBoard.pieces[namePieceCaptured]=this.playHistory[lastMovement].pieceCaptured
                         const positionPieceCaptured=this.playHistory[lastMovement].pieceCaptured.position
                         this.chessBoard.reference[positionPieceCaptured]=this.playHistory[lastMovement].pieceCaptured   
                         delete this.capturePiece[namePieceCaptured]
@@ -440,7 +438,7 @@ export default class CreateGame {
                     const positionBack = piecesPlayed.position
                     const namePiece=piecesPlayed.fullName
                     this.chessBoard.reference[positionBack]=piecesPlayed
-                    this.piecesBoard[namePiece]=piecesPlayed
+                    this.piecesBoard.pieces[namePiece]=piecesPlayed
                 }
             })
             this.playHistory.pop()  
@@ -453,22 +451,22 @@ export default class CreateGame {
         this.specialMovement.roque.tower=[]
         this.specialMovement.roque.newMovementTower=[]
         const nameKing = `King${color}`
-        if(this.piecesBoard[nameKing].qtMovements===0 && this.statusGame.checkKing.check===false){
+        if( this.piecesBoard.pieces[nameKing].qtMovements===0 && this.statusGame.checkKing.check===false){
             const TowerLeft = `Tower-Left${color}`
             const TowerRight = `Tower-Right${color}`
-            if(this.piecesBoard[TowerLeft].qtMovements===0){
-                if(this.piecesBoard[TowerLeft].refMovements.includes("ref41")){    
+            if( this.piecesBoard.pieces[TowerLeft].qtMovements===0){
+                if( this.piecesBoard.pieces[TowerLeft].refMovements.includes("ref41")){    
                     this.possibleMovementRoque(TowerLeft,"ref41",nameKing)
                 } 
-                if(this.piecesBoard[TowerLeft].refMovements.includes("ref48")){
+                if( this.piecesBoard.pieces[TowerLeft].refMovements.includes("ref48")){
                     this.possibleMovementRoque(TowerLeft,"ref48",nameKing)
                 }         
             }
-            if(this.piecesBoard[TowerRight].qtMovements===0){
-                if(this.piecesBoard[TowerRight].refMovements.includes("ref61")){
+            if( this.piecesBoard.pieces[TowerRight].qtMovements===0){
+                if( this.piecesBoard.pieces[TowerRight].refMovements.includes("ref61")){
                     this.possibleMovementRoque(TowerRight,"ref61",nameKing)
                 } 
-                if(this.piecesBoard[TowerRight].refMovements.includes("ref68")){ 
+                if( this.piecesBoard.pieces[TowerRight].refMovements.includes("ref68")){ 
                     this.possibleMovementRoque(TowerRight,"ref68",nameKing)
                 }
             }
@@ -484,16 +482,16 @@ export default class CreateGame {
         }   
         const possibleMovement = towerMovement[refMovementTower] 
         this.specialMovement.roque.isPossible=true
-        this.specialMovement.roque.king=this.piecesBoard[nameKing]
+        this.specialMovement.roque.king= this.piecesBoard.pieces[nameKing]
         this.specialMovement.roque.positionKingToRoque.push(possibleMovement)
-        this.specialMovement.roque.tower.push(this.piecesBoard[tower])
+        this.specialMovement.roque.tower.push( this.piecesBoard.pieces[tower])
         this.specialMovement.roque.newMovementTower.push(refMovementTower)
-        this.piecesBoard[nameKing].refMovements.push(possibleMovement)
+        this.piecesBoard.pieces[nameKing].refMovements.push(possibleMovement)
         const specialRoque = {
             positions:possibleMovement,
             type:"roque"
         }
-        this.piecesBoard[nameKing].possibleSpecialMovements.push(specialRoque)
+        this.piecesBoard.pieces[nameKing].possibleSpecialMovements.push(specialRoque)
     }
 
     movementRoque(informationPieceToMove){
@@ -518,7 +516,7 @@ export default class CreateGame {
                 if(lastPieceMove.name.includes("Pawn") && lastPieceMove.qtMovements===0){
                     const directionLastPawn =(lastPieceMove.color==this.colorPieceBoard.bottom)?1:-1
                     const positionLastPawn= refIdToArray(lastPieceMove.position)
-                    const newPositionPawn= refIdToArray(this.piecesBoard[lastPieceMove.fullName].position)
+                    const newPositionPawn= refIdToArray( this.piecesBoard.pieces[lastPieceMove.fullName].position)
                     if((positionLastPawn[1]+(directionLastPawn*2))===newPositionPawn[1]){
                         const positionInAtackLeft = `ref${(newPositionPawn[0]-1)}${newPositionPawn[1]}`
                         if(!!this.chessBoard.reference[positionInAtackLeft]){
@@ -543,7 +541,7 @@ export default class CreateGame {
         const newMovementPiece= `ref${movement[0]}${movement[1]+direction}`
         this.chessBoard.reference[positionInAtack].refMovements.push(newMovementPiece)
         this.specialMovement.enPassant.isPossible=true
-        this.specialMovement.enPassant.pawnPossibleCapture=this.piecesBoard[lastPieceMove.fullName]
+        this.specialMovement.enPassant.pawnPossibleCapture= this.piecesBoard.pieces[lastPieceMove.fullName]
         this.specialMovement.enPassant.refIdAtack=newMovementPiece
         this.specialMovement.enPassant.pawnInAtack=this.chessBoard.reference[positionInAtack]
         const specialEnPassant = {
@@ -566,10 +564,10 @@ export default class CreateGame {
         this.specialMovement.pawnPromotion.namesPawn=[]
         this.specialMovement.pawnPromotion.isPossible=false
     
-        for(let piece in this.piecesBoard){
+        for(let piece in this.piecesBoard.pieces){
             if(piece.includes("Pawn")){
-                const positionPawn = refIdToArray(this.piecesBoard[piece].position)
-                const directionPawn =(this.piecesBoard[piece].color==this.colorPieceBoard.bottom)?1:-1
+                const positionPawn = refIdToArray( this.piecesBoard.pieces[piece].position)
+                const directionPawn =( this.piecesBoard.pieces[piece].color==this.colorPieceBoard.bottom)?1:-1
                 if((positionPawn[1]+directionPawn)===8 ||(positionPawn[1]+directionPawn)===1){
                     this.possiblePawnPromotion(piece,positionPawn,directionPawn)
                 }
@@ -580,27 +578,27 @@ export default class CreateGame {
     possiblePawnPromotion(piece,positionPawn,directionPawn){
         if(!this.specialMovement.pawnPromotion.namesPawn.includes(piece)){
             this.specialMovement.pawnPromotion.isPossible=true
-            this.specialMovement.pawnPromotion.piecesPawn.push(this.piecesBoard[piece])
+            this.specialMovement.pawnPromotion.piecesPawn.push( this.piecesBoard.pieces[piece])
             this.specialMovement.pawnPromotion.namesPawn.push(piece)
             const refId=[]
             const squareLeft = `ref${positionPawn[0]-1}${positionPawn[1]+directionPawn}`
-            if(this.piecesBoard[piece].refMovements.includes(squareLeft)){
+            if( this.piecesBoard.pieces[piece].refMovements.includes(squareLeft)){
                 refId.push(squareLeft)
             }
             const squareRight = `ref${positionPawn[0]+1}${positionPawn[1]+directionPawn}`
-            if(this.piecesBoard[piece].refMovements.includes(squareRight)){
+            if( this.piecesBoard.pieces[piece].refMovements.includes(squareRight)){
                 refId.push(squareRight)
             }
             const specialPawnPromotion = {
                 positions: refId,
                 type:"piecePromotion"
             }
-            this.piecesBoard[piece].possibleSpecialMovements.push(specialPawnPromotion)
+            this.piecesBoard.pieces[piece].possibleSpecialMovements.push(specialPawnPromotion)
         }
     }
 
     movementPawnPromotion(informationPieceToMove){
-        const pawn = this.piecesBoard[informationPieceToMove.fullName]
+        const pawn = this.piecesBoard.pieces[informationPieceToMove.fullName]
         const informationPawnToMove={
             fullName: pawn.fullName,
             refId:informationPieceToMove.refId
@@ -619,10 +617,10 @@ export default class CreateGame {
 
     changePiecePromotion(informationPawnToMove){
         this.changePiecePosition(informationPawnToMove)
-        this.piecesBoard[this.piecesPromotion.newPiece.fullName]=this.piecesPromotion.newPiece
+        this.piecesBoard.pieces[this.piecesPromotion.newPiece.fullName]=this.piecesPromotion.newPiece
         this.chessBoard.reference[this.piecesPromotion.newPiece.position]=this.piecesPromotion.newPiece
-        this.piecesBoard[informationPawnToMove.fullName].isAtive=false
-        this.piecesBoard[informationPawnToMove.fullName].refMovements=[]
+        this.piecesBoard.pieces[informationPawnToMove.fullName].isAtive=false
+        this.piecesBoard.pieces[informationPawnToMove.fullName].refMovements=[]
     }
 
     createNewPiece(informationNewPiece,changePawn){
@@ -662,9 +660,9 @@ export default class CreateGame {
     
     drawByDrowning(color){
         if(this.statusGame.checkKing.check===false){
-            for(let piece in this.piecesBoard){
-                if(this.piecesBoard[piece].color===color){
-                    if(this.piecesBoard[piece].refMovements.length>0){
+            for(let piece in this.piecesBoard.pieces){
+                if( this.piecesBoard.pieces[piece].color===color){
+                    if( this.piecesBoard.pieces[piece].refMovements.length>0){
                         return false
                     }
                 }
@@ -710,8 +708,8 @@ export default class CreateGame {
     
     drawByChequeMateImpossibility(){
         const pieceAtive=[]
-        for(let piece in this.piecesBoard){
-            if(this.piecesBoard[piece].isAtive){
+        for(let piece in this.piecesBoard.pieces){
+            if( this.piecesBoard.pieces[piece].isAtive){
                 pieceAtive.push(piece)
             }
         }
@@ -739,20 +737,20 @@ export default class CreateGame {
     testDraw(){
         const draw=[]
         this.statusGame.checkKing.check===false
-        for(let piece in this.piecesBoard){
-                this.piecesBoard[piece].refMovements=[]
-                this.piecesBoard[piece].isAtive=false
+        for(let piece in this.piecesBoard.pieces){
+                this.piecesBoard.pieces[piece].refMovements=[]
+                this.piecesBoard.pieces[piece].isAtive=false
         }
         draw.push(this.drawByDrowning("Black"))
 
         this.statusGame.checkKing.check=true
-        this.playHistory=[{piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMovement:null},
-        {piecesPlayed:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMovement:null},
-        {piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMovement:null},
-        {piecesPlayed:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref44"], typeMovement:null},
-        {piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMovement:null},
-        {piecesPlayed:[this.piecesBoard["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMovement:null},
-        {piecesPlayed:[this.piecesBoard["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMovement:null}]
+        this.playHistory=[{piecesPlayed:[ this.piecesBoard.pieces["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMovement:null},
+        {piecesPlayed:[ this.piecesBoard.pieces["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMovement:null},
+        {piecesPlayed:[ this.piecesBoard.pieces["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMovement:null},
+        {piecesPlayed:[ this.piecesBoard.pieces["QueenWhite"]], pieceCaptured:null, newRefId:["ref44"], typeMovement:null},
+        {piecesPlayed:[ this.piecesBoard.pieces["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMovement:null},
+        {piecesPlayed:[ this.piecesBoard.pieces["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMovement:null},
+        {piecesPlayed:[ this.piecesBoard.pieces["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMovement:null}]
 
         draw.push(this.drawByReplayThreeMoves())
         draw.push(this.drawByFiftyRules(7))
@@ -760,16 +758,16 @@ export default class CreateGame {
         for(let refId in this.chessBoard.reference){
             this.chessBoard.reference[refId]=null
         }
-        this.chessBoard.reference["ref11"]=this.piecesBoard["KingBlack"]
-        this.piecesBoard["KingBlack"].isAtive=true
-        this.chessBoard.reference["ref55"]=this.piecesBoard["KingWhite"]
-        this.piecesBoard["KingWhite"].isAtive=true
+        this.chessBoard.reference["ref11"]= this.piecesBoard.pieces["KingBlack"]
+        this.piecesBoard.pieces["KingBlack"].isAtive=true
+        this.chessBoard.reference["ref55"]= this.piecesBoard.pieces["KingWhite"]
+        this.piecesBoard.pieces["KingWhite"].isAtive=true
         draw.push(this.drawByChequeMateImpossibility())
-        this.chessBoard.reference["ref15"]=this.piecesBoard["Bishop-RightWhite"]
-        this.piecesBoard["Bishop-RightWhite"].isAtive=true
+        this.chessBoard.reference["ref15"]= this.piecesBoard.pieces["Bishop-RightWhite"]
+        this.piecesBoard.pieces["Bishop-RightWhite"].isAtive=true
         draw.push(this.drawByChequeMateImpossibility())
-        this.chessBoard.reference["ref68"]=this.piecesBoard["Bishop-LeftBlack"]
-        this.piecesBoard["Bishop-LeftBlack"].isAtive=true
+        this.chessBoard.reference["ref68"]= this.piecesBoard.pieces["Bishop-LeftBlack"]
+        this.piecesBoard.pieces["Bishop-LeftBlack"].isAtive=true
         draw.push(this.drawByChequeMateImpossibility())
 
         if(draw.includes(true)){
