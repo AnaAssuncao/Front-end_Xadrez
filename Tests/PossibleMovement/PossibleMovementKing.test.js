@@ -18,21 +18,23 @@ describe("Possible Movement King", ()=>{
     test("The King must not have possible moves",()=>{
         King.position="ref11"
         const chessBoardTest = noMove(King)
-        const possibleMovement = King.functionPiece(chessBoardTest)
-        expect(possibleMovement).toEqual([])
+        const possibleMovements = King.functionPiece(chessBoardTest)
+        expect(possibleMovements).toEqual([])
     })
     test("The King must have possible moves",()=>{
         King.position="ref44"
         const chessBoardTest = withMove(King)
-        const possibleMovement = King.functionPiece(chessBoardTest)
-        expect(possibleMovement).not.toEqual([])
+        const possibleMovements = King.functionPiece(chessBoardTest)
+        expect(possibleMovements).not.toEqual([])
+        const refPossibleMovement = "ref55"
+        expect(possibleMovements).toContain(refPossibleMovement)    
     })
     test("The King must have possible moves",()=>{
         King.position="ref11"
         const refAdversaryPiece= "ref22"
         const chessBoardTest = withMoveToEat(King,refAdversaryPiece)
-        const possibleMovement = King.functionPiece(chessBoardTest)
-        expect(possibleMovement).toContain(refAdversaryPiece)
+        const possibleMovements = King.functionPiece(chessBoardTest)
+        expect(possibleMovements).toContain(refAdversaryPiece)
     })
 }
 )
