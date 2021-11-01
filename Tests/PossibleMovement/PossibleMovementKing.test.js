@@ -1,4 +1,4 @@
-import possibleMovementKing from "../../Game/PossibleMovement/possibleMovementKing.js"
+import possibleMovementKing from "../../Game/PossibleMovement/PossibleMovementKing.js"
 import {noMove,withMove,withMoveToEat} from "./PossibleMovementObj.js"
 
 const King={
