@@ -3,11 +3,11 @@ import {noMove,withMove,withMoveToEat} from "./PossibleMovementObj.js"
 
 const pawn={
     color: "white",
-    fullName: "pawnWhite",
+    fullName: "Pawn-1white",
     functionPiece: possibleMovementPawn,
     imgName: "pawnWhite",
     isAtive: true,
-    name: "pawn",
+    name: "Pawn-1",
     position: null,
     possibleSpecialMovements: [],
     qtMovements: 0,

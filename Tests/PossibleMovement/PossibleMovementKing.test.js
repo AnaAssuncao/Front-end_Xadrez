@@ -3,7 +3,7 @@ import {noMove,withMove,withMoveToEat} from "./PossibleMovementObj.js"
 
 const King={
     color: "white",
-    fullName: "kingWhite",
+    fullName: "Kingwhite",
     functionPiece: possibleMovementKing,
     imgName: "kingWhite",
     isAtive: true,
