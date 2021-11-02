@@ -17,15 +17,16 @@ import {
     defaultCapturePiece,
     defaultPlayHistory } from "./DefaultObjets.js"
 import { refIdToArray } from "./utils.js"
+import createObjHistory from "./createObjHistory.js"
 
 export default class CreateGame {
-    constructor(player){
+    constructor(colorPlayers){
         this.chessBoard= defaultChessBoard
         //chave Nome+cor - conforme obj chessBoard
         this.piecesBoard= {}
     
         //Cor peças
-        this.colorPieceBoard= player
+        this.colorPieceBoard= colorPlayers
 
         this.capturePiece={}
 
@@ -94,12 +95,11 @@ export default class CreateGame {
         this.checkMovementsAllPieces()
     }
 
-
     checkMovementsAllPieces(){
         for(let piece in this.piecesBoard.pieces){
             if(this.piecesBoard.pieces[piece].isAtive===true)
                 {
-                    this.piecesBoard.pieces[piece].refMovements=this.piecesBoard.pieces[piece].functionPiece(this.chessBoard.reference)
+                    this.piecesBoard.pieces[piece].refMovements=this.piecesBoard.pieces[piece].functionPiece(this.chessBoard.reference, this.colorPieceBoard.bottom)
                     this.piecesBoard.pieces[piece].possibleSpecialMovements=[]
                 }
         }
@@ -109,7 +109,8 @@ export default class CreateGame {
         const piece = this.piecesBoard.pieces[informationPieceSelect.fullName]
         const isMove = piece.refMovements.includes(informationPieceSelect.refId)
         if(isMove){
-            this.updateHistory([informationPieceSelect],"movementPiece")
+            const objHistory = createObjHistory.apply(this,[[informationPieceSelect],"movementPiece"])
+            this.playHistory.setHistory(objHistory)
             this.changePiecePosition(informationPieceSelect)
             this.updateStatusGame(piece.color)
         }
@@ -126,37 +127,6 @@ export default class CreateGame {
         movePiece.position=newRefId
         movePiece.qtMovements++
         this.chessBoard.reference[newRefId]= movePiece
-    }
-
-    updateHistory(arrayPiece,typeMovement){
-        const movement={
-            piecesPlayed:[],
-            pieceCaptured:null,
-            newRefId:[],
-            typeMovement:null
-        }
-        arrayPiece.forEach(piece=> {
-            if( this.piecesBoard.pieces[piece.fullName]){
-                movement.piecesPlayed.push({__proto__:this,
-                    ... this.piecesBoard.pieces[piece.fullName]})   
-                if(this.chessBoard.reference[piece.refId]!==null){
-                    movement.pieceCaptured={__proto__:this,
-                        ... this.piecesBoard.pieces[this.chessBoard.reference[piece.refId].fullName]}
-                }
-                if(typeMovement==="enPassant"){
-                    movement.pieceCaptured={__proto__:this,
-                        ... this.piecesBoard.pieces[this.specialMovement.enPassant.pawnPossibleCapture.fullName]}
-                }
-            }
-            else if(typeMovement==="piecePromotion" ){
-                movement.piecesPlayed.push({__proto__:this,
-                     ...this.piecesPromotion.newPiece})
-            }
-            movement.newRefId.push(piece.refId)
-        })
-        movement.typeMovement=typeMovement
-     
-        this.playHistory.push(movement)
     }
 
     eatPiece(nameCapturePiece){
@@ -301,7 +271,7 @@ export default class CreateGame {
         for(let refId in fakeChessBoard){
             if(fakeChessBoard[refId]!==null && fakeChessBoard[refId].color!==colorKing && fakeChessBoard[refId].isAtive)
             {
-                const refMovements=fakeChessBoard[refId].functionPiece(fakeChessBoard)
+                const refMovements=fakeChessBoard[refId].functionPiece(fakeChessBoard,this.colorPieceBoard.bottom)
                 if(this.movementsPieceAdversity(refMovements,newRefIdKing)){//verifica se o refId adversario e igual ao refId do rei
                     //se for verdadeiro o rei esta em check, movimento para morte
                     return true
@@ -418,21 +388,21 @@ export default class CreateGame {
     }
 
     returnChangePiece(){
-        const lastMovement= this.playHistory.length-1
+        const lastMovement= this.playHistory.history.length-1
         if(lastMovement>=0){
-            this.playHistory[lastMovement].piecesPlayed.forEach((piecesPlayed,ind)=>{
-                if(this.playHistory[lastMovement].typeMovement==="piecePromotion" && ind===1){
+            this.playHistory.history[lastMovement].piecesPlayed.forEach((piecesPlayed,ind)=>{
+                if(this.playHistory.history[lastMovement].typeMovement==="piecePromotion" && ind===1){
                     const namePiece=piecesPlayed.fullName
                     delete this.piecesBoard.pieces[namePiece]
                 }
                 else{
-                    const position = this.playHistory[lastMovement].newRefId[ind]
+                    const position = this.playHistory.history[lastMovement].newRefId[ind]
                     this.chessBoard.reference[position]=null
-                    if(this.playHistory[lastMovement].pieceCaptured!==null){
-                        const namePieceCaptured =this.playHistory[lastMovement].pieceCaptured.fullName
-                        this.piecesBoard.pieces[namePieceCaptured]=this.playHistory[lastMovement].pieceCaptured
-                        const positionPieceCaptured=this.playHistory[lastMovement].pieceCaptured.position
-                        this.chessBoard.reference[positionPieceCaptured]=this.playHistory[lastMovement].pieceCaptured   
+                    if(this.playHistory.history[lastMovement].pieceCaptured!==null){
+                        const namePieceCaptured =this.playHistory.history[lastMovement].pieceCaptured.fullName
+                        this.piecesBoard.pieces[namePieceCaptured]=this.playHistory.history[lastMovement].pieceCaptured
+                        const positionPieceCaptured=this.playHistory.history[lastMovement].pieceCaptured.position
+                        this.chessBoard.reference[positionPieceCaptured]=this.playHistory.history[lastMovement].pieceCaptured   
                         delete this.capturePiece[namePieceCaptured]
                     }
                     const positionBack = piecesPlayed.position
@@ -441,7 +411,7 @@ export default class CreateGame {
                     this.piecesBoard.pieces[namePiece]=piecesPlayed
                 }
             })
-            this.playHistory.pop()  
+            this.playHistory.history.pop()  
         } 
     }
 
@@ -502,17 +472,18 @@ export default class CreateGame {
             refId:this.specialMovement.roque.newMovementTower[indice]
         }
         const roque = "roque"
-        this.updateHistory([informationPieceToMove,informationTowerMove],roque)
+        const objHistory = createObjHistory.apply(this,[[informationPieceToMove,informationTowerMove],roque])
+        this.playHistory.setHistory(objHistory)
         this.changePiecePosition(informationPieceToMove)
         this.changePiecePosition(informationTowerMove)
     }
     
     verifyEnPassant(nextColor){
         this.specialMovement.enPassant.isPossible=false
-        if(this.playHistory.length>0){
-            const lastMovement=this.playHistory.length-1
-            if(this.playHistory[lastMovement].piecesPlayed.length===1){
-                const lastPieceMove=this.playHistory[lastMovement].piecesPlayed[0]
+        if(this.playHistory.history.length>0){
+            const lastMovement=this.playHistory.history.length-1
+            if(this.playHistory.history[lastMovement].piecesPlayed.length===1){
+                const lastPieceMove=this.playHistory.history[lastMovement].piecesPlayed[0]
                 if(lastPieceMove.name.includes("Pawn") && lastPieceMove.qtMovements===0){
                     const directionLastPawn =(lastPieceMove.color==this.colorPieceBoard.bottom)?1:-1
                     const positionLastPawn= refIdToArray(lastPieceMove.position)
@@ -552,11 +523,12 @@ export default class CreateGame {
     }
 
     movementEnPassant(informationPieceToMove){
-           const enPassant = "enPassant"
-            this.updateHistory([informationPieceToMove],enPassant)
-            this.changePiecePosition(informationPieceToMove)
-            this.eatPiece(this.specialMovement.enPassant.pawnPossibleCapture.fullName)
-            this.chessBoard.reference[this.specialMovement.enPassant.pawnPossibleCapture.position]=null
+        const enPassant = "enPassant"
+        const objHistory = createObjHistory.apply(this,[[informationPieceToMove],enPassant])
+        this.playHistory.setHistory(objHistory)
+        this.changePiecePosition(informationPieceToMove)
+        this.eatPiece(this.specialMovement.enPassant.pawnPossibleCapture.fullName)
+        this.chessBoard.reference[this.specialMovement.enPassant.pawnPossibleCapture.position]=null
     }
 
     verifyPawnPromotion(color){
@@ -609,7 +581,8 @@ export default class CreateGame {
             refId:informationPieceToMove.refId
         }  
         const piecePromotion = "piecePromotion"
-        this.updateHistory([informationPawnToMove,informationPiecePromotion],piecePromotion)
+        const objHistory =createObjHistory.apply(this,[[informationPawnToMove,informationPiecePromotion],piecePromotion])
+        this.playHistory.setHistory(objHistory)
         this.changePiecePromotion(informationPawnToMove)
         this.updateStatusGame(pawn.color)
 
@@ -673,16 +646,16 @@ export default class CreateGame {
     }
     
     drawByReplayThreeMoves(){
-        const qtPlays= this.playHistory.length-1
+        const qtPlays= this.playHistory.history.length-1
         if(qtPlays>=6 && this.statusGame.checkKing.check===true){
-            const lastPlay=this.playHistory[qtPlays]
-            const penultimatePlay=this.playHistory[qtPlays-1]
+            const lastPlay=this.playHistory.history[qtPlays]
+            const penultimatePlay=this.playHistory.history[qtPlays-1]
             if(lastPlay.piecesPlayed[0].fullName.includes("King")||penultimatePlay.piecesPlayed[0].fullName.includes("King")){
                 const conditions={
-                    play1:lastPlay.piecesPlayed[0]===this.playHistory[qtPlays-2].piecesPlayed[0],
-                    play2:penultimatePlay.piecesPlayed[0]===this.playHistory[qtPlays-3].piecesPlayed[0],
-                    play3:lastPlay.piecesPlayed[0]===this.playHistory[qtPlays-4].piecesPlayed[0] && lastPlay.newRefId[0]===this.playHistory[qtPlays-4].newRefId[0],
-                    play4:penultimatePlay.piecesPlayed[0]===this.playHistory[qtPlays-5].piecesPlayed[0] && penultimatePlay.newRefId[0]===this.playHistory[qtPlays-5].newRefId[0]
+                    play1:lastPlay.piecesPlayed[0]===this.playHistory.history[qtPlays-2].piecesPlayed[0],
+                    play2:penultimatePlay.piecesPlayed[0]===this.playHistory.history[qtPlays-3].piecesPlayed[0],
+                    play3:lastPlay.piecesPlayed[0]===this.playHistory.history[qtPlays-4].piecesPlayed[0] && lastPlay.newRefId[0]===this.playHistory.history[qtPlays-4].newRefId[0],
+                    play4:penultimatePlay.piecesPlayed[0]===this.playHistory.history[qtPlays-5].piecesPlayed[0] && penultimatePlay.newRefId[0]===this.playHistory.history[qtPlays-5].newRefId[0]
                 }
                     if(conditions.play1===true && conditions.play2===true && conditions.play3===true && conditions.play4===true){
                         return true
@@ -694,10 +667,10 @@ export default class CreateGame {
     }
     
     drawByFiftyRules(numberPlays= 100){
-        const qtPlays = this.playHistory.length
+        const qtPlays = this.playHistory.history.length
         if(qtPlays>=numberPlays){
             for(let i = 1;(i<=numberPlays);i++){
-                if(this.playHistory[qtPlays-i].piecesPlayed[0].name.includes("Pawn") || this.playHistory[qtPlays-i].pieceCaptured){
+                if(this.playHistory.history[qtPlays-i].piecesPlayed[0].name.includes("Pawn") || this.playHistory.history[qtPlays-i].pieceCaptured){
                     return false
                 }
             }
@@ -744,7 +717,7 @@ export default class CreateGame {
         draw.push(this.drawByDrowning("Black"))
 
         this.statusGame.checkKing.check=true
-        this.playHistory=[{piecesPlayed:[ this.piecesBoard.pieces["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMovement:null},
+        this.playHistory.history=[{piecesPlayed:[ this.piecesBoard.pieces["KingBlack"]], pieceCaptured:null, newRefId:["ref25"], typeMovement:null},
         {piecesPlayed:[ this.piecesBoard.pieces["QueenWhite"]], pieceCaptured:null, newRefId:["ref45"], typeMovement:null},
         {piecesPlayed:[ this.piecesBoard.pieces["KingBlack"]], pieceCaptured:null, newRefId:["ref24"], typeMovement:null},
         {piecesPlayed:[ this.piecesBoard.pieces["QueenWhite"]], pieceCaptured:null, newRefId:["ref44"], typeMovement:null},
@@ -787,7 +760,7 @@ export default class CreateGame {
         return this.chessBoard.reference
     }
     getHistoryMoves(){
-        return this.playHistory
+        return this.playHistory.history
     }
     getCapturedPieces(){
         return this.capturePiece
