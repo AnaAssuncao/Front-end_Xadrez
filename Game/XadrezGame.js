@@ -5,23 +5,13 @@ import possibleMovementBishop from "./PossibleMovement/PossibleMovementBishop.js
 import possibleMovementQueen from "./PossibleMovement/PossibleMovementQueen.js"
 import possibleMovementKing from "./PossibleMovement/PossibleMovementKing.js"
 import possibleMovementPawn from "./PossibleMovement/PossibleMovementPawn.js"
-import {
-    defaultPiecesBoard,
-    defaultBlackPieces,
-    defaulWhitePieces,
-    defaultNamePieces,
-    defaultChessBoard,
-    defaultStatusGame,
-    defaultSpecialMovement,
-    defaultPiecesPromotion,
-    defaultCapturePiece,
-    defaultPlayHistory } from "./DefaultObjets.js"
+import defaultObjets from "./DefaultsObjects/DefaultObjets.js"
 import { refIdToArray } from "./utils.js"
 import createObjHistory from "./createObjHistory.js"
 
 export default class CreateGame {
     constructor(colorPlayers){
-        this.chessBoard= defaultChessBoard
+        this.chessBoard= new defaultObjets.ClassChessBoard()
         //chave Nome+cor - conforme obj chessBoard
         this.piecesBoard= {}
     
@@ -58,17 +48,17 @@ export default class CreateGame {
     }  
 
     starObjGame(){
-        this.piecesBoard=defaultPiecesBoard
-        this.statusGame=defaultStatusGame
-        this.capturePiece=defaultCapturePiece
-        this.playHistory=defaultPlayHistory
-        this.specialMovement=defaultSpecialMovement
-        this.piecesPromotion=defaultPiecesPromotion
+        this.piecesBoard=new defaultObjets.ClassPiecesBoard
+        this.statusGame=new defaultObjets.ClassStatusGame
+        this.capturedPiece=new defaultObjets.ClassCapturedPiece
+        this.playHistory=new defaultObjets.ClassPlayHistory
+        this.specialMovement=new defaultObjets.ClassSpecialMovement
+        this.piecesPromotion=new defaultObjets.ClassPiecesPromotion
 
         const objStarBoard={
-            starPiecesBlack:defaultBlackPieces,
-            starPiecesWhite:defaulWhitePieces,
-            namePiece:defaultNamePieces,
+            starPiecesBlack:defaultObjets.objBlackPieces,
+            starPiecesWhite:defaultObjets.objWhitePieces,
+            namePiece:defaultObjets.objNamePieces,
             functionPieces:[possibleMovementTower,possibleMovementKnight,possibleMovementBishop,possibleMovementQueen,possibleMovementKing, possibleMovementBishop,possibleMovementKnight, possibleMovementTower,
                 possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn, possibleMovementPawn]
         }
