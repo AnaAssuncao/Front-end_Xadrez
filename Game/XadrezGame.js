@@ -89,7 +89,7 @@ export default class CreateGame {
         for(let piece in this.piecesBoard.pieces){
             if(this.piecesBoard.pieces[piece].isAtive===true)
                 {
-                    this.piecesBoard.pieces[piece].refMovements=this.piecesBoard.pieces[piece].functionPiece(this.chessBoard.reference, this.colorPieceBoard.bottom)
+                    this.piecesBoard.pieces[piece].refMovements=this.piecesBoard.pieces[piece].functionPiece()
                     this.piecesBoard.pieces[piece].possibleSpecialMovements=[]
                 }
         }
@@ -261,7 +261,7 @@ export default class CreateGame {
         for(let refId in fakeChessBoard){
             if(fakeChessBoard[refId]!==null && fakeChessBoard[refId].color!==colorKing && fakeChessBoard[refId].isAtive)
             {
-                const refMovements=fakeChessBoard[refId].functionPiece(fakeChessBoard,this.colorPieceBoard.bottom)
+                const refMovements=fakeChessBoard[refId].functionPiece(fakeChessBoard)
                 if(this.movementsPieceAdversity(refMovements,newRefIdKing)){//verifica se o refId adversario e igual ao refId do rei
                     //se for verdadeiro o rei esta em check, movimento para morte
                     return true
