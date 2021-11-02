@@ -18,7 +18,7 @@ export default class CreateGame {
         //Cor peças
         this.colorPieceBoard= colorPlayers
 
-        this.capturePiece={}
+        this.capturedPiece={}
 
         this.statusGame={}
 
@@ -31,29 +31,13 @@ export default class CreateGame {
         this.piecesPromotion={}
     }
 
-    makePiece (name,fullName,color,img,position,functionPiece,isAtive=true){  
-        return {
-            __proto__:this,
-            name:name,
-            fullName:fullName,
-            color:color,
-            imgName:img,
-            position:position,
-            isAtive:isAtive,
-            functionPiece:functionPiece,
-            qtMovements:0,
-            refMovements:[],
-            possibleSpecialMovements:[]
-        } 
-    }  
-
     starObjGame(){
-        this.piecesBoard=new defaultObjets.ClassPiecesBoard
-        this.statusGame=new defaultObjets.ClassStatusGame
-        this.capturedPiece=new defaultObjets.ClassCapturedPiece
-        this.playHistory=new defaultObjets.ClassPlayHistory
-        this.specialMovement=new defaultObjets.ClassSpecialMovement
-        this.piecesPromotion=new defaultObjets.ClassPiecesPromotion
+        this.piecesBoard=new defaultObjets.ClassPiecesBoard()
+        this.statusGame=new defaultObjets.ClassStatusGame()
+        this.capturedPiece=new defaultObjets.ClassCapturedPiece()
+        this.playHistory=new defaultObjets.ClassPlayHistory()
+        this.specialMovement=new defaultObjets.ClassSpecialMovement()
+        this.piecesPromotion=new defaultObjets.ClassPiecesPromotion()
 
         const objStarBoard={
             starPiecesBlack:defaultObjets.objBlackPieces,
@@ -69,7 +53,7 @@ export default class CreateGame {
             const refColumn= (i%8+1)
             const keyChess = `ref${refColumn}${refLine}`
             const keyPieces = objStarBoard.namePiece[i] + this.colorPieceBoard.bottom 
-            const newPiece= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.bottom,objStarBoard.starPiecesWhite[i],keyChess,objStarBoard.functionPieces[i])
+            const newPiece= new defaultObjets.ClassMakePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.bottom,objStarBoard.starPiecesWhite[i],keyChess,objStarBoard.functionPieces[i],this)
             this.piecesBoard.addPieceOfRef(keyPieces,newPiece)
             this.chessBoard.reference[keyChess]= newPiece
         }
@@ -78,7 +62,7 @@ export default class CreateGame {
             const refLine= (8 - parseInt(i/8))
             const keyChess = `ref${refColumn}${refLine}`
             const keyPieces = objStarBoard.namePiece[i]+this.colorPieceBoard.top
-            const newPiece= this.makePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.top,objStarBoard.starPiecesBlack[i],keyChess, objStarBoard.functionPieces[i])
+            const newPiece= new defaultObjets.ClassMakePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.top,objStarBoard.starPiecesBlack[i],keyChess, objStarBoard.functionPieces[i],this)
             this.piecesBoard.addPieceOfRef(keyPieces,newPiece)
             this.chessBoard.reference[keyChess]= newPiece
         }
@@ -96,13 +80,13 @@ export default class CreateGame {
     }
 
     setMove(informationPieceSelect){
-        const piece = this.piecesBoard.pieces[informationPieceSelect.fullName]
-        const isMove = piece.refMovements.includes(informationPieceSelect.refId)
+        const objOfMovedPiece = this.piecesBoard.pieces[informationPieceSelect.fullName]
+        const isMove = objOfMovedPiece.refMovements.includes(informationPieceSelect.refId)
         if(isMove){
             const objHistory = createObjHistory.apply(this,[[informationPieceSelect],"movementPiece"])
             this.playHistory.setHistory(objHistory)
             this.changePiecePosition(informationPieceSelect)
-            this.updateStatusGame(piece.color)
+            this.updateStatusGame(objOfMovedPiece.color)
         }
         return isMove
     }
@@ -122,7 +106,7 @@ export default class CreateGame {
     eatPiece(nameCapturePiece){
         this.piecesBoard.pieces[nameCapturePiece].isAtive = false
         this.piecesBoard.pieces[nameCapturePiece].refMovements=[]
-        this.capturePiece[nameCapturePiece]= this.piecesBoard.pieces[nameCapturePiece]
+        this.capturedPiece.pieces[nameCapturePiece]= this.piecesBoard.pieces[nameCapturePiece]
         if(nameCapturePiece==="KingWhite"||nameCapturePiece==="KingBlack"){
             this.statusGame.endGame=true
             this.statusGame.winColor=(this.colorPieceBoard.top===this.colorPieceBoard.play)?this.colorPieceBoard.bottom:this.colorPieceBoard.top 
@@ -393,7 +377,7 @@ export default class CreateGame {
                         this.piecesBoard.pieces[namePieceCaptured]=this.playHistory.history[lastMovement].pieceCaptured
                         const positionPieceCaptured=this.playHistory.history[lastMovement].pieceCaptured.position
                         this.chessBoard.reference[positionPieceCaptured]=this.playHistory.history[lastMovement].pieceCaptured   
-                        delete this.capturePiece[namePieceCaptured]
+                        delete this.capturedPiece.pieces[namePieceCaptured]
                     }
                     const positionBack = piecesPlayed.position
                     const namePiece=piecesPlayed.fullName
@@ -605,7 +589,7 @@ export default class CreateGame {
         const position = informationNewPiece.refId
         const functionPiece = chancePiece.functionPieces[indChangePiece]
         this.piecesPromotion[color].qtPiece[indChangePiece]++
-        this.piecesPromotion.newPiece= this.makePiece(namePiece,fullName,color,img,position,functionPiece)
+        this.piecesPromotion.newPiece= new defaultObjets.ClassMakePiece(namePiece,fullName,color,img,position,functionPiece,this)
         this.piecesPromotion.newPiece.refMovements=changePawn.qtMovements
     }
 
@@ -753,6 +737,6 @@ export default class CreateGame {
         return this.playHistory.history
     }
     getCapturedPieces(){
-        return this.capturePiece
+        return this.capturedPiece.pieces
     }
 }

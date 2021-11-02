@@ -1,4 +1,4 @@
-function createObjHistory(arrayPiece,typeMovement,chessBoard=this.chessBoard,piecesBoard=this.piecesBoard,specialMovement=this.specialMovement){
+function createObjHistory(arrayPiece,typeMovement,chessBoard=this.chessBoard,piecesBoard=this.piecesBoard,specialMovement=this.specialMovement,piecesPromotion=this.piecesPromotion){
     const movement={
         piecesPlayed:[],
         pieceCaptured:null,
