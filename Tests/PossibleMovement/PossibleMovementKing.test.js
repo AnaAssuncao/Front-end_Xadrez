@@ -1,40 +1,52 @@
 import possibleMovementKing from "../../Game/PossibleMovement/PossibleMovementKing.js"
-import {noMove,withMove,withMoveToEat} from "./PossibleMovementObj.js"
+import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
+import ChessBoard from "../../Game/DefaultsObjects/ClassChessBoard.js"
 
-const King={
-    color: "white",
-    fullName: "Kingwhite",
-    functionPiece: possibleMovementKing,
-    imgName: "kingWhite",
-    isAtive: true,
-    name: "King",
-    position: null,
-    possibleSpecialMovements: [],
-    qtMovements: 0,
-    refMovements: []
-}
+const king = makePiece("King","kingWhite","white","Kingwhite","ref11",possibleMovementKing)
+const chessBoard = new ChessBoard ()
 
 describe("Possible Movement King", ()=>{
-    test("The King must not have possible moves",()=>{
-        King.position="ref11"
-        const chessBoardTest = noMove(King)
-        const possibleMovements = King.functionPiece(chessBoardTest)
-        expect(possibleMovements).toEqual([])
-    })
-    test("The King must have possible moves",()=>{
-        King.position="ref44"
-        const chessBoardTest = withMove(King)
-        const possibleMovements = King.functionPiece(chessBoardTest)
+    test("The king should have possible moves",()=>{
+        const refID = "ref44"
+        king.changePosition(refID)
+        chessBoard.addPieceOfRef(refID,king)
+        const possibleMovements = king.functionPiece(chessBoard.reference)
         expect(possibleMovements).not.toEqual([])
-        const refPossibleMovement = "ref55"
-        expect(possibleMovements).toContain(refPossibleMovement)    
+
+        const refPossibleMovement = "ref45"
+        expect(possibleMovements).toContain(refPossibleMovement)
+
+        chessBoard.deletePieceOfRef(refID)
     })
-    test("The King must have possible moves",()=>{
-        King.position="ref11"
+    test("The king should have possible eat adversary piece",()=>{
+        const refID = "ref11"
+        king.changePosition(refID)
+        chessBoard.addPieceOfRef(refID,king)
         const refAdversaryPiece= "ref22"
-        const chessBoardTest = withMoveToEat(King,refAdversaryPiece)
-        const possibleMovements = King.functionPiece(chessBoardTest)
+        const adversaryPiece = makePiece("King-Left","King-black","black","kingBlack",refAdversaryPiece,possibleMovementKing)
+        chessBoard.addPieceOfRef(refAdversaryPiece,adversaryPiece)
+        const possibleMovements = king.functionPiece(chessBoard.reference)
         expect(possibleMovements).toContain(refAdversaryPiece)
+
+        chessBoard.deletePieceOfRef(refID)
+        chessBoard.deletePieceOfRef(refAdversaryPiece)
+    })
+    test("The king should not have possible moves",()=>{
+        const refID = "ref11"
+        king.position=refID
+        king.changePosition(refID)
+        const refAllyPiece= ["ref12","ref22","ref21"]
+        const allyPiece = makePiece("Pawn-1","Pawn-1-white","white","Pawn-2White",refAllyPiece,possibleMovementKing)
+        refAllyPiece.forEach((refIdAlly)=>{
+            chessBoard.addPieceOfRef(refIdAlly,allyPiece)
+        })
+        const possibleMovements = king.functionPiece(chessBoard.reference)
+        expect(possibleMovements).toEqual([])
+        
+        chessBoard.deletePieceOfRef(refID)
+        refAllyPiece.forEach((refIdAlly)=>{
+            chessBoard.deletePieceOfRef(refIdAlly)
+        })
     })
 }
 )

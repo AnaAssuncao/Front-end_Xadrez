@@ -1,4 +1,4 @@
-function possibleMovementPawn(chessBoard=this.chessBoard.reference,color=this.color, position=this.position,qtMovements=this.qtMovements, bottomPieceColor=this.colorPieceBoard.bottom){
+function possibleMovementPawn(chessBoard=this.chessBoard.reference,bottomPieceColor=this.colorPieceBoard.bottom,color=this.color, position=this.position,qtMovements=this.qtMovements){
     const column=Number(position.charAt(3))
     const line =Number(position.charAt(4))
     const movementPawn = []
