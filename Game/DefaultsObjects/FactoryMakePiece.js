@@ -27,6 +27,12 @@ export default function makePiece (name,fullName,color,img,position,functionPiec
         changePosition:function(newPosition){
             this.position= newPosition
         },
+        increaseQtMovements:function(){
+            this.qtMovements++
+        },
+        decreaseQtMovements:function(){
+            this.qtMovements--
+        }
     }
 }
 

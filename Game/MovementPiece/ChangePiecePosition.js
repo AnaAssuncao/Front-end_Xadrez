@@ -1,13 +1,14 @@
 import eatPiece from "./EatPiece.js"
+
 function changePiecePosition(objOfMovedPiece,informationPiecetoMove,chessBoard=this.chessBoard,capturedPiece=this.capturedPiece){
     const newRefId = informationPiecetoMove.refId
     if(chessBoard.reference[newRefId]!==null){
         eatPiece(chessBoard.reference[newRefId],capturedPiece)
     }
-    chessBoard.reference[objOfMovedPiece.position]=null
-    objOfMovedPiece.position=newRefId
-    objOfMovedPiece.qtMovements++
-    chessBoard.reference[newRefId]= objOfMovedPiece
+    chessBoard.deletePieceOfRef(objOfMovedPiece.position)
+    objOfMovedPiece.changePosition(newRefId)
+    objOfMovedPiece.increaseQtMovements()
+    chessBoard.addPieceOfRef(newRefId, objOfMovedPiece)
 }
 
 export default changePiecePosition

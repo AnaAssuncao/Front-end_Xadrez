@@ -89,7 +89,6 @@ export default class CreateGame {
             this.playHistory.setHistory(objHistory)
             changePiecePosition.apply(this,[objOfMovedPiece,informationPieceSelect])
             this.updateStatusGame(objOfMovedPiece.color)
-            // mandar p ver se a peça q comeu é king, andar no captured e ver se é os nomes
         }
         return isMove
     }
@@ -123,6 +122,7 @@ export default class CreateGame {
     }
 
     updateStatusGame(colorMove){
+        this.verifyEndGame()
         this.checkMovementsAllPieces()
         const nextColor=(this.colorPieceBoard.top===colorMove)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
         this.updateStatusCheck(nextColor)
@@ -132,6 +132,14 @@ export default class CreateGame {
         this.colorPieceBoard.play=nextColor
     }
 
+    verifyEndGame(){
+        const kingWhite = this.capturedPiece.pieces["KingWhite"]
+        const kingBlack = this.capturedPiece.pieces["KingBlack"]
+        if(kingWhite||kingBlack){
+            this.statusGame.endGame=true
+            this.statusGame.winColor=(this.colorPieceBoard.top===this.colorPieceBoard.play)?this.colorPieceBoard.bottom:this.colorPieceBoard.top 
+        }
+    }
     updateSpecialMoves(nextColor){
         this.verifyRoque(nextColor)
         this.verifyEnPassant(nextColor)
