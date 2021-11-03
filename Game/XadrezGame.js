@@ -7,7 +7,9 @@ import possibleMovementKing from "./PossibleMovement/PossibleMovementKing.js"
 import possibleMovementPawn from "./PossibleMovement/PossibleMovementPawn.js"
 import defaultObjets from "./DefaultsObjects/DefaultObjets.js"
 import { refIdToArray } from "./utils.js"
-import createObjHistory from "./createObjHistory.js"
+import createObjHistory from "./PlayHistory/CreateObjHistory.js"
+import changePiecePosition from "./MovementPiece/ChangePiecePosition.js"
+import eatPiece from "./MovementPiece/EatPiece.js"
 
 export default class CreateGame {
     constructor(colorPlayers){
@@ -85,32 +87,11 @@ export default class CreateGame {
         if(isMove){
             const objHistory = createObjHistory.apply(this,[[informationPieceSelect],"movementPiece"])
             this.playHistory.setHistory(objHistory)
-            this.changePiecePosition(objOfMovedPiece,informationPieceSelect)
+            changePiecePosition.apply(this,[objOfMovedPiece,informationPieceSelect])
             this.updateStatusGame(objOfMovedPiece.color)
+            // mandar p ver se a peça q comeu é king, andar no captured e ver se é os nomes
         }
         return isMove
-    }
-
-    changePiecePosition(objOfMovedPiece,informationPiecetoMove){
-        const newRefId = informationPiecetoMove.refId
-        if(this.chessBoard.reference[newRefId]!==null){
-            this.eatPiece(this.chessBoard.reference[newRefId])
-        }
-        this.chessBoard.reference[objOfMovedPiece.position]=null
-        objOfMovedPiece.position=newRefId
-        objOfMovedPiece.qtMovements++
-        this.chessBoard.reference[newRefId]= objOfMovedPiece
-    }
-
-    eatPiece(objOfEatedPiece){
-        const nameCapturePiece = objOfEatedPiece.fullName
-        objOfEatedPiece.disablePiece()
-        objOfEatedPiece.deletePossibleSpecialMovements()
-        this.capturedPiece.pieces[nameCapturePiece]= objOfEatedPiece
-        if(nameCapturePiece==="KingWhite"||nameCapturePiece==="KingBlack"){
-            this.statusGame.endGame=true
-            this.statusGame.winColor=(this.colorPieceBoard.top===this.colorPieceBoard.play)?this.colorPieceBoard.bottom:this.colorPieceBoard.top 
-        }
     }
 
     setSpecialMovement(informationPieceToMove){
@@ -448,8 +429,8 @@ export default class CreateGame {
         const roque = "roque"
         const objHistory = createObjHistory.apply(this,[[informationPieceToMove,informationTowerMove],roque])
         this.playHistory.setHistory(objHistory)
-        this.changePiecePosition(this.specialMovement.roque.king,informationPieceToMove)
-        this.changePiecePosition(this.specialMovement.roque.tower[indice],informationTowerMove)
+        changePiecePosition.apply(this,[this.specialMovement.roque.king,informationPieceToMove])
+        changePiecePosition.apply(this,[this.specialMovement.roque.tower[indice],informationTowerMove])
     }
     
     verifyEnPassant(nextColor){
@@ -500,8 +481,8 @@ export default class CreateGame {
         const enPassant = "enPassant"
         const objHistory = createObjHistory.apply(this,[[informationPieceToMove],enPassant])
         this.playHistory.setHistory(objHistory)
-        this.changePiecePosition(this.specialMovement.enPassant.pawnInAtack,informationPieceToMove)
-        this.eatPiece(this.specialMovement.enPassant.pawnPossibleCapture)
+        changePiecePosition.apply(this,[this.specialMovement.enPassant.pawnInAtack,informationPieceToMove])
+        eatPiece(this.specialMovement.enPassant.pawnPossibleCapture)
         this.chessBoard.reference[this.specialMovement.enPassant.pawnPossibleCapture.position]=null
     }
 
@@ -563,7 +544,7 @@ export default class CreateGame {
     }
 
     changePiecePromotion(pawn,informationPawnToMove){
-        this.changePiecePosition(pawn,informationPawnToMove)
+        changePiecePosition.apply(this,[pawn,informationPawnToMove])
         this.piecesBoard.pieces[this.piecesPromotion.newPiece.fullName]=this.piecesPromotion.newPiece
         this.chessBoard.reference[this.piecesPromotion.newPiece.position]=this.piecesPromotion.newPiece
         this.piecesBoard.pieces[informationPawnToMove.fullName].isAtive=false
