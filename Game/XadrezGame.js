@@ -53,7 +53,7 @@ export default class CreateGame {
             const refColumn= (i%8+1)
             const keyChess = `ref${refColumn}${refLine}`
             const keyPieces = objStarBoard.namePiece[i] + this.colorPieceBoard.bottom 
-            const newPiece= new defaultObjets.ClassMakePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.bottom,objStarBoard.starPiecesWhite[i],keyChess,objStarBoard.functionPieces[i],this)
+            const newPiece= defaultObjets.factoryMakePiece.apply(this,[objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.bottom,objStarBoard.starPiecesWhite[i],keyChess,objStarBoard.functionPieces[i]])
             this.piecesBoard.addPieceOfRef(keyPieces,newPiece)
             this.chessBoard.reference[keyChess]= newPiece
         }
@@ -62,7 +62,7 @@ export default class CreateGame {
             const refLine= (8 - parseInt(i/8))
             const keyChess = `ref${refColumn}${refLine}`
             const keyPieces = objStarBoard.namePiece[i]+this.colorPieceBoard.top
-            const newPiece= new defaultObjets.ClassMakePiece(objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.top,objStarBoard.starPiecesBlack[i],keyChess, objStarBoard.functionPieces[i],this)
+            const newPiece= defaultObjets.factoryMakePiece.apply(this,[objStarBoard.namePiece[i],keyPieces,this.colorPieceBoard.top,objStarBoard.starPiecesBlack[i],keyChess, objStarBoard.functionPieces[i]])
             this.piecesBoard.addPieceOfRef(keyPieces,newPiece)
             this.chessBoard.reference[keyChess]= newPiece
         }
@@ -85,28 +85,28 @@ export default class CreateGame {
         if(isMove){
             const objHistory = createObjHistory.apply(this,[[informationPieceSelect],"movementPiece"])
             this.playHistory.setHistory(objHistory)
-            this.changePiecePosition(informationPieceSelect)
+            this.changePiecePosition(objOfMovedPiece,informationPieceSelect)
             this.updateStatusGame(objOfMovedPiece.color)
         }
         return isMove
     }
 
-    changePiecePosition(informationPiecetoMove){
-        const movePiece =this.piecesBoard.pieces[informationPiecetoMove.fullName]
+    changePiecePosition(objOfMovedPiece,informationPiecetoMove){
         const newRefId = informationPiecetoMove.refId
         if(this.chessBoard.reference[newRefId]!==null){
-            this.eatPiece(this.chessBoard.reference[newRefId].fullName)
+            this.eatPiece(this.chessBoard.reference[newRefId])
         }
-        this.chessBoard.reference[movePiece.position]=null
-        movePiece.position=newRefId
-        movePiece.qtMovements++
-        this.chessBoard.reference[newRefId]= movePiece
+        this.chessBoard.reference[objOfMovedPiece.position]=null
+        objOfMovedPiece.position=newRefId
+        objOfMovedPiece.qtMovements++
+        this.chessBoard.reference[newRefId]= objOfMovedPiece
     }
 
-    eatPiece(nameCapturePiece){
-        this.piecesBoard.pieces[nameCapturePiece].isAtive = false
-        this.piecesBoard.pieces[nameCapturePiece].refMovements=[]
-        this.capturedPiece.pieces[nameCapturePiece]= this.piecesBoard.pieces[nameCapturePiece]
+    eatPiece(objOfEatedPiece){
+        const nameCapturePiece = objOfEatedPiece.fullName
+        objOfEatedPiece.disablePiece()
+        objOfEatedPiece.deletePossibleSpecialMovements()
+        this.capturedPiece.pieces[nameCapturePiece]= objOfEatedPiece
         if(nameCapturePiece==="KingWhite"||nameCapturePiece==="KingBlack"){
             this.statusGame.endGame=true
             this.statusGame.winColor=(this.colorPieceBoard.top===this.colorPieceBoard.play)?this.colorPieceBoard.bottom:this.colorPieceBoard.top 
@@ -448,8 +448,8 @@ export default class CreateGame {
         const roque = "roque"
         const objHistory = createObjHistory.apply(this,[[informationPieceToMove,informationTowerMove],roque])
         this.playHistory.setHistory(objHistory)
-        this.changePiecePosition(informationPieceToMove)
-        this.changePiecePosition(informationTowerMove)
+        this.changePiecePosition(this.specialMovement.roque.king,informationPieceToMove)
+        this.changePiecePosition(this.specialMovement.roque.tower[indice],informationTowerMove)
     }
     
     verifyEnPassant(nextColor){
@@ -500,8 +500,8 @@ export default class CreateGame {
         const enPassant = "enPassant"
         const objHistory = createObjHistory.apply(this,[[informationPieceToMove],enPassant])
         this.playHistory.setHistory(objHistory)
-        this.changePiecePosition(informationPieceToMove)
-        this.eatPiece(this.specialMovement.enPassant.pawnPossibleCapture.fullName)
+        this.changePiecePosition(this.specialMovement.enPassant.pawnInAtack,informationPieceToMove)
+        this.eatPiece(this.specialMovement.enPassant.pawnPossibleCapture)
         this.chessBoard.reference[this.specialMovement.enPassant.pawnPossibleCapture.position]=null
     }
 
@@ -557,13 +557,13 @@ export default class CreateGame {
         const piecePromotion = "piecePromotion"
         const objHistory =createObjHistory.apply(this,[[informationPawnToMove,informationPiecePromotion],piecePromotion])
         this.playHistory.setHistory(objHistory)
-        this.changePiecePromotion(informationPawnToMove)
+        this.changePiecePromotion(pawn,informationPawnToMove)
         this.updateStatusGame(pawn.color)
 
     }
 
-    changePiecePromotion(informationPawnToMove){
-        this.changePiecePosition(informationPawnToMove)
+    changePiecePromotion(pawn,informationPawnToMove){
+        this.changePiecePosition(pawn,informationPawnToMove)
         this.piecesBoard.pieces[this.piecesPromotion.newPiece.fullName]=this.piecesPromotion.newPiece
         this.chessBoard.reference[this.piecesPromotion.newPiece.position]=this.piecesPromotion.newPiece
         this.piecesBoard.pieces[informationPawnToMove.fullName].isAtive=false
@@ -589,7 +589,7 @@ export default class CreateGame {
         const position = informationNewPiece.refId
         const functionPiece = chancePiece.functionPieces[indChangePiece]
         this.piecesPromotion[color].qtPiece[indChangePiece]++
-        this.piecesPromotion.newPiece= new defaultObjets.ClassMakePiece(namePiece,fullName,color,img,position,functionPiece,this)
+        this.piecesPromotion.newPiece= defaultObjets.factoryMakePiece.apply(this,[namePiece,fullName,color,img,position,functionPiece])
         this.piecesPromotion.newPiece.refMovements=changePawn.qtMovements
     }
 
