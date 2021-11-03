@@ -482,7 +482,7 @@ export default class CreateGame {
         const objHistory = createObjHistory.apply(this,[[informationPieceToMove],enPassant])
         this.playHistory.setHistory(objHistory)
         changePiecePosition.apply(this,[this.specialMovement.enPassant.pawnInAtack,informationPieceToMove])
-        eatPiece(this.specialMovement.enPassant.pawnPossibleCapture)
+        eatPiece(this.specialMovement.enPassant.pawnPossibleCapture,this.capturedPiece)
         this.chessBoard.reference[this.specialMovement.enPassant.pawnPossibleCapture.position]=null
     }
 

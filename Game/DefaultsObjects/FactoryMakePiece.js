@@ -20,10 +20,13 @@ export default function makePiece (name,fullName,color,img,position,functionPiec
         },
         addPossibleSpecialMovements:function(newMovements){
             this.possibleSpecialMovements.push(newMovements)}
-            ,
+        ,
         deletePossibleSpecialMovements:function(){
             this.possibleSpecialMovements=[]
-        }
+        },
+        changePosition:function(newPosition){
+            this.position= newPosition
+        },
     }
 }
 
