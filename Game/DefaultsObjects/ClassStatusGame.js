@@ -12,4 +12,8 @@ export default class StatusGame{
         this.endGame=false,
         this.winColor=null
     }
+    addEndGame(color){
+        this.endGame=true
+        this.winColor=color
+    }
 }
