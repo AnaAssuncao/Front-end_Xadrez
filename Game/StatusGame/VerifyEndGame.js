@@ -1,18 +1,18 @@
 function verifyEndGame(capturedPiece=this.capturedPiece){
     let winColor = null
-    let endGame = false
+    let isEndGame = false
     const kingWhite = capturedPiece.pieces["Kingwhite"]
     const kingBlack = capturedPiece.pieces["Kingblack"]
     if(kingWhite){
-        endGame = true
+        isEndGame = true
         winColor ="black"
     }
     if(kingBlack){
-        endGame = true
+        isEndGame = true
         winColor ="white"
     }
     return {
-        endGame,
+        isEndGame,
         winColor
     }
 }

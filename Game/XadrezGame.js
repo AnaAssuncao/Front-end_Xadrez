@@ -5,6 +5,7 @@ import { refIdToArray } from "./utils.js"
 import createObjHistory from "./PlayHistory/CreateObjHistory.js"
 import movementPieces from "./MakeMovements/index.js"
 import verifyEndGame from "./StatusGame/VerifyEndGame.js"
+import updateStatusCheck from "./StatusGame/UpdateStatusCheck.js"
 
 export default class CreateGame {
     constructor(colorPlayers){
@@ -84,11 +85,11 @@ export default class CreateGame {
 
     updateStatusGame(colorMove){
         const endGame = verifyEndGame(this.capturedPiece)
-        if(endGame){
+        if(endGame.isEndGame){
             this.statusGame.addEndGame(endGame.winColor)
         }
         const nextColor=(this.colorPieceBoard.top===colorMove)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
-        this.updateStatusCheck(nextColor)
+        updateStatusCheck.apply(this,[nextColor])
         this.verifyDrawGame(nextColor)
         this.colorPieceBoard.play=nextColor
     }
@@ -140,22 +141,7 @@ export default class CreateGame {
     }
 
 // Check and ChekMate
-    updateStatusCheck(color){
-        this.statusGame.checkKing.check=false
-        const nameKing =`King${color}` 
-        const checks=this.verifyCheck( this.piecesBoard.pieces[nameKing].position,color,nameKing)
 
-        if(checks.qt!==0){
-            this.statusGame.checkKing.refIdPathsToCheck = this.pathToCheck(nameKing,checks)
-            this.statusGame.checkKing.check=true
-            this.statusGame.checkKing.checkMate=this.checkMate(nameKing,color,checks)
-                if( this.statusGame.checkKing.checkMate===true){
-                    this.statusGame.endGame=true
-                    this.statusGame.winColor=(this.colorPieceBoard.top===color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
-                }
-        }
-    } 
- 
     verifyCheck(refIdKing,colorKing){
         let checks = {
             qt:0,
