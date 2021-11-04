@@ -4,6 +4,7 @@ import defaultObjets from "./DefaultsObjects/index.js"
 import { refIdToArray } from "./utils.js"
 import createObjHistory from "./PlayHistory/CreateObjHistory.js"
 import movementPieces from "./MakeMovements/index.js"
+import verifyEndGame from "./StatusGame/VerifyEndGame.js"
 
 export default class CreateGame {
     constructor(colorPlayers){
@@ -61,19 +62,9 @@ export default class CreateGame {
             this.piecesBoard.addPieceOfRef(keyPieces,newPiece)
             this.chessBoard.reference[keyChess]= newPiece
         }
-        this.checkMovementsAllPieces()
+        movementsPossibilities.updateAllMovements.apply(this)
     }
 
-    checkMovementsAllPieces(){
-        for(let namePiece in this.piecesBoard.pieces){
-            const piece =this.piecesBoard.pieces[namePiece]
-            if(piece.isAtive===true)
-                {
-                    piece.changePossibleMovements()
-                    piece.deletePossibleSpecialMovements()
-                }
-        }
-    }
 
     setMove(informationPieceSelect){
         const objOfMovedPiece = this.piecesBoard.pieces[informationPieceSelect.fullName]
@@ -82,9 +73,24 @@ export default class CreateGame {
             const objHistory = createObjHistory.apply(this,[[informationPieceSelect],"movementPiece"])
             this.playHistory.setHistory(objHistory)
             movementPieces.changePiecePosition.apply(this,[objOfMovedPiece,informationPieceSelect])
-            this.updateStatusGame(objOfMovedPiece.color)
+            movementsPossibilities.updateAllMovements.apply(this)
+           this.updateStatusGame(objOfMovedPiece.color)
+           const nextColor=(this.colorPieceBoard.top===objOfMovedPiece.color)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
+            this.updateSpecialMoves(nextColor)
+            this.updateFilterMovement(nextColor)
         }
         return isMove
+    }
+
+    updateStatusGame(colorMove){
+        const endGame = verifyEndGame(this.capturedPiece)
+        if(endGame){
+            this.statusGame.addEndGame(endGame.winColor)
+        }
+        const nextColor=(this.colorPieceBoard.top===colorMove)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
+        this.updateStatusCheck(nextColor)
+        this.verifyDrawGame(nextColor)
+        this.colorPieceBoard.play=nextColor
     }
 
     setSpecialMovement(informationPieceToMove){
@@ -93,7 +99,7 @@ export default class CreateGame {
             if(informationPieceToMove.fullName===this.specialMovement.roque.king.fullName){
                 if(this.specialMovement.roque.positionKingToRoque.includes(informationPieceToMove.refId)){
                     this.movementRoque(informationPieceToMove)
-                    this.updateStatusGame(piece.color)
+                   this.updateStatusGame(piece.color)
                     return true
                 } 
             }
@@ -101,39 +107,20 @@ export default class CreateGame {
         if(this.specialMovement.enPassant.isPossible===true){
             if(this.specialMovement.enPassant.refIdAtack===informationPieceToMove.refId){
                 this.movementEnPassant(informationPieceToMove)
-                this.updateStatusGame(piece.color)
+               this.updateStatusGame(piece.color)
                 return true
             }
         }
         if(this.specialMovement.pawnPromotion.isPossible===true){
             if(this.specialMovement.pawnPromotion.namesPawn.includes(informationPieceToMove.fullName)){
                 this.movementPawnPromotion(informationPieceToMove)
-                this.updateStatusGame(piece.color)
+               this.updateStatusGame(piece.color)
                 return true
             }
         }
         return false
     }
 
-    updateStatusGame(colorMove){
-        this.verifyEndGame()
-        this.checkMovementsAllPieces()
-        const nextColor=(this.colorPieceBoard.top===colorMove)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
-        this.updateStatusCheck(nextColor)
-        this.updateSpecialMoves(nextColor)
-        this.updateFilterMovement(nextColor)
-        this.verifyDrawGame(nextColor)
-        this.colorPieceBoard.play=nextColor
-    }
-
-    verifyEndGame(){
-        const kingWhite = this.capturedPiece.pieces["KingWhite"]
-        const kingBlack = this.capturedPiece.pieces["KingBlack"]
-        if(kingWhite||kingBlack){
-            this.statusGame.endGame=true
-            this.statusGame.winColor=(this.colorPieceBoard.top===this.colorPieceBoard.play)?this.colorPieceBoard.bottom:this.colorPieceBoard.top 
-        }
-    }
     updateSpecialMoves(nextColor){
         this.verifyRoque(nextColor)
         this.verifyEnPassant(nextColor)
@@ -340,7 +327,7 @@ export default class CreateGame {
         this.statusGame.checkKing.checkMate=false
         this.statusGame.winColor=null
         this.returnChangePiece( )
-        this.updateStatusGame(this.colorPieceBoard.play)
+       this.updateStatusGame(this.colorPieceBoard.play)
         this.colorPieceBoard.play=(this.colorPieceBoard.top===this.colorPieceBoard.play)?this.colorPieceBoard.bottom:this.colorPieceBoard.top
     }
 
@@ -541,7 +528,7 @@ export default class CreateGame {
         const objHistory =createObjHistory.apply(this,[[informationPawnToMove,informationPiecePromotion],piecePromotion])
         this.playHistory.setHistory(objHistory)
         this.changePiecePromotion(pawn,informationPawnToMove)
-        this.updateStatusGame(pawn.color)
+       this.updateStatusGame(pawn.color)
 
     }
 
