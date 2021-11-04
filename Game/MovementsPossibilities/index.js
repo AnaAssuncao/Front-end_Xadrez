@@ -4,6 +4,7 @@ import bishop from "./Bishop.js"
 import queen from "./Queen.js"
 import king from "./King.js"
 import pawn from "./Pawn.js"
+import updateAllMovements from "./UpdateAllMovements.js"
 
 export default {
     tower,
@@ -11,5 +12,6 @@ export default {
     bishop,
     queen,
     king,
-    pawn
+    pawn,
+    updateAllMovements
 }
