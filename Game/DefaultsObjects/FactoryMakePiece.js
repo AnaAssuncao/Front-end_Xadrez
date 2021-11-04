@@ -1,5 +1,23 @@
-const disablePiece=function(){
+function disablePiece(){
     this.isAtive=false
+}
+function changePossibleMovements(){
+    this.refMovements= this.functionPiece()
+}
+function addPossibleSpecialMovements(newMovements){
+    this.possibleSpecialMovements.push(newMovements)
+}
+function deletePossibleSpecialMovements(){
+    this.possibleSpecialMovements=[]
+}
+function changePosition(newPosition){
+    this.position= newPosition
+}
+function increaseQtMovements(){
+    this.qtMovements++
+}
+function decreaseQtMovements(){
+    this.qtMovements--
 }
 
 export default function makePiece (name,fullName,color,img,position,functionPiece,isAtive=true){
@@ -17,24 +35,12 @@ export default function makePiece (name,fullName,color,img,position,functionPiec
         refMovements:[],
         possibleSpecialMovements:[],
         disablePiece,
-        changePossibleMovements:function(){
-            this.refMovements= this.functionPiece()
-        },
-        addPossibleSpecialMovements:function(newMovements){
-            this.possibleSpecialMovements.push(newMovements)}
-        ,
-        deletePossibleSpecialMovements:function(){
-            this.possibleSpecialMovements=[]
-        },
-        changePosition:function(newPosition){
-            this.position= newPosition
-        },
-        increaseQtMovements:function(){
-            this.qtMovements++
-        },
-        decreaseQtMovements:function(){
-            this.qtMovements--
-        }
+        changePossibleMovements,
+        addPossibleSpecialMovements,
+        deletePossibleSpecialMovements,
+        changePosition,
+        increaseQtMovements,
+        decreaseQtMovements
     }
 }
 

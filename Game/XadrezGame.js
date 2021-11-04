@@ -65,11 +65,12 @@ export default class CreateGame {
     }
 
     checkMovementsAllPieces(){
-        for(let piece in this.piecesBoard.pieces){
-            if(this.piecesBoard.pieces[piece].isAtive===true)
+        for(let namePiece in this.piecesBoard.pieces){
+            const piece =this.piecesBoard.pieces[namePiece]
+            if(piece.isAtive===true)
                 {
-                    this.piecesBoard.pieces[piece].refMovements=this.piecesBoard.pieces[piece].functionPiece()
-                    this.piecesBoard.pieces[piece].possibleSpecialMovements=[]
+                    piece.changePossibleMovements()
+                    piece.deletePossibleSpecialMovements()
                 }
         }
     }
