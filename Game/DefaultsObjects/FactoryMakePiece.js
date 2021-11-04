@@ -1,5 +1,9 @@
+const disablePiece=function(){
+    this.isAtive=false
+}
 
 export default function makePiece (name,fullName,color,img,position,functionPiece,isAtive=true){
+
     return{
         __proto__:this,
         name:name,
@@ -12,9 +16,7 @@ export default function makePiece (name,fullName,color,img,position,functionPiec
         qtMovements:0,
         refMovements:[],
         possibleSpecialMovements:[],
-        disablePiece:function(){
-            this.isAtive=false
-        },
+        disablePiece,
         changePossibleMovements:function(){
             this.refMovements= this.functionPiece()
         },

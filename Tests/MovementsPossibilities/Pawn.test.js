@@ -1,4 +1,4 @@
-import possibleMovementPawn from "../../Game/PossibleMovement/PossibleMovementPawn.js"
+import possibleMovementPawn from "../../Game/MovementsPossibilities/Pawn.js"
 import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
 import ChessBoard from "../../Game/DefaultsObjects/ClassChessBoard.js"
 
@@ -11,7 +11,7 @@ describe("Possible Movement Pawn", ()=>{
         const refID = "ref12"
         pawn.changePosition(refID)
         chessBoard.addPieceOfRef(refID,pawn)
-        const possibleMovements = pawn.functionPiece(chessBoard.reference,bottomPieceColor)
+        const possibleMovements = pawn.functionPiece(chessBoard,bottomPieceColor)
         expect(possibleMovements).not.toEqual([])
 
         const refPossibleMovement = "ref13"
@@ -23,7 +23,7 @@ describe("Possible Movement Pawn", ()=>{
         const refID = "ref12"
         pawn.changePosition(refID)
         chessBoard.addPieceOfRef(refID,pawn)
-        const possibleMovements = pawn.functionPiece(chessBoard.reference,bottomPieceColor)
+        const possibleMovements = pawn.functionPiece(chessBoard,bottomPieceColor)
         const refPossibleMovement = "ref14"
         expect(possibleMovements).toContain(refPossibleMovement)    
 
@@ -36,7 +36,7 @@ describe("Possible Movement Pawn", ()=>{
         const refAdversaryPiece= "ref22"
         const adversaryPiece = makePiece("Pawn-Left","Pawn-black","black","pawnBlack",refAdversaryPiece,possibleMovementPawn)
         chessBoard.addPieceOfRef(refAdversaryPiece,adversaryPiece)
-        const possibleMovements = pawn.functionPiece(chessBoard.reference,bottomPieceColor)
+        const possibleMovements = pawn.functionPiece(chessBoard,bottomPieceColor)
         expect(possibleMovements).toContain(refAdversaryPiece)
 
         chessBoard.deletePieceOfRef(refID)
@@ -49,7 +49,7 @@ describe("Possible Movement Pawn", ()=>{
         const refAllyPiece= "ref12"
         const allyPiece = makePiece("Pawn-1","Pawn-1-white","white","Pawn-2White",refAllyPiece,possibleMovementPawn)
         chessBoard.addPieceOfRef(refAllyPiece,allyPiece)
-        const possibleMovements = pawn.functionPiece(chessBoard.reference,bottomPieceColor)
+        const possibleMovements = pawn.functionPiece(chessBoard,bottomPieceColor)
         expect(possibleMovements).toEqual([])
         
         chessBoard.deletePieceOfRef(refID)

@@ -1,4 +1,4 @@
-import possibleMovementKnight from "../../Game/PossibleMovement/PossibleMovementKnight.js"
+import possibleMovementKnight from "../../Game/MovementsPossibilities/Knight.js"
 import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
 import ChessBoard from "../../Game/DefaultsObjects/ClassChessBoard.js"
 
@@ -10,7 +10,7 @@ describe("Possible Movement Knight", ()=>{
         const refID = "ref44"
         knight.changePosition(refID)
         chessBoard.addPieceOfRef(refID,knight)
-        const possibleMovements = knight.functionPiece(chessBoard.reference)
+        const possibleMovements = knight.functionPiece(chessBoard)
         expect(possibleMovements).not.toEqual([])
 
         const refPossibleMovement = "ref25"
@@ -25,7 +25,7 @@ describe("Possible Movement Knight", ()=>{
         const refAdversaryPiece= "ref23"
         const adversaryPiece = makePiece("Knight-Left","Knight-black","black","knightBlack",refAdversaryPiece,possibleMovementKnight)
         chessBoard.addPieceOfRef(refAdversaryPiece,adversaryPiece)
-        const possibleMovements = knight.functionPiece(chessBoard.reference)
+        const possibleMovements = knight.functionPiece(chessBoard)
         expect(possibleMovements).toContain(refAdversaryPiece)
 
         chessBoard.deletePieceOfRef(refID)
@@ -40,7 +40,7 @@ describe("Possible Movement Knight", ()=>{
         refAllyPiece.forEach((refIdAlly)=>{
             chessBoard.addPieceOfRef(refIdAlly,allyPiece)
         })
-        const possibleMovements = knight.functionPiece(chessBoard.reference)
+        const possibleMovements = knight.functionPiece(chessBoard)
         expect(possibleMovements).toEqual([])
 
         chessBoard.deletePieceOfRef(refID)

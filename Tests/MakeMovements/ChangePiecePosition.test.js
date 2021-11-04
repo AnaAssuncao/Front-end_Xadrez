@@ -1,4 +1,4 @@
-import changePiecePosition from "../../Game/MovementPiece/ChangePiecePosition.js"
+import changePiecePosition from "../../Game/MakeMovements/ChangePiecePosition.js"
 import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
 import ClassChessBoard from "../../Game/DefaultsObjects/ClassChessBoard.js"
 import ClassCapturedPiece from "../../Game/DefaultsObjects/ClassCapturedPiece.js"

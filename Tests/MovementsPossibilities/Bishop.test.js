@@ -1,4 +1,4 @@
-import possibleMovementBishop from "../../Game/PossibleMovement/PossibleMovementBishop.js"
+import possibleMovementBishop from "../../Game/MovementsPossibilities/Bishop.js"
 import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
 import ChessBoard from "../../Game/DefaultsObjects/ClassChessBoard.js"
 
@@ -10,7 +10,7 @@ describe("Possible Movement Bishop", ()=>{
         const refID = "ref44"
         bishop.changePosition(refID)
         chessBoard.addPieceOfRef(refID,bishop)
-        const possibleMovements = bishop.functionPiece(chessBoard.reference)
+        const possibleMovements = bishop.functionPiece(chessBoard)
         expect(possibleMovements).not.toEqual([])
 
         const refPossibleMovement = "ref77"
@@ -25,7 +25,7 @@ describe("Possible Movement Bishop", ()=>{
         const refAdversaryPiece= "ref22"
         const adversaryPiece = makePiece("Bishop-Left","Bishop-black","black","bishopBlack",refAdversaryPiece,possibleMovementBishop)
         chessBoard.addPieceOfRef(refAdversaryPiece,adversaryPiece)
-        const possibleMovements = bishop.functionPiece(chessBoard.reference)
+        const possibleMovements = bishop.functionPiece(chessBoard)
         expect(possibleMovements).toContain(refAdversaryPiece)
 
         chessBoard.deletePieceOfRef(refID)
@@ -38,7 +38,7 @@ describe("Possible Movement Bishop", ()=>{
         const refAllyPiece= "ref22"
         const allyPiece = makePiece("Pawn-1","Pawn-1-white","white","Pawn-2White",refAllyPiece,possibleMovementBishop)
         chessBoard.addPieceOfRef(refAllyPiece,allyPiece)
-        const possibleMovements = bishop.functionPiece(chessBoard.reference)
+        const possibleMovements = bishop.functionPiece(chessBoard)
         expect(possibleMovements).toEqual([])
         
         chessBoard.deletePieceOfRef(refID)

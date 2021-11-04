@@ -1,4 +1,4 @@
-import eatPiece from "../../Game/MovementPiece/EatPiece.js"
+import eatPiece from "../../Game/MakeMovements/EatPiece.js"
 import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
 import ClassCapturedPiece from "../../Game/DefaultsObjects/ClassCapturedPiece.js"
 

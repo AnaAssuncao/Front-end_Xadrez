@@ -4,10 +4,10 @@ const checkRegularMovement = ([column,line], columnPosition, linePosition, color
     const possibleDirection = []
     for(let limit = 1; possibleColumn>=1 && possibleColumn<=8 && possibleLine>=1 && possibleLine<=8 && limit<=maximumPaces;limit++){
         const position = `ref${possibleColumn}${possibleLine}`
-        if(chessBoard[position]==null){
+        if(chessBoard.reference[position]==null){
             possibleDirection.push(position)
         }
-        else if(chessBoard[position].color!==color){
+        else if(chessBoard.reference[position].color!==color){
             possibleDirection.push(position)
             break
         }
