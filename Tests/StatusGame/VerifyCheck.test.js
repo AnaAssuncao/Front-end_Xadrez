@@ -1,4 +1,4 @@
-import verifyCheck from "../../Game/UpdateStatusGame/verifyCheck.js"
+import verifyCheck from "../../Game/UpdateStatusGame/VerifyCheck.js"
 import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
 import ClassPiecesBoard from "../../Game/DefaultsObjects/ClassPiecesBoard.js"
 
@@ -13,7 +13,7 @@ const king = makePiece("King","Kingwhite","white","kingWhite",refIdKing,possible
 piecesBoard.addPieceOfRef("kingWhite",king)
 king.changePosition(refIdKing)
 
-describe("verify Check", ()=>{
+describe("Verify Check", ()=>{
     test("No Should return check",()=>{
         bishop.changePosition("ref21")
         bishop.refMovements=["ref33"]

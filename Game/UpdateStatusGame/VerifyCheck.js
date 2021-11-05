@@ -1,4 +1,4 @@
-import {movementsPieceAdversity} from "./utils.js"
+import {movementsPieceAdversity} from "../utils.js"
 
 function verifyCheck(refIdKing,colorKing,piecesBoard=this.piecesBoard){
     let checks = {
