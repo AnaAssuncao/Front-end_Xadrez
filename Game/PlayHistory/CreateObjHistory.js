@@ -7,19 +7,19 @@ function createObjHistory(arrayPiece,typeMovement,chessBoard=this.chessBoard,pie
     }
     arrayPiece.forEach(piece=> {
         if( piecesBoard.pieces[piece.fullName]){
-            movement.piecesPlayed.push({
+            movement.piecesPlayed.push({__proto__:this,
                 ... piecesBoard.pieces[piece.fullName]})   
             if(chessBoard.reference[piece.refId]!==null){
-                movement.pieceCaptured={
+                movement.pieceCaptured={__proto__:this,
                     ... piecesBoard.pieces[chessBoard.reference[piece.refId].fullName]}
             }
             if(typeMovement==="enPassant"){
-                movement.pieceCaptured={
+                movement.pieceCaptured={__proto__:this,
                     ... piecesBoard.pieces[specialMovement.enPassant.pawnPossibleCapture.fullName]}
             }
         }
         else if(typeMovement==="piecePromotion" ){
-            movement.piecesPlayed.push({
+            movement.piecesPlayed.push({__proto__:this,
                  ...piecesPromotion.newPiece})
         }
         movement.newRefId.push(piece.refId)
