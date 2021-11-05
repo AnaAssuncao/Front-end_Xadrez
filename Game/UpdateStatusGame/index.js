@@ -2,7 +2,6 @@ import verifyEndGame from "./VerifyEndGame.js"
 import updateStatusCheck from "./UpdateStatusCheck.js"
 import verifyCheck from "./VerifyCheck.js"
 import verifyCheckMate from "./VerifyCheckMate.js"
-import {newFakeChessBoard, verifyCheckInFakeBoard} from "./FakeChessBoard.js"
 
 function verifyStatusGame(colorMove,statusGame=this.statusGame,capturedPiece=this.capturedPiece,colorPieceBoard=this.colorPieceBoard){
     const endGame = verifyEndGame(capturedPiece)
@@ -21,6 +20,4 @@ export default {
     updateStatusCheck,
     verifyCheck,
     verifyCheckMate,
-    verifyCheckInFakeBoard,
-    newFakeChessBoard
 }

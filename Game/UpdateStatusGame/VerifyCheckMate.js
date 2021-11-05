@@ -1,11 +1,11 @@
-import {verifyCheckInFakeBoard,newFakeChessBoard} from "./FakeChessBoard.js"
+import {verifyCheckInFakeBoard,newFakeBoard} from "../FakeChessBoard/index.js"
 
 function verifyCheckMate(nameKing,colorKing,checks,chessBoard=this.chessBoard,piecesBoard=this.piecesBoard, statusGame=this.statusGame){
     const positionInitialKing = piecesBoard.pieces[nameKing].position
     for(let i=0;i< piecesBoard.pieces[nameKing].refMovements.length;i++){
         const refIdInitialKing= piecesBoard.pieces[nameKing].position
         const newRefIdKing = piecesBoard.pieces[nameKing].refMovements[i]
-        const fakeChessBoard = newFakeChessBoard(refIdInitialKing,newRefIdKing,chessBoard) //FALSO CHESSBOARD PARA CONFERÊNCIA DO REI
+        const fakeChessBoard = newFakeBoard(refIdInitialKing,newRefIdKing,chessBoard) //FALSO CHESSBOARD PARA CONFERÊNCIA DO REI
         if(verifyCheckInFakeBoard(fakeChessBoard,newRefIdKing,colorKing) === false){//se na nova refId do rei não tem check, não há checkMate
             return false 
         }
@@ -18,7 +18,7 @@ function verifyCheckMate(nameKing,colorKing,checks,chessBoard=this.chessBoard,pi
                 for(let refMovementFriend of chessBoard.reference[refId].refMovements){
                     for(let refIdPossiblePath of statusGame.checkKing.refIdPathsToCheck){
                         if(refMovementFriend===refIdPossiblePath){
-                            const fakeChessBoard = newFakeChessBoard(refId,refMovementFriend,chessBoard)
+                            const fakeChessBoard = newFakeBoard(refId,refMovementFriend,chessBoard)
                             if(verifyCheckInFakeBoard(fakeChessBoard,positionInitialKing,colorKing) === false){//se na nova refId do rei não tem check, não há checkMate
                                 return false 
                             }
