@@ -1,7 +1,10 @@
 function disablePiece(){
     this.isAtive=false
 }
-function changePossibleMovements(){
+function changeMovementsPossibilities(newRefMovements){
+    this.refMovements= newRefMovements
+}
+function updateMovementsPossibilities(){
     this.refMovements= this.functionPiece()
 }
 function addPossibleSpecialMovements(newMovements){
@@ -35,7 +38,8 @@ export default function makePiece (name,fullName,color,img,position,functionPiec
         refMovements:[],
         possibleSpecialMovements:[],
         disablePiece,
-        changePossibleMovements,
+        changeMovementsPossibilities,
+        updateMovementsPossibilities,
         addPossibleSpecialMovements,
         deletePossibleSpecialMovements,
         changePosition,
