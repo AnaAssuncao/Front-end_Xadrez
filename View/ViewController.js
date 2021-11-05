@@ -132,7 +132,6 @@ export default function ViewController(startBoard){
     const statusGame={
         updateCheck:function(msgCheck, check = false){
             if(check){
-                debugger
                 view.informationGame.addinformation(msgCheck)
             }
             else{
