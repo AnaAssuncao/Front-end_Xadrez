@@ -14,24 +14,24 @@ piecesBoard.addPieceOfRef(nameKing,king)
 king.changePosition(refIdKing)
 chessBoard.addPieceOfRef(refIdKing,king)
 
-let refIdBishop = "ref11"
-const bishop = makePiece.apply({chessBoard},["Bishop-Left","Bishop-Leftblack","black","bishopBlack",refIdBishop,movementsPossibilities.bishop])
-piecesBoard.addPieceOfRef("Bishop-Leftblack",bishop)
-chessBoard.addPieceOfRef(refIdBishop,bishop)
+let refIdAdversary= "ref11"
+const pieceAdversary = makePiece.apply({chessBoard},["Bishop-Left","Bishop-Leftblack","black","bishopBlack",refIdAdversary,movementsPossibilities.bishop])
+piecesBoard.addPieceOfRef("Bishop-Leftblack",pieceAdversary)
+chessBoard.addPieceOfRef(refIdAdversary,pieceAdversary)
 
 describe("Assistant King", ()=>{
-    test("No Should have assistant ",()=>{
-        refIdBishop = "ref15"
-        bishop.changePosition(refIdBishop)
+    test("No Should have assistance ",()=>{
+        refIdAdversary = "ref15"
+        pieceAdversary.changePosition(refIdAdversary)
         movementsPossibilities.updateAllMovements(piecesBoard)
         assistantKing(colorKing,chessBoard,piecesBoard)
         const movementsKing = ["ref27", "ref17", "ref28"]
         expect(king.refMovements).toEqual(movementsKing)
     })
     
-    test("Should have assistant",()=>{
-        refIdBishop = "ref26"
-        bishop.changePosition(refIdBishop)
+    test("Should have assistance",()=>{
+        refIdAdversary = "ref26"
+        pieceAdversary.changePosition(refIdAdversary)
         movementsPossibilities.updateAllMovements(piecesBoard)
         assistantKing(colorKing,chessBoard,piecesBoard)
         const movementsKing = ["ref27", "ref28"]
