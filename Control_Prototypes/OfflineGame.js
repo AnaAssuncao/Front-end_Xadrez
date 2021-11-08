@@ -49,7 +49,7 @@ export default class OfflineGame extends GenericGame{
                 this.countGameTime()
                 this.countMovementTime()
 
-            this.gameLogic.returnMovement()
+            this.gameLogic.setReturnMovement()
             const pastColor=this.changeNextColor()
             const statusGame = this.gameLogic.getStatusGame() 
             if(statusGame.endGame===false){
