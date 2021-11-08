@@ -8,10 +8,10 @@ function verifyStatusGame(colorMove,statusGame=this.statusGame,capturedPiece=thi
     if(endGame.isEndGame){
         statusGame.addEndGame(endGame.winColor)
     }
-    const nextColor=(colorPieceBoard.top===colorMove)?colorPieceBoard.bottom:colorPieceBoard.top
-    updateStatusCheck.apply(this,[nextColor])
-    this.verifyDrawGame(nextColor)
-    this.colorPieceBoard.play=nextColor
+    statusGame.changeColorPlay()
+    updateStatusCheck.apply(this,[this.statusGame.colorPieces.play])
+    this.verifyDrawGame(this.statusGame.colorPieces.play)
+    
 }
 
 export default {
@@ -19,5 +19,5 @@ export default {
     verifyEndGame,
     updateStatusCheck,
     verifyCheck,
-    verifyCheckMate,
+    verifyCheckMate
 }
