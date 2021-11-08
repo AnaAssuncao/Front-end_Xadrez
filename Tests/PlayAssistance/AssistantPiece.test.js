@@ -14,13 +14,13 @@ piecesBoard.addPieceOfRef(nameKing,king)
 king.changePosition(refIdKing)
 chessBoard.addPieceOfRef(refIdKing,king)
 
-let refIdBishop = "ref27"
+const refIdBishop = "ref27"
 const bishop = makePiece.apply({chessBoard},["Bishop-Left","Bishop-Leftwhite","white","bishopWhite",refIdBishop,movementsPossibilities.bishop])
 piecesBoard.addPieceOfRef("Bishop-Leftwhite",bishop)
 chessBoard.addPieceOfRef(refIdBishop,bishop)
 
-let  refIdAdversary= "ref45"
-const pieceAdversary = makePiece.apply({chessBoard},["Bishop-Left","Bishop-Leftblack","black","bishopBlack",refIdBishop,movementsPossibilities.bishop])
+const  refIdAdversary= "ref45"
+const pieceAdversary = makePiece.apply({chessBoard},["Bishop-Left","Bishop-Leftblack","black","bishopBlack",refIdAdversary,movementsPossibilities.bishop])
 piecesBoard.addPieceOfRef("Bishop-Leftblack",pieceAdversary)
 chessBoard.addPieceOfRef(refIdAdversary,pieceAdversary)
 
