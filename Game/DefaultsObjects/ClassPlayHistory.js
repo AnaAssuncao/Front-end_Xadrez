@@ -5,4 +5,7 @@ export default class PlayHistory{
     setHistory(history){
         this.history.push(history)
     }
+    deleteLastHistory(){
+        this.history.pop()  
+    }
 }
