@@ -9,7 +9,7 @@ function checkAssistance(assistantPieceColor,chessBoard=this.chessBoard,piecesBo
     const arrayNamesPieces = Object.keys(piecesBoard.pieces)
     arrayNamesPieces.forEach((namePiece)=>{
         if((assistantPieceColor=== piecesBoard.pieces[namePiece].color)&&( piecesBoard.pieces[namePiece].isAtive===true)&&(namePiece!==nameKing)){
-            piecesBoard.pieces[namePiece].refMovements= piecesBoard.pieces[namePiece].refMovements.reduce((possibleMovementPiece,refIdpiece)=>{
+            const refMovements= piecesBoard.pieces[namePiece].refMovements.reduce((possibleMovementPiece,refIdpiece)=>{
                 for(let refIdPossiblePath of statusGame.checkKing.refIdPathsToCheck){
                     if(refIdPossiblePath===refIdpiece){
                         const fakeChessBoard = newFakeBoard( piecesBoard.pieces[namePiece].position,refIdpiece,chessBoard)
@@ -20,6 +20,7 @@ function checkAssistance(assistantPieceColor,chessBoard=this.chessBoard,piecesBo
                 }
                 return possibleMovementPiece
             },[])
+            piecesBoard.pieces[namePiece].changeMovementsPossibilities(refMovements)
         }
     })
 }   
