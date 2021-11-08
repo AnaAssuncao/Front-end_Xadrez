@@ -1,3 +1,6 @@
+function enablePiece(){
+    this.isAtive=true
+}
 function disablePiece(){
     this.isAtive=false
 }
@@ -37,6 +40,7 @@ export default function makePiece (name,fullName,color,img,position,functionPiec
         qtMovements:0,
         refMovements:[],
         possibleSpecialMovements:[],
+        enablePiece,
         disablePiece,
         changeMovementsPossibilities,
         updateMovementsPossibilities,
