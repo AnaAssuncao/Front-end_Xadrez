@@ -3,9 +3,13 @@ import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
 import defaultsObjects from "../../Game/DefaultsObjects/index.js"
 import movementsPossibilities from "../../Game/MovementsPossibilities/index.js"
 
+const color={
+    top:"white",
+    bottom:"black"
+}
 const chessBoard = new defaultsObjects.ClassChessBoard()
 const piecesBoard = new defaultsObjects.ClassPiecesBoard()
-const statusGame = new defaultsObjects.ClassStatusGame()
+const statusGame = new defaultsObjects.ClassStatusGame(color)
 
 const nameKing = "Kingwhite"
 const colorKing = "white"
