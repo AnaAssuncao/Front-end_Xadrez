@@ -4,8 +4,8 @@ import defaultsObjects from "../../Game/DefaultsObjects/index.js"
 import movementsPossibilities from "../../Game/MovementsPossibilities/index.js"
 
 const color={
-    top:"white",
-    bottom:"black"
+    top:"black",
+    bottom:"white"
 }
 const chessBoard = new defaultsObjects.ClassChessBoard()
 const piecesBoard = new defaultsObjects.ClassPiecesBoard()

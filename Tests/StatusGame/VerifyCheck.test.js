@@ -1,15 +1,14 @@
 import verifyCheck from "../../Game/UpdateStatusGame/VerifyCheck.js"
-import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
-import ClassPiecesBoard from "../../Game/DefaultsObjects/ClassPiecesBoard.js"
+import defaultsObjects from "../../Game/DefaultsObjects/index.js"
 
-const piecesBoard = new ClassPiecesBoard ()
+const piecesBoard = new defaultsObjects.ClassPiecesBoard ()
 const possibleMovement = ()=>{}
 
 const refIdKing = "ref11"
 const colorKing = "white"
-const bishop = makePiece("Bishop-Left","Bishop-Leftblack","black","bishopBlack","ref11",possibleMovement)
+const bishop = defaultsObjects.factoryMakePiece("Bishop-Left","Bishop-Leftblack","black","bishopBlack","ref11",possibleMovement)
 piecesBoard.addPieceOfRef("Bishop-Leftblack",bishop)
-const king = makePiece("King","Kingwhite","white","kingWhite",refIdKing,possibleMovement)
+const king = defaultsObjects.factoryMakePiece("King","Kingwhite","white","kingWhite",refIdKing,possibleMovement)
 piecesBoard.addPieceOfRef("kingWhite",king)
 king.changePosition(refIdKing)
 

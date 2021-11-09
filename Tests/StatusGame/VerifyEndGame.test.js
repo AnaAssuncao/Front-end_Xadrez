@@ -1,14 +1,12 @@
 import verifyEndGame from "../../Game/UpdateStatusGame/VerifyEndGame.js"
-import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
-import ClassCapturedPiece from "../../Game/DefaultsObjects/ClassCapturedPiece.js"
+import defaultsObjects from "../../Game/DefaultsObjects/index.js"
 
-const capturedPiece = new ClassCapturedPiece ()
+const capturedPiece = new defaultsObjects.ClassCapturedPiece ()
 const possibleMovement = ()=>{}
-
 
 describe("Verify End Game", ()=>{
     test("No Should return End Game",()=>{
-        const bishop = makePiece("Bishop-Left","Bishop-Leftwhite","white","bishopWhite","ref11",possibleMovement)
+        const bishop = defaultsObjects.factoryMakePiece("Bishop-Left","Bishop-Leftwhite","white","bishopWhite","ref11",possibleMovement)
         capturedPiece.addCapturedPiece("Bishop-Leftwhite",bishop)
         const endGame = verifyEndGame(capturedPiece)
         expect(endGame).toEqual({
@@ -18,7 +16,7 @@ describe("Verify End Game", ()=>{
     })
     
     test("Should return End Game",()=>{
-        const king = makePiece("King","Kingwhite","white","kingWhite","ref11",possibleMovement)
+        const king = defaultsObjects.factoryMakePiece("King","Kingwhite","white","kingWhite","ref11",possibleMovement)
         capturedPiece.addCapturedPiece("Kingwhite",king)
         const endGame = verifyEndGame(capturedPiece)
         expect(endGame).toEqual({

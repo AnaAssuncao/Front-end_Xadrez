@@ -1,5 +1,4 @@
 import pathToCheck from "../../Game/UpdateStatusGame/PathToCheck.js"
-import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
 import defaultsObjects from "../../Game/DefaultsObjects/index.js"
 import movementsPossibilities from "../../Game/MovementsPossibilities/index.js"
 
@@ -8,11 +7,11 @@ const piecesBoard = new defaultsObjects.ClassPiecesBoard()
 
 const nameKing = "Kingwhite"
 const refIdKing = "ref11"
-const king = makePiece.apply({chessBoard},["King",nameKing,"white","kingWhite",refIdKing,movementsPossibilities.king])
+const king = defaultsObjects.factoryMakePiece.apply({chessBoard},["King",nameKing,"white","kingWhite",refIdKing,movementsPossibilities.king])
 piecesBoard.addPieceOfRef(nameKing,king)
 king.changePosition(refIdKing)
 const nameBishop= "Bishop-Leftblack"
-const bishop = makePiece.apply({chessBoard},["Bishop-Left",nameBishop,"black","bishopBlack","ref11",movementsPossibilities.bishop])
+const bishop = defaultsObjects.factoryMakePiece.apply({chessBoard},["Bishop-Left",nameBishop,"black","bishopBlack","ref11",movementsPossibilities.bishop])
 piecesBoard.addPieceOfRef(nameBishop,bishop)
 movementsPossibilities.updateAllMovements(piecesBoard)
 

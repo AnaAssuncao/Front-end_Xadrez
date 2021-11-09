@@ -1,14 +1,12 @@
 import changePiecePosition from "../../Game/MakeMovements/ChangePiecePosition.js"
-import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
-import ClassChessBoard from "../../Game/DefaultsObjects/ClassChessBoard.js"
-import ClassCapturedPiece from "../../Game/DefaultsObjects/ClassCapturedPiece.js"
+import defaultsObjects from "../../Game/DefaultsObjects/index.js"
 
-const chessBoard = new ClassChessBoard ()
-const capturedPiece = new ClassCapturedPiece ()
+const chessBoard = new defaultsObjects.ClassChessBoard()
+const capturedPiece = new defaultsObjects.ClassCapturedPiece ()
 const refID = "ref12"
 const fullNamePiece = "Pawn-1white"
 const possibleMovement = () => {}
-const pawn = makePiece("Pawn-1",fullNamePiece,"white","pawn-1White",refID,possibleMovement)
+const pawn = defaultsObjects.factoryMakePiece("Pawn-1",fullNamePiece,"white","pawn-1White",refID,possibleMovement)
 chessBoard.addPieceOfRef(refID,pawn)
 
 describe("Change Piece Position", ()=>{

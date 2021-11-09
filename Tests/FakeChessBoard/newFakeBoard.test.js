@@ -1,5 +1,4 @@
 import {newFakeBoard} from "../../Game/FakeChessBoard/index.js"
-import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
 import defaultsObjects from "../../Game/DefaultsObjects/index.js"
 import movementsPossibilities from "../../Game/MovementsPossibilities/index.js"
 
@@ -9,7 +8,7 @@ const piecesBoard = new defaultsObjects.ClassPiecesBoard()
 const nameKing = "Kingwhite"
 const colorKing = "white"
 const refIdKing = "ref18"
-const king = makePiece.apply({chessBoard},["King",nameKing,"white","kingWhite",refIdKing,movementsPossibilities.king])
+const king = defaultsObjects.factoryMakePiece.apply({chessBoard},["King",nameKing,"white","kingWhite",refIdKing,movementsPossibilities.king])
 piecesBoard.addPieceOfRef(nameKing,king)
 king.changePosition(refIdKing)
 chessBoard.addPieceOfRef(refIdKing,king)

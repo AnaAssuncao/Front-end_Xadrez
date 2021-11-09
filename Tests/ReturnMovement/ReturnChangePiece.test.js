@@ -1,5 +1,4 @@
 import returnChangePiece from "../../Game/ReturnMovement/ReturnChangePiece.js"
-import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
 import defaultsObjects from "../../Game/DefaultsObjects/index.js"
 import movementsPossibilities from "../../Game/MovementsPossibilities/index.js"
 
@@ -10,7 +9,7 @@ const capturedPiece = new defaultsObjects.ClassCapturedPiece ()
 
 const nameKing = "Kingwhite"
 const lastRefKing = 'ref11'
-const lastKing = makePiece.apply({chessBoard},["King",nameKing,"white","kingWhite",lastRefKing,movementsPossibilities.king])
+const lastKing = defaultsObjects.factoryMakePiece.apply({chessBoard},["King",nameKing,"white","kingWhite",lastRefKing,movementsPossibilities.king])
 piecesBoard.addPieceOfRef(nameKing,lastKing)
 lastKing.changePosition(lastRefKing)
 chessBoard.addPieceOfRef(lastRefKing,lastKing)

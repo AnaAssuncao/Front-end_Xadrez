@@ -1,19 +1,15 @@
 import createObjHistory from "../../Game/PlayHistory/CreateObjHistory.js"
-import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
-import ClassChessBoard from "../../Game/DefaultsObjects/ClassChessBoard.js"
-import ClassPiecesBoard from "../../Game/DefaultsObjects/ClassPiecesBoard.js"
-import ClassSpecialMovement from "../../Game/DefaultsObjects/ClassSpecialMovement.js"
-import ClassPiecesPromotion from "../../Game/DefaultsObjects/ClassPiecesPromotion.js"
+import defaultsObjects from "../../Game/DefaultsObjects/index.js"
 
-const chessBoard = new ClassChessBoard()
-const piecesBoard = new ClassPiecesBoard()
-const specialMovement = new ClassSpecialMovement()
-const piecesPromotion = new ClassPiecesPromotion()
+const chessBoard = new defaultsObjects.ClassChessBoard()
+const piecesBoard = new defaultsObjects.ClassPiecesBoard()
+const specialMovement = new defaultsObjects.ClassSpecialMovement()
+const piecesPromotion = new defaultsObjects.ClassPiecesPromotion()
 const possibleMovement = ()=>{}
 
 const refID = "ref12"
 const fullNamePiece = "Pawnwhite"
-const pawn = makePiece("Pawn-1",fullNamePiece,"white","pawn-1White",refID,possibleMovement)
+const pawn = defaultsObjects.factoryMakePiece("Pawn-1",fullNamePiece,"white","pawn-1White",refID,possibleMovement)
 chessBoard.addPieceOfRef(refID,pawn)
 piecesBoard.addPieceOfRef(fullNamePiece,pawn)
 
@@ -48,7 +44,7 @@ describe("Create Obj History", ()=>{
             refId: refAdversaryPiece,
             specialMovement: false,
             typeMovement:typeMovement}
-        const adversaryPiece = makePiece("Pawn-Left","Pawn-black","black","pawnBlack",refAdversaryPiece,possibleMovement)
+        const adversaryPiece = defaultsObjects.factoryMakePiece("Pawn-Left","Pawn-black","black","pawnBlack",refAdversaryPiece,possibleMovement)
         chessBoard.addPieceOfRef(refAdversaryPiece,adversaryPiece)
 
         const arrayPiece=[informationPieceSelect]

@@ -1,11 +1,10 @@
 import eatPiece from "../../Game/MakeMovements/EatPiece.js"
-import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
-import ClassCapturedPiece from "../../Game/DefaultsObjects/ClassCapturedPiece.js"
+import defaultsObjects from "../../Game/DefaultsObjects/index.js"
 
-const capturedPiece = new ClassCapturedPiece ()
+const capturedPiece = new defaultsObjects.ClassCapturedPiece ()
 const possibleMovement = ()=>{}
 const fullName = "Kingwhite"
-const king = makePiece("King",fullName,"white","kingWhite","ref11",possibleMovement)
+const king = defaultsObjects.factoryMakePiece("King",fullName,"white","kingWhite","ref11",possibleMovement)
 
 describe("Change Piece Position", ()=>{
     test("Should captured piece",()=>{

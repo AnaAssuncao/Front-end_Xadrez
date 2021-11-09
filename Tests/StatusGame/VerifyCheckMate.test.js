@@ -1,11 +1,10 @@
 import verifyCheckMate from "../../Game/UpdateStatusGame/VerifyCheckMate.js"
-import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
 import defaultsObjects from "../../Game/DefaultsObjects/index.js"
 import movementsPossibilities from "../../Game/MovementsPossibilities/index.js"
 
 const color={
-    top:"white",
-    bottom:"black"
+    top:"black",
+    bottom:"white"
 }
 const chessBoard = new defaultsObjects.ClassChessBoard()
 const piecesBoard = new defaultsObjects.ClassPiecesBoard()
@@ -14,11 +13,11 @@ const statusGame = new defaultsObjects.ClassStatusGame(color)
 const nameKing = "Kingwhite"
 const colorKing = "white"
 const refIdKing = "ref18"
-const queen1Black = makePiece.apply({chessBoard},["Queen","Queen-1black","black","queenBlack","ref26",movementsPossibilities.queen])
+const queen1Black = defaultsObjects.factoryMakePiece.apply({chessBoard},["Queen","Queen-1black","black","queenBlack","ref26",movementsPossibilities.queen])
 piecesBoard.addPieceOfRef("Queenblack",queen1Black)
-const queen2Black = makePiece.apply({chessBoard},["Queen","Queen-2black","black","queenBlack","ref26",movementsPossibilities.queen])
+const queen2Black = defaultsObjects.factoryMakePiece.apply({chessBoard},["Queen","Queen-2black","black","queenBlack","ref26",movementsPossibilities.queen])
 piecesBoard.addPieceOfRef("Queenblack",queen2Black)
-const king = makePiece.apply({chessBoard},["King",nameKing,"white","kingWhite",refIdKing,movementsPossibilities.king])
+const king = defaultsObjects.factoryMakePiece.apply({chessBoard},["King",nameKing,"white","kingWhite",refIdKing,movementsPossibilities.king])
 piecesBoard.addPieceOfRef(nameKing,king)
 statusGame.checkKing.refIdPathsToCheck=[refIdKing,"ref17","ref27","ref28"]
 king.changePosition(refIdKing)

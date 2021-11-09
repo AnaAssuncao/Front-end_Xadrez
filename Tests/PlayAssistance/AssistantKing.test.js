@@ -1,5 +1,4 @@
 import assistantKing from "../../Game/PlayAssistance/AssistantKing.js"
-import makePiece from "../../Game/DefaultsObjects/FactoryMakePiece.js"
 import defaultsObjects from "../../Game/DefaultsObjects/index.js"
 import movementsPossibilities from "../../Game/MovementsPossibilities/index.js"
 
@@ -9,13 +8,13 @@ const piecesBoard = new defaultsObjects.ClassPiecesBoard()
 const nameKing = "Kingwhite"
 const colorKing = "white"
 const refIdKing = "ref18"
-const king = makePiece.apply({chessBoard},["King",nameKing,"white","kingWhite",refIdKing,movementsPossibilities.king])
+const king = defaultsObjects.factoryMakePiece.apply({chessBoard},["King",nameKing,"white","kingWhite",refIdKing,movementsPossibilities.king])
 piecesBoard.addPieceOfRef(nameKing,king)
 king.changePosition(refIdKing)
 chessBoard.addPieceOfRef(refIdKing,king)
 
 let refIdAdversary= "ref11"
-const pieceAdversary = makePiece.apply({chessBoard},["Bishop-Left","Bishop-Leftblack","black","bishopBlack",refIdAdversary,movementsPossibilities.bishop])
+const pieceAdversary = defaultsObjects.factoryMakePiece.apply({chessBoard},["Bishop-Left","Bishop-Leftblack","black","bishopBlack",refIdAdversary,movementsPossibilities.bishop])
 piecesBoard.addPieceOfRef("Bishop-Leftblack",pieceAdversary)
 chessBoard.addPieceOfRef(refIdAdversary,pieceAdversary)
 
