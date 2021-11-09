@@ -3,6 +3,7 @@ function enablePiece(){
 }
 function disablePiece(){
     this.isAtive=false
+    this.refMovements= []
 }
 function changeMovementsPossibilities(newRefMovements){
     this.refMovements= newRefMovements
