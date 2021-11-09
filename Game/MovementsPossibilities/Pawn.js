@@ -1,4 +1,4 @@
-function movementsPossibilitiesPawn(chessBoard=this.chessBoard,bottomPieceColor=this.colorPieceBoard.bottom,color=this.color, position=this.position,qtMovements=this.qtMovements){
+function movementsPossibilitiesPawn(chessBoard=this.chessBoard,bottomPieceColor=this.statusGame.colorPieces.bottom,color=this.color, position=this.position,qtMovements=this.qtMovements){
     const column=Number(position.charAt(3))
     const line =Number(position.charAt(4))
     const movementPawn = []
