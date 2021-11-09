@@ -4,6 +4,9 @@ import bishop from "./Bishop.js"
 import queen from "./Queen.js"
 import king from "./King.js"
 import pawn from "./Pawn.js"
+import roque from "./Roque.js"
+import enPassant from "./EnPassant.js"
+import pawnPromotion from "./PawnPromotion.js"
 import updateAllMovements from "./UpdateAllMovements.js"
 
 export default {
@@ -13,5 +16,8 @@ export default {
     queen,
     king,
     pawn,
+    roque,
+    enPassant,
+    pawnPromotion,
     updateAllMovements
 }
