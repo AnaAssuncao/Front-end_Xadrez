@@ -8,6 +8,7 @@ import roque from "./Roque.js"
 import enPassant from "./EnPassant.js"
 import pawnPromotion from "./PawnPromotion.js"
 import updateAllMovements from "./UpdateAllMovements.js"
+import updateSpecialMoves from "./UpdateSpecialMoves.js"
 
 export default {
     tower,
@@ -19,5 +20,6 @@ export default {
     roque,
     enPassant,
     pawnPromotion,
-    updateAllMovements
+    updateAllMovements,
+    updateSpecialMoves
 }
