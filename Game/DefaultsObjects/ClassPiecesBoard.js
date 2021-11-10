@@ -5,7 +5,7 @@ export default class PiecesBoard{
     addPieceOfRef(namePiece,piece){
         this.pieces[namePiece]=piece
     }
-    deletePiece(){
+    deletePiece(namePiece){
         delete this.pieces[namePiece]
     }
 }
