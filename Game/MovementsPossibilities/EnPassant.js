@@ -35,7 +35,6 @@ function possibleMovementEnPassant(lastPieceMove,direction,positionInAtack,chess
     const pawnPossibleCapture= piecesBoard.pieces[lastPieceMove.fullName]
     const pawnInAtack=chessBoard.reference[positionInAtack]
     specialMovement.addEnPassantMovement(true,pawnPossibleCapture,newMovementPiece,pawnInAtack)
-    console.log(specialMovement.enPassant)
     pawnInAtack.changeMovementsPossibilities([...pawnInAtack.refMovements,newMovementPiece])
     const specialEnPassant = {
         positions: specialMovement.enPassant.refIdAtack,
