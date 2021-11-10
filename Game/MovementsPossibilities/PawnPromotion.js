@@ -8,7 +8,6 @@ function pawnPromotion(piecesBoard=this.piecesBoard,specialMovement=this.special
             const positionPawn = refIdToArray( pawn.position)
             const directionPawn =( pawn.color==statusGame.colorPieces.bottom)?1:-1
             if((positionPawn[1]+directionPawn)===8 ||(positionPawn[1]+directionPawn)===1){
-                debugger
                 possiblePawnPromotion(namePawn,pawn,positionPawn,directionPawn,specialMovement)
             }
         }
@@ -31,7 +30,6 @@ function possiblePawnPromotion(namePawn,pawn,positionPawn,directionPawn,specialM
             positions: refId,
             type:"piecePromotion"
         }
-        console.log(specialMovement.pawnPromotion)
         pawn.addPossibleSpecialMovements(specialPawnPromotion)
     }
 }

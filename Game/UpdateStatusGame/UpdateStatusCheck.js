@@ -10,7 +10,7 @@ function updateStatusCheck(color,piecesBoard=this.piecesBoard,statusGame=this.st
     if(checks.qt!==0){
         statusGame.checkKing.refIdPathsToCheck = pathToCheck(nameKing,checks,piecesBoard)
         statusGame.updateCheck(true)
-        statusGame.checkKing.updateCheckmate(verifyCheckMate.apply(this,[nameKing,color,checks]))
+        statusGame.updateCheckMate(verifyCheckMate.apply(this,[nameKing,color,checks]))
             if( statusGame.checkKing.checkMate===true){
                 statusGame.updateEndGame(true)
                 const winColor=(colorPieceBoard.top===color)?colorPieceBoard.bottom:colorPieceBoard.top

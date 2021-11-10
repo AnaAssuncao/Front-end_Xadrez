@@ -26,7 +26,6 @@ export default class SpecialMovement{
         this.roque.positionKingToRoque.push(possibleMovement)
         this.roque.tower.push(tower)
         this.roque.newMovementTower.push(refMovementTower)
-        console.log(this.roque)
     }
     addEnPassantMovement(isPossible,pawnPossibleCapture,newMovementPiece,pawnInAtack){
         this.enPassant.isPossible=isPossible

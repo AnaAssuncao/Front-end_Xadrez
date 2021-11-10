@@ -3,7 +3,7 @@ export default class StatusGame{
         this.colorPieces={
             top:top,
             bottom:bottom,
-            play:null
+            play:"white"
         }
         this.checkKing={
             color:null,
@@ -29,7 +29,7 @@ export default class StatusGame{
     updateCheck(isCheck){
         this.checkKing.check=isCheck
     }
-    updateCheckmate(isCheckmate){
+    updateCheckMate(isCheckmate){
         this.checkKing.checkMate=isCheckmate
     }
     updateEndGame(isEndGame){
