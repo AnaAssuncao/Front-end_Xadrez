@@ -1,4 +1,4 @@
-import createObjHistory from "../PlayHistory/CreateObjHistory.js"
+import saveHistory from "../History/index.js"
 import makeMovements from "./index.js"
 
 function movementRoque(informationPieceToMove,specialMovement=this.specialMovement,playHistory=this.playHistory){
@@ -9,8 +9,7 @@ function movementRoque(informationPieceToMove,specialMovement=this.specialMoveme
         refId:specialMovement.roque.newMovementTower[indice]
     }
     const roque = "roque"
-    const objHistory = createObjHistory.apply(this,[[informationPieceToMove,informationTowerMove],roque])
-    playHistory.setHistory(objHistory)
+    saveHistory.setPlay.apply(this,[[informationPieceToMove,informationTowerMove],roque])
     makeMovements.changePiecePosition.apply(this,[specialMovement.roque.king,informationPieceToMove])
     makeMovements.changePiecePosition.apply(this,[specialMovement.roque.tower[indice],informationTowerMove])
 }

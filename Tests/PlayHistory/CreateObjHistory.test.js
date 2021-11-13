@@ -1,4 +1,4 @@
-import createObjHistory from "../../Game/PlayHistory/CreateObjHistory.js"
+import createObjHistory from "../../Game/History/CreateObjHistory.js"
 import defaultsObjects from "../../Game/DefaultsObjects/index.js"
 
 const chessBoard = new defaultsObjects.ClassChessBoard()
