@@ -1,7 +1,7 @@
 import defaultObjets from "../DefaultsObjects/index.js"
 import movementsPossibilities from "../MovementsPossibilities/index.js"
 
-function createNewPiece(informationNewPiece,pawnPiece,piecesPromotion){
+function piecePromotion(informationNewPiece,pawnPiece,piecesPromotion=this.piecesPromotion){
     const chancePiece={
         names:["Tower","Knight","Bishop","Queen"],
         functionPieces:[movementsPossibilities.tower,movementsPossibilities.knight,movementsPossibilities.bishop,movementsPossibilities.queen],
@@ -21,4 +21,4 @@ function createNewPiece(informationNewPiece,pawnPiece,piecesPromotion){
     piecesPromotion.addPiecesPromotion(color,newPiece,pawnPiece.qtMovements,indChangePiece)
 }
 
-export default createNewPiece
+export default piecePromotion

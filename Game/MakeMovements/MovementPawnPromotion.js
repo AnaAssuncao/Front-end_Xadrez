@@ -1,14 +1,15 @@
 import createObjHistory from "../PlayHistory/CreateObjHistory.js"
-import createNewPiece from "../CreateNewPiece/CreateNewPiece.js"
+import createNewPieces from "../CreateNewPieces/index.js"
 import makeMovements from "./index.js"
 
 function  movementPawnPromotion(informationPieceToMove,piecesBoard=this.piecesBoard,playHistory=this.playHistory,piecesPromotion=this.piecesPromotion){
     const pawn = piecesBoard.pieces[informationPieceToMove.fullName]
+    debugger
     const informationPawnToMove={
         fullName: pawn.fullName,
         refId:informationPieceToMove.refId
     }  
-    createNewPiece.apply(this,[informationPieceToMove,pawn,piecesPromotion])
+    createNewPieces.piecePromotion.apply(this,[informationPieceToMove,pawn])
     const informationPiecePromotion={
         fullName: piecesPromotion.newPiece.fullName,
         refId:informationPieceToMove.refId
