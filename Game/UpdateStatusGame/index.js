@@ -2,6 +2,7 @@ import verifyEndGame from "./VerifyEndGame.js"
 import updateStatusCheck from "./UpdateStatusCheck.js"
 import verifyCheck from "./VerifyCheck.js"
 import verifyCheckMate from "./VerifyCheckMate.js"
+import verifyDrawGame from "./VerifyDrawGame.js"
 
 function verifyStatusGame(colorMove,statusGame=this.statusGame,capturedPiece=this.capturedPiece,colorPieceBoard=this.colorPieceBoard){
     const endGame = verifyEndGame(capturedPiece)
@@ -10,8 +11,7 @@ function verifyStatusGame(colorMove,statusGame=this.statusGame,capturedPiece=thi
     }
     statusGame.changeColorPlay()
     updateStatusCheck.apply(this,[this.statusGame.colorPieces.play])
-    this.verifyDrawGame(this.statusGame.colorPieces.play)
-    
+    verifyDrawGame.apply(this)
 }
 
 export default {
@@ -19,5 +19,6 @@ export default {
     verifyEndGame,
     updateStatusCheck,
     verifyCheck,
-    verifyCheckMate
+    verifyCheckMate,
+    verifyDrawGame
 }

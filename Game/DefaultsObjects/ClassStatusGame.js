@@ -32,6 +32,9 @@ export default class StatusGame{
     updateCheckMate(isCheckmate){
         this.checkKing.checkMate=isCheckmate
     }
+    updateDrawGame(isDrawn){
+        this.statusDrawn.draw=isDrawn
+    }
     updateEndGame(isEndGame){
         this.endGame=isEndGame
     }
