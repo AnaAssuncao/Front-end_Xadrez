@@ -1,4 +1,4 @@
-import CreateGame from "./Game/XadrezGame.js"
+import CreateGame from "./Game/ChessGame.js"
 import ViewController from "./View/ViewController.js"
 import InterfaceNetwork from "./Network/Network.js"
 import ApplicationSetup from "./Control_Prototypes/ApplicationSetup.js"
