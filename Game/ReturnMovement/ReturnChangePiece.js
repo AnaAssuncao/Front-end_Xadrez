@@ -14,6 +14,7 @@ function returnChangePiece(chessBoard=this.chessBoard,piecesBoard=this.piecesBoa
                     const pastPiece = playHistory.history[lastMovement].pieceCaptured
                     pastPiece.enablePiece()
                     const positionPieceCaptured=playHistory.history[lastMovement].pieceCaptured.position
+                    piecesBoard.addPieceOfRef(namePieceCaptured,pastPiece)
                     chessBoard.addPieceOfRef(positionPieceCaptured,pastPiece)
                     capturedPiece.deleteCapturedPiece(namePieceCaptured)
                 }

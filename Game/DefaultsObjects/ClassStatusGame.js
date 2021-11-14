@@ -11,9 +11,7 @@ export default class StatusGame{
             checkMate:false,
             refIdPathsToCheck: []
         },
-        this.statusDrawn={
-            draw:false
-        },
+        this.drawn=false,
         this.endGame=false,
         this.winColor=null
     }
@@ -22,6 +20,8 @@ export default class StatusGame{
         this.winColor=color
     }
     clearStatus(){
+        this.checkKing.check=false
+        this.drawn=false
         this.endGame=false
         this.checkKing.checkMate=false
         this.winColor=null
@@ -33,7 +33,7 @@ export default class StatusGame{
         this.checkKing.checkMate=isCheckmate
     }
     updateDrawGame(isDrawn){
-        this.statusDrawn.draw=isDrawn
+        this.drawn=isDrawn
     }
     updateEndGame(isEndGame){
         this.endGame=isEndGame
