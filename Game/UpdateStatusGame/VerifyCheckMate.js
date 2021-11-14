@@ -6,7 +6,8 @@ function verifyCheckMate(nameKing,colorKing,checks,chessBoard=this.chessBoard,pi
         const refIdInitialKing= piecesBoard.pieces[nameKing].position
         const newRefIdKing = piecesBoard.pieces[nameKing].refMovements[i]
         const fakeChessBoard = newFakeBoard(refIdInitialKing,newRefIdKing,chessBoard) //FALSO CHESSBOARD PARA CONFERÊNCIA DO REI
-        if(verifyCheckInFakeBoard(fakeChessBoard,newRefIdKing,colorKing) === false){//se na nova refId do rei não tem check, não há checkMate
+        const checkFakeBoard = verifyCheckInFakeBoard(fakeChessBoard,newRefIdKing,colorKing)
+        if( checkFakeBoard.isCheck === false){//se na nova refId do rei não tem check, não há checkMate
             return false 
         }
     }
@@ -19,7 +20,8 @@ function verifyCheckMate(nameKing,colorKing,checks,chessBoard=this.chessBoard,pi
                     for(let refIdPossiblePath of statusGame.checkKing.refIdPathsToCheck){
                         if(refMovementFriend===refIdPossiblePath){
                             const fakeChessBoard = newFakeBoard(refId,refMovementFriend,chessBoard)
-                            if(verifyCheckInFakeBoard(fakeChessBoard,positionInitialKing,colorKing) === false){//se na nova refId do rei não tem check, não há checkMate
+                            const checkFakeBoard =verifyCheckInFakeBoard(fakeChessBoard,positionInitialKing,colorKing)
+                            if( checkFakeBoard.isCheck === false){//se na nova refId do rei não tem check, não há checkMate
                                 return false 
                             }
                         }

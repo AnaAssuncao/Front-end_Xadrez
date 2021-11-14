@@ -15,11 +15,17 @@ function verifyCheckInFakeBoard(fakeChessBoard,newRefIdKing,colorKing){
             const refMovements=fakeChessBoard.reference[refId].functionPiece(fakeChessBoard)
             if(movementsPieceAdversity(refMovements,newRefIdKing)){//verifica se o refId adversario e igual ao refId do rei
                 //se for verdadeiro o rei esta em check, movimento para morte
-                return true
+                return {
+                    isCheck:true,
+                    pieceAttack:fakeChessBoard.reference[refId]
+                }
             }
         }
     }
-    return false
+    return  {
+        isCheck:false,
+        pieceAttack:null
+    }
 }
 
 

@@ -5,13 +5,19 @@ function  assistantPiece(assistantPieceColor,chessBoard=this.chessBoard,piecesBo
     const positionInitialKing = piecesBoard.pieces[nameKing].position
     const arrayNamesPieces = Object.keys(piecesBoard.pieces)
     arrayNamesPieces.forEach((namePiece)=>{
-        if((assistantPieceColor=== piecesBoard.pieces[namePiece].color)&&( piecesBoard.pieces[namePiece].isAtive===true)&&(namePiece!==nameKing)){ 
+        const piece = piecesBoard.pieces[namePiece]
+        if((assistantPieceColor=== piece.color)&&( piece.isAtive===true)&&(namePiece!==nameKing)){ 
             const fakeChessBoard= {reference:{...chessBoard.reference}} 
-            const positionPiece = piecesBoard.pieces[namePiece].position
+            const positionPiece = piece.position
             fakeChessBoard.reference[positionPiece]=null
-            if(verifyCheckInFakeBoard(fakeChessBoard,positionInitialKing,assistantPieceColor)){//se na nova refId do rei não tem check, não há checkMat
-                piecesBoard.pieces[namePiece].refMovements=[]
-                // pode matar a peça 
+            const checkFakeBoard = verifyCheckInFakeBoard(fakeChessBoard,positionInitialKing,assistantPieceColor)
+            if(checkFakeBoard.isCheck===true){//se na nova refId do rei não tem check, não há checkMat
+                if(piece.refMovements.includes(checkFakeBoard.pieceAttack.position)){
+                    piece.changeMovementsPossibilities([checkFakeBoard.pieceAttack.position])
+                }
+                else{
+                    piece.changeMovementsPossibilities([])
+                }
             }  
         }
     }

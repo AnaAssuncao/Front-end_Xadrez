@@ -39,7 +39,8 @@ describe("Verify Check In FakeBoard", ()=>{
             Queen2black:"ref86"
         }
         addPieceBoard(refQueen)
-        expect(verifyCheckInFakeBoard(chessBoard,refIdKing,colorKing)).toBeFalsy()
+        const checkFakeBoard = verifyCheckInFakeBoard(chessBoard,refIdKing,colorKing)
+        expect(checkFakeBoard.isCheck).toBeFalsy()
         deletePieceBoard(refQueen)
     })
     test("Should return check",()=>{
@@ -48,7 +49,8 @@ describe("Verify Check In FakeBoard", ()=>{
             Queen2black:"ref45"
         }
         addPieceBoard(refQueen)
-        expect(verifyCheckInFakeBoard(chessBoard,refIdKing,colorKing)).toBeTruthy()
+        const checkFakeBoard = verifyCheckInFakeBoard(chessBoard,refIdKing,colorKing)
+        expect(checkFakeBoard.isCheck).toBeTruthy()
         deletePieceBoard(refQueen)
     })
 })

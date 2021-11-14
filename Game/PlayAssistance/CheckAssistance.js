@@ -13,7 +13,8 @@ function checkAssistance(assistantPieceColor,chessBoard=this.chessBoard,piecesBo
                 for(let refIdPossiblePath of statusGame.checkKing.refIdPathsToCheck){
                     if(refIdPossiblePath===refIdpiece){
                         const fakeChessBoard = newFakeBoard( piecesBoard.pieces[namePiece].position,refIdpiece,chessBoard)
-                        if(verifyCheckInFakeBoard(fakeChessBoard,positionInitialKing,assistantPieceColor) === false){//se na nova refId do rei não tem check, não há checkMate
+                        const checkFakeBoard = verifyCheckInFakeBoard(fakeChessBoard,positionInitialKing,assistantPieceColor)
+                        if( checkFakeBoard.isCheck === false){//se na nova refId do rei não tem check, não há checkMate
                             possibleMovementPiece.push(refIdpiece)
                         }                
                     }
